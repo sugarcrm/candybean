@@ -1,9 +1,11 @@
-package com.voodoo2;
+package com.sugarcrm.voodoo2;
 
 import java.awt.Toolkit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.swing.JOptionPane;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -59,5 +61,9 @@ public class Automation {
 			}});
 	}
 	
-	public static getBrowsers
+	public static void pause(String s) {
+		JOptionPane.showInputDialog(s);
+	}
+	
+//	public static getBrowsers
 }

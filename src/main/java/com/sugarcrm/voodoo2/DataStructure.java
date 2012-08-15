@@ -1,4 +1,4 @@
-package com.voodoo2;
+package com.sugarcrm.voodoo2;
 
 public class DataStructure {
 	
