@@ -1,9 +1,13 @@
-package com.sugarcrm.voodoo2;
+package com.sugarcrm.voodoo;
 
 import java.awt.Toolkit;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -31,6 +35,16 @@ public class Automation {
 		browser.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 	
+	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
+		Set<String> nativeOptionNames = new HashSet<String>();
+		for (WebElement option : nativeOptions) {
+			nativeOptionNames.add(option.getText());
+		}
+		if (nativeOptionNames.containsAll(queryOptionNames) && queryOptionNames.containsAll(nativeOptionNames)) return true;
+		else return false;
+		
+	}
+	
 	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
 		List<WebElement> options = selectElement.getOptions(); 
 		for(WebElement option : options) {
@@ -54,6 +68,29 @@ public class Automation {
 		} else throw new Exception("Specified select option unavailable...");
 	}
 	
+	public static boolean tableContainsValue(WebElement tableElement, String rowRelativeXPathTextKey, String value) {
+		List<WebElement> rows = tableElement.findElements(By.tagName("tr"));
+		for (WebElement row : rows) {
+			if (row.findElement(By.xpath(rowRelativeXPathTextKey)).getText().equalsIgnoreCase(value)) return true;
+		}
+		return false;
+	}
+	
+	public static Map<String, WebElement> loadMapFromTable(WebElement table, String rowRelativeXPathTextKey, String rowRelativeXPathElementValue) throws Exception {
+		Map<String, WebElement>	rowMap = new HashMap<String, WebElement>();
+		List<WebElement> rows = table.findElements(By.tagName("tr"));
+//		System.out.println("table # rows:" + rows.size());
+		for (WebElement row : rows) {
+//			List<WebElement> childTDs = row.findElements(By.tagName("td"));
+//			for (WebElement childTD : childTDs) System.out.println("td text:" + childTD.getText());
+			String k = row.findElement(By.xpath(rowRelativeXPathTextKey)).getText();
+			WebElement v = row.findElement(By.xpath(rowRelativeXPathElementValue));
+//			System.out.println("key text:" + k + ", value we:" + v.getTagName() + "/" + v.getText());
+			rowMap.put(k, v);
+		}
+		return rowMap;
+	}
+	
 	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
 		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
 			public WebElement apply(WebDriver wd) {
@@ -61,9 +98,7 @@ public class Automation {
 			}});
 	}
 	
-	public static void pause(String s) {
+	public static void interact(String s) {
 		JOptionPane.showInputDialog(s);
 	}
-	
-//	public static getBrowsers
 }
