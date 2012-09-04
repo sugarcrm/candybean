@@ -17,7 +17,26 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+    <properties>
+         <slf4jVersion>1.6.6</slf4jVersion>
+         <logbackVersion>1.0.7</logbackVersion>
+    </properties>
 	<dependencies>
+	    <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logbackVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logbackVersion}</version>
+        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
