@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>[%d{MM/dd/yyyy-HH:mm:ss.SSS}] %-5level %-15logger{0} \(*\) %msg%n </Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>log/voodoogrimoire.log</file>
+		<append>false</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>[%d{MM/dd/yyyy-HH:mm:ss.SSS}] %-5level %-15logger{0} \(*\) %msg%n </Pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.sugarcrm.test.Accounts_0001" level="INFO"
+		additivity="false">
+		<!-- appender-ref ref="NEW-FILE"/ -->
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<!-- Multiple files may be constructed to be used by different loggers -->
+	<!-- "NEW-FILE is an example used by anotherLogger -->
+	<appender name="NEW-FILE" class="ch.qos.logback.core.FileAppender">
+		<file>log/anotherLogger.log</file>
+		<append>false</append>
+		<encoder>
+			<Pattern>[%d{MM/dd/yyyy-HH:mm:ss.SSS}] %-5level %-15logger{0} \(*\) %msg%n </Pattern>
+		</encoder>
+	</appender>
+
+	<logger name="anotherLogger" level="INFO" additivity="false">
+		<appender-ref ref="NEW-FILE" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>
