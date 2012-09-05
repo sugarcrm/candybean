@@ -7,9 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import com.sugarcrm.voodoo.autofw.SeleniumAutoFW;
-import com.sugarcrm.voodoo.autofw.VAutoFW;
-import com.sugarcrm.voodoo.autofw.VControl;
+import com.sugarcrm.voodoo.automation.SeleniumAutomation;
+import com.sugarcrm.voodoo.automation.VAutomation;
+import com.sugarcrm.voodoo.automation.VControl;
 
 
 public class Voodoo {
@@ -19,12 +19,12 @@ public class Voodoo {
 
 	private static Voodoo instance = null;
 	private final ResourceBundle props;
-	private final VAutoFW vAutoFW;
+	private final VAutomation vAutomation;
 	
 	private Voodoo(String bundleNamePrefix) throws Exception {
 		this.props = ResourceBundle.getBundle(bundleNamePrefix, Locale.getDefault());
 		this.log = this.getLogger();
-		this.vAutoFW = this.getVAutoFW();
+		this.vAutomation = this.getAutomation();
 	}
 	
 	public static Voodoo getInstance(String bundleNamePrefix) throws Exception {
@@ -32,18 +32,18 @@ public class Voodoo {
 		return instance;
 	}
 	
-	public VControl getControl(VAutoFW.Strategy strategy, String hook) throws Exception {
-		return vAutoFW.getControl(strategy, hook);
+	public VControl getControl(VAutomation.Strategy strategy, String hook) throws Exception {
+		return vAutomation.getControl(strategy, hook);
 	}
 	
-	private VAutoFW getVAutoFW() throws Exception {
-		VAutoFW vAutoFW = null;
+	private VAutomation getAutomation() throws Exception {
+		VAutomation vAutomation = null;
 		Voodoo.BrowserType browserType = this.getBrowserType();
-		String vAutoFWString = props.getString("AUTOMATION.FRAMEWORK");
+		String vAutomationString = props.getString("AUTOMATION.FRAMEWORK");
 		// TODO: Add multi-browser support
 		// TODO: Add multi-automation framework support
-		vAutoFW = new SeleniumAutoFW(props, browserType);
-		return vAutoFW;
+		vAutomation = new SeleniumAutomation(props, browserType);
+		return vAutomation;
     }
 	
 	private Voodoo.BrowserType getBrowserType() throws Exception {
