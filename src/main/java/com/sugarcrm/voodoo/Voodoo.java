@@ -2,10 +2,15 @@ package com.sugarcrm.voodoo;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+
+//import java.util.logging.FileHandler;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+//import java.util.logging.SimpleFormatter;
+
+// sl4j/logback 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sugarcrm.voodoo.automation.SeleniumAutomation;
 import com.sugarcrm.voodoo.automation.VAutomation;
@@ -23,8 +28,13 @@ public class Voodoo {
 	
 	private Voodoo(String bundleNamePrefix) throws Exception {
 		this.props = ResourceBundle.getBundle(bundleNamePrefix, Locale.getDefault());
+<<<<<<< HEAD
 		this.log = this.getLogger();
 		this.vAutomation = this.getAutomation();
+=======
+		this.log = this.getLogger(); 
+		this.vAutoFW = this.getVAutoFW();
+>>>>>>> faf529347de214e9c6dd7bd2da44314b56252b07
 	}
 	
 	public static Voodoo getInstance(String bundleNamePrefix) throws Exception {
@@ -109,14 +119,35 @@ public class Voodoo {
 //	}
 	
 	private Logger getLogger() throws Exception {
-		Logger logger = Logger.getLogger(Voodoo.class.getName());
-		FileHandler fh = new FileHandler(this.getLogPath());
-		fh.setFormatter(new SimpleFormatter());
-		logger.addHandler(fh);
-		logger.setLevel(this.getLogLevel());
+		
+//		Logger logger = Logger.getLogger(Voodoo.class.getName());
+//		FileHandler fh = new FileHandler(this.getLogPath());
+//		fh.setFormatter(new SimpleFormatter());
+//		logger.addHandler(fh);
+//		logger.setLevel(this.getLogLevel());
+//		return logger;
+
+	        // logging settings are configured in src/main/resources/logback.xml.
+	        // The logback.xml is placed there only for voodoo2 development purposes. 
+	        // That is, when voodoo2 is running independent of Grimoire.
+	        // Grimoire has a config file named logback-test.xml, which takes precedence
+	        // over logback.xml.
+	        // The sl4j/logback logger first looks for logback-test.xml, if not present,
+	        // goes on to look for logback.xml. If no config file is found, the logger
+	        // falls back to a default, which only logs to the console.
+	        // logback.xml is generally meant for production use. In our case, 
+	        // since voodoo2 is a library, it's not expected to provide logging settings.
+	        // The settings choice should be with the application/end user.
+	    
+	        Logger logger = LoggerFactory.getLogger(Voodoo.class.getName());
+
+	        logger.info("Trying out sl4j and logback");
+	        logger.info("Using {}", "parameterized logging");
+
 		return logger;
 	}
 	
+/******************************************************************************
 	private String getLogPath() {
 		return props.getString("SYSTEM.LOG_PATH");
 	}
@@ -134,4 +165,5 @@ public class Voodoo {
 			return Level.INFO;
 		}
 	}
+******************************************************************************/
 }
