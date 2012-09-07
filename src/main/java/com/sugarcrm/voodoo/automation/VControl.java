@@ -5,5 +5,5 @@ public interface VControl {
 
 	public enum Type {
 	    ELEMENT, HLINK, TEXT, BUTTON;
-	}	
+	}
 }

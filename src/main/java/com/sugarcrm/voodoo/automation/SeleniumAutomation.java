@@ -2,8 +2,10 @@ package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -11,8 +13,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
 
 import com.sugarcrm.voodoo.Voodoo;
+
 
 public class SeleniumAutomation implements VAutomation {
 	
@@ -22,6 +26,29 @@ public class SeleniumAutomation implements VAutomation {
 	public SeleniumAutomation(ResourceBundle props, Voodoo.BrowserType browserType) throws Exception {
 		this.props = props;
 		this.browser = this.getBrowser(browserType);
+	}
+	
+	@Override
+	public void start(String url) throws Exception {
+		browser.get(url);
+	}
+
+	@Override
+	public void stop() throws Exception {
+		browser.close();
+	}
+	
+	@Override
+	public String getText(Strategy strategy, String hook) throws Exception {
+		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
+		return we.getText();
+	}
+	
+	@Override
+	public void hover(Strategy strategy, String hook) throws Exception {
+		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
+		Actions action = new Actions(browser);
+		action.moveToElement(we).perform();
 	}
 	
 	@Override
@@ -45,19 +72,46 @@ public class SeleniumAutomation implements VAutomation {
 	}
 
 	@Override
-	public void VClick(VControl control) throws Exception {
+	public void click(VAutomation.Strategy strategy, String hook) throws Exception {
+		this.click(this.getControl(strategy, hook));
+	}
+	
+	@Deprecated
+	@Override
+	public void click(VControl control) throws Exception {
 		if (control instanceof VSeleniumControl) {
-			((WebElement) control).click();
+			((VSeleniumControl) control).webElement.click();
 		}
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 
 	@Override
-	public void VInput(VControl control, String s) throws Exception {
+	public void input(VAutomation.Strategy strategy, String hook, String input) throws Exception {
+		this.input(this.getControl(strategy, hook), input);
+	}
+	
+	@Deprecated
+	@Override
+	public void input(VControl control, String input) throws Exception {
 		if (control instanceof VSeleniumControl) {
-			((WebElement) control).sendKeys(s);
+			((VSeleniumControl) control).webElement.sendKeys(input);
 		}
 		else throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	@Override
+	public void acceptDialog() throws Exception {
+		Alert alert = browser.switchTo().alert();
+		alert.accept();
+	}
+	
+	@Override
+	public void switchToPopup() throws Exception {
+		String currentWindowHandle = browser.getWindowHandle();
+		Set<String> windowHandles = browser.getWindowHandles();
+		windowHandles.remove(currentWindowHandle);
+		if (windowHandles.size() > 1) throw new Exception("Selenium: more than one popup/window detected");
+		else browser.switchTo().window(windowHandles.iterator().next());
 	}
 	
 	private WebDriver getBrowser(Voodoo.BrowserType browserType) throws Exception {
