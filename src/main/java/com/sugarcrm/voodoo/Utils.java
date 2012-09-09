@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -18,6 +19,13 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Utils {
+	
+	public static String getCascadingPropertyValue(ResourceBundle props, String defaultValue, String key) {
+		String value = defaultValue;
+		if (props.containsKey(key)) value = props.getString(key);
+		if (System.getProperties().containsKey(key)) value = System.getProperty(key);
+		return value;
+	}
 	
 	public static String webElementToString(WebElement element) {
 		List<WebElement> childElements = element.findElements(By.xpath("*"));

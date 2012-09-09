@@ -1,6 +1,7 @@
 package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -11,19 +12,24 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.interactions.Actions;
 
+import com.sugarcrm.voodoo.Utils;
 import com.sugarcrm.voodoo.Voodoo;
 
 
 public class SeleniumAutomation implements VAutomation {
 	
+	private final Voodoo voodoo;
 	private final ResourceBundle props;
 	private final WebDriver browser;
 	
-	public SeleniumAutomation(ResourceBundle props, Voodoo.BrowserType browserType) throws Exception {
+	public SeleniumAutomation(Voodoo voodoo, ResourceBundle props, Voodoo.BrowserType browserType) throws Exception {
+		this.voodoo = voodoo;
 		this.props = props;
 		this.browser = this.getBrowser(browserType);
 	}
@@ -118,22 +124,26 @@ public class SeleniumAutomation implements VAutomation {
 		WebDriver webDriver = null;
 		switch (browserType) {
 		case FIREFOX:
-//			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(props.getString("BROWSER.FIREFOX_PROFILE"));
+			String profileName = Utils.getCascadingPropertyValue(this.props, "default", "BROWSER.FIREFOX_PROFILE");
+			String ffBinaryPath = Utils.getCascadingPropertyValue(this.props, "//home//conrad//Applications//firefox-10//firefox", "BROWSER.FIREFOX_BINARY");
+			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
+			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
 //			if (System.getProperty("headless") != null) {
 //				FirefoxBinary ffBinary = new FirefoxBinary();//new File("//home//conrad//Applications//firefox-10//firefox"));
 //				ffBinary.setEnvironmentProperty("DISPLAY", ":1"); 
 //				webDriver = new FirefoxDriver(ffBinary, ffProfile);
 //			}
-			webDriver = new FirefoxDriver();
+			voodoo.log.info("Instantiating Firefox with profile name: " + profileName + " and binary path: " + ffBinaryPath);
+			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
-			String chromeDriverPath = props.getString("BROWSER.CHROME_DRIVER_PATH");
+			String chromeDriverPath = Utils.getCascadingPropertyValue(props, "/Users/cwarmbold/Documents/Workspace/voodoo2/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
 			webDriver = new ChromeDriver();
 			break;
 		case IE:
-			webDriver = new InternetExplorerDriver();
-			break;
+			throw new Exception("Selenium: ie browser not yet supported.");
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
 		default:
