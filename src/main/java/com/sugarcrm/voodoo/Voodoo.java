@@ -1,6 +1,5 @@
 package com.sugarcrm.voodoo;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -23,14 +22,14 @@ public class Voodoo implements VAutomation {
 	private final ResourceBundle props;
 	private final VAutomation vAutomation;
 
-	private Voodoo(String bundleNamePrefix) throws Exception {
-		this.props = ResourceBundle.getBundle(bundleNamePrefix, Locale.getDefault());
+	private Voodoo(ResourceBundle props) throws Exception {
+		this.props = props;
 		this.log = this.getLogger();
 		this.vAutomation = this.getAutomation();
 	}
 
-	public static Voodoo getInstance(String bundleNamePrefix) throws Exception {
-		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(bundleNamePrefix);
+	public static Voodoo getInstance(ResourceBundle props) throws Exception {
+		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props);
 		return instance;
 	}
 
@@ -113,16 +112,23 @@ public class Voodoo implements VAutomation {
 	private VAutomation getAutomation() throws Exception {
 		VAutomation vAutomation = null;
 		Voodoo.BrowserType browserType = this.getBrowserType();
-		String vAutomationString = props.getString("AUTOMATION.FRAMEWORK");
-		// TODO: Add multi-browser support
-		// TODO: Add multi-automation framework support
-		vAutomation = new SeleniumAutomation(props, browserType);
+		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "AUTOMATION.FRAMEWORK");
+		switch (vAutomationString) {
+		case "selenium":
+			this.log.info("Instantiating Selenium automation with browserType: " + browserType.name());
+			vAutomation = new SeleniumAutomation(this, props, browserType);
+			break;
+		case "robotium":
+			throw new Exception("Robotium automation not yet supported.");
+		default:
+			throw new Exception("Automation framework not recognized.");
+		}
 		return vAutomation;
     }
 
 	private Voodoo.BrowserType getBrowserType() throws Exception {
 		Voodoo.BrowserType browserType = null;
-		String browserTypeString = props.getString("AUTOMATION.BROWSER");
+		String browserTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "AUTOMATION.BROWSER");
 		for (Voodoo.BrowserType browserTypeIter : Voodoo.BrowserType.values()) {
 			if (browserTypeIter.name().equalsIgnoreCase(browserTypeString)) {
 				browserType = browserTypeIter;
