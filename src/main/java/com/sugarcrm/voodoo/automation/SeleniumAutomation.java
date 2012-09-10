@@ -100,7 +100,9 @@ public class SeleniumAutomation implements VAutomation {
 	@Override
 	public void input(VControl control, String input) throws Exception {
 		if (control instanceof VSeleniumControl) {
-			((VSeleniumControl) control).webElement.sendKeys(input);
+			WebElement we = ((VSeleniumControl) control).webElement;
+			we.clear();
+			we.sendKeys(input);
 		}
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
