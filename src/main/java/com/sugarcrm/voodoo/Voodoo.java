@@ -48,11 +48,13 @@ public class Voodoo implements VAutomation {
 
 	@Override
 	public void start(String url) throws Exception {
+		this.log.info("Starting voodoo with url: " + url);
 		this.vAutomation.start(url);
 	}
 
 	@Override
 	public void stop() throws Exception {
+		this.log.info("Stopping voodoo.");
 		this.vAutomation.stop();
 	}
 
