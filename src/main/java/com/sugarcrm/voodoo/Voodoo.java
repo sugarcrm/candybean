@@ -1,16 +1,15 @@
 package com.sugarcrm.voodoo;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-//import java.util.logging.FileHandler;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 //import java.util.logging.SimpleFormatter;
-
-// sl4j/logback 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sugarcrm.voodoo.autofw.SeleniumAutoFW;
 import com.sugarcrm.voodoo.autofw.VAutoFW;
@@ -113,40 +112,49 @@ public class Voodoo {
 //		browser.quit();
 //	}
 	
-	private Logger getLogger() throws Exception {
-		
-//		Logger logger = Logger.getLogger(Voodoo.class.getName());
-//		FileHandler fh = new FileHandler(this.getLogPath());
-//		fh.setFormatter(new SimpleFormatter());
-//		logger.addHandler(fh);
-//		logger.setLevel(this.getLogLevel());
-//		return logger;
+    private Logger getLogger() throws Exception {
 
-	        // logging settings are configured in src/main/resources/logback.xml.
-	        // The logback.xml is placed there only for voodoo2 development purposes. 
-	        // That is, when voodoo2 is running independent of Grimoire.
-	        // Grimoire has a config file named logback-test.xml, which takes precedence
-	        // over logback.xml.
-	        // The sl4j/logback logger first looks for logback-test.xml, if not present,
-	        // goes on to look for logback.xml. If no config file is found, the logger
-	        // falls back to a default, which only logs to the console.
-	        // logback.xml is generally meant for production use. In our case, 
-	        // since voodoo2 is a library, it's not expected to provide logging settings.
-	        // The settings choice should be with the application/end user.
-	    
-	        Logger logger = LoggerFactory.getLogger(Voodoo.class.getName());
-
-	        logger.info("Trying out sl4j and logback");
-	        logger.info("Using {}", "parameterized logging");
-
-		return logger;
+	// Load loggingVoodoo.properties
+	final InputStream inputStream = getClass().getResourceAsStream(
+		"/loggingVoodoo.properties");
+	try {
+	    LogManager.getLogManager().readConfiguration(inputStream);
+	} catch (final IOException e) {
+	    Logger.getAnonymousLogger().severe(
+		    "Could not load loggingVoodoo.properties file");
+	    Logger.getAnonymousLogger().severe(e.getMessage());
 	}
+
+	Logger logger = Logger.getLogger(Voodoo.class.getName());
+
+	// In the loggingVoodoo.properties file, only the log file path for the
+	// root
+	// can be specified, and not for other loggers.
+	// We thus put the other logger log paths in files such as
+	// voodoo.properties.
+	FileHandler fh = new FileHandler(this.getLogPath());
+
+	// fh.setFormatter(new SimpleFormatter()); // the format inherits from
+	// root as set in loggingVoodoo.properties
+	logger.addHandler(fh);
+
+	// The log level for this logger inherits the root level set in
+	// loggingVoodoo.properties.
+	// It can also be explicitly set in the same config file.
+	// logger.setLevel(this.getLogLevel());
+
+	// Try out some messages
+	logger.info("Check out the format string. Testing only");
+	logger.severe("Another test message.");
+
+	return logger;
+    }
+	
+    private String getLogPath() {
+	return props.getString("SYSTEM.LOG_PATH");
+    }
 	
 /******************************************************************************
-	private String getLogPath() {
-		return props.getString("SYSTEM.LOG_PATH");
-	}
-	
 	private Level getLogLevel() {
 		switch(props.getString("SYSTEM.LOG_LEVEL")) {
 		case "SEVERE": return Level.SEVERE;
