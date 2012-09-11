@@ -52,13 +52,13 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	@Override
-	public String getText(Strategy strategy, String hook) throws Exception {
+	public String getText(VAutomation.Strategy strategy, String hook) throws Exception {
 		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
 		return we.getText();
 	}
 	
 	@Override
-	public void hover(Strategy strategy, String hook) throws Exception {
+	public void hover(VAutomation.Strategy strategy, String hook) throws Exception {
 		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
 		Actions action = new Actions(browser);
 		action.moveToElement(we).perform();
