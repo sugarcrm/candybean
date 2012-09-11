@@ -15,10 +15,21 @@ import com.sugarcrm.voodoo.automation.VControl;
 
 public class Voodoo implements VAutomation {
 
+<<<<<<< HEAD
+=======
+/**
+ * @author 
+ *
+ */
+public class Voodoo {
+
+	public enum BrowserType { FIREFOX, IE, CHROME, SAFARI; }
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 	public final Logger log;
 
 	private static Voodoo instance = null;
 	private final ResourceBundle props;
+<<<<<<< HEAD
 	private final VAutomation vAutomation;
 
 	private Voodoo(ResourceBundle props) throws Exception {
@@ -69,10 +80,49 @@ public class Voodoo implements VAutomation {
 
 	public void pause(long ms) throws Exception {
 		Thread.sleep(ms);
+=======
+	private final VAutoFW vAutoFW;
+	
+	/**
+	 * 
+	 * Voodoo() 
+	 * @param bundleNamePrefix 
+	 * @throws Exception 
+	 */
+	private Voodoo(String bundleNamePrefix) throws Exception {
+		this.props = ResourceBundle.getBundle(bundleNamePrefix, Locale.getDefault());
+		this.log = this.getLogger(); 
+		this.vAutoFW = this.getVAutoFW();
 	}
 	
 	/**
 	 * 
+	 * getInstance() 
+	 * @param bundleNamePrefix 
+	 * @return 
+	 * @throws Exception 
+	 */
+	public static Voodoo getInstance(String bundleNamePrefix) throws Exception {
+		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(bundleNamePrefix);
+		return instance;
+	}
+	
+	/**
+	 * 
+	 * getControl() 
+	 * @param strategy 
+	 * @param hook 
+	 * @return 
+	 * @throws Exception 
+	 */
+	public VControl getControl(VAutoFW.Strategy strategy, String hook) throws Exception {
+		return vAutoFW.getControl(strategy, hook);
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
+	}
+	
+	/**
+	 * 
+<<<<<<< HEAD
 	 * @param props
 	 * @param defaultValue
 	 * @param key
@@ -123,6 +173,14 @@ public class Voodoo implements VAutomation {
 
 	private VAutomation getAutomation() throws Exception {
 		VAutomation vAutomation = null;
+=======
+	 * getVAutoFW() 
+	 * @return 
+	 * @throws Exception 
+	 */
+	private VAutoFW getVAutoFW() throws Exception {
+		VAutoFW vAutoFW = null;
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 		Voodoo.BrowserType browserType = this.getBrowserType();
 		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "AUTOMATION.FRAMEWORK");
 		switch (vAutomationString) {
@@ -137,7 +195,17 @@ public class Voodoo implements VAutomation {
 		}
 		return vAutomation;
     }
+<<<<<<< HEAD
 
+=======
+	
+	/**
+	 * 
+	 * getBrowserType() 
+	 * @return 
+	 * @throws Exception 
+	 */
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 	private Voodoo.BrowserType getBrowserType() throws Exception {
 		Voodoo.BrowserType browserType = null;
 		String browserTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "AUTOMATION.BROWSER");
@@ -199,6 +267,41 @@ public class Voodoo implements VAutomation {
 //	public void shutdownBrowser(WebDriver browser) {
 //		browser.quit();
 //	}
+<<<<<<< HEAD
+=======
+	
+	/**
+	 * 
+	 * getLogger() 
+	 * @return 
+	 * @throws Exception 
+	 */
+	private Logger getLogger() throws Exception {
+		
+//		Logger logger = Logger.getLogger(Voodoo.class.getName());
+//		FileHandler fh = new FileHandler(this.getLogPath());
+//		fh.setFormatter(new SimpleFormatter());
+//		logger.addHandler(fh);
+//		logger.setLevel(this.getLogLevel());
+//		return logger;
+
+	        // logging settings are configured in src/main/resources/logback.xml.
+	        // The logback.xml is placed there only for voodoo2 development purposes. 
+	        // That is, when voodoo2 is running independent of Grimoire.
+	        // Grimoire has a config file named logback-test.xml, which takes precedence
+	        // over logback.xml.
+	        // The sl4j/logback logger first looks for logback-test.xml, if not present,
+	        // goes on to look for logback.xml. If no config file is found, the logger
+	        // falls back to a default, which only logs to the console.
+	        // logback.xml is generally meant for production use. In our case, 
+	        // since voodoo2 is a library, it's not expected to provide logging settings.
+	        // The settings choice should be with the application/end user.
+	    
+	        Logger logger = LoggerFactory.getLogger(Voodoo.class.getName());
+
+	        logger.info("Trying out sl4j and logback");
+	        logger.info("Using {}", "parameterized logging");
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 
 	// logging settings are configured in src/main/resources/logback.xml.
     // The logback.xml is placed there only for voodoo2 development purposes. 
