@@ -17,6 +17,10 @@ import com.sugarcrm.voodoo.autofw.VAutoFW;
 import com.sugarcrm.voodoo.autofw.VControl;
 
 
+/**
+ * @author 
+ *
+ */
 public class Voodoo {
 
 	public enum BrowserType { FIREFOX, IE, CHROME, SAFARI; }
@@ -26,21 +30,48 @@ public class Voodoo {
 	private final ResourceBundle props;
 	private final VAutoFW vAutoFW;
 	
+	/**
+	 * 
+	 * Voodoo() 
+	 * @param bundleNamePrefix 
+	 * @throws Exception 
+	 */
 	private Voodoo(String bundleNamePrefix) throws Exception {
 		this.props = ResourceBundle.getBundle(bundleNamePrefix, Locale.getDefault());
 		this.log = this.getLogger(); 
 		this.vAutoFW = this.getVAutoFW();
 	}
 	
+	/**
+	 * 
+	 * getInstance() 
+	 * @param bundleNamePrefix 
+	 * @return 
+	 * @throws Exception 
+	 */
 	public static Voodoo getInstance(String bundleNamePrefix) throws Exception {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(bundleNamePrefix);
 		return instance;
 	}
 	
+	/**
+	 * 
+	 * getControl() 
+	 * @param strategy 
+	 * @param hook 
+	 * @return 
+	 * @throws Exception 
+	 */
 	public VControl getControl(VAutoFW.Strategy strategy, String hook) throws Exception {
 		return vAutoFW.getControl(strategy, hook);
 	}
 	
+	/**
+	 * 
+	 * getVAutoFW() 
+	 * @return 
+	 * @throws Exception 
+	 */
 	private VAutoFW getVAutoFW() throws Exception {
 		VAutoFW vAutoFW = null;
 		Voodoo.BrowserType browserType = this.getBrowserType();
@@ -51,6 +82,12 @@ public class Voodoo {
 		return vAutoFW;
     }
 	
+	/**
+	 * 
+	 * getBrowserType() 
+	 * @return 
+	 * @throws Exception 
+	 */
 	private Voodoo.BrowserType getBrowserType() throws Exception {
 		Voodoo.BrowserType browserType = null;
 		String browserTypeString = props.getString("AUTOMATION.BROWSER");
@@ -113,6 +150,12 @@ public class Voodoo {
 //		browser.quit();
 //	}
 	
+	/**
+	 * 
+	 * getLogger() 
+	 * @return 
+	 * @throws Exception 
+	 */
 	private Logger getLogger() throws Exception {
 		
 //		Logger logger = Logger.getLogger(Voodoo.class.getName());

@@ -19,8 +19,18 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * @author 
+ *
+ */
 public class Automation {
 	
+	/**
+	 * 
+	 * webElementToString() 
+	 * @param element 
+	 * @return 
+	 */ 
 	public static String webElementToString(WebElement element) {
 		List<WebElement> childElements = element.findElements(By.xpath("*"));
 		String s = element.getTagName() + ":" + element.getText() + " ";
@@ -30,11 +40,23 @@ public class Automation {
 		return s;
 	}
 	
+	/**
+	 * 
+	 * maximizeBrowserWindow() 
+	 * @param browser 
+	 */
 	public static void maximizeBrowserWindow(WebDriver browser) {
 		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		browser.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 	
+	/**
+	 * 
+	 * optionValuesEqual() 
+	 * @param nativeOptions 
+	 * @param queryOptionNames 
+	 * @return 
+	 */  
 	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
 		Set<String> nativeOptionNames = new HashSet<String>();
 		for (WebElement option : nativeOptions) {
@@ -45,6 +67,12 @@ public class Automation {
 		
 	}
 	
+	/**
+	 * 
+	 * allOptionsAction() 
+	 * @param selectElement 
+	 * @param actionElement 
+	 */
 	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
 		List<WebElement> options = selectElement.getOptions(); 
 		for(WebElement option : options) {
@@ -53,6 +81,14 @@ public class Automation {
 		}
 	}
 	
+	/**
+	 * 
+	 * optionAction() 
+	 * @param selectElement 
+	 * @param actionOptionValues 
+	 * @param actionElement 
+	 * @throws Exception 
+	 */
 	public static void optionAction(Select selectElement, Set<String> actionOptionValues, WebElement actionElement) throws Exception {
 		List<WebElement> allOptions = selectElement.getOptions();
 		HashSet<String> optionValues = new HashSet<String>();
@@ -68,6 +104,14 @@ public class Automation {
 		} else throw new Exception("Specified select option unavailable...");
 	}
 	
+	/**
+	 * 
+	 * tableContainsValue() 
+	 * @param tableElement 
+	 * @param rowRelativeXPathTextKey 
+	 * @param value 
+	 * @return 
+	 */
 	public static boolean tableContainsValue(WebElement tableElement, String rowRelativeXPathTextKey, String value) {
 		List<WebElement> rows = tableElement.findElements(By.tagName("tr"));
 		for (WebElement row : rows) {
@@ -76,6 +120,15 @@ public class Automation {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * loadMapFromTable() 
+	 * @param table 
+	 * @param rowRelativeXPathTextKey 
+	 * @param rowRelativeXPathElementValue 
+	 * @return 
+	 * @throws Exception 
+	 */
 	public static Map<String, WebElement> loadMapFromTable(WebElement table, String rowRelativeXPathTextKey, String rowRelativeXPathElementValue) throws Exception {
 		Map<String, WebElement>	rowMap = new HashMap<String, WebElement>();
 		List<WebElement> rows = table.findElements(By.tagName("tr"));
@@ -91,6 +144,14 @@ public class Automation {
 		return rowMap;
 	}
 	
+	/**
+	 * 
+	 * explicitWait() 
+	 * @param browser
+	 * @param timeout
+	 * @param by
+	 * @throws Exception
+	 */
 	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
 		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
 			public WebElement apply(WebDriver wd) {
@@ -98,6 +159,10 @@ public class Automation {
 			}});
 	}
 	
+	/**
+	 * interact() 
+	 * @param s 
+	 */
 	public static void interact(String s) {
 		JOptionPane.showInputDialog(s);
 	}
