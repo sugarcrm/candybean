@@ -14,16 +14,36 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 
 import com.sugarcrm.voodoo.Voodoo;
 
+/**
+ * @author 
+ *
+ */
 public class SeleniumAutoFW implements VAutoFW {
 	
 	private final ResourceBundle props;
 	private final WebDriver browser;
 	
+	/**
+	 * 
+	 * SeleniumAutoFW() 
+	 * @param props 
+	 * @param browserType 
+	 * @throws Exception 
+	 */
 	public SeleniumAutoFW(ResourceBundle props, Voodoo.BrowserType browserType) throws Exception {
 		this.props = props;
 		this.browser = this.getBrowser(browserType);
 	}
 	
+	/**
+	 * 
+	 * getControl()
+	 * @param strategy
+	 * @param hook
+	 * @return 
+	 * @throws Exception
+	 * 
+	 */
 	@Override
 	public VControl getControl(VAutoFW.Strategy strategy, String hook) throws Exception {
 		WebElement webElement = null;
@@ -44,6 +64,12 @@ public class SeleniumAutoFW implements VAutoFW {
 		return new VSeleniumControl(webElement);
 	}
 
+	/**
+	 * 
+	 * VClick() 
+	 * @param control 
+	 * @throws Exception 
+	 */
 	@Override
 	public void VClick(VControl control) throws Exception {
 		if (control instanceof VSeleniumControl) {
@@ -52,6 +78,13 @@ public class SeleniumAutoFW implements VAutoFW {
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 
+	/**
+	 * 
+	 * VInput() 
+	 * @param control 
+	 * @param s 
+	 * @throws Exception 
+	 */
 	@Override
 	public void VInput(VControl control, String s) throws Exception {
 		if (control instanceof VSeleniumControl) {
@@ -60,6 +93,13 @@ public class SeleniumAutoFW implements VAutoFW {
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 	
+	/**
+	 * 
+	 * getBrowser() 
+	 * @param browserType 
+	 * @return 
+	 * @throws Exception 
+	 */
 	private WebDriver getBrowser(Voodoo.BrowserType browserType) throws Exception {
 		WebDriver webDriver = null;
 		switch (browserType) {
@@ -94,8 +134,17 @@ public class SeleniumAutoFW implements VAutoFW {
 		return webDriver;
 	}
 	
+	/**
+	 * @author 
+	 *
+	 */
 	public class VSeleniumControl implements VControl {
 		private final WebElement webElement;
+		/**
+		 * 
+		 * VSeleniumControl() 
+		 * @param webElement 
+		 */
 		public VSeleniumControl(WebElement webElement) { this.webElement = webElement; }
 	}
 }
