@@ -1,5 +1,6 @@
 package com.sugarcrm.voodoo;
 
+<<<<<<< HEAD
 import java.util.ResourceBundle;
 
 
@@ -9,6 +10,11 @@ import java.util.ResourceBundle;
  * 
  * @author cwarmbold
  * 
+=======
+/**
+ * @author 
+ *
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
  */
 public class Utils {
 
@@ -33,10 +39,17 @@ public class Utils {
 	
 	/**
 	 * 
+<<<<<<< HEAD
 	 * @param props
 	 * @param defaultValue
 	 * @param key
 	 * @return
+=======
+	 * trimString() 
+	 * @param s 
+	 * @param length 
+	 * @return 
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 	 */
 	public static String trimString(String s, int length) {
 		if (s.length() <= length)
@@ -44,6 +57,7 @@ public class Utils {
 		return s.substring(s.length() - length);
 	}
 
+<<<<<<< HEAD
 	
 	/**
 	 * Pair is a python-2-tuple lightweight equivalent for convenience.
@@ -66,10 +80,35 @@ public class Utils {
 		public String toString() {
 			return "x:" + x.toString() + ",y:" + y.toString();
 		}
+=======
+	/**
+	 * 
+	 * Pair<X,Y> 
+	 * @param <X> 
+	 * @param <Y> 
+	 */
+	public static class Pair<X, Y> { 
+		  public final X x; 
+		  public final Y y; 
+		  public Pair(X x, Y y) { 
+			  this.x = x; 
+			  this.y = y; 
+		  }
+			/**
+			 * @author wli
+			 *
+			 * @param <X>
+			 * @param <Y>
+			 */
+		@Override public String toString() {
+			  return "x:" + x.toString() + ",y:" + y.toString();
+		  }
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 	}
 
 	
 	/**
+<<<<<<< HEAD
 	 * Triplet is a python-3-tuple lightweight equivalent for convenience.
 	 * 
 	 * @author cwarmbold
@@ -94,5 +133,31 @@ public class Utils {
 			return "x:" + x.toString() + ",y:" + y.toString() + ",z:"
 					+ z.toString();
 		}
+=======
+	 * 
+	 * Triplet<X, Y, Z> 
+	 * @param <X> 
+	 * @param <Y> 
+	 * @param <Z> 
+ 	 */
+	public static class Triplet<X, Y, Z> { 
+		  public final X x; 
+		  public final Y y; 
+		  public final Z z; 
+		  public Triplet(X x, Y y, Z z) { 
+			  this.x = x; 
+			  this.y = y;
+			  this.z = z;
+		  } 
+			/**
+			 *
+			 * toString() 
+			 * @param <X> 
+			 * @param <Y> 
+			 */
+		@Override public String toString() {
+			  return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
+		  }
+>>>>>>> 45f87a95674cf2ebb29e3d91e955111128e53d9b
 	}
 }
