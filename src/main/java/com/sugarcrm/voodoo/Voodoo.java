@@ -6,8 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import javax.swing.JOptionPane;
 
 import com.sugarcrm.voodoo.automation.SeleniumAutomation;
 import com.sugarcrm.voodoo.automation.VAutomation;
@@ -70,6 +69,17 @@ public class Voodoo implements VAutomation {
 
 	public void pause(long ms) throws Exception {
 		Thread.sleep(ms);
+	}
+	
+	/**
+	 * 
+	 * @param props
+	 * @param defaultValue
+	 * @param key
+	 * @return
+	 */
+	public static void interact(String s) {
+		JOptionPane.showInputDialog(s);
 	}
 
 	@Override
@@ -202,7 +212,7 @@ public class Voodoo implements VAutomation {
     // since voodoo2 is a library, it's not expected to provide logging settings.
     // The settings choice should be with the application/end user.
 	private Logger getLogger() throws Exception {
-		Logger logger = Logger.getLogger(Voodoo.class.getName());
+		Logger logger = Logger.getLogger(TestVoodoo.class.getName());
 		FileHandler fh = new FileHandler(this.getLogPath());
 		fh.setFormatter(new SimpleFormatter());
 		logger.addHandler(fh);
