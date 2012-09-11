@@ -33,7 +33,7 @@ public class TestUtils {
 
 	
 	@Test
-	public void testTrimString(String s, int length) {
+	public void testTrimString() {
 //		if (s.length() <= length)
 //			return s;
 //		return s.substring(s.length() - length);
