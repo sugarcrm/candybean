@@ -1,5 +1,9 @@
 package com.sugarcrm.voodoo;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 
@@ -12,6 +16,40 @@ import java.util.ResourceBundle;
  */
 public class Utils {
 
+	/**
+	 * A property file such as voodoo.properties that contain keys such as 'AUTOMATION.BROWSER' and its value as 'chrome'
+	 * Note that all the directories of the 'filepath' argument must exist
+	 * 
+	 * modifyPropertyKey() A helper function to modify any key from the .properties file to any given value
+	 * @param filepath argument of type String that specifies the path of the properties file
+	 * @param key argument of type String 
+	 * @param value argument of type String
+	 * @return value argument of type String
+	 */
+	public static String modifyPropertyKey(String filepath, String key, String value){
+		Properties prop = new Properties();
+		try {
+			prop.load(new FileInputStream(filepath));
+			prop.setProperty(key, value);
+			prop.store(new FileOutputStream(filepath), null);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * getOSType() A helper function to check the OS type running this java project
+	 * @return String type argument specifying the OS type 
+	 */
+	public static String getOSType() {
+		String os;
+		os = System.getProperty("os.name").toLowerCase();
+		if (os.indexOf("mac") >= 0) return "mac";
+		else if (os.indexOf("win") >= 0) return "win";
+		else return "linux64";
+	}
+	
 	
 	/**
 	 * 

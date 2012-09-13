@@ -1,5 +1,6 @@
 package com.sugarcrm.voodoo;
 
+import java.io.File;
 import java.util.ResourceBundle;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -34,7 +35,7 @@ public class Voodoo implements VAutomation {
 	}
 
 	public static Voodoo getInstance(ResourceBundle props) throws Exception {
-		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props);
+		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
 		return instance;
 	}
 
@@ -231,6 +232,12 @@ public class Voodoo implements VAutomation {
 	 * @throws Exception 
 	 */
 	private Logger getLogger() throws Exception {
+		// check for Log directory existence 
+		File logDir = new File("log");
+		if (!logDir.exists()){
+			logDir.mkdir();
+		}
+		
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
 		FileHandler fh = new FileHandler(this.getLogPath());
 		fh.setFormatter(new SimpleFormatter());
@@ -243,11 +250,11 @@ public class Voodoo implements VAutomation {
 //      logger.info("Using {}", "parameterized logging");
 //		return logger;
 	}
-	
+
 	private String getLogPath() {
 		return props.getString("SYSTEM.LOG_PATH");
 	}
-
+	
 	private Level getLogLevel() {
 		switch(props.getString("SYSTEM.LOG_LEVEL")) {
 		case "SEVERE": return Level.SEVERE;
