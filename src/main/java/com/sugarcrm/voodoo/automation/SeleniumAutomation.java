@@ -2,13 +2,19 @@ package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.JOptionPane;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -266,8 +272,12 @@ public class SeleniumAutomation implements VAutomation {
 	
 	private WebDriver getBrowser(Voodoo.BrowserType browserType) throws Exception {
 		WebDriver webDriver = null;
+		
+		// get the OS type
+		String OS = Utils.getOSType();
+		
 		switch (browserType) {
-		case FIREFOX:
+		case FIREFOX:		
 			String profileName = Utils.getCascadingPropertyValue(this.props, "default", "BROWSER.FIREFOX_PROFILE");
 			String ffBinaryPath = Utils.getCascadingPropertyValue(this.props, "//home//conrad//Applications//firefox-10//firefox", "BROWSER.FIREFOX_BINARY");
 			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
@@ -281,7 +291,12 @@ public class SeleniumAutomation implements VAutomation {
 			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
-			String chromeDriverPath = Utils.getCascadingPropertyValue(props, "/Users/cwarmbold/Documents/Workspace/voodoo2/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
+			// Set chromedriver-mac path
+			String currentDir = System.getProperty("user.dir");
+			String propPath = currentDir + "/target/test-classes/voodoo.properties";
+			String chromePath = Utils.modifyPropertyKey(propPath, "BROWSER.CHROME_DRIVER_PATH", currentDir + "/../voodoo2/lib/chromedriver-" + OS);
+				
+			String chromeDriverPath = Utils.getCascadingPropertyValue(props, chromePath, "BROWSER.CHROME_DRIVER_PATH");
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
 			webDriver = new ChromeDriver();
