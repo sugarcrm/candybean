@@ -2,19 +2,13 @@ package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.JOptionPane;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -32,46 +26,93 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sugarcrm.voodoo.Utils;
+import com.sugarcrm.voodoo.IAutomation;
 import com.sugarcrm.voodoo.Voodoo;
 
 
-public class SeleniumAutomation implements VAutomation {
+public class Selenium implements IFramework {
 	
 	private final Voodoo voodoo;
 	private final ResourceBundle props;
 	private final WebDriver browser;
 	
-	public SeleniumAutomation(Voodoo voodoo, ResourceBundle props, Voodoo.BrowserType browserType) throws Exception {
+	/**
+	 * @param voodoo
+	 * @param props
+	 * @param browserType
+	 * @throws Exception
+	 */
+	public Selenium(Voodoo voodoo, ResourceBundle props, Voodoo.InterfaceType browserType) throws Exception {
 		this.voodoo = voodoo;
 		this.props = props;
 		this.browser = this.getBrowser(browserType);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#start(java.lang.String)
+	 */
 	@Override
 	public void start(String url) throws Exception {
 		browser.get(url);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#stop()
+	 */
 	@Override
 	public void stop() throws Exception {
 		browser.close();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#getText(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
-	public String getText(VAutomation.Strategy strategy, String hook) throws Exception {
+	public String getText(VControl control) throws Exception {
+		if (control instanceof VSeleniumControl) {
+			WebElement we = ((VSeleniumControl) control).webElement;
+			return we.getText();
+		}
+		else throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#getText(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
+	 */
+	@Override
+	public String getText(IAutomation.Strategy strategy, String hook) throws Exception {
 		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
 		return we.getText();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#hover(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
-	public void hover(VAutomation.Strategy strategy, String hook) throws Exception {
+	public void hover(VControl control) throws Exception {
+		if (control instanceof VSeleniumControl) {
+			WebElement we = ((VSeleniumControl) control).webElement;
+			Actions action = new Actions(browser);
+			action.moveToElement(we).perform();
+		}
+		else throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#hover(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
+	 */
+	@Override
+	public void hover(IAutomation.Strategy strategy, String hook) throws Exception {
 		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
 		Actions action = new Actions(browser);
 		action.moveToElement(we).perform();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#getControl(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
+	 */
 	@Override
-	public VControl getControl(VAutomation.Strategy strategy, String hook) throws Exception {
+	public VControl getControl(IAutomation.Strategy strategy, String hook) throws Exception {
 		WebElement webElement = null;
 		switch (strategy) {
 		case CSS:
@@ -87,15 +128,12 @@ public class SeleniumAutomation implements VAutomation {
 			webElement = this.browser.findElement(By.name(hook));
 			break;
 		}
-		return new VSeleniumControl(webElement);
+		return new VSeleniumControl(this, webElement);
 	}
 
-	@Override
-	public void click(VAutomation.Strategy strategy, String hook) throws Exception {
-		this.click(this.getControl(strategy, hook));
-	}
-	
-	@Deprecated
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#click(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
 	public void click(VControl control) throws Exception {
 		if (control instanceof VSeleniumControl) {
@@ -104,12 +142,17 @@ public class SeleniumAutomation implements VAutomation {
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#click(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
+	 */
 	@Override
-	public void input(VAutomation.Strategy strategy, String hook, String input) throws Exception {
-		this.input(this.getControl(strategy, hook), input);
+	public void click(IAutomation.Strategy strategy, String hook) throws Exception {
+		this.click(this.getControl(strategy, hook));
 	}
 	
-	@Deprecated
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#input(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+	 */
 	@Override
 	public void input(VControl control, String input) throws Exception {
 		if (control instanceof VSeleniumControl) {
@@ -120,12 +163,26 @@ public class SeleniumAutomation implements VAutomation {
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#input(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void input(IAutomation.Strategy strategy, String hook, String input) throws Exception {
+		this.input(this.getControl(strategy, hook), input);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#acceptDialog()
+	 */
 	@Override
 	public void acceptDialog() throws Exception {
 		Alert alert = browser.switchTo().alert();
 		alert.accept();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#switchToPopup()
+	 */
 	@Override
 	public void switchToPopup() throws Exception {
 		String currentWindowHandle = browser.getWindowHandle();
@@ -136,24 +193,15 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
+	 * @param browser
 	 */
 	public static void maximizeBrowserWindow(WebDriver browser) {
-		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit()
-				.getScreenSize();
-		browser.manage().window()
-				.setSize(new Dimension(screenSize.width, screenSize.height));
+		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		browser.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
+	 * @param element
 	 * @return
 	 */
 	public static String webElementToString(WebElement element) {
@@ -166,10 +214,8 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
+	 * @param nativeOptions
+	 * @param queryOptionNames
 	 * @return
 	 */
 	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
@@ -179,15 +225,11 @@ public class SeleniumAutomation implements VAutomation {
 		}
 		if (nativeOptionNames.containsAll(queryOptionNames) && queryOptionNames.containsAll(nativeOptionNames)) return true;
 		else return false;
-		
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
+	 * @param selectElement
+	 * @param actionElement
 	 */
 	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
 		List<WebElement> options = selectElement.getOptions(); 
@@ -198,11 +240,10 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
+	 * @param selectElement
+	 * @param actionOptionValues
+	 * @param actionElement
+	 * @throws Exception
 	 */
 	public static void optionAction(Select selectElement, Set<String> actionOptionValues, WebElement actionElement) throws Exception {
 		List<WebElement> allOptions = selectElement.getOptions();
@@ -220,10 +261,9 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
+	 * @param tableElement
+	 * @param rowRelativeXPathTextKey
+	 * @param value
 	 * @return
 	 */
 	public static boolean tableContainsValue(WebElement tableElement, String rowRelativeXPathTextKey, String value) {
@@ -235,11 +275,11 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
+	 * @param table
+	 * @param rowRelativeXPathTextKey
+	 * @param rowRelativeXPathElementValue
 	 * @return
+	 * @throws Exception
 	 */
 	public static Map<String, WebElement> loadMapFromTable(WebElement table, String rowRelativeXPathTextKey, String rowRelativeXPathElementValue) throws Exception {
 		Map<String, WebElement>	rowMap = new HashMap<String, WebElement>();
@@ -257,11 +297,10 @@ public class SeleniumAutomation implements VAutomation {
 	}
 	
 	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
+	 * @param browser
+	 * @param timeout
+	 * @param by
+	 * @throws Exception
 	 */
 	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
 		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
@@ -270,7 +309,7 @@ public class SeleniumAutomation implements VAutomation {
 			}});
 	}
 	
-	private WebDriver getBrowser(Voodoo.BrowserType browserType) throws Exception {
+	private WebDriver getBrowser(Voodoo.InterfaceType browserType) throws Exception {
 		WebDriver webDriver = null;
 		
 		// get the OS type
@@ -317,8 +356,11 @@ public class SeleniumAutomation implements VAutomation {
 		return webDriver;
 	}
 	
-	public class VSeleniumControl implements VControl {
+	public class VSeleniumControl extends VControl {
 		private final WebElement webElement;
-		public VSeleniumControl(WebElement webElement) { this.webElement = webElement; }
+		public VSeleniumControl(IFramework vAutomation, WebElement webElement) {
+			super(vAutomation);
+			this.webElement = webElement;
+		}
 	}
 }
