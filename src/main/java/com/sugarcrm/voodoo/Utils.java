@@ -1,5 +1,5 @@
 package com.sugarcrm.voodoo;
-import java.util.ResourceBundle;
+import java.util.Properties;
 
 
 /**
@@ -18,11 +18,11 @@ public class Utils {
 	 * @param key
 	 * @return
 	 */
-	public static String getCascadingPropertyValue(ResourceBundle props,
+	public static String getCascadingPropertyValue(Properties props,
 			String defaultValue, String key) {
 		String value = defaultValue;
 		if (props.containsKey(key))
-			value = props.getString(key);
+			value = props.getProperty(key);
 		if (System.getProperties().containsKey(key))
 			value = System.getProperty(key);
 		return value;

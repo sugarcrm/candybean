@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ import com.sugarcrm.voodoo.Voodoo;
 public class Selenium implements IFramework {
 	
 	private final Voodoo voodoo;
-	private final ResourceBundle props;
+	private final Properties props;
 	private final WebDriver browser;
 	
 	/**
@@ -42,7 +43,7 @@ public class Selenium implements IFramework {
 	 * @param browserType
 	 * @throws Exception
 	 */
-	public Selenium(Voodoo voodoo, ResourceBundle props, Voodoo.InterfaceType browserType) throws Exception {
+	public Selenium(Voodoo voodoo, Properties props, Voodoo.InterfaceType browserType) throws Exception {
 		this.voodoo = voodoo;
 		this.props = props;
 		this.browser = this.getBrowser(browserType);
@@ -339,7 +340,7 @@ public class Selenium implements IFramework {
 		default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-		long implicitWait = Long.parseLong(props.getString("PERF.IMPLICIT_WAIT"));
+		long implicitWait = Long.parseLong(props.getProperty("PERF.IMPLICIT_WAIT"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			webDriver.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
