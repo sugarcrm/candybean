@@ -312,9 +312,6 @@ public class Selenium implements IFramework {
 	private WebDriver getBrowser(Voodoo.InterfaceType browserType) throws Exception {
 		WebDriver webDriver = null;
 		
-		// get the OS type
-		String OS = Utils.getOSType();
-		
 		switch (browserType) {
 		case FIREFOX:		
 			String profileName = Utils.getCascadingPropertyValue(this.props, "default", "BROWSER.FIREFOX_PROFILE");
@@ -330,12 +327,7 @@ public class Selenium implements IFramework {
 			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
-			// Set chromedriver-mac path
-			String currentDir = System.getProperty("user.dir");
-			String propPath = currentDir + "/target/test-classes/voodoo.properties";
-			String chromePath = Utils.modifyPropertyKey(propPath, "BROWSER.CHROME_DRIVER_PATH", currentDir + "/../voodoo2/lib/chromedriver-" + OS);
-				
-			String chromeDriverPath = Utils.getCascadingPropertyValue(props, chromePath, "BROWSER.CHROME_DRIVER_PATH");
+			String chromeDriverPath = Utils.getCascadingPropertyValue(props, "/Users/cwarmbold/Documents/Workspace/voodoo2/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
 			webDriver = new ChromeDriver();
