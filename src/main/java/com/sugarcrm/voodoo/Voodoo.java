@@ -1,7 +1,7 @@
 package com.sugarcrm.voodoo;
 
 import java.io.File;
-import java.util.ResourceBundle;
+import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,10 +25,10 @@ public class Voodoo implements IAutomation {
 	public final Logger log;
 
 	private static Voodoo instance = null;
-	private final ResourceBundle props;
+	private final Properties props;
 	private final IFramework vAutomation;
 
-	private Voodoo(ResourceBundle props) throws Exception {
+	private Voodoo(Properties props) throws Exception {
 		this.props = props;
 		this.log = this.getLogger();
 		this.vAutomation = this.getAutomation();
@@ -39,7 +39,7 @@ public class Voodoo implements IAutomation {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Voodoo getInstance(ResourceBundle props) throws Exception {
+	public static Voodoo getInstance(Properties props) throws Exception {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
 		return instance;
 	}
@@ -261,11 +261,13 @@ public class Voodoo implements IAutomation {
 	}
 
 	private String getLogPath() {
-		return props.getString("SYSTEM.LOG_PATH");
+		String defaultLogPath = "." + File.separator + "log" + File.separator + "voodoo.log";
+		return Utils.getCascadingPropertyValue(props, defaultLogPath, "SYSTEM.LOG_PATH");
 	}
 	
 	private Level getLogLevel() {
-		switch(props.getString("SYSTEM.LOG_LEVEL")) {
+		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", "SYSTEM.LOG_LEVEL");
+		switch(logLevel) {
 		case "SEVERE": return Level.SEVERE;
 		case "WARNING": return Level.WARNING;
 		case "INFO": return Level.INFO;
