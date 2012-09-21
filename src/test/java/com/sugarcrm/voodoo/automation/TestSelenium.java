@@ -1,7 +1,7 @@
 package com.sugarcrm.voodoo.automation;
 
 
-public class TestSeleniumAutomation {
+public class TestSelenium {
 	
 	public void testStart() throws Exception {
 //		browser.get(url);
