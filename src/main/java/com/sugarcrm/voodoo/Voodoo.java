@@ -169,7 +169,6 @@ public class Voodoo implements IAutomation {
 	 * @see com.sugarcrm.voodoo.VAutomation#click(com.sugarcrm.voodoo.automation.VControl)
 	 */
 	@Override
-	@Deprecated
 	public void click(VControl control) throws Exception {
 		this.log.info("Clicking on control: " + control);
 		vAutomation.click(control);
@@ -215,10 +214,8 @@ public class Voodoo implements IAutomation {
     }
 	
 	/**
-	 * 
-	 * getBrowserType() 
-	 * @return 
-	 * @throws Exception 
+	 * @return
+	 * @throws Exception
 	 */
 	private Voodoo.InterfaceType getInterfaceType() throws Exception {
 		Voodoo.InterfaceType interfaceType = null;
@@ -237,15 +234,9 @@ public class Voodoo implements IAutomation {
 //	}
 
 //	public String getTime() {
-//		return Utils.trimString("" + (new Date()).getTime(), 6);
+//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
 //	}
 
-	/**
-	 * 
-	 * getLogger() 
-	 * @return 
-	 * @throws Exception 
-	 */
 	private Logger getLogger() throws Exception {
 		// check for Log directory existence 
 		File logDir = new File("log");
