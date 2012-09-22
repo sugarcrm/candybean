@@ -12,7 +12,6 @@ import java.util.Properties;
 public class Utils {
 	
 	/**
-	 * 
 	 * @param props
 	 * @param defaultValue
 	 * @param key
@@ -30,13 +29,11 @@ public class Utils {
 
 	
 	/**
-	 * 
-	 * trimString() 
-	 * @param s 
-	 * @param length 
-	 * @return 
+	 * @param s
+	 * @param length
+	 * @return
 	 */
-	public static String trimString(String s, int length) {
+	public static String pretruncate(String s, int length) {
 		if (s.length() <= length)
 			return s;
 		return s.substring(s.length() - length);
