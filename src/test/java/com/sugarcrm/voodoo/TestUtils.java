@@ -38,13 +38,13 @@ public class TestUtils {
 			
 			// Test
 			String actualDefaultVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, "NULL");
-			System.out.println("actualDefaultVal: " + actualDefaultVal);
+//			System.out.println("actualDefaultVal: " + actualDefaultVal);
 			Assert.assertEquals("Expected default value.", propDefaultVal, actualDefaultVal);
 			String actualConfigVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, propKey);
-			System.out.println("actualConfigVal: " + actualConfigVal);
+//			System.out.println("actualConfigVal: " + actualConfigVal);
 			Assert.assertEquals("Expected configuration value.", propConfigVal, actualConfigVal);
 			String actualSysVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, propSysKey);
-			System.out.println("actualSysVal: " + actualSysVal);
+//			System.out.println("actualSysVal: " + actualSysVal);
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
 			// Resource cleanup
