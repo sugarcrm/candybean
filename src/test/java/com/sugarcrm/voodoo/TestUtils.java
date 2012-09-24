@@ -48,7 +48,7 @@ public class TestUtils {
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
 			// Resource cleanup
-			System.clearProperty(propKey);
+			System.clearProperty(propSysKey);
 			(new File(propsFilePath)).delete();
 		} catch (Exception e) {
 			e.printStackTrace();
