@@ -26,27 +26,8 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-    <properties>
-         <slf4jVersion>1.6.6</slf4jVersion>
-         <logbackVersion>1.0.7</logbackVersion>
-    </properties>
-	<dependencies>
+    <dependencies>
 	    <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4jVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logbackVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logbackVersion}</version>
-        </dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
@@ -72,14 +53,14 @@
 					<outputName>Sugar_Automation</outputName>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin>
+			</plugin -->
 		</plugins>
 	</reporting>
 </project>

@@ -29,11 +29,13 @@ public class TestUtils {
 			String propSysVal = "systemvalue";
 		
 			// Resource setup
+			File propsFile = new File(propsFilePath);
+			propsFile.createNewFile();
 			Properties voodooProps = new Properties();
 			voodooProps.setProperty(propKey, propConfigVal);
 			voodooProps.setProperty(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
-			voodooProps.store(new FileOutputStream(propsFilePath), null);
+			voodooProps.store(new FileOutputStream(propsFile), null);
 //			JOptionPane.showInputDialog("pause");
 			
 			// Test
@@ -49,7 +51,7 @@ public class TestUtils {
 
 			// Resource cleanup
 			System.clearProperty(propSysKey);
-			(new File(propsFilePath)).delete();
+			propsFile.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail("Exception caught.");
@@ -58,11 +60,11 @@ public class TestUtils {
 
 	
 	@Test
-	public void testTruncate() {
+	public void testPretruncate() {
 		String original = "ffour";
 		String expected = "four";
 		String actual = Utils.pretruncate(original, 4);
-		Assert.assertEquals("Actual truncated string length does not match expected.", expected, actual);
+		Assert.assertEquals("Actual pretruncated string length does not match expected.", expected, actual);
 	}
 
 	
