@@ -19,9 +19,9 @@ public class TestUtils {
 	@Test
 	public void testGetCascadingPropertyValue() {
 		try {
-			String currentWorkingPath = System.getProperty("user.dir");
-			String relativeResourcesPath = File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator;
-			String propsFilePath = currentWorkingPath + relativeResourcesPath + "testutils.properties";
+			String currentWorkingPath = System.getProperty("user.dir") + File.separator;
+			String propsFilePath = currentWorkingPath + "testutils.properties";
+//			System.out.println("Props file path: " + propsFilesPath);
 			String propKey = "key";
 			String propSysKey = "syskey";
 			String propConfigVal = "configvalue";
