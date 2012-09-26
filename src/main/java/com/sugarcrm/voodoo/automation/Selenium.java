@@ -350,7 +350,7 @@ public class Selenium implements IFramework {
 	}
 	
 	public class VSeleniumControl extends VControl {
-		private final WebElement webElement;
+		public final WebElement webElement;
 		public VSeleniumControl(IFramework vAutomation, WebElement webElement) {
 			super(vAutomation);
 			this.webElement = webElement;
