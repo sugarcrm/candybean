@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.JOptionPane;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -328,7 +330,8 @@ public class Selenium implements IFramework {
 			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
-			String chromeDriverPath = Utils.getCascadingPropertyValue(props, "/Users/ws3li/Documents/workspace4/voodoo2/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
+			String workingDir = System.getProperty("user.dir");
+			String chromeDriverPath = Utils.getCascadingPropertyValue(props, workingDir + "/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
 			webDriver = new ChromeDriver();
