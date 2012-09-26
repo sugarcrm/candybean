@@ -1,4 +1,5 @@
 package com.sugarcrm.voodoo;
+import java.io.File;
 import java.util.Properties;
 
 
@@ -63,6 +64,20 @@ public class Utils {
 		}
 	}
 
+	/**
+	 * adjustPath - Modify the given path to support different Operating Systems' path type.
+	 * 
+	 * @author wli
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String adjustPath(String path){
+		path = path.replace("\\", "/");
+		path = path.replaceAll("/+", File.separator);
+		return path;
+	}
+	
 	
 	/**
 	 * Triplet is a python-3-tuple lightweight equivalent for convenience.
