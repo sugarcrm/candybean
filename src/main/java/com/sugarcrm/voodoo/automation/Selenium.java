@@ -328,7 +328,8 @@ public class Selenium implements IFramework {
 			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
-			String chromeDriverPath = Utils.getCascadingPropertyValue(props, "/Users/cwarmbold/Documents/Workspace/voodoo2/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
+			String workingDir = System.getProperty("user.dir");
+			String chromeDriverPath = Utils.getCascadingPropertyValue(props, workingDir + "/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
 			webDriver = new ChromeDriver();
