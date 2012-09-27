@@ -334,10 +334,11 @@ public class Selenium implements IFramework {
 			String workingDir = System.getProperty("user.dir");
 			ChromeOptions chromeOptions = new ChromeOptions();
 			String chromeDriverLogPath = Utils.getCascadingPropertyValue(props, workingDir + "/log/chromedriver.log", "browser.chrome_driver_log_path");
-			chromeOptions.addArguments("-log-path=" + chromeDriverLogPath);
+			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 			String chromeDriverPath = Utils.getCascadingPropertyValue(props, workingDir + "/etc/chromedriver-mac", "browser.chrome_driver_path");
+//			chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
+			voodoo.log.info("Instantiating Chrome with:\n    log path:" + chromeDriverLogPath + "\n    driver path: " + chromeDriverPath);
 			webDriver = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
