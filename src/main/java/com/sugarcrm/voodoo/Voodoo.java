@@ -1,9 +1,14 @@
 package com.sugarcrm.voodoo;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -199,7 +204,7 @@ public class Voodoo implements IAutomation {
 	private IFramework getAutomation() throws Exception {
 		IFramework vAutomation = null;
 		Voodoo.InterfaceType iType = this.getInterfaceType();
-		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "AUTOMATION.FRAMEWORK");
+		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "automation.framework");
 		switch (vAutomationString) {
 		case "selenium":
 			this.log.info("Instantiating Selenium automation with interface type: " + iType.name());
@@ -219,7 +224,7 @@ public class Voodoo implements IAutomation {
 	 */
 	private Voodoo.InterfaceType getInterfaceType() throws Exception {
 		Voodoo.InterfaceType interfaceType = null;
-		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "AUTOMATION.INTERFACE");
+		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
 		for (Voodoo.InterfaceType interfaceTypeIter : Voodoo.InterfaceType.values()) {
 			if (interfaceTypeIter.name().equalsIgnoreCase(interfaceTypeString)) {
 				interfaceType = interfaceTypeIter;
@@ -230,7 +235,7 @@ public class Voodoo implements IAutomation {
 	}
 
 //	public long getPageLoadTimeout() {
-//		return Long.parseLong(props.getString("PERF.PAGE_LOAD_TIMEOUT"));
+//		return Long.parseLong(props.getString("perf.page_load_timeout"));
 //	}
 
 //	public String getTime() {
@@ -238,36 +243,35 @@ public class Voodoo implements IAutomation {
 //	}
 
 	private Logger getLogger() throws Exception {
-		// check for Log directory existence 
-		File logDir = new File("log");
-		if (!logDir.exists()){
-			logDir.mkdir();
-		}
+		// check for Log directory existence
+		String currentWorkingPath = System.getProperty("user.dir");
+		File tempLogPropsFile = new File(currentWorkingPath + File.separator + "logging.properties");
+		tempLogPropsFile.createNewFile();
+//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
+//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
+		OutputStream output = new FileOutputStream(tempLogPropsFile);
+		this.props.store(output, "");
+//		JOptionPane.showInputDialog("pause");
+		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
-		FileHandler fh = new FileHandler(this.getLogPath());
-		fh.setFormatter(new SimpleFormatter());
-		logger.addHandler(fh);
-		logger.setLevel(this.getLogLevel());
+		LogManager.getLogManager().readConfiguration(input);
+//		logger.setLevel(this.getLogLevel());
+		tempLogPropsFile.delete();
 		return logger;
 	}
 
-	private String getLogPath() {
-		String defaultLogPath = "." + File.separator + "log" + File.separator + "voodoo.log";
-		return Utils.getCascadingPropertyValue(props, defaultLogPath, "SYSTEM.LOG_PATH");
-	}
-	
-	private Level getLogLevel() {
-		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", "SYSTEM.LOG_LEVEL");
-		switch(logLevel) {
-		case "SEVERE": return Level.SEVERE;
-		case "WARNING": return Level.WARNING;
-		case "INFO": return Level.INFO;
-		case "FINE": return Level.FINE;
-		case "FINER": return Level.FINER;
-		case "FINEST": return Level.FINEST;
-		default:
-			log.warning("Configured SYSTEM.LOG_LEVEL not recognized; defaulting to Level.INFO");
-			return Level.INFO;
-		}
-	}
+//	private Level getLogLevel() {
+//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
+//		switch(logLevel) {
+//		case "SEVERE": return Level.SEVERE;
+//		case "WARNING": return Level.WARNING;
+//		case "INFO": return Level.INFO;
+//		case "FINE": return Level.FINE;
+//		case "FINER": return Level.FINER;
+//		case "FINEST": return Level.FINEST;
+//		default:
+//			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
+//			return Level.INFO;
+//		}
+//	}
 }
