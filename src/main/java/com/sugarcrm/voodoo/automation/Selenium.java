@@ -2,6 +2,7 @@ package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,11 +18,13 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -315,8 +318,8 @@ public class Selenium implements IFramework {
 		
 		switch (browserType) {
 		case FIREFOX:		
-			String profileName = Utils.getCascadingPropertyValue(this.props, "default", "BROWSER.FIREFOX_PROFILE");
-			String ffBinaryPath = Utils.getCascadingPropertyValue(this.props, "//home//conrad//Applications//firefox-10//firefox", "BROWSER.FIREFOX_BINARY");
+			String profileName = Utils.getCascadingPropertyValue(this.props, "default", "browser.firefox_profile");
+			String ffBinaryPath = Utils.getCascadingPropertyValue(this.props, "//home//conrad//Applications//firefox-10//firefox", "browser.firefox_binary");
 			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
 			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
 //			if (System.getProperty("headless") != null) {
@@ -329,10 +332,13 @@ public class Selenium implements IFramework {
 			break;
 		case CHROME:
 			String workingDir = System.getProperty("user.dir");
-			String chromeDriverPath = Utils.getCascadingPropertyValue(props, workingDir + "/lib/chromedriver-mac", "BROWSER.CHROME_DRIVER_PATH");
+			ChromeOptions chromeOptions = new ChromeOptions();
+			String chromeDriverLogPath = Utils.getCascadingPropertyValue(props, workingDir + "/log/chromedriver.log", "browser.chrome_driver_log_path");
+			chromeOptions.addArguments("-log-path=" + chromeDriverLogPath);
+			String chromeDriverPath = Utils.getCascadingPropertyValue(props, workingDir + "/etc/chromedriver-mac", "browser.chrome_driver_path");
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with driver path: " + chromeDriverPath);
-			webDriver = new ChromeDriver();
+			webDriver = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
 			throw new Exception("Selenium: ie browser not yet supported.");
@@ -341,7 +347,7 @@ public class Selenium implements IFramework {
 		default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-		long implicitWait = Long.parseLong(props.getProperty("PERF.IMPLICIT_WAIT"));
+		long implicitWait = Long.parseLong(props.getProperty("perf.implicit_wait"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			webDriver.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));

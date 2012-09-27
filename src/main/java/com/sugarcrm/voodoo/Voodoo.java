@@ -199,7 +199,7 @@ public class Voodoo implements IAutomation {
 	private IFramework getAutomation() throws Exception {
 		IFramework vAutomation = null;
 		Voodoo.InterfaceType iType = this.getInterfaceType();
-		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "AUTOMATION.FRAMEWORK");
+		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "automation.framework");
 		switch (vAutomationString) {
 		case "selenium":
 			this.log.info("Instantiating Selenium automation with interface type: " + iType.name());
@@ -219,7 +219,7 @@ public class Voodoo implements IAutomation {
 	 */
 	private Voodoo.InterfaceType getInterfaceType() throws Exception {
 		Voodoo.InterfaceType interfaceType = null;
-		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "AUTOMATION.INTERFACE");
+		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
 		for (Voodoo.InterfaceType interfaceTypeIter : Voodoo.InterfaceType.values()) {
 			if (interfaceTypeIter.name().equalsIgnoreCase(interfaceTypeString)) {
 				interfaceType = interfaceTypeIter;
@@ -230,7 +230,7 @@ public class Voodoo implements IAutomation {
 	}
 
 //	public long getPageLoadTimeout() {
-//		return Long.parseLong(props.getString("PERF.PAGE_LOAD_TIMEOUT"));
+//		return Long.parseLong(props.getString("perf.page_load_timeout"));
 //	}
 
 //	public String getTime() {
@@ -253,11 +253,11 @@ public class Voodoo implements IAutomation {
 
 	private String getLogPath() {
 		String defaultLogPath = "." + File.separator + "log" + File.separator + "voodoo.log";
-		return Utils.getCascadingPropertyValue(props, defaultLogPath, "SYSTEM.LOG_PATH");
+		return Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
 	}
 	
 	private Level getLogLevel() {
-		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", "SYSTEM.LOG_LEVEL");
+		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", "system.log_level");
 		switch(logLevel) {
 		case "SEVERE": return Level.SEVERE;
 		case "WARNING": return Level.WARNING;
@@ -266,7 +266,7 @@ public class Voodoo implements IAutomation {
 		case "FINER": return Level.FINER;
 		case "FINEST": return Level.FINEST;
 		default:
-			log.warning("Configured SYSTEM.LOG_LEVEL not recognized; defaulting to Level.INFO");
+			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
 			return Level.INFO;
 		}
 	}
