@@ -1,9 +1,14 @@
 package com.sugarcrm.voodoo;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -238,36 +243,35 @@ public class Voodoo implements IAutomation {
 //	}
 
 	private Logger getLogger() throws Exception {
-		// check for Log directory existence 
-		File logDir = new File("log");
-		if (!logDir.exists()){
-			logDir.mkdir();
-		}
+		// check for Log directory existence
+		String currentWorkingPath = System.getProperty("user.dir");
+		File tempLogPropsFile = new File(currentWorkingPath + File.separator + "logging.properties");
+		tempLogPropsFile.createNewFile();
+//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
+//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
+		OutputStream output = new FileOutputStream(tempLogPropsFile);
+		this.props.store(output, "");
+//		JOptionPane.showInputDialog("pause");
+		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
-		FileHandler fh = new FileHandler(this.getLogPath());
-		fh.setFormatter(new SimpleFormatter());
-		logger.addHandler(fh);
-		logger.setLevel(this.getLogLevel());
+		LogManager.getLogManager().readConfiguration(input);
+//		logger.setLevel(this.getLogLevel());
+		tempLogPropsFile.delete();
 		return logger;
 	}
 
-	private String getLogPath() {
-		String defaultLogPath = "." + File.separator + "log" + File.separator + "voodoo.log";
-		return Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
-	}
-	
-	private Level getLogLevel() {
-		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", "system.log_level");
-		switch(logLevel) {
-		case "SEVERE": return Level.SEVERE;
-		case "WARNING": return Level.WARNING;
-		case "INFO": return Level.INFO;
-		case "FINE": return Level.FINE;
-		case "FINER": return Level.FINER;
-		case "FINEST": return Level.FINEST;
-		default:
-			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
-			return Level.INFO;
-		}
-	}
+//	private Level getLogLevel() {
+//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
+//		switch(logLevel) {
+//		case "SEVERE": return Level.SEVERE;
+//		case "WARNING": return Level.WARNING;
+//		case "INFO": return Level.INFO;
+//		case "FINE": return Level.FINE;
+//		case "FINER": return Level.FINER;
+//		case "FINEST": return Level.FINEST;
+//		default:
+//			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
+//			return Level.INFO;
+//		}
+//	}
 }
