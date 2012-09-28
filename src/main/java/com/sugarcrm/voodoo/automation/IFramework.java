@@ -16,6 +16,8 @@ public interface IFramework {
 	public void hover(IAutomation.Strategy strategy, String hook) throws Exception;
 	public void click(IAutomation.Strategy strategy, String hook) throws Exception;
 	public void click(VControl control) throws Exception;
+	public void rightClick(IAutomation.Strategy strategy, String hook) throws Exception;
+	public void rightClick(VControl control) throws Exception;
 	public void input(IAutomation.Strategy strategy, String hook, String input) throws Exception;
 	public void input(VControl control, String input) throws Exception;
 	public void acceptDialog() throws Exception;
