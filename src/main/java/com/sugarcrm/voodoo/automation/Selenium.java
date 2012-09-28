@@ -154,6 +154,23 @@ public class Selenium implements IFramework {
 		this.click(this.getControl(strategy, hook));
 	}
 	
+	@Override
+	public void rightClick(VControl control) throws Exception {
+		if (control instanceof VSeleniumControl) {
+			WebElement we = ((VSeleniumControl) control).webElement;
+			Actions action = new Actions(browser);
+			action.contextClick(we).perform();
+		}
+		else throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	@Override
+	public void rightClick(IAutomation.Strategy strategy, String hook) throws Exception {
+		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
+		Actions action = new Actions(browser);
+		action.contextClick(we).perform();
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.automation.IFramework#input(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
 	 */

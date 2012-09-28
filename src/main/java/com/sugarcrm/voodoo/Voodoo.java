@@ -178,6 +178,18 @@ public class Voodoo implements IAutomation {
 		this.log.info("Clicking on control: " + control);
 		vAutomation.click(control);
 	}
+	
+	@Override
+	public void rightClick(IAutomation.Strategy strategy, String hook) throws Exception {
+		this.log.info("Right Clicking on control with hook: " + hook + " via strategy: " + strategy);
+		vAutomation.rightClick(strategy, hook);
+	}
+
+	@Override
+	public void rightClick(VControl control) throws Exception {
+		this.log.info("Right Clicking on control: " + control);
+		vAutomation.rightClick(control);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.VAutomation#input(com.sugarcrm.voodoo.VAutomation.Strategy, java.lang.String, java.lang.String)
