@@ -25,6 +25,11 @@ public class VControl implements IControl {
 	public void click() throws Exception {
 		this.vAutomation.click(this);
 	}
+	
+	@Override
+	public void rightClick() throws Exception {
+		this.vAutomation.click(this);
+	}
 
 	@Override
 	public void input(String input) throws Exception {

@@ -17,6 +17,8 @@ public interface IAutomation {
 	public void hover(Strategy strategy, String hook) throws Exception;
 	public void click(VControl control) throws Exception;
 	public void click(Strategy strategy, String hook) throws Exception;
+	public void rightClick(VControl control) throws Exception;
+	public void rightClick(Strategy strategy, String hook) throws Exception;
 	public void input(VControl control, String input) throws Exception;
 	public void input(Strategy strategy, String hook, String input) throws Exception;
 	public void pause(long ms) throws Exception;
