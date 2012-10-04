@@ -1,0 +1,20 @@
+# FORMAT: "name = STRATEGY:hook"
+# The following strategies are currently supported: CSS, XPATH, ID, NAME
+
+# LOGIN
+login_textfield_username = ID:user_name
+login_textfield_password = ID:user_password
+login_button_login = ID:login_button
+
+# NAVBAR
+navbar_menu_user = CSS:#globalLinks span
+navbar_menuitem_admin = ID:admin_link
+navbar_menuitem_logout = ID:logout_link
+
+# ADMINISTRATION
+admin_link_sugarportal = ID:sugarportal
+
+# PORTAL
+portal_link_configureportal = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div/div/div/div/div[2]/div/div/div/div[2]/div[3]/table/tbody/tr/td/table/tbody/tr/td/a/span
+portal_checkbox_portalenable = ID:appStatus
+portal_button_save = ID:gobutton
