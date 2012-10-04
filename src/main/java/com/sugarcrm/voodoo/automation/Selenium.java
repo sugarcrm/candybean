@@ -2,13 +2,11 @@ package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +22,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -73,8 +70,8 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public String getText(VControl control) throws Exception {
-		if (control instanceof VSeleniumControl) {
-			WebElement we = ((VSeleniumControl) control).webElement;
+		if (control instanceof SeleniumVControl) {
+			WebElement we = ((SeleniumVControl) control).webElement;
 			return we.getText();
 		}
 		else throw new Exception("Selenium: VControl not selenium-based.");
@@ -85,7 +82,7 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public String getText(IAutomation.Strategy strategy, String hook) throws Exception {
-		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
+		WebElement we = ((SeleniumVControl) this.getControl(strategy, hook)).webElement;
 		return we.getText();
 	}
 	
@@ -94,8 +91,8 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public void hover(VControl control) throws Exception {
-		if (control instanceof VSeleniumControl) {
-			WebElement we = ((VSeleniumControl) control).webElement;
+		if (control instanceof SeleniumVControl) {
+			WebElement we = ((SeleniumVControl) control).webElement;
 			Actions action = new Actions(browser);
 			action.moveToElement(we).perform();
 		}
@@ -107,7 +104,7 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public void hover(IAutomation.Strategy strategy, String hook) throws Exception {
-		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
+		WebElement we = ((SeleniumVControl) this.getControl(strategy, hook)).webElement;
 		Actions action = new Actions(browser);
 		action.moveToElement(we).perform();
 	}
@@ -132,7 +129,7 @@ public class Selenium implements IFramework {
 			webElement = this.browser.findElement(By.name(hook));
 			break;
 		}
-		return new VSeleniumControl(this, webElement);
+		return new SeleniumVControl(this, webElement);
 	}
 
 	/* (non-Javadoc)
@@ -140,8 +137,8 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public void click(VControl control) throws Exception {
-		if (control instanceof VSeleniumControl) {
-			((VSeleniumControl) control).webElement.click();
+		if (control instanceof SeleniumVControl) {
+			((SeleniumVControl) control).webElement.click();
 		}
 		else throw new Exception("Selenium: VControl not selenium-based.");
 	}
@@ -156,8 +153,8 @@ public class Selenium implements IFramework {
 	
 	@Override
 	public void rightClick(VControl control) throws Exception {
-		if (control instanceof VSeleniumControl) {
-			WebElement we = ((VSeleniumControl) control).webElement;
+		if (control instanceof SeleniumVControl) {
+			WebElement we = ((SeleniumVControl) control).webElement;
 			Actions action = new Actions(browser);
 			action.contextClick(we).perform();
 		}
@@ -166,7 +163,7 @@ public class Selenium implements IFramework {
 	
 	@Override
 	public void rightClick(IAutomation.Strategy strategy, String hook) throws Exception {
-		WebElement we = ((VSeleniumControl) this.getControl(strategy, hook)).webElement;
+		WebElement we = ((SeleniumVControl) this.getControl(strategy, hook)).webElement;
 		Actions action = new Actions(browser);
 		action.contextClick(we).perform();
 	}
@@ -176,8 +173,8 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public void input(VControl control, String input) throws Exception {
-		if (control instanceof VSeleniumControl) {
-			WebElement we = ((VSeleniumControl) control).webElement;
+		if (control instanceof SeleniumVControl) {
+			WebElement we = ((SeleniumVControl) control).webElement;
 			we.clear();
 			we.sendKeys(input);
 		}
@@ -374,9 +371,9 @@ public class Selenium implements IFramework {
 		return webDriver;
 	}
 	
-	public class VSeleniumControl extends VControl {
+	public class SeleniumVControl extends VControl {
 		public final WebElement webElement;
-		public VSeleniumControl(IFramework vAutomation, WebElement webElement) {
+		public SeleniumVControl(IFramework vAutomation, WebElement webElement) {
 			super(vAutomation);
 			this.webElement = webElement;
 		}
