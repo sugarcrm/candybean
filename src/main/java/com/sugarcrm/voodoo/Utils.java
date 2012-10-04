@@ -1,6 +1,11 @@
 package com.sugarcrm.voodoo;
+
 import java.io.File;
+import java.util.HashMap;
 import java.util.Properties;
+
+import com.sugarcrm.voodoo.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.VHook;
 
 
 /**
@@ -12,7 +17,56 @@ import java.util.Properties;
  */
 public class Utils {
 	
+	public static String HOOK_DELIMITER = ":";
+	
 	/**
+	 * Returns a preloaded hashmap based on the given, formatted hooks (Properties) file.
+	 * 
+	 * @param hooks
+	 * @return
+	 * @throws Exception
+	 */
+	public static HashMap<String, VHook> getHooks(Properties hooks) throws Exception {
+		HashMap<String, VHook> hooksMap = new HashMap<String, VHook>();
+		for(String name : hooks.stringPropertyNames()) {
+//			System.out.println("hook name: " + name);
+			String[] strategyNHook = hooks.getProperty(name).split(HOOK_DELIMITER);
+			if (strategyNHook.length != 2) throw new Exception("Malformed hooks file for name: " + name);
+			else {
+//				System.out.println("strategy: " + strategyNHook[0] + ", hook: " + strategyNHook[1]);
+				Strategy strategy = Utils.getStrategy(strategyNHook[0]);
+				String hook = strategyNHook[1];
+				hooksMap.put(name, new VHook(strategy, hook));
+			}
+		}
+		return hooksMap;
+	}
+	
+	/**
+	 * Returns the Voodoo-defined hook strategy based on the given string.
+	 * 
+	 * @param strategy
+	 * @return
+	 * @throws Exception
+	 */
+	public static Strategy getStrategy(String strategy) throws Exception {
+		switch(strategy) {
+		case "CSS": return Strategy.CSS;
+		case "ID": return Strategy.ID;
+		case "NAME": return Strategy.NAME;
+		case "XPATH": return Strategy.XPATH;
+		default:
+			throw new Exception("Strategy not recognized: " + strategy);
+		}
+	}
+	
+	/**
+	 * Given a properties file, a default key-value pair value, and a key, this
+	 * function returns:\n a) the default value\n b) or, if exists, the
+	 * key-value value in the properties file\n c) or, if exists, the system
+	 * property key-value value. This function is used to override configuration
+	 * files in cascading fashion.
+	 * 
 	 * @param props
 	 * @param defaultValue
 	 * @param key
@@ -30,6 +84,8 @@ public class Utils {
 
 	
 	/**
+	 * Given a string, this function returns the suffix of that string matching the given length.
+	 * 
 	 * @param s
 	 * @param length
 	 * @return
@@ -89,22 +145,19 @@ public class Utils {
 	 * @param <Z>
 	 */
 	public static class Triplet<X, Y, Z> { 
-		  public final X x; 
-		  public final Y y; 
-		  public final Z z; 
-		  public Triplet(X x, Y y, Z z) { 
-			  this.x = x; 
-			  this.y = y;
-			  this.z = z;
-		  } 
-			/**
-			 *
-			 * toString() 
-			 * @param <X> 
-			 * @param <Y> 
-			 */
-		@Override public String toString() {
-			  return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
-		  }
+		public final X x; 
+		public final Y y; 
+		public final Z z;
+		
+		public Triplet(X x, Y y, Z z) { 
+			this.x = x; 
+			this.y = y;
+			this.z = z;
+		} 
+		
+		@Override
+		public String toString() {
+			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
+		}
 	}
 }
