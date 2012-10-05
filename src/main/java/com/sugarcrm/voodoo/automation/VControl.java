@@ -1,7 +1,7 @@
 package com.sugarcrm.voodoo.automation;
 
 
-public class VControl implements IControl {
+public abstract class VControl implements IControl {
 	public enum Type { ELEMENT, HLINK, TEXT, BUTTON; }
 	
 	private final IFramework vAutomation;

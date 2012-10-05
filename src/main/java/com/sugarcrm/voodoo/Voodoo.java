@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import com.sugarcrm.voodoo.automation.Selenium;
 import com.sugarcrm.voodoo.automation.IFramework;
 import com.sugarcrm.voodoo.automation.VControl;
+import com.sugarcrm.voodoo.automation.VHook;
 import com.sugarcrm.voodoo.Utils;
 
 
@@ -46,7 +47,7 @@ public class Voodoo implements IAutomation {
 	 */
 	public static Voodoo getInstance(Properties props) throws Exception {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
-		return instance;
+		return Voodoo.instance;
 	}
 
 //	public static void closePopupWindow(WebDriver browser) throws Exception {
@@ -117,57 +118,54 @@ public class Voodoo implements IAutomation {
 		JOptionPane.showInputDialog(message);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getControl(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public VControl getControl(VHook hook) throws Exception {
+		this.log.info("Getting control with hook: " + hook);
+		return vAutomation.getControl(hook.hookStrategy, hook.hookString);
+	}
+	
+	@Deprecated
+	@Override
+	public VControl getControl(Strategy strategy, String hook) throws Exception {
+		this.log.info("Getting control with hook: " + hook + " via strategy: " + strategy);
+		return vAutomation.getControl(strategy, hook);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public String getText(VHook hook) throws Exception {
+		this.log.info("Getting text for control with hook: " + hook);
+		return this.vAutomation.getText(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
 	public String getText(VControl control) throws Exception {
 		this.log.info("Getting text for control: " + control);
 		return this.vAutomation.getText(control);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.VAutomation#getText(com.sugarcrm.voodoo.VAutomation.Strategy, java.lang.String)
-	 */
+	@Deprecated
 	@Override
 	public String getText(Strategy strategy, String hook) throws Exception {
 		this.log.info("Getting text for control with hook: " + hook + " via strategy: " + strategy);
 		return this.vAutomation.getText(strategy, hook);
 	}
-
-	@Override
-	public void hover(VControl control) throws Exception {
-		this.log.info("Hovering on control: " + control);
-		vAutomation.hover(control);
-	}
 	
 	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.VAutomation#hover(com.sugarcrm.voodoo.VAutomation.Strategy, java.lang.String)
+	 * @see com.sugarcrm.voodoo.IAutomation#click(com.sugarcrm.voodoo.automation.VHook)
 	 */
 	@Override
-	public void hover(Strategy strategy, String hook) throws Exception {
-		this.log.info("Hovering on control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.hover(strategy, hook);
-	}
-
-	/**
-	 * 
-	 * getControl() 
-	 * @param strategy 
-	 * @param hook 
-	 * @return 
-	 * @throws Exception 
-	 */
-	@Override
-	public VControl getControl(IAutomation.Strategy strategy, String hook) throws Exception {
-		this.log.info("Getting control with hook: " + hook + " via strategy: " + strategy);
-		return vAutomation.getControl(strategy, hook);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.VAutomation#click(com.sugarcrm.voodoo.VAutomation.Strategy, java.lang.String)
-	 */
-	@Override
-	public void click(IAutomation.Strategy strategy, String hook) throws Exception {
-		this.log.info("Clicking on control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.click(strategy, hook);
+	public void click(VHook hook) throws Exception {
+		this.log.info("Clicking on control with hook: " + hook);
+		vAutomation.click(hook.hookStrategy, hook.hookString);
 	}
 
 	/* (non-Javadoc)
@@ -179,25 +177,45 @@ public class Voodoo implements IAutomation {
 		vAutomation.click(control);
 	}
 	
+	@Deprecated
 	@Override
-	public void rightClick(IAutomation.Strategy strategy, String hook) throws Exception {
-		this.log.info("Right Clicking on control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.rightClick(strategy, hook);
-	}
-
-	@Override
-	public void rightClick(VControl control) throws Exception {
-		this.log.info("Right Clicking on control: " + control);
-		vAutomation.rightClick(control);
+	public void click(Strategy strategy, String hook) throws Exception {
+		this.log.info("Clicking on control with hook: " + hook + " via strategy: " + strategy);
+		vAutomation.click(strategy, hook);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.VAutomation#input(com.sugarcrm.voodoo.VAutomation.Strategy, java.lang.String, java.lang.String)
+	 * @see com.sugarcrm.voodoo.IAutomation#hover(com.sugarcrm.voodoo.automation.VHook)
 	 */
 	@Override
-	public void input(IAutomation.Strategy strategy, String hook, String input) throws Exception {
-		this.log.info("Inputting text for control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.input(strategy, hook, input);
+	public void hover(VHook hook) throws Exception {
+		this.log.info("Hovering on control with hook: " + hook);
+		vAutomation.hover(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#hover(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void hover(VControl control) throws Exception {
+		this.log.info("Hovering on control: " + control);
+		vAutomation.hover(control);
+	}
+	
+	@Deprecated
+	@Override
+	public void hover(Strategy strategy, String hook) throws Exception {
+		this.log.info("Hovering on control with hook: " + hook + " via strategy: " + strategy);
+		vAutomation.hover(strategy, hook);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#input(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
+	 */
+	@Override
+	public void input(VHook hook, String input) throws Exception {
+		this.log.info("Inputting text for control with hook: " + hook);
+		vAutomation.input(hook.hookStrategy, hook.hookString, input);
 	}
 
 	/* (non-Javadoc)
@@ -207,6 +225,56 @@ public class Voodoo implements IAutomation {
 	public void input(VControl control, String input) throws Exception {
 		this.log.info("Inputting text for control: " + control);
 		vAutomation.input(control, input);
+	}
+	
+	@Deprecated
+	@Override
+	public void input(Strategy strategy, String hook, String input) throws Exception {
+		this.log.info("Inputting text for control with hook: " + hook + " via strategy: " + strategy);
+		vAutomation.input(strategy, hook, input);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void rightClick(VHook hook) throws Exception {
+		this.log.info("Right Clicking on control with hook: " + hook);
+		vAutomation.rightClick(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void rightClick(VControl control) throws Exception {
+		this.log.info("Right-clicking on control: " + control);
+		vAutomation.rightClick(control);
+	}
+
+	@Deprecated
+	@Override
+	public void rightClick(Strategy strategy, String hook) throws Exception {
+		this.log.info("Right-clicking on control with hook: " + hook + " via strategy: " + strategy);
+		vAutomation.rightClick(strategy, hook);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void scroll(VHook hook) throws Exception {
+		this.log.info("Scrolling to hook: " + hook);
+		vAutomation.scroll(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void scroll(VControl control) throws Exception {
+		this.log.info("Scrolling to control: " + control);
+		vAutomation.scroll(control);
 	}
 
 	/**
