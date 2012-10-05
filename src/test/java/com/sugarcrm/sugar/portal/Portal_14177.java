@@ -48,7 +48,7 @@ public class Portal_14177 extends SugarTest {
 	@Override
 	@After
 	public void cleanup() throws Exception {
-//		Administration.selectPortalEnable(voodoo, sugar);
+		Administration.selectPortalEnable(voodoo, sugar);
 		super.cleanup();
 	}
 

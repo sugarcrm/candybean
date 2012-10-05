@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -55,8 +56,8 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public void start(String url) throws Exception {
-		browser.switchTo().window(browser.getWindowHandle());
 		browser.get(url);
+		browser.switchTo().window(browser.getWindowHandle());
 	}
 
 	/* (non-Javadoc)
@@ -64,7 +65,7 @@ public class Selenium implements IFramework {
 	 */
 	@Override
 	public void stop() throws Exception {
-		browser.close();
+		browser.quit();
 	}
 	
 	/* (non-Javadoc)
