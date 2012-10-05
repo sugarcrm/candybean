@@ -12,6 +12,7 @@ navbar_menuitem_admin = ID:admin_link
 navbar_menuitem_logout = ID:logout_link
 
 # ADMINISTRATION
+admin_table_devtools = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div[2]/div/div/table[10]
 admin_link_sugarportal = ID:sugarportal
 
 # PORTAL
