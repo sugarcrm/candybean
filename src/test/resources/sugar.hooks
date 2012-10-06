@@ -7,11 +7,23 @@ login_textfield_password = ID:user_password
 login_button_login = ID:login_button
 
 # NAVBAR
+navbar_menu_users = ID:moduleTab_AllUsers
+navbar_menuitem_createportaluser = ID:CreatePortalAPIUserAll
 navbar_menu_user = CSS:#globalLinks span
 navbar_menuitem_admin = ID:admin_link
 navbar_menuitem_logout = ID:logout_link
 
+# USERS
+users_textfield_namesearch = ID:search_name_basic
+users_textfield_username = ID:user_name
+users_textfield_name = ID:last_name
+users_tab_password = ID:tab2
+users_textfield_password = ID:new_password
+users_textfield_passwordconfirm = ID:confirm_pwd
+users_button_save = ID:SAVE_FOOTER
+
 # ADMINISTRATION
+admin_link_usermanagement = ID:user_management
 admin_table_devtools = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div[2]/div/div/table[10]
 admin_link_sugarportal = ID:sugarportal
 
