@@ -26,16 +26,16 @@ public class Sugar {
 		return Sugar.hooksMap.get(name);
 	}
 	
-	public void login(Voodoo voodoo, String username, String password) throws Exception {
-		voodoo.input(this.getHook("login_textfield_username"), "admin");
-		voodoo.input(this.getHook("login_textfield_password"), "asdf");
-		voodoo.click(this.getHook("login_button_login"));
+	public static void login(Voodoo voodoo, Sugar sugar, String username, String password) throws Exception {
+		voodoo.input(sugar.getHook("login_textfield_username"), "admin");
+		voodoo.input(sugar.getHook("login_textfield_password"), "asdf");
+		voodoo.click(sugar.getHook("login_button_login"));
 		voodoo.pause(400);
 	}
 	
-	public void logout(Voodoo voodoo) throws Exception {
-		voodoo.click(this.getHook("navbar_menu_user"));
-		voodoo.click(this.getHook("navbar_menuitem_logout"));
+	public static void logout(Voodoo voodoo, Sugar sugar) throws Exception {
+		voodoo.click(sugar.getHook("navbar_menu_user"));
+		voodoo.click(sugar.getHook("navbar_menuitem_logout"));
 		voodoo.pause(400);
 	}
 }
