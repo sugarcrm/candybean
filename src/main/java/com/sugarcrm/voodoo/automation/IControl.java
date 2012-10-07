@@ -10,4 +10,5 @@ public interface IControl {
 	public void click() throws Exception;
 	public void rightClick() throws Exception;
 	public void input(String input) throws Exception;
+    public void dragAndDrop(IControl target) throws Exception;
 }
