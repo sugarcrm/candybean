@@ -35,4 +35,9 @@ public abstract class VControl implements IControl {
 	public void input(String input) throws Exception {
 		this.vAutomation.input(this, input);
 	}
+	
+    @Override
+	public void dragAndDrop(IControl target) throws Exception {
+		this.vAutomation.dragAndDrop(this, (VControl) target);
+	}
 }
