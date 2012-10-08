@@ -362,8 +362,24 @@ public class Selenium implements IFramework {
 		((JavascriptExecutor) browser).executeScript("window.scrollBy(0," + y +");");
 	}
 	
-	/**
-	
+    @Override
+    public void dragAndDrop(VControl control1, VControl control2) throws Exception {
+            if (control1 instanceof SeleniumVControl && control2 instanceof SeleniumVControl) {
+                    WebElement draggable = ((SeleniumVControl) control1).webElement;
+                    WebElement target = ((SeleniumVControl) control2).webElement;
+                    Actions action = new Actions(browser);
+                    action.dragAndDrop(draggable, target).build().perform();
+            }
+            else throw new Exception("Selenium: VControl not selenium-based.");
+    }
+
+    @Override
+    public void dragAndDrop(Strategy strategy, String hook1, String hook2) throws Exception {
+            VControl vc1 =  this.getControl(strategy, hook1);
+            VControl vc2 =  this.getControl(strategy, hook2);
+            this.dragAndDrop(vc1, vc2);
+    }
+
 	/**
 	 * @param browserType
 	 * @return

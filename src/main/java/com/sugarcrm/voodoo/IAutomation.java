@@ -34,4 +34,6 @@ public interface IAutomation {
 	public void interact(String message) throws Exception;
 	public void acceptDialog() throws Exception;
 	public void switchToPopup() throws Exception;
+    public void dragAndDrop(VHook hook1, VHook hook2) throws Exception;
+    public void dragAndDrop(VControl control1, VControl control2) throws Exception;
 }
