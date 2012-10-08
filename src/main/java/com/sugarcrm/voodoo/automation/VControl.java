@@ -64,4 +64,9 @@ public abstract class VControl implements IControl {
 	public void scroll() throws Exception {
 		this.vAutomation.scroll(this);
 	}
+	
+    @Override
+	public void dragAndDrop(IControl target) throws Exception {
+		this.vAutomation.dragAndDrop(this, (VControl) target);
+	}
 }

@@ -108,7 +108,7 @@ public class Voodoo implements IAutomation {
 		this.log.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
-	
+
 	/**
 	 * @param message
 	 * @throws Exception
@@ -126,7 +126,7 @@ public class Voodoo implements IAutomation {
 		this.log.info("Getting control with hook: " + hook);
 		return vAutomation.getControl(hook.hookStrategy, hook.hookString);
 	}
-	
+
 	@Deprecated
 	@Override
 	public VControl getControl(Strategy strategy, String hook) throws Exception {
@@ -151,14 +151,14 @@ public class Voodoo implements IAutomation {
 		this.log.info("Getting text for control: " + control);
 		return this.vAutomation.getText(control);
 	}
-	
+
 	@Deprecated
 	@Override
 	public String getText(Strategy strategy, String hook) throws Exception {
 		this.log.info("Getting text for control with hook: " + hook + " via strategy: " + strategy);
 		return this.vAutomation.getText(strategy, hook);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#click(com.sugarcrm.voodoo.automation.VHook)
 	 */
@@ -176,7 +176,7 @@ public class Voodoo implements IAutomation {
 		this.log.info("Clicking on control: " + control);
 		vAutomation.click(control);
 	}
-	
+
 	@Deprecated
 	@Override
 	public void click(Strategy strategy, String hook) throws Exception {
@@ -201,7 +201,7 @@ public class Voodoo implements IAutomation {
 		this.log.info("Hovering on control: " + control);
 		vAutomation.hover(control);
 	}
-	
+
 	@Deprecated
 	@Override
 	public void hover(Strategy strategy, String hook) throws Exception {
@@ -226,7 +226,7 @@ public class Voodoo implements IAutomation {
 		this.log.info("Inputting text for control: " + control);
 		vAutomation.input(control, input);
 	}
-	
+
 	@Deprecated
 	@Override
 	public void input(Strategy strategy, String hook, String input) throws Exception {
@@ -276,6 +276,19 @@ public class Voodoo implements IAutomation {
 		this.log.info("Scrolling to control: " + control);
 		vAutomation.scroll(control);
 	}
+	
+	@Override
+	public void dragAndDrop(VHook hook1, VHook hook2) throws Exception {
+		this.log.info("Drag and drop on controls with hooks: " + hook1
+				+ " and " + hook2 + " via strategy: " + hook1.hookStrategy);
+		vAutomation.dragAndDrop(hook1.hookStrategy, hook1.hookString, hook2.hookString);
+	}
+
+	@Override
+	public void dragAndDrop(VControl control1, VControl control2) throws Exception {
+		this.log.info("Drag and drop control " + control1 + " to " + control2);
+		vAutomation.dragAndDrop(control1, control2);
+	}
 
 	/**
 	 * @return
@@ -297,7 +310,7 @@ public class Voodoo implements IAutomation {
 		}
 		return vAutomation;
     }
-	
+
 	/**
 	 * @return
 	 * @throws Exception
