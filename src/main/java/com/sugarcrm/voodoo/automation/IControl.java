@@ -20,7 +20,13 @@ public interface IControl {
 	 */
 	public void click() throws Exception;
 	
-	/**
+    /**
+     * @param target
+     * @throws Exception
+     */
+    public void dragAndDrop(IControl targetControl) throws Exception;
+
+    /**
 	 * @throws Exception
 	 */
 	public void hover() throws Exception;
@@ -30,6 +36,7 @@ public interface IControl {
 	 * @throws Exception
 	 */
 	public void input(String input) throws Exception;
+
 	
 	/**
 	 * @throws Exception

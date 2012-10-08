@@ -23,4 +23,6 @@ public interface IFramework {
 	public void rightClick(VControl control) throws Exception;
 	public void scroll(Strategy strategy, String hook) throws Exception;
 	public void scroll(VControl control) throws Exception;
+    public void dragAndDrop(Strategy strategy, String hook1, String hook2) throws Exception;
+    public void dragAndDrop(VControl control1, VControl control2) throws Exception;
 }
