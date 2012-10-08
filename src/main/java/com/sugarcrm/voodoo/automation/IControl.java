@@ -24,7 +24,7 @@ public interface IControl {
      * @param target
      * @throws Exception
      */
-    public void dragAndDrop(IControl targetControl) throws Exception;
+    public void dragAndDrop(IControl control) throws Exception;
 
     /**
 	 * @throws Exception
