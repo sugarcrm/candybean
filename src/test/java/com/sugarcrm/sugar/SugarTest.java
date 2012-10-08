@@ -33,11 +33,11 @@ public abstract class SugarTest {
 
 	public void setup() throws Exception {
 		voodoo.start(sugarProps.getProperty("env.base_url"));
-		sugar.login(SugarTest.voodoo, "admin", "asdf");
+		Sugar.login(voodoo, sugar, "admin", "asdf");
 	}
 
 	public void cleanup() throws Exception {
-		sugar.logout(SugarTest.voodoo);
+		Sugar.logout(voodoo, sugar);
 		voodoo.stop();
 	}
 

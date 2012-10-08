@@ -185,6 +185,25 @@ public class Voodoo implements IAutomation {
 	}
 
 	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#dragAndDrop(com.sugarcrm.voodoo.automation.VHook, com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void dragAndDrop(VHook hook1, VHook hook2) throws Exception {
+		this.log.info("Drag and drop on controls with hooks: " + hook1
+				+ " and " + hook2 + " via strategy: " + hook1.hookStrategy);
+		vAutomation.dragAndDrop(hook1.hookStrategy, hook1.hookString, hook2.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#dragAndDrop(com.sugarcrm.voodoo.automation.VControl, com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void dragAndDrop(VControl control1, VControl control2) throws Exception {
+		this.log.info("Drag and drop control " + control1 + " to " + control2);
+		vAutomation.dragAndDrop(control1, control2);
+	}
+
+	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#hover(com.sugarcrm.voodoo.automation.VHook)
 	 */
 	@Override
@@ -277,19 +296,6 @@ public class Voodoo implements IAutomation {
 		vAutomation.scroll(control);
 	}
 	
-	@Override
-	public void dragAndDrop(VHook hook1, VHook hook2) throws Exception {
-		this.log.info("Drag and drop on controls with hooks: " + hook1
-				+ " and " + hook2 + " via strategy: " + hook1.hookStrategy);
-		vAutomation.dragAndDrop(hook1.hookStrategy, hook1.hookString, hook2.hookString);
-	}
-
-	@Override
-	public void dragAndDrop(VControl control1, VControl control2) throws Exception {
-		this.log.info("Drag and drop control " + control1 + " to " + control2);
-		vAutomation.dragAndDrop(control1, control2);
-	}
-
 	/**
 	 * @return
 	 * @throws Exception
