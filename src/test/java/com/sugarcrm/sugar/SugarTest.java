@@ -10,8 +10,9 @@ import com.sugarcrm.voodoo.Voodoo;
 
 public abstract class SugarTest {
 	
+	public static Properties sugarProps;
+	
 	protected static Voodoo voodoo;
-	protected static Properties sugarProps;
 	protected static Sugar sugar;
 
 	private static final String curWorkDir = System.getProperty("user.dir");
