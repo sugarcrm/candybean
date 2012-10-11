@@ -38,6 +38,8 @@ public class Selenium implements IFramework {
 	private final Voodoo voodoo;
 	private final Properties props;
 	private final WebDriver browser;
+	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
+	private int windowIndex = 0;
 	
 	/**
 	 * @param voodoo
@@ -68,6 +70,10 @@ public class Selenium implements IFramework {
 		browser.quit();
 	}
 	
+	public void closeWindow() throws Exception {
+		this.browser.close();
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.automation.IFramework#acceptDialog()
 	 */
@@ -87,6 +93,67 @@ public class Selenium implements IFramework {
 		windowHandles.remove(currentWindowHandle);
 		if (windowHandles.size() > 1) throw new Exception("Selenium: more than one popup/window detected");
 		else browser.switchTo().window(windowHandles.iterator().next());
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(int window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByIndex(int index) throws Exception {
+		Set<String> Handles = browser.getWindowHandles();
+		while (Handles.iterator().hasNext()){
+			String windowHandle = Handles.iterator().next();
+			if (!windowHandles.containsValue(windowHandle)){
+				windowHandles.put(windowIndex, windowHandle);
+				windowIndex++;
+			}
+			Handles.remove(windowHandle);
+		}
+		browser.switchTo().window(windowHandles.get(index));
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(string window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByTitle(String title) throws Exception {
+		Set<String> Handles = browser.getWindowHandles();
+		while (Handles.iterator().hasNext()){
+			String windowHandle = Handles.iterator().next();
+			WebDriver window = browser.switchTo().window(windowHandle);
+			if (window.getTitle().equals(title)){
+				break;
+			}
+			Handles.remove(windowHandle);
+		}
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(int window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByUrl(String url) throws Exception {
+		Set<String> Handles = browser.getWindowHandles();
+		while (Handles.iterator().hasNext()){
+			String windowHandle = Handles.iterator().next();
+			WebDriver window = browser.switchTo().window(windowHandle);
+			if (window.getCurrentUrl().equals(url)){
+				break;
+			}
+			Handles.remove(windowHandle);
+		}
 	}
 	
 	/**
