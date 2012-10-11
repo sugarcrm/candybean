@@ -50,19 +50,6 @@ public class Voodoo implements IAutomation {
 		return Voodoo.instance;
 	}
 
-//	public static void closePopupWindow(WebDriver browser) throws Exception {
-//		browser.close();
-//		Set<String> windows = browser.getWindowHandles();
-//		if (windows.size() > 1) throw new Exception("More than one window open; expecting 1");
-//		for (String window : windows) browser.switchTo().window(window);
-//	}
-//	
-//	public static void switchToMainWindow(WebDriver browser) throws Exception {
-//		Set<String> windows = browser.getWindowHandles();
-//		if (windows.size() > 1) throw new Exception("More than one window open; expecting 1");
-//		for (String window : windows) browser.switchTo().window(window);
-//	}
-
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.VAutomation#start(java.lang.String)
 	 */
@@ -79,6 +66,18 @@ public class Voodoo implements IAutomation {
 	public void stop() throws Exception {
 		this.log.info("Stopping voodoo.");
 		this.vAutomation.stop();
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * closeWindow() - close the current Browser
+	 * 
+	 * @throws Exception
+	 */
+	public void closeWindow() throws Exception {
+		this.log.info("Closing Window.");
+		this.vAutomation.closeWindow();
 	}
 
 	/* (non-Javadoc)
@@ -98,7 +97,47 @@ public class Voodoo implements IAutomation {
 		this.log.info("Switching to popup dialog.");
 		this.vAutomation.switchToPopup();
 	}
-
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(int window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByIndex(int window) throws Exception {
+		this.log.info("Switching to popup dialog by Index: " + window);
+		this.vAutomation.focusByIndex(window);
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByTitle(int window) - Switch to a window by title
+	 * 
+	 * @param window - Argument of type String representing the title of a window
+	 * @throws Exception
+	 */
+	public void focusByTitle(String title) throws Exception {
+		this.log.info("Switching to popup dialog by title: " + title);
+		this.vAutomation.focusByTitle(title);
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByUrl(int window) - Switch to a window by url
+	 * 
+	 * @param window - Argument of type String representing the url of a window
+	 * @throws Exception
+	 */
+	public void focusByUrl(String url) throws Exception {
+		this.log.info("Switching to popup dialog by url: " + url);
+		this.vAutomation.focusByUrl(url);
+	}
+	
+	
 	/**
 	 * @param ms
 	 * @throws Exception
