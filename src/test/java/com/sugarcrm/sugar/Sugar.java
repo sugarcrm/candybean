@@ -27,8 +27,8 @@ public class Sugar {
 	}
 	
 	public static void login(Voodoo voodoo, Sugar sugar, String username, String password) throws Exception {
-		voodoo.input(sugar.getHook("login_textfield_username"), "admin");
-		voodoo.input(sugar.getHook("login_textfield_password"), "asdf");
+		voodoo.input(sugar.getHook("login_textfield_username"), username);
+		voodoo.input(sugar.getHook("login_textfield_password"), password);
 		voodoo.click(sugar.getHook("login_button_login"));
 		voodoo.pause(400);
 	}
