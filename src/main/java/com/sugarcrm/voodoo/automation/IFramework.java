@@ -17,6 +17,10 @@ public interface IFramework {
 	public VControl getControl(Strategy strategy, String hook) throws Exception;
 	public String getText(VControl control) throws Exception;
 	public String getText(Strategy strategy, String hook) throws Exception;
+	public void wait(VControl control) throws Exception;
+	public void wait(Strategy strategy, String hook) throws Exception;
+	public void wait(VControl control, final String attribute, final String value) throws Exception;
+	public void wait(Strategy strategy, String hook, final String attribute, final String value) throws Exception;
 	public void click(Strategy strategy, String hook) throws Exception;
 	public void click(VControl control) throws Exception;
 	public void hover(VControl control) throws Exception;
