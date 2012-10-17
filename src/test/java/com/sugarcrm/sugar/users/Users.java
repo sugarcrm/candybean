@@ -9,7 +9,7 @@ import com.sugarcrm.sugar.users.User.PortalUser;
 
 public class Users {
 	
-	public static void createUser(Voodoo voodoo, Sugar sugar, User user) throws Exception {
+	public static void create(Voodoo voodoo, Sugar sugar, User user) throws Exception {
 		if (user instanceof PortalUser) {
 			voodoo.click(sugar.getHook("navbar_menu_user"));
 			voodoo.pause(400);
@@ -32,7 +32,7 @@ public class Users {
 		} else throw new Exception("Only portal users are supported for creation at this time.");
 	}
 	
-	public static void deleteUser(Voodoo voodoo, Sugar sugar, User user) throws Exception {
+	public static void delete(Voodoo voodoo, Sugar sugar, User user) throws Exception {
 		voodoo.click(sugar.getHook("navbar_menu_user"));
 		voodoo.pause(400);
 		voodoo.click(sugar.getHook("navbar_menuitem_admin"));
