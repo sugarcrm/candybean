@@ -285,16 +285,8 @@ public class Selenium implements IFramework {
 		else throw new Exception("Selenium: VControl not selenium-based.");	
 	}
 	
-	
 	public void wait(Strategy strategy, String hook) throws Exception {
-		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
-		final WebElement we = ((SeleniumVControl) this.getControl(strategy, hook)).webElement;
-		WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
-		wait.until(new Function<WebDriver, Boolean>() {
-			public Boolean apply(WebDriver driver) {
-				return we.isDisplayed();
-			}
-		});
+		this.wait(this.getControl(strategy, hook));
 	}
 	
 	public void wait(VControl control, final String attribute, final String value) throws Exception {
@@ -311,14 +303,7 @@ public class Selenium implements IFramework {
 	}
 	
 	public void wait(Strategy strategy, String hook, final String attribute, final String value) throws Exception {
-		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
-		final WebElement we = ((SeleniumVControl) this.getControl(strategy, hook)).webElement;
-		WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
-		wait.until(new Function<WebDriver, Boolean>() {
-			public Boolean apply(WebDriver driver) {
-				return we.getAttribute(attribute).contains(value);
-			}
-		});
+		this.wait(this.getControl(strategy, hook), attribute, value);
 	}
 	
 	/* (non-Javadoc)
