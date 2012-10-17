@@ -47,7 +47,7 @@ public class Portal_14177 extends SugarTest {
 		cb.withAccount(account).withPortalName("cwarmbold").withPortalActive(true).withPortalPassword("Sugar123");
 		portalContact = cb.build();
 //		Accounts.create(voodoo, sugar, account);
-//		Contacts.create(voodoo, sugar, portalContact);
+		Contacts.create(voodoo, sugar, portalContact);
 	}
 	
 	@Test
