@@ -7,7 +7,7 @@ package com.sugarcrm.voodoo.automation;
  */
 public interface IControl {
 
-	public enum Type { ELEMENT, HLINK, TEXT, BUTTON; }
+	public enum Type { ELEMENT, LINK, TEXT, BUTTON; }
 	
 	/**
 	 * @return

@@ -55,9 +55,7 @@ public class Selenium implements IFramework {
 	 * @see com.sugarcrm.voodoo.automation.IFramework#start(java.lang.String)
 	 */
 	@Override
-	public void start(String url) throws Exception {
-		browser.get(url);
-		browser.switchTo().window(browser.getWindowHandle());
+	public void start() throws Exception {
 	}
 
 	/* (non-Javadoc)
@@ -68,6 +66,15 @@ public class Selenium implements IFramework {
 		browser.quit();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#start(java.lang.String)
+	 */
+	@Override
+	public void go(String url) throws Exception {
+		browser.get(url);
+		browser.switchTo().window(browser.getWindowHandle());
+	}
+
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.automation.IFramework#acceptDialog()
 	 */
