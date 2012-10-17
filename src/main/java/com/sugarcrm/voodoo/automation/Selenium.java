@@ -28,6 +28,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.openqa.selenium.JavascriptExecutor;
+
+import com.google.common.base.Function;
 import com.sugarcrm.voodoo.IAutomation.Strategy;
 import com.sugarcrm.voodoo.Utils;
 import com.sugarcrm.voodoo.Voodoo;
@@ -40,6 +42,7 @@ public class Selenium implements IFramework {
 	private final WebDriver browser;
 	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
 	private int windowIndex = 0;
+	
 	
 	/**
 	 * @param voodoo
@@ -260,17 +263,47 @@ public class Selenium implements IFramework {
 		return rowMap;
 	}
 	
-	/**
-	 * @param browser
-	 * @param timeout
-	 * @param by
-	 * @throws Exception
-	 */
-	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
-		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
-			public WebElement apply(WebDriver wd) {
-				return wd.findElement(by);
-			}});
+//	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
+//		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
+//			public WebElement apply(WebDriver wd) {
+//				return wd.findElement(by);
+//			}});
+//	}
+	
+
+	public void wait(VControl control) throws Exception {
+		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
+		if (control instanceof SeleniumVControl) {
+			final WebElement we = ((SeleniumVControl) control).webElement;
+			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
+			wait.until(new Function<WebDriver, Boolean>() {
+				public Boolean apply(WebDriver driver) {
+					return we.isDisplayed();
+				}
+			});
+		}
+		else throw new Exception("Selenium: VControl not selenium-based.");	
+	}
+	
+	public void wait(Strategy strategy, String hook) throws Exception {
+		this.wait(this.getControl(strategy, hook));
+	}
+	
+	public void wait(VControl control, final String attribute, final String value) throws Exception {
+		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
+		if (control instanceof SeleniumVControl) {
+			final WebElement we = ((SeleniumVControl) control).webElement;
+			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
+			   wait.until(new Function<WebDriver, Boolean>() {
+			        public Boolean apply(WebDriver driver) {
+			            return we.getAttribute(attribute).contains(value);
+			        }
+			    });
+		} throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	public void wait(Strategy strategy, String hook, final String attribute, final String value) throws Exception {
+		this.wait(this.getControl(strategy, hook), attribute, value);
 	}
 	
 	/* (non-Javadoc)

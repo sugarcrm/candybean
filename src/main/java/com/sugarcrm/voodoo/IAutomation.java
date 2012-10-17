@@ -22,6 +22,10 @@ public interface IAutomation {
 	@Deprecated public VControl getControl(Strategy strategy, String hook) throws Exception;
 	public String getText(VHook hook) throws Exception;
 	public String getText(VControl control) throws Exception;
+	public void wait(VControl control) throws Exception;
+	public void wait(VHook hook) throws Exception;
+	public void wait(VControl control, String attribute, String value) throws Exception;
+	public void wait(VHook hook, String attribute, String value) throws Exception;
 	@Deprecated public String getText(Strategy strategy, String hook) throws Exception;
 	public void click(VHook hook) throws Exception;
 	public void click(VControl control) throws Exception;

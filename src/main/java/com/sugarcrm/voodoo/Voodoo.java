@@ -190,7 +190,27 @@ public class Voodoo implements IAutomation {
 		this.log.info("Getting text for control: " + control);
 		return this.vAutomation.getText(control);
 	}
-
+	
+	public void wait(VControl control) throws Exception {
+		this.log.info("Executing wait for control: " + control);
+		this.vAutomation.wait(control);
+	}
+	
+	public void wait(VHook hook) throws Exception {
+		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString);
+		this.vAutomation.wait(hook.hookStrategy, hook.hookString);
+	}
+	
+	public void wait(VControl control, String attribute, String value) throws Exception {
+		this.log.info("Executing wait for control: " + control + ", attribute:" + attribute + ", value: " + value);
+		this.vAutomation.wait(control, attribute, value);
+	}
+	
+	public void wait(VHook hook, String attribute, String value) throws Exception {
+		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", attribute:" + attribute + ", value: " + value);
+		this.vAutomation.wait(hook.hookStrategy, hook.hookString, attribute, value);
+	}
+	
 	@Deprecated
 	@Override
 	public String getText(Strategy strategy, String hook) throws Exception {
