@@ -28,6 +28,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.openqa.selenium.JavascriptExecutor;
+
+import com.google.common.base.Function;
 import com.sugarcrm.voodoo.IAutomation.Strategy;
 import com.sugarcrm.voodoo.Utils;
 import com.sugarcrm.voodoo.Voodoo;
@@ -38,6 +40,9 @@ public class Selenium implements IFramework {
 	private final Voodoo voodoo;
 	private final Properties props;
 	private final WebDriver browser;
+	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
+	private int windowIndex = 0;
+	
 	
 	/**
 	 * @param voodoo
@@ -64,6 +69,13 @@ public class Selenium implements IFramework {
 	@Override
 	public void stop() throws Exception {
 		browser.quit();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#closeWindow()
+	 */
+	public void closeWindow() throws Exception {
+		this.browser.close();
 	}
 	
 	/* (non-Javadoc)
@@ -94,6 +106,67 @@ public class Selenium implements IFramework {
 		windowHandles.remove(currentWindowHandle);
 		if (windowHandles.size() > 1) throw new Exception("Selenium: more than one popup/window detected");
 		else browser.switchTo().window(windowHandles.iterator().next());
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(int window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByIndex(int index) throws Exception {
+		Set<String> Handles = browser.getWindowHandles();
+		while (Handles.iterator().hasNext()){
+			String windowHandle = Handles.iterator().next();
+			if (!windowHandles.containsValue(windowHandle)){
+				windowHandles.put(windowIndex, windowHandle);
+				windowIndex++;
+			}
+			Handles.remove(windowHandle);
+		}
+		browser.switchTo().window(windowHandles.get(index));
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(string window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByTitle(String title) throws Exception {
+		Set<String> Handles = browser.getWindowHandles();
+		while (Handles.iterator().hasNext()){
+			String windowHandle = Handles.iterator().next();
+			WebDriver window = browser.switchTo().window(windowHandle);
+			if (window.getTitle().equals(title)){
+				break;
+			}
+			Handles.remove(windowHandle);
+		}
+	}
+	
+	/**
+	 * @author wli
+	 * 
+	 * focusByIndex(int window) - Switch to a window by index
+	 * 
+	 * @param window - Argument of type String representing the index of a window
+	 * @throws Exception
+	 */
+	public void focusByUrl(String url) throws Exception {
+		Set<String> Handles = browser.getWindowHandles();
+		while (Handles.iterator().hasNext()){
+			String windowHandle = Handles.iterator().next();
+			WebDriver window = browser.switchTo().window(windowHandle);
+			if (window.getCurrentUrl().equals(url)){
+				break;
+			}
+			Handles.remove(windowHandle);
+		}
 	}
 	
 	/**
@@ -200,17 +273,47 @@ public class Selenium implements IFramework {
 		return rowMap;
 	}
 	
-	/**
-	 * @param browser
-	 * @param timeout
-	 * @param by
-	 * @throws Exception
-	 */
-	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
-		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
-			public WebElement apply(WebDriver wd) {
-				return wd.findElement(by);
-			}});
+//	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
+//		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
+//			public WebElement apply(WebDriver wd) {
+//				return wd.findElement(by);
+//			}});
+//	}
+	
+
+	public void wait(VControl control) throws Exception {
+		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
+		if (control instanceof SeleniumVControl) {
+			final WebElement we = ((SeleniumVControl) control).webElement;
+			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
+			wait.until(new Function<WebDriver, Boolean>() {
+				public Boolean apply(WebDriver driver) {
+					return we.isDisplayed();
+				}
+			});
+		}
+		else throw new Exception("Selenium: VControl not selenium-based.");	
+	}
+	
+	public void wait(Strategy strategy, String hook) throws Exception {
+		this.wait(this.getControl(strategy, hook));
+	}
+	
+	public void wait(VControl control, final String attribute, final String value) throws Exception {
+		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
+		if (control instanceof SeleniumVControl) {
+			final WebElement we = ((SeleniumVControl) control).webElement;
+			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
+			   wait.until(new Function<WebDriver, Boolean>() {
+			        public Boolean apply(WebDriver driver) {
+			            return we.getAttribute(attribute).contains(value);
+			        }
+			    });
+		} throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	public void wait(Strategy strategy, String hook, final String attribute, final String value) throws Exception {
+		this.wait(this.getControl(strategy, hook), attribute, value);
 	}
 	
 	/* (non-Javadoc)
