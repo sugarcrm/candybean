@@ -16,10 +16,17 @@ public interface IAutomation {
 	public void interact(String message) throws Exception;
 	public void acceptDialog() throws Exception;
 	public void switchToPopup() throws Exception;
+	public void focusByIndex(int index) throws Exception;
+	public void focusByTitle(String title) throws Exception;
+	public void focusByUrl(String url) throws Exception;
 	public VControl getControl(VHook hook) throws Exception;
 	@Deprecated public VControl getControl(Strategy strategy, String hook) throws Exception;
 	public String getText(VHook hook) throws Exception;
 	public String getText(VControl control) throws Exception;
+	public void wait(VControl control) throws Exception;
+	public void wait(VHook hook) throws Exception;
+	public void wait(VControl control, String attribute, String value) throws Exception;
+	public void wait(VHook hook, String attribute, String value) throws Exception;
 	@Deprecated public String getText(Strategy strategy, String hook) throws Exception;
 	public void click(VHook hook) throws Exception;
 	public void click(VControl control) throws Exception;

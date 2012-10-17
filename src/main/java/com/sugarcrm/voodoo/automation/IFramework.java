@@ -8,12 +8,20 @@ public interface IFramework {
 	
 	public void start() throws Exception;
 	public void stop() throws Exception;
+	public void closeWindow() throws Exception;
 	public void go(String url) throws Exception;
 	public void acceptDialog() throws Exception;
 	public void switchToPopup() throws Exception;
+	public void focusByIndex(int index) throws Exception;
+	public void focusByTitle(String title) throws Exception;
+	public void focusByUrl(String url) throws Exception;
 	public VControl getControl(Strategy strategy, String hook) throws Exception;
 	public String getText(VControl control) throws Exception;
 	public String getText(Strategy strategy, String hook) throws Exception;
+	public void wait(VControl control) throws Exception;
+	public void wait(Strategy strategy, String hook) throws Exception;
+	public void wait(VControl control, final String attribute, final String value) throws Exception;
+	public void wait(Strategy strategy, String hook, final String attribute, final String value) throws Exception;
 	public void click(Strategy strategy, String hook) throws Exception;
 	public void click(VControl control) throws Exception;
 	public void hover(VControl control) throws Exception;
