@@ -20,7 +20,13 @@ public interface IControl {
 	 */
 	public void click() throws Exception;
 	
-    /**
+
+	/**
+	 * @throws Exception
+	 */
+	public void explicitWait() throws Exception;
+    
+	/**
      * @param target
      * @throws Exception
      */
