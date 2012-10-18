@@ -191,24 +191,24 @@ public class Voodoo implements IAutomation {
 		return this.vAutomation.getText(control);
 	}
 	
-	public void wait(VControl control) throws Exception {
+	public void explicitWait(VControl control) throws Exception {
 		this.log.info("Executing wait for control: " + control);
-		this.vAutomation.wait(control);
+		this.vAutomation.explicitWait(control);
 	}
 	
-	public void wait(VHook hook) throws Exception {
+	public void explicitWait(VHook hook) throws Exception {
 		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString);
-		this.vAutomation.wait(hook.hookStrategy, hook.hookString);
+		this.vAutomation.explicitWait(hook.hookStrategy, hook.hookString);
 	}
 	
-	public void wait(VControl control, String attribute, String value) throws Exception {
+	public void explicitWait(VControl control, String attribute, String value) throws Exception {
 		this.log.info("Executing wait for control: " + control + ", attribute:" + attribute + ", value: " + value);
-		this.vAutomation.wait(control, attribute, value);
+		this.vAutomation.explicitWait(control, attribute, value);
 	}
 	
-	public void wait(VHook hook, String attribute, String value) throws Exception {
+	public void explicitWait(VHook hook, String attribute, String value) throws Exception {
 		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", attribute:" + attribute + ", value: " + value);
-		this.vAutomation.wait(hook.hookStrategy, hook.hookString, attribute, value);
+		this.vAutomation.explicitWait(hook.hookStrategy, hook.hookString, attribute, value);
 	}
 	
 	@Deprecated

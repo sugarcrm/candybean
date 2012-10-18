@@ -270,8 +270,8 @@ public class Selenium implements IFramework {
 //			}});
 //	}
 	
-
-	public void wait(VControl control) throws Exception {
+	@Override
+	public void explicitWait(VControl control) throws Exception{
 		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
 		if (control instanceof SeleniumVControl) {
 			final WebElement we = ((SeleniumVControl) control).webElement;
@@ -281,29 +281,33 @@ public class Selenium implements IFramework {
 					return we.isDisplayed();
 				}
 			});
-		}
-		else throw new Exception("Selenium: VControl not selenium-based.");	
+		} else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 	
-	public void wait(Strategy strategy, String hook) throws Exception {
-		this.wait(this.getControl(strategy, hook));
+	@Override
+	public void explicitWait(Strategy strategy, String hook) throws Exception{
+		this.explicitWait(this.getControl(strategy, hook));
 	}
 	
-	public void wait(VControl control, final String attribute, final String value) throws Exception {
+	@Override
+	public void explicitWait(VControl control, String attribute, String value) throws Exception {
+		final String vAttribute = attribute;
+		final String vValue = value;
 		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
 		if (control instanceof SeleniumVControl) {
 			final WebElement we = ((SeleniumVControl) control).webElement;
 			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
 			   wait.until(new Function<WebDriver, Boolean>() {
 			        public Boolean apply(WebDriver driver) {
-			            return we.getAttribute(attribute).contains(value);
+			            return we.getAttribute(vAttribute).contains(vValue);
 			        }
 			    });
-		} throw new Exception("Selenium: VControl not selenium-based.");
+		} else throw new Exception("Selenium: VControl not selenium-based.");
 	}
 	
-	public void wait(Strategy strategy, String hook, final String attribute, final String value) throws Exception {
-		this.wait(this.getControl(strategy, hook), attribute, value);
+	@Override
+	public void explicitWait(Strategy strategy, String hook, String attribute, String value) throws Exception {
+		this.explicitWait(this.getControl(strategy, hook), attribute, value);
 	}
 	
 	/* (non-Javadoc)
