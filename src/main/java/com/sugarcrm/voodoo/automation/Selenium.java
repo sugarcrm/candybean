@@ -338,6 +338,9 @@ public class Selenium implements IFramework {
 		case LINK:
 			webElement = this.browser.findElement(By.linkText(hook));
 			break;
+		case PLINK:
+			webElement = this.browser.findElement(By.partialLinkText(hook));
+			break;
 		}
 		return new SeleniumVControl(this, webElement);
 	}

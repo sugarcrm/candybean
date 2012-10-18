@@ -8,7 +8,6 @@ public class Case {
 	
 	public String subject() { return builder.subject; }
 	
-	public void updateSubject(String subject) { builder.updateSubject(subject); }
 	
 	@Override
 	public String toString() {
@@ -23,7 +22,5 @@ public class Case {
 		public CaseBuilder(String subject) { this.subject = subject; }
 		
 		public Case build() { return new Case(this); }
-		
-		public void updateSubject(String subject) { this.subject = subject; }
 	}
 }
