@@ -6,9 +6,10 @@ import com.sugarcrm.voodoo.IAutomation.Strategy;
 
 public interface IFramework {
 	
-	public void start(String url) throws Exception;
+	public void start() throws Exception;
 	public void stop() throws Exception;
 	public void closeWindow() throws Exception;
+	public void go(String url) throws Exception;
 	public void acceptDialog() throws Exception;
 	public void switchToPopup() throws Exception;
 	public void focusByIndex(int index) throws Exception;
