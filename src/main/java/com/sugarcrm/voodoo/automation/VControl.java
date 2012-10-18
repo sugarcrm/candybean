@@ -33,6 +33,11 @@ public abstract class VControl implements IControl {
 		this.vAutomation.click(this);
 	}
 	
+	//@Override
+	public void explicitWait() throws Exception {
+		this.vAutomation.explicitWait(this);
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.automation.IControl#hover()
 	 */
