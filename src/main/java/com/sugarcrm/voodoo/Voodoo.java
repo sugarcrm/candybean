@@ -54,9 +54,8 @@ public class Voodoo implements IAutomation {
 	 * @see com.sugarcrm.voodoo.VAutomation#start(java.lang.String)
 	 */
 	@Override
-	public void start(String url) throws Exception {
-		this.log.info("Starting voodoo with url: " + url);
-		this.vAutomation.start(url);
+	public void start() throws Exception {
+		this.log.info("Starting voodoo.");
 	}
 
 	/* (non-Javadoc)
@@ -68,6 +67,15 @@ public class Voodoo implements IAutomation {
 		this.vAutomation.stop();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#go(java.lang.String)
+	 */
+	@Override
+	public void go(String url) throws Exception {
+		this.log.info("Going to: " + url);
+		this.vAutomation.go(url);
+	}
+
 	/**
 	 * @author wli
 	 * 

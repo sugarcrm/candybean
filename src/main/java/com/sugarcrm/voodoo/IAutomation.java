@@ -7,10 +7,11 @@ import com.sugarcrm.voodoo.automation.VHook;
 public interface IAutomation {
 	
 	public enum InterfaceType { FIREFOX, IE, CHROME, SAFARI; }
-	public enum Strategy { CSS, XPATH, ID, NAME, LINK; }
+	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK; }
 
-	public void start(String url) throws Exception;
+	public void start() throws Exception;
 	public void stop() throws Exception;
+	public void go(String url) throws Exception;
 	public void pause(long ms) throws Exception;
 	public void interact(String message) throws Exception;
 	public void acceptDialog() throws Exception;

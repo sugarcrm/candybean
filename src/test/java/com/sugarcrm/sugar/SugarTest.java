@@ -10,8 +10,9 @@ import com.sugarcrm.voodoo.Voodoo;
 
 public abstract class SugarTest {
 	
+	public static Properties sugarProps;
+	
 	protected static Voodoo voodoo;
-	protected static Properties sugarProps;
 	protected static Sugar sugar;
 
 	private static final String curWorkDir = System.getProperty("user.dir");
@@ -24,6 +25,7 @@ public abstract class SugarTest {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
+		voodoo.start();
 		sugarProps = new Properties();
 		sugarProps.load(new FileInputStream(new File(sugarPropsPath)));
 		Properties sugarHooksProps = new Properties();
@@ -32,7 +34,6 @@ public abstract class SugarTest {
 	}
 
 	public void setup() throws Exception {
-		voodoo.start(sugarProps.getProperty("env.base_url"));
 		Sugar.login(voodoo, sugar, "admin", "asdf");
 	}
 

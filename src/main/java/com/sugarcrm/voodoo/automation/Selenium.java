@@ -60,9 +60,7 @@ public class Selenium implements IFramework {
 	 * @see com.sugarcrm.voodoo.automation.IFramework#start(java.lang.String)
 	 */
 	@Override
-	public void start(String url) throws Exception {
-		browser.get(url);
-		browser.switchTo().window(browser.getWindowHandle());
+	public void start() throws Exception {
 	}
 
 	/* (non-Javadoc)
@@ -73,10 +71,22 @@ public class Selenium implements IFramework {
 		browser.quit();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#closeWindow()
+	 */
 	public void closeWindow() throws Exception {
 		this.browser.close();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#start(java.lang.String)
+	 */
+	@Override
+	public void go(String url) throws Exception {
+		browser.get(url);
+		browser.switchTo().window(browser.getWindowHandle());
+	}
+
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.automation.IFramework#acceptDialog()
 	 */
@@ -331,6 +341,9 @@ public class Selenium implements IFramework {
 			break;
 		case LINK:
 			webElement = this.browser.findElement(By.linkText(hook));
+			break;
+		case PLINK:
+			webElement = this.browser.findElement(By.partialLinkText(hook));
 			break;
 		}
 		return new SeleniumVControl(this, webElement);
