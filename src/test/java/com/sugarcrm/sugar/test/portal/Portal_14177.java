@@ -36,7 +36,7 @@ public class Portal_14177 extends SugarTest {
 	public void setup() throws Exception {
 		super.setup();
 //		1. Portal side is installed successfully.
-//		Administration.selectPortalEnable(voodoo, sugar);
+		Administration.selectPortalEnable(voodoo, sugar);
 //		2. Create one portal user in Sugar server side.
 //		portalUser = (new UserBuilder("cw_test", "Conrad Warmbold", "Password1", "Password1")).buildPortalUser();
 //		Users.create(voodoo, sugar, portalUser);
@@ -46,7 +46,7 @@ public class Portal_14177 extends SugarTest {
 		Account account = (new AccountBuilder("acct_cwarmbold")).build();
 		cb.withAccount(account).withPortalName("cwarmbold").withPortalActive(true).withPortalPassword("Sugar123");
 		portalContact = cb.build();
-//		Accounts.create(voodoo, sugar, account);
+		Accounts.create(voodoo, sugar, account);
 		Contacts.create(voodoo, sugar, portalContact);
 	}
 	
@@ -58,8 +58,9 @@ public class Portal_14177 extends SugarTest {
 //		2. Go to Cases module.		
 //		3. Click "Create New" link.
 //		4. Fill all mandatory fields and click "Save" button.
-		CaseBuilder cb = new CaseBuilder("cw");
-		Case portalCase = cb.build();
+		CaseBuilder portalCB = new CaseBuilder("portalCase");
+		CaseBuilder sugarCB = new CaseBuilder("sugarCase");
+		Case portalCase = portalCB.build();
 		Portal.Cases.create(voodoo, sugar, portalCase);
 //		5. Login to Sugar server side as a valid user, such as admin user.
 		Portal.logout(voodoo, sugar);
@@ -69,14 +70,16 @@ public class Portal_14177 extends SugarTest {
 //			7. ***The new case is found.
 //		8. Edit the case record, such as all fields.
 //		8. ***The case is updated successfully in Sugar server side.
-		cb.updateSubject("cw_update");
-		Case sugarCase = cb.build();
+		Case sugarCase = sugarCB.build();
 		Cases.read(voodoo, sugar, portalCase);
-		voodoo.click(new VHook(Strategy.LINK, " " + portalCase.subject()));
+		voodoo.click(new VHook(Strategy.PLINK, portalCase.subject()));
 		voodoo.pause(400);
 		voodoo.click(sugar.getHook("cases_button_edit"));
 		voodoo.input(sugar.getHook("cases_textfield_subject"), sugarCase.subject());
-		voodoo.input(sugar.getHook("cases_textfield_teams"), "Administrator");
+		voodoo.click(new VHook(Strategy.ID, "teamSelect"));
+		voodoo.focusByIndex(1);
+		voodoo.click(new VHook(Strategy.PLINK, "Administrator"));
+		voodoo.focusByIndex(0);
 //		9. Click Save button.
 		voodoo.click(sugar.getHook("cases_button_saveheader"));
 //		10. The same Portal user log in to Portal again.
@@ -95,8 +98,8 @@ public class Portal_14177 extends SugarTest {
 	@After
 	public void cleanup() throws Exception {
 //		Users.deleteUser(voodoo, sugar, portalUser);
-//		Administration.selectPortalEnable(voodoo, sugar);
-//		super.cleanup();
+		Administration.selectPortalEnable(voodoo, sugar);
+		super.cleanup();
 	}
 
 	@AfterClass

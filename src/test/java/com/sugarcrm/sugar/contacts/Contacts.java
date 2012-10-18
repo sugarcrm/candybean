@@ -16,12 +16,12 @@ public class Contacts {
 		voodoo.hover(sugar.getHook("contacts_textfield_lastname"));
 		voodoo.input(sugar.getHook("contacts_textfield_lastname"), contact.lastName());
 		voodoo.click(sugar.getHook("contacts_button_accountselect"));
-//		voodoo.focus(1);
+		voodoo.focusByIndex(1);
 		voodoo.input(sugar.getHook("accountsearch_textfield_name"), contact.account().name());
 		voodoo.click(sugar.getHook("accountsearch_button_search"));
 		voodoo.pause(400);
 		voodoo.click(sugar.getHook("accountsearch_link_firstitem"));
-//		voodoo.focus(0);
+		voodoo.focusByIndex(0);
 		voodoo.scroll(sugar.getHook("contacts_panel_portalinfo"));
 		voodoo.pause(400);
 		voodoo.input(sugar.getHook("contacts_textfield_portalname"), contact.portalName());

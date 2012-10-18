@@ -56,6 +56,7 @@ public class Utils {
 		case "NAME": return Strategy.NAME;
 		case "XPATH": return Strategy.XPATH;
 		case "LINK": return Strategy.LINK;
+		case "PLINK": return Strategy.PLINK;
 		default:
 			throw new Exception("Strategy not recognized: " + strategy);
 		}
