@@ -15,6 +15,10 @@ public interface IAutomation {
 	public void pause(long ms) throws Exception;
 	public void interact(String message) throws Exception;
 	public void acceptDialog() throws Exception;
+	public String getSelected(VControl control) throws Exception;
+	public String getSelected(VHook hook) throws Exception;
+	public void select(VHook hook, String value) throws Exception;
+	public void select(VControl control, String value) throws Exception;
 	public void switchToPopup() throws Exception;
 	public void focusByIndex(int index) throws Exception;
 	public void focusByTitle(String title) throws Exception;
