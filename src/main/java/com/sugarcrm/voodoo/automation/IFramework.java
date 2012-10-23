@@ -16,8 +16,12 @@ public interface IFramework {
 	public void focusByTitle(String title) throws Exception;
 	public void focusByUrl(String url) throws Exception;
 	public VControl getControl(Strategy strategy, String hook) throws Exception;
+	public String getSelected(VControl control) throws Exception;
+	public String getSelected(Strategy strategy, String hook) throws Exception;
 	public String getText(VControl control) throws Exception;
 	public String getText(Strategy strategy, String hook) throws Exception;
+	public void select(Strategy strategy, String hook, String value) throws Exception;
+	public void select(VControl control, String value) throws Exception;
 	public void explicitWait(VControl control) throws Exception;
 	public void explicitWait(Strategy strategy, String hook) throws Exception;
 	public void explicitWait(VControl control, String attribute, String value) throws Exception;

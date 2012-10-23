@@ -33,9 +33,24 @@ public abstract class VControl implements IControl {
 		this.vAutomation.click(this);
 	}
 	
-	//@Override
+	@Override
+	public String getSelected() throws Exception {
+		return this.vAutomation.getSelected(this);
+	}
+	
+	@Override
+	public void select(String value) throws Exception {
+		this.vAutomation.select(this, value);
+	}
+	
+	@Override
 	public void explicitWait() throws Exception {
 		this.vAutomation.explicitWait(this);
+	}
+	
+	@Override
+	public void explicitWait(String attribute, String value) throws Exception {
+		this.vAutomation.explicitWait(this, attribute, value);
 	}
 	
 	/* (non-Javadoc)

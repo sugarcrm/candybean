@@ -189,10 +189,31 @@ public class Voodoo implements IAutomation {
 		this.log.info("Getting text for control with hook: " + hook);
 		return this.vAutomation.getText(hook.hookStrategy, hook.hookString);
 	}
-
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VControl)
-	 */
+	
+	@Override
+	public String getSelected(VControl control) throws Exception {
+		this.log.info("Getting selected option from drop-down menu");
+		return this.vAutomation.getSelected(control);
+	}
+	
+	@Override
+	public String getSelected(VHook hook) throws Exception{
+		this.log.info("getting selected option from drop-down menu for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", and value: ");
+		return this.vAutomation.getSelected(hook.hookStrategy, hook.hookString);
+	}
+	
+	@Override
+	public void select(VHook hook, String value) throws Exception {
+		this.log.info("Selecting drop-down for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", and value: " + value);
+		this.vAutomation.select(hook.hookStrategy, hook.hookString, value);
+	}
+		
+	@Override
+	public void select(VControl control, String value) throws Exception {
+		this.log.info("Selecting drop-down for control with value: " + value);
+		this.vAutomation.select(control, value);
+	}
+	
 	@Override
 	public String getText(VControl control) throws Exception {
 		this.log.info("Getting text for control: " + control);
