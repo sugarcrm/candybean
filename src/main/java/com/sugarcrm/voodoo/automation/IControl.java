@@ -27,6 +27,22 @@ public interface IControl {
 	public void explicitWait() throws Exception;
     
 	/**
+	 * @throws Exception
+	 */
+	public void explicitWait(String attribute, String value) throws Exception;
+	
+	/**
+	 * @throws Exception
+	 */
+	public String getSelected() throws Exception;
+	
+	/**
+	 * @param value
+	 * @throws Exception
+	 */
+	public void select(String value) throws Exception;
+	
+	/**
      * @param target
      * @throws Exception
      */

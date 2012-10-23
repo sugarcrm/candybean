@@ -26,6 +26,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.Select;
 
 import org.openqa.selenium.JavascriptExecutor;
 
@@ -195,6 +196,7 @@ public class Selenium implements IFramework {
 	 * @param queryOptionNames
 	 * @return
 	 */
+	
 	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
 		Set<String> nativeOptionNames = new HashSet<String>();
 		for (WebElement option : nativeOptions) {
@@ -205,15 +207,60 @@ public class Selenium implements IFramework {
 	}
 	
 	/**
-	 * @param selectElement
-	 * @param actionElement
+	 * getSelect - return a string of the of selected option from a drop down menu
+	 * 
+	 * @param control
+	 * @throws Exception
 	 */
-	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
-		List<WebElement> options = selectElement.getOptions(); 
-		for(WebElement option : options) {
-			selectElement.selectByVisibleText(option.getText());
-			actionElement.click();
+	@Override
+	public String getSelected(VControl control) throws Exception {
+		try {
+			Select dropDownList = new Select(((SeleniumVControl) control).webElement);
+			WebElement selectedOption  = dropDownList.getFirstSelectedOption();
+			return selectedOption.getText();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param control
+	 * @throws Exception
+	 */
+	@Override
+	public String getSelected(Strategy strategy, String hook) throws Exception {
+		return this.getSelected(this.getControl(strategy, hook));
+	}
+	
+	/**
+	 * Select - select an option (value) from the drop-down menu (control)
+	 * 
+	 * @param control
+	 * @param value
+	 * @throws Exception
+	 */
+	@Override
+	public void select(VControl control, String value) throws Exception {
+		try {
+			Select dropDownList = new Select(((SeleniumVControl) control).webElement);
+			dropDownList.selectByVisibleText(value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param strategy
+	 * @param hook
+	 * @param value
+	 * @throws Exception
+	 */
+	@Override
+	public void select(Strategy strategy, String hook, String value) throws Exception {
+		this.select(this.getControl(strategy, hook), value);
 	}
 	
 	/**
@@ -271,16 +318,9 @@ public class Selenium implements IFramework {
 			rowMap.put(k, v);
 		}
 		return rowMap;
-	}
+	}	
 	
-//	public static void explicitWait(WebDriver browser, long timeout, final By by) throws Exception {
-//		(new WebDriverWait(browser, timeout)).until(new ExpectedCondition<WebElement>(){
-//			public WebElement apply(WebDriver wd) {
-//				return wd.findElement(by);
-//			}});
-//	}
-	
-	@Override
+	@Override	
 	public void explicitWait(VControl control) throws Exception{
 		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
 		if (control instanceof SeleniumVControl) {
