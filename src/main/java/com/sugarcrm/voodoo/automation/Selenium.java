@@ -263,6 +263,19 @@ public class Selenium implements IFramework {
 		this.select(this.getControl(strategy, hook), value);
 	}
 	
+	
+	/**
+	 * @param selectElement
+	 * @param actionElement
+	 */
+	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
+		List<WebElement> options = selectElement.getOptions();
+		for (WebElement option : options) {
+			selectElement.selectByVisibleText(option.getText());
+			actionElement.click();
+		}
+	}
+	
 	/**
 	 * @param selectElement
 	 * @param actionOptionValues
