@@ -98,25 +98,9 @@ public class Selenium implements IFramework {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IFramework#switchToPopup()
+	 * @see com.sugarcrm.voodoo.automation.IFramework#focusByIndex(int)
 	 */
 	@Override
-	public void switchToPopup() throws Exception {
-		String currentWindowHandle = browser.getWindowHandle();
-		Set<String> windowHandles = browser.getWindowHandles();
-		windowHandles.remove(currentWindowHandle);
-		if (windowHandles.size() > 1) throw new Exception("Selenium: more than one popup/window detected");
-		else browser.switchTo().window(windowHandles.iterator().next());
-	}
-	
-	/**
-	 * @author wli
-	 * 
-	 * focusByIndex(int window) - Switch to a window by index
-	 * 
-	 * @param window - Argument of type String representing the index of a window
-	 * @throws Exception
-	 */
 	public void focusByIndex(int index) throws Exception {
 		Set<String> Handles = browser.getWindowHandles();
 		while (Handles.iterator().hasNext()){
@@ -130,14 +114,10 @@ public class Selenium implements IFramework {
 		browser.switchTo().window(windowHandles.get(index));
 	}
 	
-	/**
-	 * @author wli
-	 * 
-	 * focusByIndex(string window) - Switch to a window by index
-	 * 
-	 * @param window - Argument of type String representing the index of a window
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#focusByTitle(java.lang.String)
 	 */
+	@Override
 	public void focusByTitle(String title) throws Exception {
 		Set<String> Handles = browser.getWindowHandles();
 		while (Handles.iterator().hasNext()){
@@ -150,14 +130,10 @@ public class Selenium implements IFramework {
 		}
 	}
 	
-	/**
-	 * @author wli
-	 * 
-	 * focusByIndex(int window) - Switch to a window by index
-	 * 
-	 * @param window - Argument of type String representing the index of a window
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#focusByUrl(java.lang.String)
 	 */
+	@Override
 	public void focusByUrl(String url) throws Exception {
 		Set<String> Handles = browser.getWindowHandles();
 		while (Handles.iterator().hasNext()){
@@ -196,7 +172,6 @@ public class Selenium implements IFramework {
 	 * @param queryOptionNames
 	 * @return
 	 */
-	
 	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
 		Set<String> nativeOptionNames = new HashSet<String>();
 		for (WebElement option : nativeOptions) {
@@ -206,11 +181,8 @@ public class Selenium implements IFramework {
 		else return false;
 	}
 	
-	/**
-	 * getSelect - return a string of the of selected option from a drop down menu
-	 * 
-	 * @param control
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#getSelected(com.sugarcrm.voodoo.automation.VControl)
 	 */
 	@Override
 	public String getSelected(VControl control) throws Exception {
@@ -224,22 +196,16 @@ public class Selenium implements IFramework {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param control
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#getSelected(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
 	 */
 	@Override
 	public String getSelected(Strategy strategy, String hook) throws Exception {
 		return this.getSelected(this.getControl(strategy, hook));
 	}
 	
-	/**
-	 * Select - select an option (value) from the drop-down menu (control)
-	 * 
-	 * @param control
-	 * @param value
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#select(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
 	 */
 	@Override
 	public void select(VControl control, String value) throws Exception {
@@ -251,18 +217,13 @@ public class Selenium implements IFramework {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param strategy
-	 * @param hook
-	 * @param value
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#select(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void select(Strategy strategy, String hook, String value) throws Exception {
 		this.select(this.getControl(strategy, hook), value);
 	}
-	
 	
 	/**
 	 * @param selectElement
@@ -332,46 +293,6 @@ public class Selenium implements IFramework {
 		}
 		return rowMap;
 	}	
-	
-	@Override	
-	public void explicitWait(VControl control) throws Exception{
-		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
-		if (control instanceof SeleniumVControl) {
-			final WebElement we = ((SeleniumVControl) control).webElement;
-			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
-			wait.until(new Function<WebDriver, Boolean>() {
-				public Boolean apply(WebDriver driver) {
-					return we.isDisplayed();
-				}
-			});
-		} else throw new Exception("Selenium: VControl not selenium-based.");
-	}
-	
-	@Override
-	public void explicitWait(Strategy strategy, String hook) throws Exception{
-		this.explicitWait(this.getControl(strategy, hook));
-	}
-	
-	@Override
-	public void explicitWait(VControl control, String attribute, String value) throws Exception {
-		final String vAttribute = attribute;
-		final String vValue = value;
-		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
-		if (control instanceof SeleniumVControl) {
-			final WebElement we = ((SeleniumVControl) control).webElement;
-			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
-			   wait.until(new Function<WebDriver, Boolean>() {
-			        public Boolean apply(WebDriver driver) {
-			            return we.getAttribute(vAttribute).contains(vValue);
-			        }
-			    });
-		} else throw new Exception("Selenium: VControl not selenium-based.");
-	}
-	
-	@Override
-	public void explicitWait(Strategy strategy, String hook, String attribute, String value) throws Exception {
-		this.explicitWait(this.getControl(strategy, hook), attribute, value);
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.automation.IFramework#getControl(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
@@ -532,8 +453,11 @@ public class Selenium implements IFramework {
 		((JavascriptExecutor) browser).executeScript("window.scrollBy(0," + y +");");
 	}
 	
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IFramework#dragAndDrop(com.sugarcrm.voodoo.automation.VControl, com.sugarcrm.voodoo.automation.VControl)
+     */
     @Override
-    public void dragAndDrop(VControl control1, VControl control2) throws Exception {
+    public void dragNDrop(VControl control1, VControl control2) throws Exception {
             if (control1 instanceof SeleniumVControl && control2 instanceof SeleniumVControl) {
                     WebElement draggable = ((SeleniumVControl) control1).webElement;
                     WebElement target = ((SeleniumVControl) control2).webElement;
@@ -543,12 +467,67 @@ public class Selenium implements IFramework {
             else throw new Exception("Selenium: VControl not selenium-based.");
     }
 
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IFramework#dragAndDrop(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String, java.lang.String)
+     */
     @Override
-    public void dragAndDrop(Strategy strategy, String hook1, String hook2) throws Exception {
+    public void dragNDrop(Strategy strategy, String hook1, String hook2) throws Exception {
             VControl vc1 =  this.getControl(strategy, hook1);
             VControl vc2 =  this.getControl(strategy, hook2);
-            this.dragAndDrop(vc1, vc2);
+            this.dragNDrop(vc1, vc2);
     }
+    
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#wait(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override	
+	public void waitFor(VControl control) throws Exception{
+		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
+		if (control instanceof SeleniumVControl) {
+			final WebElement we = ((SeleniumVControl) control).webElement;
+			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
+			wait.until(new Function<WebDriver, Boolean>() {
+				public Boolean apply(WebDriver driver) {
+					return we.isDisplayed();
+				}
+			});
+		} else throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#wait(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String)
+	 */
+	@Override
+	public void waitFor(Strategy strategy, String hook) throws Exception{
+		this.waitFor(this.getControl(strategy, hook));
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#wait(com.sugarcrm.voodoo.automation.VControl, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void waitFor(VControl control, String attribute, String value) throws Exception {
+		final String vAttribute = attribute;
+		final String vValue = value;
+		long explicitWait = Long.parseLong(props.getProperty("perf.explicit_wait"));
+		if (control instanceof SeleniumVControl) {
+			final WebElement we = ((SeleniumVControl) control).webElement;
+			WebDriverWait wait = new WebDriverWait(this.browser, explicitWait);
+			   wait.until(new Function<WebDriver, Boolean>() {
+			        public Boolean apply(WebDriver driver) {
+			            return we.getAttribute(vAttribute).contains(vValue);
+			        }
+			    });
+		} else throw new Exception("Selenium: VControl not selenium-based.");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IFramework#wait(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void waitFor(Strategy strategy, String hook, String attribute, String value) throws Exception {
+		this.waitFor(this.getControl(strategy, hook), attribute, value);
+	}
 
 	/**
 	 * @param browserType

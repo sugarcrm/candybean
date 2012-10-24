@@ -33,24 +33,36 @@ public abstract class VControl implements IControl {
 		this.vAutomation.click(this);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IControl#getSelected()
+	 */
 	@Override
 	public String getSelected() throws Exception {
 		return this.vAutomation.getSelected(this);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IControl#select(java.lang.String)
+	 */
 	@Override
 	public void select(String value) throws Exception {
 		this.vAutomation.select(this, value);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IControl#waitFor()
+	 */
 	@Override
-	public void explicitWait() throws Exception {
-		this.vAutomation.explicitWait(this);
+	public void waitFor() throws Exception {
+		this.vAutomation.waitFor(this);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.automation.IControl#waitFor(java.lang.String, java.lang.String)
+	 */
 	@Override
-	public void explicitWait(String attribute, String value) throws Exception {
-		this.vAutomation.explicitWait(this, attribute, value);
+	public void waitFor(String attribute, String value) throws Exception {
+		this.vAutomation.waitFor(this, attribute, value);
 	}
 	
 	/* (non-Javadoc)
@@ -85,8 +97,11 @@ public abstract class VControl implements IControl {
 		this.vAutomation.scroll(this);
 	}
 	
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IControl#dragNDrop(com.sugarcrm.voodoo.automation.IControl)
+     */
     @Override
-	public void dragAndDrop(IControl target) throws Exception {
-		this.vAutomation.dragAndDrop(this, (VControl) target);
+	public void dragNDrop(IControl target) throws Exception {
+		this.vAutomation.dragNDrop(this, (VControl) target);
 	}
 }
