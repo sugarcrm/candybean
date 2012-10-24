@@ -76,12 +76,9 @@ public class Voodoo implements IAutomation {
 		this.vAutomation.go(url);
 	}
 
-	/**
-	 * @author wli
-	 * 
-	 * closeWindow() - close the current Browser
-	 * 
-	 * @throws Exception
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#closeWindow()
 	 */
 	public void closeWindow() throws Exception {
 		this.log.info("Closing Window.");
@@ -98,57 +95,35 @@ public class Voodoo implements IAutomation {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.VAutomation#switchToPopup()
+	 * @see com.sugarcrm.voodoo.IAutomation#focusByIndex(int)
 	 */
 	@Override
-	public void switchToPopup() throws Exception {
-		this.log.info("Switching to popup dialog.");
-		this.vAutomation.switchToPopup();
-	}
-	
-	/**
-	 * @author wli
-	 * 
-	 * focusByIndex(int window) - Switch to a window by index
-	 * 
-	 * @param window - Argument of type String representing the index of a window
-	 * @throws Exception
-	 */
 	public void focusByIndex(int window) throws Exception {
 		this.log.info("Switching to popup dialog by Index: " + window);
 		this.vAutomation.focusByIndex(window);
 	}
 	
-	/**
-	 * @author wli
-	 * 
-	 * focusByTitle(int window) - Switch to a window by title
-	 * 
-	 * @param window - Argument of type String representing the title of a window
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#focusByTitle(java.lang.String)
 	 */
+	@Override
 	public void focusByTitle(String title) throws Exception {
 		this.log.info("Switching to popup dialog by title: " + title);
 		this.vAutomation.focusByTitle(title);
 	}
 	
-	/**
-	 * @author wli
-	 * 
-	 * focusByUrl(int window) - Switch to a window by url
-	 * 
-	 * @param window - Argument of type String representing the url of a window
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#focusByUrl(java.lang.String)
 	 */
+	@Override
 	public void focusByUrl(String url) throws Exception {
 		this.log.info("Switching to popup dialog by url: " + url);
 		this.vAutomation.focusByUrl(url);
 	}
 	
 	
-	/**
-	 * @param ms
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#pause(long)
 	 */
 	@Override
 	public void pause(long ms) throws Exception {
@@ -156,10 +131,10 @@ public class Voodoo implements IAutomation {
 		Thread.sleep(ms);
 	}
 
-	/**
-	 * @param message
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#interact(java.lang.String)
 	 */
+	@Override
 	public void interact(String message) {
 		this.log.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
@@ -174,13 +149,6 @@ public class Voodoo implements IAutomation {
 		return vAutomation.getControl(hook.hookStrategy, hook.hookString);
 	}
 
-	@Deprecated
-	@Override
-	public VControl getControl(Strategy strategy, String hook) throws Exception {
-		this.log.info("Getting control with hook: " + hook + " via strategy: " + strategy);
-		return vAutomation.getControl(strategy, hook);
-	}
-
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VHook)
 	 */
@@ -190,63 +158,87 @@ public class Voodoo implements IAutomation {
 		return this.vAutomation.getText(hook.hookStrategy, hook.hookString);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getSelected(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
 	public String getSelected(VControl control) throws Exception {
 		this.log.info("Getting selected option from drop-down menu");
 		return this.vAutomation.getSelected(control);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getSelected(com.sugarcrm.voodoo.automation.VHook)
+	 */
 	@Override
 	public String getSelected(VHook hook) throws Exception{
 		this.log.info("getting selected option from drop-down menu for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", and value: ");
 		return this.vAutomation.getSelected(hook.hookStrategy, hook.hookString);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#select(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
+	 */
 	@Override
 	public void select(VHook hook, String value) throws Exception {
 		this.log.info("Selecting drop-down for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", and value: " + value);
 		this.vAutomation.select(hook.hookStrategy, hook.hookString, value);
 	}
 		
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#select(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+	 */
 	@Override
 	public void select(VControl control, String value) throws Exception {
 		this.log.info("Selecting drop-down for control with value: " + value);
 		this.vAutomation.select(control, value);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
 	public String getText(VControl control) throws Exception {
 		this.log.info("Getting text for control: " + control);
 		return this.vAutomation.getText(control);
 	}
 	
-	public void explicitWait(VControl control) throws Exception {
-		this.log.info("Executing wait for control: " + control);
-		this.vAutomation.explicitWait(control);
-	}
-	
-	public void explicitWait(VHook hook) throws Exception {
-		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString);
-		this.vAutomation.explicitWait(hook.hookStrategy, hook.hookString);
-	}
-	
-	public void explicitWait(VControl control, String attribute, String value) throws Exception {
-		this.log.info("Executing wait for control: " + control + ", attribute:" + attribute + ", value: " + value);
-		this.vAutomation.explicitWait(control, attribute, value);
-	}
-	
-	public void explicitWait(VHook hook, String attribute, String value) throws Exception {
-		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", attribute:" + attribute + ", value: " + value);
-		this.vAutomation.explicitWait(hook.hookStrategy, hook.hookString, attribute, value);
-	}
-	
-	@Deprecated
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VControl)
+	 */
 	@Override
-	public String getText(Strategy strategy, String hook) throws Exception {
-		this.log.info("Getting text for control with hook: " + hook + " via strategy: " + strategy);
-		return this.vAutomation.getText(strategy, hook);
+	public void waitFor(VControl control) throws Exception {
+		this.log.info("Executing wait for control: " + control);
+		this.vAutomation.waitFor(control);
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void waitFor(VHook hook) throws Exception {
+		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString);
+		this.vAutomation.waitFor(hook.hookStrategy, hook.hookString);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VControl, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void waitFor(VControl control, String attribute, String value) throws Exception {
+		this.log.info("Executing wait for control: " + control + ", attribute:" + attribute + ", value: " + value);
+		this.vAutomation.waitFor(control, attribute, value);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VHook, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void waitFor(VHook hook, String attribute, String value) throws Exception {
+		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", attribute:" + attribute + ", value: " + value);
+		this.vAutomation.waitFor(hook.hookStrategy, hook.hookString, attribute, value);
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#click(com.sugarcrm.voodoo.automation.VHook)
 	 */
@@ -265,30 +257,23 @@ public class Voodoo implements IAutomation {
 		vAutomation.click(control);
 	}
 
-	@Deprecated
-	@Override
-	public void click(Strategy strategy, String hook) throws Exception {
-		this.log.info("Clicking on control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.click(strategy, hook);
-	}
-
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#dragAndDrop(com.sugarcrm.voodoo.automation.VHook, com.sugarcrm.voodoo.automation.VHook)
 	 */
 	@Override
-	public void dragAndDrop(VHook hook1, VHook hook2) throws Exception {
+	public void dragNDrop(VHook hook1, VHook hook2) throws Exception {
 		this.log.info("Drag and drop on controls with hooks: " + hook1
 				+ " and " + hook2 + " via strategy: " + hook1.hookStrategy);
-		vAutomation.dragAndDrop(hook1.hookStrategy, hook1.hookString, hook2.hookString);
+		vAutomation.dragNDrop(hook1.hookStrategy, hook1.hookString, hook2.hookString);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#dragAndDrop(com.sugarcrm.voodoo.automation.VControl, com.sugarcrm.voodoo.automation.VControl)
 	 */
 	@Override
-	public void dragAndDrop(VControl control1, VControl control2) throws Exception {
+	public void dragNDrop(VControl control1, VControl control2) throws Exception {
 		this.log.info("Drag and drop control " + control1 + " to " + control2);
-		vAutomation.dragAndDrop(control1, control2);
+		vAutomation.dragNDrop(control1, control2);
 	}
 
 	/* (non-Javadoc)
@@ -309,13 +294,6 @@ public class Voodoo implements IAutomation {
 		vAutomation.hover(control);
 	}
 
-	@Deprecated
-	@Override
-	public void hover(Strategy strategy, String hook) throws Exception {
-		this.log.info("Hovering on control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.hover(strategy, hook);
-	}
-
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#input(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
 	 */
@@ -334,13 +312,6 @@ public class Voodoo implements IAutomation {
 		vAutomation.input(control, input);
 	}
 
-	@Deprecated
-	@Override
-	public void input(Strategy strategy, String hook, String input) throws Exception {
-		this.log.info("Inputting text for control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.input(strategy, hook, input);
-	}
-
 	/* (non-Javadoc)
 	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VHook)
 	 */
@@ -357,13 +328,6 @@ public class Voodoo implements IAutomation {
 	public void rightClick(VControl control) throws Exception {
 		this.log.info("Right-clicking on control: " + control);
 		vAutomation.rightClick(control);
-	}
-
-	@Deprecated
-	@Override
-	public void rightClick(Strategy strategy, String hook) throws Exception {
-		this.log.info("Right-clicking on control with hook: " + hook + " via strategy: " + strategy);
-		vAutomation.rightClick(strategy, hook);
 	}
 
 	/* (non-Javadoc)
