@@ -348,6 +348,43 @@ public class Voodoo implements IAutomation {
 		vAutomation.scroll(control);
 	}
 	
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.IAutomation#select(com.sugarcrm.voodoo.automation.VHook, boolean)
+     */
+    @Override
+    public void select(VHook hook, boolean isSelected) throws Exception {
+            this.log.info("Select for control with hook: " + hook);
+            vAutomation.select(hook.hookStrategy, hook.hookString, isSelected);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.VAutomation#select(com.sugarcrm.voodoo.automation.VControl, boolean)
+     */
+    @Override
+    public void select(VControl control, boolean isSelected) throws Exception {
+            this.log.info("Select for control: " + control);
+            vAutomation.select(control, isSelected);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.IAutomation#getAttributeValue(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
+     */
+    @Override
+    public String getAttributeValue(VHook hook, String attribute) throws Exception {
+            this.log.info("getAttributeValue for control with hook: " + hook);
+            return vAutomation.getAttributeValue(hook.hookStrategy, hook.hookString, attribute);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.VAutomation#getAttributeValue(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+     */
+    @Override
+    public String getAttributeValue(VControl control, String attribute) throws Exception {
+            this.log.info("getAttributeValue for control: " + control);
+            return vAutomation.getAttributeValue(control, attribute);
+    }
+
+	
 	/**
 	 * @return
 	 * @throws Exception
