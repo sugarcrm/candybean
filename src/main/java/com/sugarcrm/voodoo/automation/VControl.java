@@ -104,4 +104,19 @@ public abstract class VControl implements IControl {
 	public void dragNDrop(IControl target) throws Exception {
 		this.vAutomation.dragNDrop(this, (VControl) target);
 	}
+    
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IControl#select(boolean)
+     */
+    @Override
+    public void select(boolean isSelected) throws Exception {
+            this.vAutomation.select(this, isSelected);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IControl#getAttributeValue(java.lang.String)
+     */
+    public String getAttributeValue(String attribute) throws Exception {
+            return this.vAutomation.getAttributeValue(this, attribute);
+    }
 }
