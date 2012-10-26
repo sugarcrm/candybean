@@ -20,4 +20,6 @@ public interface IControl {
 	public void scroll() throws Exception;
 	public void waitFor() throws Exception;
     public void waitFor(String attribute, String value) throws Exception;
+    public void select(boolean isSelected) throws Exception;
+    public String getAttributeValue(String attribute) throws Exception;
 }
