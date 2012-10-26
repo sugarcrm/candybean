@@ -42,4 +42,8 @@ public interface IAutomation {
 	public void waitFor(VHook hook) throws Exception;
 	public void waitFor(VControl control, String attribute, String value) throws Exception;
 	public void waitFor(VHook hook, String attribute, String value) throws Exception;
+    public void select(VHook hook, boolean isSelected) throws Exception;
+    public void select(VControl control, boolean isSelected) throws Exception;
+    public String getAttributeValue(VHook hook, String attribute) throws Exception;
+    public String getAttributeValue(VControl control, String attribute) throws Exception;
 }

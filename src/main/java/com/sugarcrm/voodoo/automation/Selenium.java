@@ -528,6 +528,60 @@ public class Selenium implements IFramework {
 	public void waitFor(Strategy strategy, String hook, String attribute, String value) throws Exception {
 		this.waitFor(this.getControl(strategy, hook), attribute, value);
 	}
+	
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IFramework#select(com.sugarcrm.voodoo.automation.VControl, boolean)
+     */
+    @Override
+    public void select(VControl control, boolean isSelected) throws Exception {
+            if (control instanceof SeleniumVControl) {
+                    WebElement we =  ((SeleniumVControl) control).webElement;
+                    if (!we.getAttribute("type").equals("checkbox")) {
+                            //throw new Exception("Selenium: webElement is not a checkbox.");
+                            throw new Exception("Selenium: this web element is not a checkbox.");
+                    }
+
+                    if (we.isSelected() != isSelected) {
+                    we.click();    
+                    }
+            }
+            else throw new Exception("Selenium: VControl not selenium-based.");
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IFramework#select(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String, boolean)
+     */
+    @Override
+    public void select(Strategy strategy, String hook, boolean isSelected) throws Exception {
+            this.select(this.getControl(strategy, hook), isSelected);
+    }
+    
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IFramework#getAttributeValue(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+     */
+    @Override
+    public String getAttributeValue(VControl control, String attribute) throws Exception {
+            if (control instanceof SeleniumVControl) {
+                    WebElement we =  ((SeleniumVControl) control).webElement;
+                    String value = we.getAttribute(attribute);
+                    if (value == null) {
+                        throw new Exception("Selenium: attribute does not exist.");
+                    }
+                    else {
+                            return value;
+                    }
+            }
+            else throw new Exception("Selenium: VControl not selenium-based.");
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.automation.IFramework#getAttributeValue(com.sugarcrm.voodoo.IAutomation.Strategy, java.lang.String, java.lang.String)
+     */
+    @Override
+    public String getAttributeValue(Strategy strategy, String hook, String attribute) throws Exception {
+            return this.getAttributeValue(this.getControl(strategy, hook), attribute);
+    }
+
 
 	/**
 	 * @param browserType

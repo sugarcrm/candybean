@@ -37,4 +37,8 @@ public interface IFramework {
 	public void waitFor(Strategy strategy, String hook) throws Exception;
 	public void waitFor(VControl control, String attribute, String value) throws Exception;
 	public void waitFor(Strategy strategy, String hook, String attribute, String value) throws Exception;
+    public void select(Strategy strategy, String hook, boolean isSelected) throws Exception;
+    public void select(VControl control, boolean isSelected) throws Exception;
+    public String getAttributeValue(Strategy stategy, String hook, String attribute) throws Exception;
+    public String getAttributeValue(VControl control, String attribute) throws Exception;
 }
