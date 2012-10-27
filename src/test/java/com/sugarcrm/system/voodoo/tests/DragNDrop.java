@@ -12,6 +12,11 @@ import com.sugarcrm.voodoo.IAutomation.Strategy;
 import com.sugarcrm.voodoo.Voodoo;
 import com.sugarcrm.voodoo.automation.VHook;
 
+// Drag and drop is not supported for HTML5. Same issue reported by other users as well.
+// The following test ran fine using chrome 22.0.1229.94, selenium driver 2.19.
+// However, it does not work on firefox. (Tried firefox 10, 11, 14, with selenium driver 2.19, 2.22, 2.25)
+// For Sugar browser, drag and drop seemed to work fine.
+//
 public class DragNDrop {
 	protected static Voodoo voodoo;
 	
