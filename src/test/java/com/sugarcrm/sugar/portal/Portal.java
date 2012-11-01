@@ -2,8 +2,8 @@ package com.sugarcrm.sugar.portal;
 
 import javax.swing.JOptionPane;
 
-import com.sugarcrm.voodoo.Utils;
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Utils;
+import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.SugarTest;
 import com.sugarcrm.sugar.cases.Case;

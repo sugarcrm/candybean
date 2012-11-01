@@ -9,9 +9,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.IAutomation.Strategy;
-import com.sugarcrm.voodoo.Voodoo;
 import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 
 public class CheckboxSelectGetAttribute {
 	protected static Voodoo voodoo;

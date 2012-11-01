@@ -1,6 +1,6 @@
 package com.sugarcrm.sugar.accounts;
 
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.sugar.Sugar;
 
 

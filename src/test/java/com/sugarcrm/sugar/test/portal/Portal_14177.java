@@ -22,8 +22,8 @@ import com.sugarcrm.sugar.contacts.Contact.ContactBuilder;
 import com.sugarcrm.sugar.contacts.Contacts;
 import com.sugarcrm.sugar.cases.Cases;
 import com.sugarcrm.sugar.portal.Portal;
-import com.sugarcrm.voodoo.IAutomation.Strategy;
 import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 
 
 public class Portal_14177 extends SugarTest {
