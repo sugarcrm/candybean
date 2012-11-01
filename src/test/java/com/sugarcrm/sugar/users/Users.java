@@ -2,7 +2,7 @@ package com.sugarcrm.sugar.users;
 
 import javax.swing.JOptionPane;
 
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.users.User.PortalUser;
 

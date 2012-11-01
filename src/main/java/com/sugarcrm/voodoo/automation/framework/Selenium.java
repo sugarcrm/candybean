@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.automation;
+package com.sugarcrm.voodoo.automation.framework;
 
 import java.awt.Toolkit;
 import java.io.File;
@@ -31,9 +31,13 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.JavascriptExecutor;
 
 import com.google.common.base.Function;
-import com.sugarcrm.voodoo.IAutomation.Strategy;
-import com.sugarcrm.voodoo.Utils;
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.IAutomation;
+import com.sugarcrm.voodoo.automation.IFramework;
+import com.sugarcrm.voodoo.automation.Utils;
+import com.sugarcrm.voodoo.automation.VControl;
+import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.Voodoo.InterfaceType;
 
 
 public class Selenium implements IFramework {

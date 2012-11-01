@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo;
+package com.sugarcrm.voodoo.automation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,11 +14,8 @@ import java.util.logging.SimpleFormatter;
 
 import javax.swing.JOptionPane;
 
-import com.sugarcrm.voodoo.automation.Selenium;
-import com.sugarcrm.voodoo.automation.IFramework;
-import com.sugarcrm.voodoo.automation.VControl;
-import com.sugarcrm.voodoo.automation.VHook;
-import com.sugarcrm.voodoo.Utils;
+import com.sugarcrm.voodoo.automation.Utils;
+import com.sugarcrm.voodoo.automation.framework.Selenium;
 
 
 /**

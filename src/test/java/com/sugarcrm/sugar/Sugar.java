@@ -3,9 +3,9 @@ package com.sugarcrm.sugar;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.sugarcrm.voodoo.Utils;
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.Voodoo;
 
 
 public class Sugar {

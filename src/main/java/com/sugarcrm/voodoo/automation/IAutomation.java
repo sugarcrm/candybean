@@ -1,7 +1,5 @@
-package com.sugarcrm.voodoo;
+package com.sugarcrm.voodoo.automation;
 
-import com.sugarcrm.voodoo.automation.VControl;
-import com.sugarcrm.voodoo.automation.VHook;
 
 
 public interface IAutomation {

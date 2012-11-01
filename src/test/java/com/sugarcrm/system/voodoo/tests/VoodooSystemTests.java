@@ -8,12 +8,20 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 
-import com.sugarcrm.voodoo.IAutomation.Strategy;
-import com.sugarcrm.voodoo.Voodoo;
 import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 
 //import com.sugarcrm.voodoo.IAutomation.Strategy;
 //import com.sugarcrm.voodoo.automation.VHook;
@@ -54,6 +62,25 @@ public class VoodooSystemTests {
 	}
 	
 	@Test
+	public void dragNDropTest() throws Exception {
+//		voodoo.go("http://www.w3schools.com/html/html5_draganddrop.asp");
+//		voodoo.waitFor(new VHook(Strategy.ID, "drag1"));
+//		voodoo.dragNDrop(new VHook(Strategy.ID, "drag1"), new VHook(Strategy.ID, "div2"));
+		
+//		WebDriver driver = new ChromeDriver();
+//		driver.get("http://www.w3schools.com/html/html5_draganddrop.asp");
+//		Action dragAndDrop = (new Actions(driver)).clickAndHold(driver.findElement(By.id("drag1")))
+//			       .moveToElement(driver.findElement(By.id("div2")))
+//			       .release(driver.findElement(By.id("drag1")))
+//			       .build();
+//		voodoo.interact("wait for it...");
+//		dragAndDrop.perform();
+//		voodoo.interact("wait for it...");
+		
+//		voodoo.waitFor(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
+	}
+	
+	@Test
 	public void getSelectedTest() throws Exception {
 		String actual;
 		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
@@ -68,4 +95,8 @@ public class VoodooSystemTests {
 		
 	}
 	
+	@AfterClass
+	public static void cleanupOnce() throws Exception {
+		voodoo.stop();
+	}
 }	

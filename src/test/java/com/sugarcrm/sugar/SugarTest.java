@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Voodoo;
 
 
 public abstract class SugarTest {
