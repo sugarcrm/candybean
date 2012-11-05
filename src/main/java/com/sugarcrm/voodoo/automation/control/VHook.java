@@ -1,5 +1,6 @@
-package com.sugarcrm.voodoo.automation;
+package com.sugarcrm.voodoo.automation.control;
 
+import com.sugarcrm.voodoo.automation.IAutomation;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 
 

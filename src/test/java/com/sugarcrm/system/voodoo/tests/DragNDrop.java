@@ -8,9 +8,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.automation.VHook;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 // Drag and drop is not supported for HTML5. Same issue reported by other users as well.
 // The following test ran fine using chrome 22.0.1229.94, selenium driver 2.19.

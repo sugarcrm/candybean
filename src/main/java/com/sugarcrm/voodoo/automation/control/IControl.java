@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.automation;
+package com.sugarcrm.voodoo.automation.control;
 
 
 /**

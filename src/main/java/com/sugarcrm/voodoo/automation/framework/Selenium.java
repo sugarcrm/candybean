@@ -34,10 +34,10 @@ import com.google.common.base.Function;
 import com.sugarcrm.voodoo.automation.IAutomation;
 import com.sugarcrm.voodoo.automation.IFramework;
 import com.sugarcrm.voodoo.automation.Utils;
-import com.sugarcrm.voodoo.automation.VControl;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 import com.sugarcrm.voodoo.automation.Voodoo.InterfaceType;
+import com.sugarcrm.voodoo.automation.control.VControl;
 
 
 public class Selenium implements IFramework {
