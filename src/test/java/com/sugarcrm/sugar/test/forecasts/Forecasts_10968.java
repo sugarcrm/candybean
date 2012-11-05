@@ -22,8 +22,8 @@ import com.sugarcrm.sugar.contacts.Contact.ContactBuilder;
 import com.sugarcrm.sugar.contacts.Contacts;
 import com.sugarcrm.sugar.cases.Cases;
 import com.sugarcrm.sugar.portal.Portal;
-import com.sugarcrm.voodoo.automation.VHook;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 public class Forecasts_10968 extends SugarTest {

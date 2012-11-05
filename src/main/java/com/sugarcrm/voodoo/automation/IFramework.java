@@ -1,7 +1,7 @@
 package com.sugarcrm.voodoo.automation;
 
-import com.sugarcrm.voodoo.automation.VControl;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VControl;
 
 
 public interface IFramework {

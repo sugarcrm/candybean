@@ -12,10 +12,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sugarcrm.voodoo.automation.Utils;
-import com.sugarcrm.voodoo.automation.VHook;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 import com.sugarcrm.voodoo.automation.Utils.Pair;
 import com.sugarcrm.voodoo.automation.Utils.Triplet;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 public class TestUtils {

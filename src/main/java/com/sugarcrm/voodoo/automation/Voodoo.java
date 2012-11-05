@@ -15,6 +15,8 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.JOptionPane;
 
 import com.sugarcrm.voodoo.automation.Utils;
+import com.sugarcrm.voodoo.automation.control.VControl;
+import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.framework.Selenium;
 
 

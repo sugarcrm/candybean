@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 /**
