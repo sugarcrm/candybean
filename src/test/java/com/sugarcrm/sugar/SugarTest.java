@@ -25,7 +25,7 @@ public abstract class SugarTest {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
-		voodoo.start();
+		voodoo.auto.start();
 		sugarProps = new Properties();
 		sugarProps.load(new FileInputStream(new File(sugarPropsPath)));
 		Properties sugarHooksProps = new Properties();
@@ -39,7 +39,7 @@ public abstract class SugarTest {
 
 	public void cleanup() throws Exception {
 		Sugar.logout(voodoo, sugar);
-		voodoo.stop();
+		voodoo.auto.stop();
 	}
 
 	public static void cleanupOnce() {}
