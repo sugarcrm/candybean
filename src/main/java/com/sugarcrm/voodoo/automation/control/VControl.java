@@ -1,124 +1,31 @@
 package com.sugarcrm.voodoo.automation.control;
 
-import com.sugarcrm.voodoo.automation.IFramework;
+import com.sugarcrm.voodoo.automation.IAutomation;
 
 
 /**
  * @author cwarmbold
  *
  */
-public abstract class VControl implements IControl {
+public class VControl {
 	
-	private final IFramework vAutomation;
+	protected final VHook hook;
+	protected final IAutomation auto;
 
-	/**
-	 * @param vAutomation
-	 */
-	public VControl(IFramework vAutomation) {
-		this.vAutomation = vAutomation;
+	public VControl(VHook hook, IAutomation auto) {
+		this.hook = hook;
+		this.auto = auto;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#getText()
-	 */
-	@Override
-	public String getText() throws Exception {
-		this.vAutomation.getText(this);
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#click()
-	 */
-	@Override
-	public void click() throws Exception {
-		this.vAutomation.click(this);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#getSelected()
-	 */
-	@Override
-	public String getSelected() throws Exception {
-		return this.vAutomation.getSelected(this);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#select(java.lang.String)
-	 */
-	@Override
-	public void select(String value) throws Exception {
-		this.vAutomation.select(this, value);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#waitFor()
-	 */
-	@Override
-	public void waitFor() throws Exception {
-		this.vAutomation.waitFor(this);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#waitFor(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void waitFor(String attribute, String value) throws Exception {
-		this.vAutomation.waitFor(this, attribute, value);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#hover()
-	 */
-	@Override
-	public void hover() throws Exception {
-		this.vAutomation.hover(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#input(java.lang.String)
-	 */
-	@Override
-	public void input(String input) throws Exception {
-		this.vAutomation.input(this, input);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#rightClick()
-	 */
-	@Override
-	public void rightClick() throws Exception {
-		this.vAutomation.rightClick(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.sugarcrm.voodoo.automation.IControl#scroll()
-	 */
-	@Override
-	public void scroll() throws Exception {
-		this.vAutomation.scroll(this);
-	}
-	
-    /* (non-Javadoc)
-     * @see com.sugarcrm.voodoo.automation.IControl#dragNDrop(com.sugarcrm.voodoo.automation.IControl)
-     */
-    @Override
-	public void dragNDrop(IControl target) throws Exception {
-		this.vAutomation.dragNDrop(this, (VControl) target);
-	}
-    
-    /* (non-Javadoc)
-     * @see com.sugarcrm.voodoo.automation.IControl#select(boolean)
-     */
-    @Override
-    public void select(boolean isSelected) throws Exception {
-            this.vAutomation.select(this, isSelected);
-    }
-
-    /* (non-Javadoc)
-     * @see com.sugarcrm.voodoo.automation.IControl#getAttributeValue(java.lang.String)
-     */
-    public String getAttributeValue(String attribute) throws Exception {
-            return this.vAutomation.getAttributeValue(this, attribute);
-    }
+	public VHook getHook() throws Exception { return this.hook; }
+	public String getAttribute(String attribute) throws Exception {	return this.auto.getAttribute(this, attribute); }
+	public String getText() throws Exception { return this.auto.getText(this); }
+	public void click() throws Exception { this.auto.click(this); }
+    public void dragNDrop(VControl target) throws Exception { this.auto.dragNDrop(this, target); }
+	public void hover() throws Exception { this.auto.hover(this); }
+	public void rightClick() throws Exception { this.auto.rightClick(this); }
+	public void scroll() throws Exception { this.auto.scroll(this); }
+	public void sendString(String input) throws Exception {	this.auto.sendString(this, input); }
+	public void wait(String attribute, String value) throws Exception { this.auto.wait(this, attribute, value); }	
+	public void waitOn() throws Exception { this.auto.waitOn(this); }
 }
