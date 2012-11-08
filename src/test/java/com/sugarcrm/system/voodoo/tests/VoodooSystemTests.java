@@ -22,6 +22,7 @@ import org.openqa.selenium.interactions.Actions;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 import com.sugarcrm.voodoo.automation.control.VHook;
+import com.sugarcrm.voodoo.automation.control.VSelect;
 
 //import com.sugarcrm.voodoo.IAutomation.Strategy;
 //import com.sugarcrm.voodoo.automation.VHook;
@@ -43,20 +44,20 @@ public class VoodooSystemTests {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
-		voodoo.start();
+		voodoo.auto.start();
 	}
 
 	@Test
 	public void selectTest() throws Exception {
-		VHook dropDownList = new VHook(Strategy.ID, "birthday_month");
+		VSelect dropDownList = new VSelect(new VHook(Strategy.ID, "birthday_month"), voodoo.auto);
 		String option = "Sep";
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
-		voodoo.go(facebookCreateAccountUrl);
+		voodoo.auto.go(facebookCreateAccountUrl);
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
-		voodoo.select(dropDownList, option);
+		dropDownList.select(option);
 		// 3. Verify that 'Sep' was actually selected
-		String actual = voodoo.getSelected(dropDownList);
+		String actual = dropDownList.getSelected();
 		String expected = option;
 		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
 	}
@@ -84,12 +85,12 @@ public class VoodooSystemTests {
 	public void getSelectedTest() throws Exception {
 		String actual;
 		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
-		VHook dropDownList = new VHook(Strategy.ID, "birthday_month");
+		VSelect dropDownList = new VSelect(new VHook(Strategy.ID, "birthday_month"), voodoo.auto);
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
-		voodoo.go(facebookCreateAccountUrl);
+		voodoo.auto.go(facebookCreateAccountUrl);
 		// 2. Get the current option from the drop-down list
-		actual = voodoo.getSelected(dropDownList);
+		actual = dropDownList.getSelected();
 		// 3. Verify that actual value is the expected value
 		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
 		
@@ -97,6 +98,6 @@ public class VoodooSystemTests {
 	
 	@AfterClass
 	public static void cleanupOnce() throws Exception {
-		voodoo.stop();
+		voodoo.auto.stop();
 	}
 }	

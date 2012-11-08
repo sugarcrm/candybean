@@ -23,6 +23,7 @@ import com.sugarcrm.sugar.contacts.Contacts;
 import com.sugarcrm.sugar.cases.Cases;
 import com.sugarcrm.sugar.portal.Portal;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 
 
@@ -40,7 +41,7 @@ public class Portal_14177 extends SugarTest {
 //		1. Portal side is installed successfully.
 		Administration.selectPortalEnable(voodoo, sugar);
 //		2. Create one portal user in Sugar server side.
-//		portalUser = (new UserBuilder("cw_test", "Conrad Warmbold", "Password1", "Password1")).buildPortalUser();
+//		portalUser = (new UserBuilder("cw_test", "Conrad Warmbold", "Password1", "Password1"), voodoo.auto)).buildPortalUser();
 //		Users.create(voodoo, sugar, portalUser);
 //		3. Create a contact record with portal name, portal access URL, password and account fields filled, such as:
 //		Contact Name -> contact1, Account Name -> account1, Portal Name -> PortalTest1, Password-> a, check box "Portal Active"
@@ -74,23 +75,23 @@ public class Portal_14177 extends SugarTest {
 //		8. ***The case is updated successfully in Sugar server side.
 		Case sugarCase = sugarCB.build();
 		Cases.read(voodoo, sugar, portalCase);
-		voodoo.click(new VHook(Strategy.PLINK, portalCase.subject()));
+		(new VControl(new VHook(Strategy.PLINK, portalCase.subject()), voodoo.auto)).click();
 		voodoo.pause(400);
-		voodoo.click(sugar.getHook("cases_button_edit"));
-		voodoo.input(sugar.getHook("cases_textfield_subject"), sugarCase.subject());
-		voodoo.click(new VHook(Strategy.ID, "teamSelect"));
-		voodoo.focusByIndex(1);
-		voodoo.click(new VHook(Strategy.PLINK, "Administrator"));
-		voodoo.focusByIndex(0);
+		(new VControl(sugar.getHook("cases_button_edit"), voodoo.auto)).click();
+		(new VControl(sugar.getHook("cases_textfield_subject"), voodoo.auto)).sendString(sugarCase.subject());
+		(new VControl(new VHook(Strategy.ID, "teamSelect"), voodoo.auto)).click();
+		voodoo.auto.focusByIndex(1);
+		(new VControl(new VHook(Strategy.PLINK, "Administrator"), voodoo.auto)).click();
+		voodoo.auto.focusByIndex(0);
 //		9. Click Save button.
-		voodoo.click(sugar.getHook("cases_button_saveheader"));
+		(new VControl(sugar.getHook("cases_button_saveheader"), voodoo.auto)).click();
 //		10. The same Portal user log in to Portal again.
 		Sugar.logout(voodoo, sugar);
 		Portal.login(voodoo, sugar, portalContact.portalName(), portalContact.portalPassword());
 //			10.***The changes are also shown on the portal side.
 //		11. Navigate to Cases tab and search the same case.
 		Portal.Cases.read(voodoo, sugar);
-		String caseSubject = voodoo.getText(new VHook(Strategy.XPATH, "/html/body/div/div/div[3]/div/div/div/div/div[3]/table/tbody/tr/td[2]/span/a"));
+		String caseSubject = (new VControl(new VHook(Strategy.XPATH, "/html/body/div/div/div[3]/div/div/div/div/div[3]/table/tbody/tr/td[2]/span/a"), voodoo.auto)).getText();
 		Assert.assertEquals("Expected case subject does not match actual subject: " + caseSubject, caseSubject, sugarCase.subject());
 		Portal.logout(voodoo, sugar);
 		Sugar.login(voodoo, sugar, "admin", "asdf");
