@@ -7,7 +7,7 @@ import java.util.Properties;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Voodoo;
 
 
 public class TestVoodoo {

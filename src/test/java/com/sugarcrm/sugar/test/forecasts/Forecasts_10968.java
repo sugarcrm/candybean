@@ -22,8 +22,8 @@ import com.sugarcrm.sugar.contacts.Contact.ContactBuilder;
 import com.sugarcrm.sugar.contacts.Contacts;
 import com.sugarcrm.sugar.cases.Cases;
 import com.sugarcrm.sugar.portal.Portal;
-import com.sugarcrm.voodoo.IAutomation.Strategy;
-import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 public class Forecasts_10968 extends SugarTest {
@@ -47,11 +47,7 @@ public class Forecasts_10968 extends SugarTest {
 	
 	@Test
 	public void test() throws Exception {
-//		Log in a regular user of Sugar
-//		Navigate to Forecasts module
-//		Click on the Time Period drop down
-//
-//		Verify that sort order of the time periods is by start date first, then end date
+		
 	}
 
 	@Override

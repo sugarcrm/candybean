@@ -9,9 +9,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.IAutomation.Strategy;
-import com.sugarcrm.voodoo.Voodoo;
-import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VControl;
+import com.sugarcrm.voodoo.automation.control.VHook;
+import com.sugarcrm.voodoo.automation.control.VSelect;
 
 public class CheckboxSelectGetAttribute {
 	protected static Voodoo voodoo;
@@ -25,7 +27,7 @@ public class CheckboxSelectGetAttribute {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
-		voodoo.start();
+		voodoo.auto.start();
 	}
 
 	@Test
@@ -33,15 +35,15 @@ public class CheckboxSelectGetAttribute {
 		
 		// Checking checkbox select 
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
-		voodoo.go(w3Url);
+		voodoo.auto.go(w3Url);
 		voodoo.pause(2000);
 		
-		VHook hook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]");
-		voodoo.select(hook, true);
+		VSelect select = new VSelect(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"), voodoo.auto);
+		select.select(true);
         voodoo.pause(5000);  // pause for manual inspection
-		voodoo.select(hook, false);
+		select.select(false);
         voodoo.pause(5000); 
-		voodoo.select(hook, true);
+		select.select(true);
         voodoo.pause(2000);  
         
         // Exception should throw for non-checkbox element
@@ -49,22 +51,22 @@ public class CheckboxSelectGetAttribute {
 		//voodoo.select(nonCheckboxHook, true);  // yes, verified exception was thrown
         
         // Checking getAttributeValue()
-		VHook attribHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]");
-		String actText = voodoo.getAttributeValue(attribHook, "type");
+		VControl control = new VControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"), voodoo.auto);
+		String actText = control.getAttribute("type");
         String expText = "text";
         Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
         
-		String actSize = voodoo.getAttributeValue(attribHook, "size");
+		String actSize = control.getAttribute("size");
         String expSize = "20";
         Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
         
-		String actName = voodoo.getAttributeValue(attribHook, "name");
+		String actName = control.getAttribute("name");
         String expName = "firstname";
         Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
 	}
 	
 	@After
 	public void cleanup() throws Exception {
-		voodoo.stop();
+		voodoo.auto.stop();
 	}
 }	

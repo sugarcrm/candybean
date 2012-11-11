@@ -3,9 +3,10 @@ package com.sugarcrm.sugar;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.sugarcrm.voodoo.Utils;
-import com.sugarcrm.voodoo.Voodoo;
-import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.Utils;
+import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.automation.control.VControl;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 public class Sugar {
@@ -28,16 +29,16 @@ public class Sugar {
 	
 	public static void login(Voodoo voodoo, Sugar sugar, String username, String password) throws Exception {
 		String sugarURL = Utils.getCascadingPropertyValue(SugarTest.sugarProps, "http://localhost/sugar/", "env.base_url");
-		voodoo.go(sugarURL);
-		voodoo.input(sugar.getHook("login_textfield_username"), username);
-		voodoo.input(sugar.getHook("login_textfield_password"), password);
-		voodoo.click(sugar.getHook("login_button_login"));
+		voodoo.auto.go(sugarURL);
+		(new VControl(sugar.getHook("login_textfield_username"), voodoo.auto)).sendString(username);
+		(new VControl(sugar.getHook("login_textfield_password"), voodoo.auto)).sendString(password);
+		(new VControl(sugar.getHook("login_button_login"), voodoo.auto)).click();
 		voodoo.pause(400);
 	}
 	
 	public static void logout(Voodoo voodoo, Sugar sugar) throws Exception {
-		voodoo.click(sugar.getHook("navbar_menu_user"));
-		voodoo.click(sugar.getHook("navbar_menuitem_logout"));
+		(new VControl(sugar.getHook("navbar_menu_user"), voodoo.auto)).click();
+		(new VControl(sugar.getHook("navbar_menuitem_logout"), voodoo.auto)).click();
 		voodoo.pause(400);
 	}
 }
