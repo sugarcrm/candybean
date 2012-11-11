@@ -1,153 +1,402 @@
 package com.sugarcrm.voodoo;
 
 import java.io.File;
-import java.util.ResourceBundle;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import javax.swing.JOptionPane;
 
-import com.sugarcrm.voodoo.automation.SeleniumAutomation;
-import com.sugarcrm.voodoo.automation.VAutomation;
+import com.sugarcrm.voodoo.automation.Selenium;
+import com.sugarcrm.voodoo.automation.IFramework;
 import com.sugarcrm.voodoo.automation.VControl;
+import com.sugarcrm.voodoo.automation.VHook;
 import com.sugarcrm.voodoo.Utils;
 
 
 /**
- * @author 
+ * @author Conrad Warmbold
  *
  */
-public class Voodoo implements VAutomation {
+public class Voodoo implements IAutomation {
 
-	public enum BrowserType { FIREFOX, IE, CHROME, SAFARI; }
+	public enum InterfaceType { FIREFOX, IE, CHROME, SAFARI, ANDROID; }
 	public final Logger log;
 
 	private static Voodoo instance = null;
-	private final ResourceBundle props;
-	private final VAutomation vAutomation;
+	private final Properties props;
+	private final IFramework vAutomation;
 
-	private Voodoo(ResourceBundle props) throws Exception {
+	private Voodoo(Properties props) throws Exception {
 		this.props = props;
 		this.log = this.getLogger();
 		this.vAutomation = this.getAutomation();
 	}
 
-	public static Voodoo getInstance(ResourceBundle props) throws Exception {
+	/**
+	 * @param props
+	 * @return
+	 * @throws Exception
+	 */
+	public static Voodoo getInstance(Properties props) throws Exception {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
-		return instance;
+		return Voodoo.instance;
 	}
 
-//	public static void closePopupWindow(WebDriver browser) throws Exception {
-//		browser.close();
-//		Set<String> windows = browser.getWindowHandles();
-//		if (windows.size() > 1) throw new Exception("More than one window open; expecting 1");
-//		for (String window : windows) browser.switchTo().window(window);
-//	}
-//	
-//	public static void switchToMainWindow(WebDriver browser) throws Exception {
-//		Set<String> windows = browser.getWindowHandles();
-//		if (windows.size() > 1) throw new Exception("More than one window open; expecting 1");
-//		for (String window : windows) browser.switchTo().window(window);
-//	}
-
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.VAutomation#start(java.lang.String)
+	 */
 	@Override
-	public void start(String url) throws Exception {
-		this.log.info("Starting voodoo with url: " + url);
-		this.vAutomation.start(url);
+	public void start() throws Exception {
+		this.log.info("Starting voodoo.");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.VAutomation#stop()
+	 */
 	@Override
 	public void stop() throws Exception {
 		this.log.info("Stopping voodoo.");
 		this.vAutomation.stop();
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#go(java.lang.String)
+	 */
+	@Override
+	public void go(String url) throws Exception {
+		this.log.info("Going to: " + url);
+		this.vAutomation.go(url);
+	}
 
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#closeWindow()
+	 */
+	public void closeWindow() throws Exception {
+		this.log.info("Closing Window.");
+		this.vAutomation.closeWindow();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.VAutomation#acceptDialog()
+	 */
 	@Override
 	public void acceptDialog() throws Exception {
+		this.log.info("Accepting popup dialog.");
 		this.vAutomation.acceptDialog();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#focusByIndex(int)
+	 */
 	@Override
-	public void switchToPopup() throws Exception {
-		this.vAutomation.switchToPopup();
+	public void focusByIndex(int window) throws Exception {
+		this.log.info("Switching to popup dialog by Index: " + window);
+		this.vAutomation.focusByIndex(window);
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#focusByTitle(java.lang.String)
+	 */
+	@Override
+	public void focusByTitle(String title) throws Exception {
+		this.log.info("Switching to popup dialog by title: " + title);
+		this.vAutomation.focusByTitle(title);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#focusByUrl(java.lang.String)
+	 */
+	@Override
+	public void focusByUrl(String url) throws Exception {
+		this.log.info("Switching to popup dialog by url: " + url);
+		this.vAutomation.focusByUrl(url);
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#pause(long)
+	 */
+	@Override
 	public void pause(long ms) throws Exception {
+		this.log.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
 
-	/**
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
-	 */
-	public static void interact(String s) {
-		JOptionPane.showInputDialog(s);
-	}
-
-	@Override
-	public String getText(Strategy strategy, String hook) throws Exception {
-		return this.vAutomation.getText(strategy, hook);
-	}
-
-	@Override
-	public void hover(Strategy strategy, String hook) throws Exception {
-		vAutomation.hover(strategy, hook);
-	}
-
-	/**
-	 * 
-	 * getControl() 
-	 * @param strategy 
-	 * @param hook 
-	 * @return 
-	 * @throws Exception 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#interact(java.lang.String)
 	 */
 	@Override
-	public VControl getControl(VAutomation.Strategy strategy, String hook) throws Exception {
-		return vAutomation.getControl(strategy, hook);
+	public void interact(String message) {
+		this.log.info("Interaction via popup dialog with message: " + message);
+		JOptionPane.showInputDialog(message);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getControl(com.sugarcrm.voodoo.automation.VHook)
+	 */
 	@Override
-	public void click(VAutomation.Strategy strategy, String hook) throws Exception {
-		vAutomation.click(strategy, hook);
+	public VControl getControl(VHook hook) throws Exception {
+		this.log.info("Getting control with hook: " + hook);
+		return vAutomation.getControl(hook.hookStrategy, hook.hookString);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VHook)
+	 */
 	@Override
-	@Deprecated
+	public String getText(VHook hook) throws Exception {
+		this.log.info("Getting text for control with hook: " + hook);
+		return this.vAutomation.getText(hook.hookStrategy, hook.hookString);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getSelected(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public String getSelected(VControl control) throws Exception {
+		this.log.info("Getting selected option from drop-down menu");
+		return this.vAutomation.getSelected(control);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getSelected(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public String getSelected(VHook hook) throws Exception{
+		this.log.info("getting selected option from drop-down menu for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", and value: ");
+		return this.vAutomation.getSelected(hook.hookStrategy, hook.hookString);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#select(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
+	 */
+	@Override
+	public void select(VHook hook, String value) throws Exception {
+		this.log.info("Selecting drop-down for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", and value: " + value);
+		this.vAutomation.select(hook.hookStrategy, hook.hookString, value);
+	}
+		
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#select(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+	 */
+	@Override
+	public void select(VControl control, String value) throws Exception {
+		this.log.info("Selecting drop-down for control with value: " + value);
+		this.vAutomation.select(control, value);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#getText(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public String getText(VControl control) throws Exception {
+		this.log.info("Getting text for control: " + control);
+		return this.vAutomation.getText(control);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void waitFor(VControl control) throws Exception {
+		this.log.info("Executing wait for control: " + control);
+		this.vAutomation.waitFor(control);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void waitFor(VHook hook) throws Exception {
+		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString);
+		this.vAutomation.waitFor(hook.hookStrategy, hook.hookString);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VControl, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void waitFor(VControl control, String attribute, String value) throws Exception {
+		this.log.info("Executing wait for control: " + control + ", attribute:" + attribute + ", value: " + value);
+		this.vAutomation.waitFor(control, attribute, value);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#wait(com.sugarcrm.voodoo.automation.VHook, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void waitFor(VHook hook, String attribute, String value) throws Exception {
+		this.log.info("Executing wait for strategy: " + hook.hookStrategy + ", hook: " + hook.hookString + ", attribute:" + attribute + ", value: " + value);
+		this.vAutomation.waitFor(hook.hookStrategy, hook.hookString, attribute, value);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#click(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void click(VHook hook) throws Exception {
+		this.log.info("Clicking on control with hook: " + hook);
+		vAutomation.click(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.VAutomation#click(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
 	public void click(VControl control) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.log.info("Clicking on control: " + control);
+		vAutomation.click(control);
 	}
 
-	@Override
-	public void input(VAutomation.Strategy strategy, String hook, String input) throws Exception {
-		vAutomation.input(strategy, hook, input);
-	}
-
-	@Override
-	@Deprecated
-	public void input(VControl control, String input) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @return 
-	 * @throws Exception 
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#dragAndDrop(com.sugarcrm.voodoo.automation.VHook, com.sugarcrm.voodoo.automation.VHook)
 	 */
-	private VAutomation getAutomation() throws Exception {
-		VAutomation vAutomation = null;
-		Voodoo.BrowserType browserType = this.getBrowserType();
-		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "AUTOMATION.FRAMEWORK");
+	@Override
+	public void dragNDrop(VHook hook1, VHook hook2) throws Exception {
+		this.log.info("Drag and drop on controls with hooks: " + hook1
+				+ " and " + hook2 + " via strategy: " + hook1.hookStrategy);
+		vAutomation.dragNDrop(hook1.hookStrategy, hook1.hookString, hook2.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#dragAndDrop(com.sugarcrm.voodoo.automation.VControl, com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void dragNDrop(VControl control1, VControl control2) throws Exception {
+		this.log.info("Drag and drop control " + control1 + " to " + control2);
+		vAutomation.dragNDrop(control1, control2);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#hover(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void hover(VHook hook) throws Exception {
+		this.log.info("Hovering on control with hook: " + hook);
+		vAutomation.hover(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#hover(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void hover(VControl control) throws Exception {
+		this.log.info("Hovering on control: " + control);
+		vAutomation.hover(control);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#input(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
+	 */
+	@Override
+	public void input(VHook hook, String input) throws Exception {
+		this.log.info("Inputting text for control with hook: " + hook);
+		vAutomation.input(hook.hookStrategy, hook.hookString, input);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.VAutomation#input(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+	 */
+	@Override
+	public void input(VControl control, String input) throws Exception {
+		this.log.info("Inputting text for control: " + control);
+		vAutomation.input(control, input);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void rightClick(VHook hook) throws Exception {
+		this.log.info("Right Clicking on control with hook: " + hook);
+		vAutomation.rightClick(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void rightClick(VControl control) throws Exception {
+		this.log.info("Right-clicking on control: " + control);
+		vAutomation.rightClick(control);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VHook)
+	 */
+	@Override
+	public void scroll(VHook hook) throws Exception {
+		this.log.info("Scrolling to hook: " + hook);
+		vAutomation.scroll(hook.hookStrategy, hook.hookString);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.sugarcrm.voodoo.IAutomation#rightClick(com.sugarcrm.voodoo.automation.VControl)
+	 */
+	@Override
+	public void scroll(VControl control) throws Exception {
+		this.log.info("Scrolling to control: " + control);
+		vAutomation.scroll(control);
+	}
+	
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.IAutomation#select(com.sugarcrm.voodoo.automation.VHook, boolean)
+     */
+    @Override
+    public void select(VHook hook, boolean isSelected) throws Exception {
+            this.log.info("Select for control with hook: " + hook);
+            vAutomation.select(hook.hookStrategy, hook.hookString, isSelected);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.VAutomation#select(com.sugarcrm.voodoo.automation.VControl, boolean)
+     */
+    @Override
+    public void select(VControl control, boolean isSelected) throws Exception {
+            this.log.info("Select for control: " + control);
+            vAutomation.select(control, isSelected);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.IAutomation#getAttributeValue(com.sugarcrm.voodoo.automation.VHook, java.lang.String)
+     */
+    @Override
+    public String getAttributeValue(VHook hook, String attribute) throws Exception {
+            this.log.info("getAttributeValue for control with hook: " + hook);
+            return vAutomation.getAttributeValue(hook.hookStrategy, hook.hookString, attribute);
+    }
+
+    /* (non-Javadoc)
+     * @see com.sugarcrm.voodoo.VAutomation#getAttributeValue(com.sugarcrm.voodoo.automation.VControl, java.lang.String)
+     */
+    @Override
+    public String getAttributeValue(VControl control, String attribute) throws Exception {
+            this.log.info("getAttributeValue for control: " + control);
+            return vAutomation.getAttributeValue(control, attribute);
+    }
+
+	
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	private IFramework getAutomation() throws Exception {
+		IFramework vAutomation = null;
+		Voodoo.InterfaceType iType = this.getInterfaceType();
+		String vAutomationString = Utils.getCascadingPropertyValue(this.props, "selenium", "automation.framework");
 		switch (vAutomationString) {
 		case "selenium":
-			this.log.info("Instantiating Selenium automation with browserType: " + browserType.name());
-			vAutomation = new SeleniumAutomation(this, props, browserType);
+			this.log.info("Instantiating Selenium automation with interface type: " + iType.name());
+			vAutomation = new Selenium(this, props, iType);
 			break;
 		case "robotium":
 			throw new Exception("Robotium automation not yet supported.");
@@ -158,114 +407,59 @@ public class Voodoo implements VAutomation {
     }
 
 	/**
-	 * 
-	 * getBrowserType() 
-	 * @return 
-	 * @throws Exception 
+	 * @return
+	 * @throws Exception
 	 */
-	private Voodoo.BrowserType getBrowserType() throws Exception {
-		Voodoo.BrowserType browserType = null;
-		String browserTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "AUTOMATION.BROWSER");
-		for (Voodoo.BrowserType browserTypeIter : Voodoo.BrowserType.values()) {
-			if (browserTypeIter.name().equalsIgnoreCase(browserTypeString)) {
-				browserType = browserTypeIter;
+	private Voodoo.InterfaceType getInterfaceType() throws Exception {
+		Voodoo.InterfaceType interfaceType = null;
+		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
+		for (Voodoo.InterfaceType interfaceTypeIter : Voodoo.InterfaceType.values()) {
+			if (interfaceTypeIter.name().equalsIgnoreCase(interfaceTypeString)) {
+				interfaceType = interfaceTypeIter;
 				break;
 			}
 		}
-		return browserType;
+		return interfaceType;
 	}
 
-//	public Collection<Object[]> getBrowsers() throws Exception {
-//		ArrayList<Object[]> browsers = new ArrayList<Object[]>(); // takes this form in order to work with JUnit.Parameterized
-//		if(System.getProperties().containsKey("browser") || System.getProperties().containsKey("browsers")) {
-//			String browserProperty = null;
-//			if (System.getProperty("browser") != null) browserProperty = System.getProperty("browser");
-//			if (System.getProperty("browsers") != null) browserProperty = System.getProperty("browsers");
-//			String[] browserNames = browserProperty.split(",");
-//			for(String b : browserNames) {
-//				switch(b) {
-//				case("firefox"):
-//					initFFBrowser(browsers);
-//					break; 
-//				case("chrome"):
-//					String chromeDriverPath = props.getString("BROWSER.CHROME_DRIVER_PATH");
-//					System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-//					browsers.add(new Object[] { this.initBrowser(new ChromeDriver()) });
-//					break;
-//				case("ie"):
-//					browsers.add(new Object[] { this.initBrowser(new InternetExplorerDriver()) });
-//					break;
-//				case("safari"):
-//			    	browsers.add(new Object[] { Automation.initBrowser(new SafariDriver(), testProps) });
-//					break;
-//				default: 
-//					throw new Exception("System property 'browser/s' not recognized.");
-//				}
-//			}
-//		} else {
-//			initFFBrowser(browsers);
-//		}
-//		return browsers;
-//    }
-
 //	public long getPageLoadTimeout() {
-//		return Long.parseLong(props.getString("PERF.PAGE_LOAD_TIMEOUT"));
+//		return Long.parseLong(props.getString("perf.page_load_timeout"));
 //	}
 
 //	public String getTime() {
-//		return Utils.trimString("" + (new Date()).getTime(), 6);
+//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
 //	}
 
-//	public void initializeBrowser(WebDriver browser) {
-//		browser.get(this.getBaseURL());
-//		this.log.info("Logging into:" + this.getBaseURL() + ", username:" + this.getUsername() + ", password:" + this.getPassword());
-//	}
-
-//	public void shutdownBrowser(WebDriver browser) {
-//		browser.quit();
-//	}
-
-	/**
-	 * 
-	 * getLogger() 
-	 * @return 
-	 * @throws Exception 
-	 */
 	private Logger getLogger() throws Exception {
-		// check for Log directory existence 
-		File logDir = new File("log");
-		if (!logDir.exists()){
-			logDir.mkdir();
-		}
-
+		// check for Log directory existence
+		String currentWorkingPath = System.getProperty("user.dir");
+		File tempLogPropsFile = new File(currentWorkingPath + File.separator + "logging.properties");
+		tempLogPropsFile.createNewFile();
+//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
+//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
+		OutputStream output = new FileOutputStream(tempLogPropsFile);
+		this.props.store(output, "");
+//		JOptionPane.showInputDialog("pause");
+		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
-		FileHandler fh = new FileHandler(this.getLogPath());
-		fh.setFormatter(new SimpleFormatter());
-		logger.addHandler(fh);
-		logger.setLevel(this.getLogLevel());
+		LogManager.getLogManager().readConfiguration(input);
+//		logger.setLevel(this.getLogLevel());
+		tempLogPropsFile.delete();
 		return logger;
-
-//		Logger logger = LoggerFactory.getLogger(Voodoo.class.getName());
-//      logger.info("Trying out sl4j and logback");
-//      logger.info("Using {}", "parameterized logging");
-//		return logger;
 	}
 
-	private String getLogPath() {
-		return props.getString("SYSTEM.LOG_PATH");
-	}
-
-	private Level getLogLevel() {
-		switch(props.getString("SYSTEM.LOG_LEVEL")) {
-		case "SEVERE": return Level.SEVERE;
-		case "WARNING": return Level.WARNING;
-		case "INFO": return Level.INFO;
-		case "FINE": return Level.FINE;
-		case "FINER": return Level.FINER;
-		case "FINEST": return Level.FINEST;
-		default:
-			log.warning("Configured SYSTEM.LOG_LEVEL not recognized; defaulting to Level.INFO");
-			return Level.INFO;
-		}
-	}
+//	private Level getLogLevel() {
+//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
+//		switch(logLevel) {
+//		case "SEVERE": return Level.SEVERE;
+//		case "WARNING": return Level.WARNING;
+//		case "INFO": return Level.INFO;
+//		case "FINE": return Level.FINE;
+//		case "FINER": return Level.FINER;
+//		case "FINEST": return Level.FINEST;
+//		default:
+//			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
+//			return Level.INFO;
+//		}
+//	}
 }
