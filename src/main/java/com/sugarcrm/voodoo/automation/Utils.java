@@ -1,11 +1,11 @@
-package com.sugarcrm.voodoo;
+package com.sugarcrm.voodoo.automation;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.sugarcrm.voodoo.IAutomation.Strategy;
-import com.sugarcrm.voodoo.automation.VHook;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 /**

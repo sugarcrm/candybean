@@ -2,7 +2,8 @@ package com.sugarcrm.sugar.cases;
 
 import javax.swing.JOptionPane;
 
-import com.sugarcrm.voodoo.Voodoo;
+import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.sugar.Sugar;
 
 
@@ -13,15 +14,15 @@ public class Cases {
 	}
 	
 	public static void read(Voodoo voodoo, Sugar sugar, Case sugarCase) throws Exception {
-		voodoo.click(sugar.getHook("navbar_menu_more"));
+		(new VControl(sugar.getHook("navbar_menu_more"), voodoo.auto)).click();
 		voodoo.pause(200);
-		voodoo.click(sugar.getHook("navbar_menuitem_showmore"));
+		(new VControl(sugar.getHook("navbar_menuitem_showmore"), voodoo.auto)).click();
 		voodoo.pause(200);
-//		voodoo.scroll(sugar.getHook("navbar_menuitem_cases"));
-		voodoo.click(sugar.getHook("navbar_menuitem_cases"));
+//		voodoo.scroll(sugar.getHook("navbar_menuitem_cases"), voodoo.auto);
+		(new VControl(sugar.getHook("navbar_menuitem_cases"), voodoo.auto)).click();
 		voodoo.pause(400);
-		voodoo.input(sugar.getHook("cases_textfield_subjectsearch"), sugarCase.subject());
-		voodoo.click(sugar.getHook("cases_button_search"));
+		(new VControl(sugar.getHook("cases_textfield_subjectsearch"), voodoo.auto)).sendString(sugarCase.subject());
+		(new VControl(sugar.getHook("cases_button_search"), voodoo.auto)).click();
 		voodoo.pause(400);
 	}
 	
