@@ -21,6 +21,7 @@ public class VControl {
 	public String getAttribute(String attribute) throws Exception {	return this.auto.getAttribute(this, attribute); }
 	public String getText() throws Exception { return this.auto.getText(this); }
 	public void click() throws Exception { this.auto.click(this); }
+	public void doubleClick() throws Exception { this.auto.doubleClick(this); }
     public void dragNDrop(VControl target) throws Exception { this.auto.dragNDrop(this, target); }
 	public void hover() throws Exception { this.auto.hover(this); }
 	public void rightClick() throws Exception { this.auto.rightClick(this); }

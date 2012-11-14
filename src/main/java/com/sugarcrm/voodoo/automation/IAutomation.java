@@ -27,6 +27,8 @@ public interface IAutomation {
 	@Deprecated public String getText(Strategy strategy, String hook) throws Exception;
 	public void click(VControl control) throws Exception;
 	@Deprecated public void click(Strategy strategy, String hook) throws Exception;
+	public void doubleClick(VControl control) throws Exception;
+	@Deprecated public void doubleClick(Strategy strategy, String hook) throws Exception;
     public void dragNDrop(VControl control1, VControl control2) throws Exception;
     @Deprecated public void dragNDrop(Strategy strategy1, String hook1, Strategy strategy2, String hook2) throws Exception;
 	public void hover(VControl control) throws Exception;
