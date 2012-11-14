@@ -195,6 +195,20 @@ public class Selenium implements IAutomation {
 		this.click(new VControl(new VHook(strategy, hook), this));
 	}
 	
+	@Override
+	public void doubleClick(VControl control) throws Exception {
+		By by = Selenium.getBy(control.getHook().hookStrategy, control.getHook().hookString);
+		WebElement we = browser.findElement(by);
+		Actions action = new Actions(browser);
+		action.doubleClick(we).perform();
+	}
+	
+	
+	@Override
+	public void doubleClick(Strategy strategy, String hook) throws Exception {
+		this.doubleClick(new VControl(new VHook(strategy, hook), this));
+	}
+	
     
     @Override
     public void dragNDrop(VControl control1, VControl control2) throws Exception {
