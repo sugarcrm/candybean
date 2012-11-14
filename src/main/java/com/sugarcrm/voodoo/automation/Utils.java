@@ -98,6 +98,23 @@ public class Utils {
 		return s.substring(s.length() - length);
 	}
 
+	/**
+	 * adjustPath - This method adds robustness to a given path for different platforms.
+	 * 
+	 * @author wli
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String adjustPath(String path){
+		String tempPath = path;
+		// replace all single backslash (not followed by space) with forward slash
+		tempPath = tempPath.replaceAll("\\\\(?! )", "/"); 
+		// replace all one or more consecutive forward slashes with a File Separator
+		tempPath = tempPath.replaceAll("/+", File.separator);
+		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
+		return tempPath;
+	}
 	
 	/**
 	 * Pair is a python-2-tuple lightweight equivalent for convenience.
@@ -122,21 +139,6 @@ public class Utils {
 		}
 	}
 
-	/**
-	 * adjustPath - Modify the given path to support different Operating Systems' path type.
-	 * 
-	 * @author wli
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public static String adjustPath(String path){
-		path = path.replace("\\", "/");
-		path = path.replaceAll("/+", File.separator);
-		return path;
-	}
-	
-	
 	/**
 	 * Triplet is a python-3-tuple lightweight equivalent for convenience.
 	 * 
