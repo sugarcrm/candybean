@@ -1,6 +1,5 @@
 package com.sugarcrm.sugar.portal;
 
-import javax.swing.JOptionPane;
 
 import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.Voodoo;

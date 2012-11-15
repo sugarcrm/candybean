@@ -6,17 +6,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import javax.swing.JOptionPane;
 
+import com.sugarcrm.voodoo.automation.IAutomation.InterfaceType;
 import com.sugarcrm.voodoo.automation.Utils;
-import com.sugarcrm.voodoo.automation.control.VControl;
-import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.framework.Selenium;
 
 
@@ -26,7 +22,6 @@ import com.sugarcrm.voodoo.automation.framework.Selenium;
  */
 public class Voodoo {
 
-	public enum InterfaceType { FIREFOX, IE, CHROME, SAFARI, ANDROID; }
 	public final Logger log;
 	public final IAutomation auto;
 
@@ -69,7 +64,7 @@ public class Voodoo {
 	 */
 	private IAutomation getAutomation() throws Exception {
 		IAutomation auto = null;
-		Voodoo.InterfaceType iType = this.getInterfaceType();
+		InterfaceType iType = this.getInterfaceType();
 		String autoString = Utils.getCascadingPropertyValue(this.props, "selenium", "automation.framework");
 		switch (autoString) {
 		case "selenium":
@@ -89,10 +84,10 @@ public class Voodoo {
 	 * @return
 	 * @throws Exception
 	 */
-	private Voodoo.InterfaceType getInterfaceType() throws Exception {
-		Voodoo.InterfaceType interfaceType = null;
+	private InterfaceType getInterfaceType() throws Exception {
+		InterfaceType interfaceType = null;
 		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
-		for (Voodoo.InterfaceType interfaceTypeIter : Voodoo.InterfaceType.values()) {
+		for (InterfaceType interfaceTypeIter : InterfaceType.values()) {
 			if (interfaceTypeIter.name().equalsIgnoreCase(interfaceTypeString)) {
 				interfaceType = interfaceTypeIter;
 				break;

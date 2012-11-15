@@ -5,7 +5,6 @@ import com.sugarcrm.voodoo.automation.IAutomation;
 
 /**
  * @author cwarmbold
- *
  */
 public class VControl {
 	
@@ -28,4 +27,7 @@ public class VControl {
 	public void sendString(String input) throws Exception {	this.auto.sendString(this, input); }
 	public void wait(String attribute, String value) throws Exception { this.auto.wait(this, attribute, value); }	
 	public void waitOn() throws Exception { this.auto.waitOn(this); }
+	
+	@Override
+	public String toString() { return "VControl(" + this.hook.toString() + ")";}
 }

@@ -4,14 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.PrintWriter;
-
-import javax.swing.JOptionPane;
-
 import junit.framework.Assert;
-
 import com.sugarcrm.voodoo.translations.Translations;
-
 import org.junit.Test;
 
 public class TranslationsTest {

@@ -5,10 +5,8 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sugarcrm.voodoo.automation.Utils;
