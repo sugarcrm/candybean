@@ -6,9 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 import junit.framework.Assert;
-
 import com.sugarcrm.voodoo.translations.Translations;
-
 import org.junit.Test;
 
 public class TranslationsTest {

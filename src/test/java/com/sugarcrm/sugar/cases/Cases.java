@@ -1,6 +1,5 @@
 package com.sugarcrm.sugar.cases;
 
-import javax.swing.JOptionPane;
 
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VControl;
