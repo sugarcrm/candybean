@@ -1,6 +1,5 @@
 package com.sugarcrm.sugar.test.portal;
 
-import javax.swing.JOptionPane;
 
 import org.junit.After;
 import org.junit.AfterClass;

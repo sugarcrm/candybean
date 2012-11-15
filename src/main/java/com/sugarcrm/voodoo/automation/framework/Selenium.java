@@ -3,14 +3,10 @@ package com.sugarcrm.voodoo.automation.framework;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -23,22 +19,16 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.Select;
 
 import org.openqa.selenium.JavascriptExecutor;
 
 import com.google.common.base.Function;
 import com.sugarcrm.voodoo.automation.IAutomation;
-import com.sugarcrm.voodoo.automation.IAutomation;
 import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.Voodoo;
-import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
-import com.sugarcrm.voodoo.automation.Voodoo.InterfaceType;
 import com.sugarcrm.voodoo.automation.control.VControl;
-import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 
 
@@ -57,7 +47,7 @@ public class Selenium implements IAutomation {
 	 * @param browserType
 	 * @throws Exception
 	 */
-	public Selenium(Voodoo voodoo, Properties props, Voodoo.InterfaceType browserType) throws Exception {
+	public Selenium(Voodoo voodoo, Properties props, InterfaceType browserType) throws Exception {
 		this.voodoo = voodoo;
 		this.props = props;
 		this.browser = this.getBrowser(browserType);
@@ -145,10 +135,8 @@ public class Selenium implements IAutomation {
 	}
 	
 	
-	/**
-	 * @param browser
-	 */
-	public static void maximizeBrowserWindow(WebDriver browser) {
+	public void maximize() {
+		voodoo.log.info("Selenium: maximizing window");
 		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		browser.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 	}
@@ -156,17 +144,12 @@ public class Selenium implements IAutomation {
 	
 	@Override
     public String getAttribute(VControl control, String attribute) throws Exception {
+		voodoo.log.info("Selenium: getting attribute: " + attribute + " for control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy, control.getHook().hookString);
         WebElement we =  browser.findElement(by);
         String value = we.getAttribute(attribute);
         if (value == null) throw new Exception("Selenium: attribute does not exist.");
         else return value;
-    }
-
-    
-    @Override
-    public String getAttribute(Strategy strategy, String hook, String attribute) throws Exception {
-    	return this.getAttribute(new VControl(new VHook(strategy, hook), this), attribute);
     }
 
     
@@ -176,25 +159,13 @@ public class Selenium implements IAutomation {
         return browser.findElement(by).getText();
 	}
 	
-	
-	@Override
-	public String getText(Strategy strategy, String hook) throws Exception {
-		return this.getText(new VControl(new VHook(strategy, hook), this));
-	}
-	
-	
+
 	@Override
 	public void click(VControl control) throws Exception {
 		By by = Selenium.getBy(control.getHook().hookStrategy, control.getHook().hookString);
 		browser.findElement(by).click();
 	}
 
-	
-	@Override
-	public void click(Strategy strategy, String hook) throws Exception {
-		this.click(new VControl(new VHook(strategy, hook), this));
-	}
-	
     
     @Override
     public void dragNDrop(VControl control1, VControl control2) throws Exception {
@@ -206,14 +177,6 @@ public class Selenium implements IAutomation {
         action.dragAndDrop(draggable, target).build().perform();
     }
 
-    
-    @Override
-    public void dragNDrop(Strategy strategy1, String hook1, Strategy strategy2, String hook2) throws Exception {
-	    VControl vc1 =  new VControl(new VHook(strategy1, hook1), this);
-	    VControl vc2 =  new VControl(new VHook(strategy2, hook2), this);
-	    this.dragNDrop(vc1, vc2);
-    }
-    
 	
 	@Override
 	public void hover(VControl control) throws Exception {
@@ -225,23 +188,11 @@ public class Selenium implements IAutomation {
 	
 	
 	@Override
-	public void hover(Strategy strategy, String hook) throws Exception {
-		this.hover(new VControl(new VHook(strategy, hook), this));
-	}
-
-	
-	@Override
 	public void rightClick(VControl control) throws Exception {
 		By by = Selenium.getBy(control.getHook().hookStrategy, control.getHook().hookString);
 		WebElement we = browser.findElement(by);
 		Actions action = new Actions(browser);
 		action.contextClick(we).perform();
-	}
-	
-	
-	@Override
-	public void rightClick(Strategy strategy, String hook) throws Exception {
-		this.rightClick(new VControl(new VHook(strategy, hook), this));
 	}
 	
 	
@@ -255,23 +206,11 @@ public class Selenium implements IAutomation {
 	
 	
 	@Override
-	public void sendString(Strategy strategy, String hook, String input) throws Exception {
-		this.sendString(new VControl(new VHook(strategy, hook), this), input);
-	}
-	
-	
-	@Override
 	public void scroll(VControl control) throws Exception {
 		By by = Selenium.getBy(control.getHook().hookStrategy, control.getHook().hookString);
 		WebElement we = browser.findElement(by);
 		int y = we.getLocation().y;
 		((JavascriptExecutor) browser).executeScript("window.scrollBy(0," + y +");");
-	}
-	
-	
-	@Override
-	public void scroll(Strategy strategy, String hook) throws Exception {
-		this.scroll(new VControl(new VHook(strategy, hook), this));
 	}
 	
 	
@@ -290,12 +229,6 @@ public class Selenium implements IAutomation {
 	
 	
 	@Override
-	public void waitOn(Strategy strategy, String hook) throws Exception{
-		this.waitOn(new VControl(new VHook(strategy, hook), this));
-	}
-	
-	
-	@Override
 	public void wait(VControl control, String attribute, String value) throws Exception {
 		By by = Selenium.getBy(control.getHook().hookStrategy, control.getHook().hookString);
 		final WebElement we = browser.findElement(by);
@@ -310,13 +243,7 @@ public class Selenium implements IAutomation {
 	    });
 	}
 	
-	
-	@Override
-	public void wait(Strategy strategy, String hook, String attribute, String value) throws Exception {
-		this.wait(new VControl(new VHook(strategy, hook), this), attribute, value);
-	}
-	
-	
+		
 	@Override
 	public String getSelected(VSelect select) throws Exception {
 		voodoo.log.info("Selenium: getting selected value from control: " + select.toString());
@@ -369,7 +296,7 @@ public class Selenium implements IAutomation {
 	 * @return
 	 * @throws Exception
 	 */
-	private WebDriver getBrowser(Voodoo.InterfaceType browserType) throws Exception {
+	private WebDriver getBrowser(InterfaceType browserType) throws Exception {
 		WebDriver webDriver = null;
 		switch (browserType) {
 		case FIREFOX:		

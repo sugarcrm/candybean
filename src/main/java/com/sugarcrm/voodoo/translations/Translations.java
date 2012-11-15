@@ -232,6 +232,7 @@ public class Translations {
 				}
 			}
 			output.close();
+			fileScanner.close();
 		} catch (Exception ex){
 			System.out.println(ex.getMessage());
 			// Could not connect to the database
