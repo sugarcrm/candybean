@@ -23,8 +23,18 @@ public interface IAutomation {
 	public String getAttribute(VControl control, String attribute) throws Exception;
     public String getText(VControl control) throws Exception;
 	public void click(VControl control) throws Exception;
+<<<<<<< HEAD
 	public void dragNDrop(VControl control1, VControl control2) throws Exception;
     public void hover(VControl control) throws Exception;
+=======
+	@Deprecated public void click(Strategy strategy, String hook) throws Exception;
+	public void doubleClick(VControl control) throws Exception;
+	@Deprecated public void doubleClick(Strategy strategy, String hook) throws Exception;
+    public void dragNDrop(VControl control1, VControl control2) throws Exception;
+    @Deprecated public void dragNDrop(Strategy strategy1, String hook1, Strategy strategy2, String hook2) throws Exception;
+	public void hover(VControl control) throws Exception;
+	@Deprecated public void hover(Strategy strategy, String hook) throws Exception;
+>>>>>>> 382c227fc905f3cd553969be79d4f7cd87300e1d
 	public void rightClick(VControl control) throws Exception;
 	public void scroll(VControl control) throws Exception;
 	public void sendString(VControl control, String input) throws Exception;

@@ -5,7 +5,10 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 382c227fc905f3cd553969be79d4f7cd87300e1d
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,8 +26,8 @@ public class TestUtils {
 		try {
 			String currentWorkingPath = System.getProperty("user.dir") + File.separator;
 			String hooksFilePath = currentWorkingPath + "testutils.hooks";
-//			System.out.println("Hooks file path: " + hooksFilePath);
-		
+			//			System.out.println("Hooks file path: " + hooksFilePath);
+
 			// Resource setup
 			File hooksFile = new File(hooksFilePath);
 			hooksFile.createNewFile();
@@ -38,8 +41,8 @@ public class TestUtils {
 			hooksProps.setProperty(hook1Name, hook1Strategy + Utils.HOOK_DELIMITER + hook1String);
 			hooksProps.setProperty(hook2Name, hook2Strategy + Utils.HOOK_DELIMITER + hook2String);
 			hooksProps.store(new FileOutputStream(hooksFile), null);
-//			JOptionPane.showInputDialog("pause");
-			
+			//			JOptionPane.showInputDialog("pause");
+
 			// Test
 			HashMap<String, VHook> hooksMap = Utils.getHooks(hooksProps);
 			VHook hook1 = hooksMap.get(hook1Name);
@@ -48,7 +51,7 @@ public class TestUtils {
 			VHook hook2 = hooksMap.get(hook2Name);
 			Assert.assertEquals("Test hook2 strategy doesn't match expected: " + hook2Strategy, hook2Strategy, hook2.hookStrategy);
 			Assert.assertEquals("Test hook2 string doesn't match expected: " + hook2String, hook2String, hook2.hookString);
-			
+
 			// Resource cleanup
 			hooksFile.delete();
 		} catch (Exception e) {
@@ -57,7 +60,7 @@ public class TestUtils {
 		}
 
 	}
-	
+
 	@Test
 	public void testGetStrategy() {
 		try {
@@ -73,19 +76,19 @@ public class TestUtils {
 			Assert.fail("Exception caught.");
 		}
 	}
-	
+
 	@Test
 	public void testGetCascadingPropertyValue() {
 		try {
 			String currentWorkingPath = System.getProperty("user.dir") + File.separator;
 			String propsFilePath = currentWorkingPath + "testutils.properties";
-//			System.out.println("Props file path: " + propsFilePath);
+			//			System.out.println("Props file path: " + propsFilePath);
 			String propKey = "key";
 			String propSysKey = "syskey";
 			String propConfigVal = "configvalue";
 			String propDefaultVal = "defaultvalue";
 			String propSysVal = "systemvalue";
-		
+
 			// Resource setup
 			File propsFile = new File(propsFilePath);
 			propsFile.createNewFile();
@@ -94,17 +97,17 @@ public class TestUtils {
 			voodooProps.setProperty(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
 			voodooProps.store(new FileOutputStream(propsFile), null);
-//			JOptionPane.showInputDialog("pause");
-			
+			//			JOptionPane.showInputDialog("pause");
+
 			// Test
 			String actualDefaultVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, "NULL");
-//			System.out.println("actualDefaultVal: " + actualDefaultVal);
+			//			System.out.println("actualDefaultVal: " + actualDefaultVal);
 			Assert.assertEquals("Expected default value.", propDefaultVal, actualDefaultVal);
 			String actualConfigVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, propKey);
-//			System.out.println("actualConfigVal: " + actualConfigVal);
+			//			System.out.println("actualConfigVal: " + actualConfigVal);
 			Assert.assertEquals("Expected configuration value.", propConfigVal, actualConfigVal);
 			String actualSysVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, propSysKey);
-//			System.out.println("actualSysVal: " + actualSysVal);
+			//			System.out.println("actualSysVal: " + actualSysVal);
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
 			// Resource cleanup
@@ -116,7 +119,7 @@ public class TestUtils {
 		}
 	}
 
-	
+
 	@Test
 	public void testPretruncate() {
 		String original = "ffour";
@@ -125,7 +128,26 @@ public class TestUtils {
 		Assert.assertEquals("Actual pretruncated string length does not match expected.", expected, actual);
 	}
 
-	
+	@Test
+	public void testAdjustPath() {
+		String path1 = "~/computer\\  science\\Hello\\";
+		String expected1 = "~/computer\\  science/Hello/";
+		String path2 = "c:\\computer\\\"science\"\\";
+		String expected2 = "c:/computer/\"science\"/";
+		String path3 = "\\\"computer science\"\\";
+		String expected3 = "/\"computer science\"/";
+		String path4 = "cd /computer\\ science\\";
+		String expected4 = "cd /computer\\ science/";
+		String path5 = "computer\\ \\ \\ \\ \\ science/";
+		String expected5 = "computer\\ \\ \\ \\ \\ science/";
+
+		Assert.assertEquals(expected1, Utils.adjustPath(path1));
+		Assert.assertEquals(expected2, Utils.adjustPath(path2));
+		Assert.assertEquals(expected3, Utils.adjustPath(path3));
+		Assert.assertEquals(expected4, Utils.adjustPath(path4));
+		Assert.assertEquals(expected5, Utils.adjustPath(path5));
+	}
+
 	@Test
 	public void testPair() {
 		Object o1 = new Object();
@@ -135,7 +157,7 @@ public class TestUtils {
 		Assert.assertEquals("Actual pair object y does not match expected, original object y.", pair.y, o2);
 	}
 
-	
+
 	@Test
 	public void testTriplet() {
 		Object o1 = new Object();
