@@ -4,10 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-<<<<<<< HEAD
-=======
-
->>>>>>> 382c227fc905f3cd553969be79d4f7cd87300e1d
 import junit.framework.Assert;
 import com.sugarcrm.voodoo.translations.Translations;
 import org.junit.Test;
