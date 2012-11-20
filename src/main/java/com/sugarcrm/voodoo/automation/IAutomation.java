@@ -5,7 +5,6 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
 
 
 public interface IAutomation {
-
   public enum InterfaceType { FIREFOX, IE, CHROME, SAFARI; }
   public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK; }
 

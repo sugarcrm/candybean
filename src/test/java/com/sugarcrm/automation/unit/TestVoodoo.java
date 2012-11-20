@@ -1,4 +1,4 @@
-package com.sugarcrm.unit.voodoo;
+package com.sugarcrm.automation.unit;
 
 import java.io.File;
 import java.io.FileInputStream;

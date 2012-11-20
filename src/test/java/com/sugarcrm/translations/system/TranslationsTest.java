@@ -1,10 +1,9 @@
-package com.sugarcrm.translations.test;
+package com.sugarcrm.translations.system;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-
 import junit.framework.Assert;
 import com.sugarcrm.voodoo.translations.Translations;
 import org.junit.Test;
