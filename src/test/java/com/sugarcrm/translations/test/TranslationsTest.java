@@ -4,6 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 382c227fc905f3cd553969be79d4f7cd87300e1d
 import junit.framework.Assert;
 import com.sugarcrm.voodoo.translations.Translations;
 import org.junit.Test;
@@ -16,7 +20,7 @@ public class TranslationsTest {
 	 *  which uses arguments presented by the user (instead of using the properties file)
 	 */
 	@Test
-	public void SingleTestTranslation() {
+	public void SingleTestTranslation() throws Exception {
 		try {
 			// Accounts File create
 			String AccountsFolderName = "Accounts_0105.java";
@@ -61,7 +65,7 @@ public class TranslationsTest {
 	 *  - It will also use a properties file instead of argument inputs (properties file path given as a argument)
 	 */
 	@Test
-	public void MutilpleTestsTranslation(){
+	public void MutilpleTestsTranslation() throws Exception {
 		// Create a temporary folder containing two directories with two test files each
 		String TempFolder = "tempFolder";
 		String TempFolderPath = currentWorkingDir + File.separator + TempFolder;
