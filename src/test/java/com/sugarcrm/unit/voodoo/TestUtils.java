@@ -5,10 +5,6 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 382c227fc905f3cd553969be79d4f7cd87300e1d
 import org.junit.Assert;
 import org.junit.Test;
 
