@@ -32,21 +32,13 @@ public class Contacts {
 		(new VControl(sugar.getHook("contacts_button_savefooter"), voodoo.auto)).click();
 	}
 	
-	public static void delete(Voodoo voodoo, Sugar sugar, Contact contact) throws Exception {
-//		voodoo.click(sugar.getHook("navbar_menu_user"), voodoo.auto));
-//		voodoo.pause(400);
-//		voodoo.click(sugar.getHook("navbar_menuitem_admin"), voodoo.auto));
-//		voodoo.pause(800);
-//		voodoo.click(sugar.getHook("admin_link_usermanagement"), voodoo.auto));
-//		voodoo.pause(800);
-//		voodoo.click(sugar.getHook("navbar_menu_users"), voodoo.auto));
-//		voodoo.pause(800);
-//		voodoo.input(sugar.getHook("users_textfield_namesearch"), contact.username(), voodoo.auto));
-//		voodoo.click(sugar.getHook("search_form_submit"), voodoo.auto));
-//		voodoo.pause(800);
-//		JOptionPane.showInputDialog("pause");
-		throw new Exception("deleteContact not yet supported");
-//		voodoo.click(sugar.getHook("users_button_save"), voodoo.auto));
-//		JOptionPane.showInputDialog("pause");
+	public static void deleteAll(Voodoo voodoo, Sugar sugar) throws Exception {
+		(new VControl(sugar.getHook("navbar_menu_contacts"), voodoo.auto)).click();
+		(new VControl(sugar.getHook("navbar_menu_user"), voodoo.auto)).hover();
+		(new VControl(sugar.getHook("contactsearch_checkbox_selectall"), voodoo.auto)).waitOn();
+		(new VControl(sugar.getHook("contactsearch_checkbox_selectall"), voodoo.auto)).click();
+		(new VControl(sugar.getHook("contactsearch_button_deleteall"), voodoo.auto)).waitOn();
+		(new VControl(sugar.getHook("contactsearch_button_deleteall"), voodoo.auto)).click();
+		voodoo.auto.acceptDialog();
 	}
 }

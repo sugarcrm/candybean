@@ -26,8 +26,11 @@ accounts_button_saveheader = ID:SAVE_HEADER
 accounts_textfield_name = ID:name
 
 # ACCOUNTS_SEARCH
+accountsearch_header = XPATH://*[@id="content"]/div[1]/h2
 accountsearch_textfield_name = ID:name_advanced
 accountsearch_button_search = ID:search_form_submit
+accountsearch_checkbox_selectall = ID:massall_top
+accountsearch_button_deleteall = ID:delete_listview_top
 accountsearch_link_firstitem = XPATH:/html/body/table[4]/tbody/tr[3]/td[1]/a
 
 # CONTACTS
@@ -42,6 +45,10 @@ contacts_password_portalpassword1 = ID:portal_password1
 contacts_password_portalpassword2 = ID:portal_password
 contacts_button_savefooter = ID:SAVE_FOOTER
 contacts_div_bottomlinks = ID:bottomLinks
+
+# CONTACTS_SEARCH
+contactsearch_checkbox_selectall = ID:massall_top
+contactsearch_button_deleteall = ID:delete_listview_top
 
 # USERS
 users_textfield_namesearch = ID:search_name_basic

@@ -25,6 +25,7 @@ public class Cases {
 		voodoo.auto.focusByIndex(1);
 		(new VControl(new VHook(Strategy.PLINK, oldCase.team().name()), voodoo.auto)).click();
 		voodoo.auto.focusByIndex(0);
+		voodoo.interact("Pausing for save button watch...");
 		(new VControl(sugar.getHook("cases_button_saveheader"), voodoo.auto)).click();
 	}
 	
