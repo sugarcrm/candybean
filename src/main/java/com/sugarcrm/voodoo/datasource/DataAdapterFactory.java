@@ -1,9 +1,8 @@
 package com.sugarcrm.voodoo.datasource;
 
-import java.util.Properties;
 
 /**
- *
+ *  DataAdapterFactory is a public interface used to get various DataAdapters. 
  *
  */
 public class DataAdapterFactory {
@@ -16,7 +15,8 @@ public class DataAdapterFactory {
 
 	public DataAdapter createDataAdapter() {
 		if (adpaterType == DataAdapterType.XML) {
-			return new XmlDataAdapter();
+			//return new XmlDataAdapter();
+			return null;   // TODO 
 		} else {
 			return new CsvDataAdapter();   // CSV is default 
 		}

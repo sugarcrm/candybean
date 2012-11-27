@@ -6,16 +6,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVParser;
 
-//public class CSV {
+/**
+ * CSV class parses an input csv file. It inherits from DataSource which acts as a public interface. 
+ * 
+ */
 public class CSV extends DataSource {
 
 	private ArrayList<String> keys = null;
-	//private FieldSetList data = null;
 	private CSVParser parser = null;
-	//private String filename = "";
 
 	public CSV(String csvfile) {
-		super(csvfile);
+		//super(csvfile);
+		super();
 		
 		this.filename = csvfile;
 		FileInputStream fs = null;
@@ -36,27 +38,12 @@ public class CSV extends DataSource {
 		}
 	}
 	
-	//public String getFilename() {
-	//	return this.filename;
-	//}
-
-	/**
-	 * Return the data read from a CSV file.
-	 * 
-	 * @return CSVData object.
-	 */
-
-	//public FieldSetList getData() {
-	//	return this.data;
-	//}
-
 	/**
 	 * Read the CSV file and process the file into an array of hashes.
 	 * 
 	 * @param br
 	 *            BufferedReader for the CSV file with line 1 consumed
 	 */
-
 	private void createData(BufferedReader br) {
 		String line = "";
 		String[] linedata;

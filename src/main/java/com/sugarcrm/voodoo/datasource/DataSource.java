@@ -1,11 +1,15 @@
 package com.sugarcrm.voodoo.datasource;
 
+/**
+ *  DataSource is a minimal class that provides a uniform type seen by a client.   
+ *
+ */
 public class DataSource {
 	
 	protected FieldSetList data = null;
 	protected String filename = "";
 
-	public DataSource(String csvfile) {
+	public DataSource() {
 	}
 	
 	public FieldSetList getData() {
