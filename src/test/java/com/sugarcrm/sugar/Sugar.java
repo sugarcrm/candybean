@@ -33,12 +33,12 @@ public class Sugar {
 		(new VControl(sugar.getHook("login_textfield_username"), voodoo.auto)).sendString(username);
 		(new VControl(sugar.getHook("login_textfield_password"), voodoo.auto)).sendString(password);
 		(new VControl(sugar.getHook("login_button_login"), voodoo.auto)).click();
-		voodoo.pause(400);
+		(new VControl(sugar.getHook("navbar_menu_user"), voodoo.auto)).waitOn();
 	}
 	
 	public static void logout(Voodoo voodoo, Sugar sugar) throws Exception {
 		(new VControl(sugar.getHook("navbar_menu_user"), voodoo.auto)).click();
 		(new VControl(sugar.getHook("navbar_menuitem_logout"), voodoo.auto)).click();
-		voodoo.pause(400);
+		(new VControl(sugar.getHook("login_button_login"), voodoo.auto)).waitOn();
 	}
 }
