@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 
 /**
- *
+ *  DataAdapter is an "interface" class a client uses to convert csv, xml, etc. formatted contents into a list of DataSource 
  *
  */
 public abstract class DataAdapter {

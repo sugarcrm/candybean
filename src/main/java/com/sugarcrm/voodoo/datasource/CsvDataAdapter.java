@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ *  CsvDataAdapter is used by client to convert csv files into a list of DataSource.
  *
  */
 public class CsvDataAdapter extends DataAdapter {
@@ -15,6 +15,12 @@ public class CsvDataAdapter extends DataAdapter {
 	public CsvDataAdapter() {
 	}
 	
+	/**
+	 * getData is used by client to obtain a list of DataSource 
+	 * 
+	 * @param testData : String
+	 * @return dataSourceList : List<DataSource>         
+	 */
 	public List<DataSource> getData(String testData) {
 		
 		List<File> csvFileList = getCsvFileList(testData);
@@ -24,7 +30,13 @@ public class CsvDataAdapter extends DataAdapter {
 		return dataSourceList;
 	}
 
-	public static List<File> getCsvFileList(String testData) {
+	/**
+	 * getCsvFileList returns a list of File object based on an input pattern 
+	 * 
+	 * @param testData : String
+	 * @return fileList : List<File>         
+	 */
+	private static List<File> getCsvFileList(String testData) {
 
 		String fileFullPath = getFileFullDirPath();
 		System.out.println("CsvDataAdapter.java: getCsvFileList(): fileFullPath = " + fileFullPath);
@@ -48,19 +60,25 @@ public class CsvDataAdapter extends DataAdapter {
 		return fileFullPath;   // it seems returning just filePath still works
 	}
 	
+	/**
+	 * convertIt converts the input list of File objects into a list of DataSource 
+	 * 
+	 * @param csvFileList : List<File> 
+	 * @return dataSourceList : List<DataSource>         
+	 */
 	private List<DataSource> convertIt(List<File> csvFileList) {
 		
-    	List<DataSource> csvList = new ArrayList<DataSource>(); 
+    	List<DataSource> dataSourceList = new ArrayList<DataSource>(); 
 		
 		for (File f : csvFileList) {
 			//System.out.println(f.toString());
 			String absPath = f.getAbsolutePath();
 			//System.out.println(absPath);
    		    CSV csv = new CSV(absPath);   // CSV parses CSV file. It inherits from DataSource
-   		    csvList.add(csv);
+   		    dataSourceList.add(csv);
 		}
 		
-		return csvList;
+		return dataSourceList;
 	}
 	
 	private static void	printCsvFileList(List<File> csvFileList) {
