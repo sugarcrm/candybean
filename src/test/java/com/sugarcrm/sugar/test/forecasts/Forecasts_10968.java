@@ -1,29 +1,12 @@
 package com.sugarcrm.sugar.test.forecasts;
 
-import javax.swing.JOptionPane;
-
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.SugarTest;
-import com.sugarcrm.sugar.accounts.Account;
-import com.sugarcrm.sugar.accounts.Accounts;
-import com.sugarcrm.sugar.accounts.Account.AccountBuilder;
-import com.sugarcrm.sugar.admin.Administration;
-import com.sugarcrm.sugar.cases.Case;
-import com.sugarcrm.sugar.cases.Case.CaseBuilder;
-import com.sugarcrm.sugar.contacts.Contact;
-import com.sugarcrm.sugar.contacts.Contact.ContactBuilder;
-import com.sugarcrm.sugar.contacts.Contacts;
-import com.sugarcrm.sugar.cases.Cases;
-import com.sugarcrm.sugar.portal.Portal;
-import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
-import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 public class Forecasts_10968 extends SugarTest {

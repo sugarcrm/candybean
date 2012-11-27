@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import com.sugarcrm.sugar.users.User;
+import com.sugarcrm.sugar.users.User.UserBuilder;
+import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.Voodoo;
 
 
@@ -14,6 +17,7 @@ public abstract class SugarTest {
 	
 	protected static Voodoo voodoo;
 	protected static Sugar sugar;
+	protected static User admin;
 
 	private static final String curWorkDir = System.getProperty("user.dir");
 	private static final String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
@@ -31,6 +35,11 @@ public abstract class SugarTest {
 		Properties sugarHooksProps = new Properties();
 		sugarHooksProps.load(new FileInputStream(new File(sugarHooksPath)));
 		sugar = Sugar.getInstance(sugarHooksProps);
+		String adminUser = Utils.getCascadingPropertyValue(SugarTest.sugarProps, "admin", "sugar.user");
+		String adminPass = Utils.getCascadingPropertyValue(SugarTest.sugarProps, "asdf", "sugar.pass");
+		String adminName = Utils.getCascadingPropertyValue(SugarTest.sugarProps, "Administrator", "sugar.name");
+		UserBuilder ub = new UserBuilder(adminUser, adminName, adminPass, adminPass);
+		admin = ub.build();
 	}
 
 	public void setup() throws Exception {

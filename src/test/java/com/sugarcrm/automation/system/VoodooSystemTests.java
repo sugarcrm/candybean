@@ -1,26 +1,17 @@
-package com.sugarcrm.system.voodoo.tests;
+package com.sugarcrm.automation.system;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Action;
-import org.openqa.selenium.interactions.Actions;
 
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 
@@ -60,6 +51,24 @@ public class VoodooSystemTests {
 		String actual = dropDownList.getSelected();
 		String expected = option;
 		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
+	}
+	
+	@Test 
+	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
+	public void testDoubleClickTest() throws Exception {
+		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+		voodoo.auto.go(w3Url);
+		//Checkbox control
+		VControl checkboxControl = (new VControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"), voodoo.auto));
+		// DoubleClick on a Checkbox
+		checkboxControl.scroll();
+		voodoo.pause(2000);
+		checkboxControl.doubleClick();
+		voodoo.pause(2000); 
+		checkboxControl.doubleClick();
+		voodoo.pause(2000); 
+		checkboxControl.doubleClick();
+		voodoo.pause(2000); 
 	}
 	
 	@Test
