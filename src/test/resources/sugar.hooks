@@ -21,12 +21,16 @@ navbar_menuitem_admin = ID:admin_link
 navbar_menuitem_logout = ID:logout_link
 
 # ACCOUNTS
+accounts_create_header = XPATH:/html/body/div[7]/div/div/h2
 accounts_button_saveheader = ID:SAVE_HEADER
 accounts_textfield_name = ID:name
 
 # ACCOUNTS_SEARCH
+accountsearch_header = XPATH://*[@id="content"]/div[1]/h2
 accountsearch_textfield_name = ID:name_advanced
 accountsearch_button_search = ID:search_form_submit
+accountsearch_checkbox_selectall = ID:massall_top
+accountsearch_button_deleteall = ID:delete_listview_top
 accountsearch_link_firstitem = XPATH:/html/body/table[4]/tbody/tr[3]/td[1]/a
 
 # CONTACTS
@@ -41,6 +45,10 @@ contacts_password_portalpassword1 = ID:portal_password1
 contacts_password_portalpassword2 = ID:portal_password
 contacts_button_savefooter = ID:SAVE_FOOTER
 contacts_div_bottomlinks = ID:bottomLinks
+
+# CONTACTS_SEARCH
+contactsearch_checkbox_selectall = ID:massall_top
+contactsearch_button_deleteall = ID:delete_listview_top
 
 # USERS
 users_textfield_namesearch = ID:search_name_basic
@@ -57,14 +65,17 @@ cases_button_search = ID:search_form_submit
 cases_button_edit = ID:edit_button
 cases_button_saveheader = ID:SAVE_HEADER
 cases_textfield_subject = ID:name
+cases_button_team = ID:teamSelect
 cases_textfield_teams = ID:EditView_team_name_collection_0
 
 # ADMINISTRATION
+admin_header = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div/h2
 admin_link_usermanagement = ID:user_management
 admin_table_devtools = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div[2]/div/div/table[10]
 admin_link_sugarportal = ID:sugarportal
 
 # ADMINISTRATION_PORTAL
+portal_header = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div/div/div[2]/div/div/h2
 portal_link_configureportal = XPATH:/html/body/div[5]/div/table/tbody/tr/td/div/div/div/div/div[2]/div/div/div/div[2]/div[3]/table/tbody/tr/td/table/tbody/tr/td/a/span
 portal_checkbox_portalenable = ID:appStatus
 portal_button_save = ID:gobutton
@@ -78,8 +89,10 @@ portallogin_button_login = NAME:login_button
 portal_navbar_menu_cases = LINK:Cases
 portal_navbar_menu_user = ID:userActions
 portal_navbar_menuitem_logout = LINK:Log Out
+portal_cases_header = XPATH:/html/body/div/div/div[3]/div/div/div/div/h1
 
 # PORTAL_CASES
 portal_cases_create = XPATH:/html/body/div/div/div[3]/div/div/div/div/div[4]/ul/li/a
+portal_cases_firstcasesubject_link = XPATH:/html/body/div/div/div[3]/div/div/div/div/div[3]/table/tbody/tr/td[2]/span/a
 portal_cases_textfield_subject = NAME:name
 portal_cases_button_save = NAME:save_button
