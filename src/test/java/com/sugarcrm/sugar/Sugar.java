@@ -3,10 +3,10 @@ package com.sugarcrm.sugar;
 import java.util.HashMap;
 import java.util.Properties;
 
-import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
+import com.sugarcrm.voodoo.utilities.Utils;
 
 
 public class Sugar {

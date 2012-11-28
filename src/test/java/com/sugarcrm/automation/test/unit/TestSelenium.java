@@ -1,4 +1,4 @@
-package com.sugarcrm.automation.unit;
+package com.sugarcrm.automation.test.unit;
 
 
 public class TestSelenium {
