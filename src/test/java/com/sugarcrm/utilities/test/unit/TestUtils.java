@@ -1,4 +1,4 @@
-package com.sugarcrm.automation.unit;
+package com.sugarcrm.utilities.test.unit;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,11 +8,11 @@ import java.util.Properties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.automation.Utils;
-import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
-import com.sugarcrm.voodoo.automation.Utils.Pair;
-import com.sugarcrm.voodoo.automation.Utils.Triplet;
 import com.sugarcrm.voodoo.automation.control.VHook;
+import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
+import com.sugarcrm.voodoo.utilities.Utils;
+import com.sugarcrm.voodoo.utilities.Utils.Pair;
+import com.sugarcrm.voodoo.utilities.Utils.Triplet;
 
 
 public class TestUtils {

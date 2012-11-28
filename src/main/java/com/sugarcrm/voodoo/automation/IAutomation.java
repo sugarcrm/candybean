@@ -23,7 +23,7 @@ public interface IAutomation {
   public String getText(VControl control) throws Exception;
   public void click(VControl control) throws Exception;
   public void doubleClick(VControl control) throws Exception;
-  public void dragNDrop(VControl control1, VControl control2) throws Exception;
+  public void dragNDrop(VControl dragControl, VControl dropControl) throws Exception;
   public void hover(VControl control) throws Exception;
   public void rightClick(VControl control) throws Exception;
   public void scroll(VControl control) throws Exception;

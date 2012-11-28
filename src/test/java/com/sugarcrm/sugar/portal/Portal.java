@@ -1,9 +1,9 @@
 package com.sugarcrm.sugar.portal;
 
 
-import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VControl;
+import com.sugarcrm.voodoo.utilities.Utils;
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.SugarTest;
 import com.sugarcrm.sugar.cases.Case;

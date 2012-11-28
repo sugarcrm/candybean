@@ -1,4 +1,4 @@
-package com.sugarcrm.automation.system;
+package com.sugarcrm.automation.test;
 
 import java.io.File;
 import java.io.FileInputStream;
