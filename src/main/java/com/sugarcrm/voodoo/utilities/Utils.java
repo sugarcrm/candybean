@@ -1,6 +1,10 @@
-package com.sugarcrm.voodoo.automation;
+package com.sugarcrm.voodoo.utilities;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -18,6 +22,23 @@ import com.sugarcrm.voodoo.automation.control.VHook;
 public class Utils {
 	
 	public static String HOOK_DELIMITER = ":";
+	
+	/**
+	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
+	 * 
+	 * @param cmd 
+	 * @throws Exception
+	 */
+	public static void run(String cmd) throws Exception {
+		Process process = new ProcessBuilder(cmd).start();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+		String line = reader.readLine();
+		System.out.print("Run command: " + cmd);
+		while (line != null) {
+			System.out.println(line);
+			line = reader.readLine();
+		}
+    }
 	
 	/**
 	 * Returns a preloaded hashmap based on the given, formatted hooks (Properties) file.

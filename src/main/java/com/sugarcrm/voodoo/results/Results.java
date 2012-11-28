@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class Results {
 	
 	public static enum Type { PASS, FAIL, ERROR, NOTE; }
-	private ArrayList<Results.Result> results = new ArrayList<Result>();
+	private ArrayList<Result> results = new ArrayList<Result>();
 	
 	public Results(File resultsFile) throws Exception {
 		Scanner scanner = new Scanner(resultsFile);
@@ -39,24 +39,5 @@ public class Results {
 	
 	public boolean verifyFile(File candidate) throws Exception {
 		throw new Exception("Verify not yet implemented...");
-	}
-	
-	/**
-	 * @author Conrad Warmbold
-	 * 
-	 * Format: [TIMESTAMP] [TYPE] [CLASS] [TEST] [FAIL_MESSAGE] [TAG(S)]
-	 */
-	private class Result {
-		private String line;
-		private Date timeStamp;
-		private Results.Type type;
-		private String className;
-		private String testName;
-		private String failMessage;
-		private HashSet<String> tags;
-		public Result(String line) { 
-			this.line = line;
-			// split line and store each; check for optional tokens
-		}
 	}
 }

@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import com.sugarcrm.voodoo.automation.IAutomation.InterfaceType;
-import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.framework.Selenium;
+import com.sugarcrm.voodoo.utilities.Utils;
 
 
 /**

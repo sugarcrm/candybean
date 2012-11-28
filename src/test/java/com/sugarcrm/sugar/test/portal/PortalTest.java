@@ -92,6 +92,7 @@ public class PortalTest extends SugarTest {
 	@Override
 	@After
 	public void cleanup() throws Exception {
+		// TODO this doesn't appear to clean up the portal user entirely and it may be a bug; the username created can't be completely 'reset' for reuse
 //		Users.delete(voodoo, sugar, portalUser);
 		Contacts.deleteAll(voodoo, sugar);
 		Accounts.deleteAll(voodoo, sugar);
