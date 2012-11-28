@@ -1,4 +1,4 @@
-package com.sugarcrm.sugar.test.forecasts;
+package com.sugarcrm.sugar.forecasts;
 
 import org.junit.After;
 import org.junit.AfterClass;

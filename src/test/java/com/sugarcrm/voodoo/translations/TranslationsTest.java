@@ -1,4 +1,4 @@
-package com.sugarcrm.translations.test;
+package com.sugarcrm.voodoo.translations;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

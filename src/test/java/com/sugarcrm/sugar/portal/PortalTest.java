@@ -1,4 +1,4 @@
-package com.sugarcrm.sugar.test.portal;
+package com.sugarcrm.sugar.portal;
 
 
 import org.junit.After;
@@ -21,7 +21,6 @@ import com.sugarcrm.sugar.contacts.Contact;
 import com.sugarcrm.sugar.contacts.Contact.ContactBuilder;
 import com.sugarcrm.sugar.contacts.Contacts;
 import com.sugarcrm.sugar.cases.Cases;
-import com.sugarcrm.sugar.portal.Portal;
 import com.sugarcrm.sugar.teams.Team;
 import com.sugarcrm.sugar.teams.Team.TeamBuilder;
 import com.sugarcrm.sugar.users.User;

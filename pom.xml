@@ -61,8 +61,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <includes>
-                <include>**/system/*.java</include>
-                <include>**/unit/*.java</include>
+                <include>**/*UnitTest.java</include>
               </includes>
             </configuration>
           </plugin>
@@ -78,9 +77,12 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <includes>
-                <include>**/system/*.java</include>
+                <include>**//*Test.java</include>
               </includes>
-            </configuration>
+              <excludes>
+                <exclude>**//*UnitTest.java</exclude>
+              </excludes>
+              </configuration>
           </plugin>
         </plugins>
       </build>
@@ -94,7 +96,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <includes>
-                <include>**/unit/*.java</include>
+                <include>**/*UnitTest.java</include>
               </includes>
             </configuration>
           </plugin>
@@ -134,6 +136,22 @@
       </build>
     </profile>
     <profile>
+      <id>datasource</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/datasource/**/*.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>translations</id>
       <build>
         <plugins>
@@ -143,6 +161,22 @@
             <configuration>
               <includes>
                 <include>**/translations/**/*.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>utilities</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/utilities/**/*.java</include>
               </includes>
             </configuration>
           </plugin>

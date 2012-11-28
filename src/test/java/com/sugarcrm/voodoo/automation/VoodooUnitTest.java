@@ -1,4 +1,4 @@
-package com.sugarcrm.automation.test.unit;
+package com.sugarcrm.voodoo.automation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.sugarcrm.voodoo.automation.Voodoo;
 
 
-public class TestVoodoo {
+public class VoodooUnitTest {
 
 	@Ignore
 	@Test
