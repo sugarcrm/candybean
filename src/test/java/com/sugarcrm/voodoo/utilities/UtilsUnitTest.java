@@ -1,4 +1,4 @@
-package com.sugarcrm.utilities.test.unit;
+package com.sugarcrm.voodoo.utilities;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,7 +15,7 @@ import com.sugarcrm.voodoo.utilities.Utils.Pair;
 import com.sugarcrm.voodoo.utilities.Utils.Triplet;
 
 
-public class TestUtils {
+public class UtilsUnitTest {
 
 	@Test
 	public void testGetHooks() {
