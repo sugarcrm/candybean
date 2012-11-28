@@ -1,5 +1,7 @@
 package com.sugarcrm.voodoo.test;
 
+import java.util.logging.Logger;
+
 
 /**
  * @author Conrad Warmbold
@@ -7,13 +9,13 @@ package com.sugarcrm.voodoo.test;
  */
 public class Test {
 	
-	public boolean assertEqual(Object expectedObject, Object actualObject, String failMessage) {
-//		log(failMessage);
+	public static boolean assertEqual(Object expectedObject, Object actualObject, String failMessage, Logger log) {
+		log.info(failMessage);
 		return expectedObject.equals(actualObject);
 	}
 	
-	public boolean assertTrue(String failMessage, boolean test) {
-//		log(failMessage);
+	public static boolean assertTrue(boolean test, String failMessage, Logger log) {
+		log.info(failMessage);
 		return test;
 	}
 

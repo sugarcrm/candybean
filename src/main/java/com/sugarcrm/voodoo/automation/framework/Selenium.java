@@ -26,10 +26,10 @@ import org.openqa.selenium.JavascriptExecutor;
 
 import com.google.common.base.Function;
 import com.sugarcrm.voodoo.automation.IAutomation;
-import com.sugarcrm.voodoo.automation.Utils;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VSelect;
+import com.sugarcrm.voodoo.utilities.Utils;
 
 
 public class Selenium implements IAutomation {
@@ -152,6 +152,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public String getText(VControl control) throws Exception {
+		voodoo.log.info("Selenium: getting text for control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		return browser.findElement(by).getText();
@@ -159,6 +160,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void click(VControl control) throws Exception {
+		voodoo.log.info("Selenium: clicking on control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		browser.findElement(by).click();
@@ -166,6 +168,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void doubleClick(VControl control) throws Exception {
+		voodoo.log.info("Selenium: double-clicking on control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		WebElement we = browser.findElement(by);
@@ -174,12 +177,13 @@ public class Selenium implements IAutomation {
 	}
 
 	@Override
-	public void dragNDrop(VControl control1, VControl control2)
+	public void dragNDrop(VControl dragControl, VControl dropControl)
 			throws Exception {
-		By by1 = Selenium.getBy(control1.getHook().hookStrategy,
-				control1.getHook().hookString);
-		By by2 = Selenium.getBy(control2.getHook().hookStrategy,
-				control2.getHook().hookString);
+		voodoo.log.info("Selenium: dragging control: " + dragControl.toString() + " to control: " + dropControl.toString());
+		By by1 = Selenium.getBy(dragControl.getHook().hookStrategy,
+				dragControl.getHook().hookString);
+		By by2 = Selenium.getBy(dropControl.getHook().hookStrategy,
+				dropControl.getHook().hookString);
 		WebElement draggable = browser.findElement(by1);
 		WebElement target = browser.findElement(by2);
 		Actions action = new Actions(browser);
@@ -188,6 +192,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void hover(VControl control) throws Exception {
+		voodoo.log.info("Selenium: hovering over control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		WebElement we = browser.findElement(by);
@@ -197,6 +202,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void rightClick(VControl control) throws Exception {
+		voodoo.log.info("Selenium: right-clicking control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		WebElement we = browser.findElement(by);
@@ -206,6 +212,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void scroll(VControl control) throws Exception {
+		voodoo.log.info("Selenium: scrolling to control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		WebElement we = browser.findElement(by);
@@ -216,6 +223,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void sendString(VControl control, String input) throws Exception {
+		voodoo.log.info("Selenium: sending string: " + input + " to control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		WebElement we = browser.findElement(by);
@@ -225,6 +233,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void waitOn(VControl control) throws Exception {
+		voodoo.log.info("Selenium: waiting on visibility of control: " + control.toString());
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		final WebElement we = browser.findElement(by);
@@ -241,6 +250,8 @@ public class Selenium implements IAutomation {
 	@Override
 	public void wait(VControl control, String attribute, String value)
 			throws Exception {
+		voodoo.log.info("Selenium: waiting for control: " + control.toString()
+				+ " to have attribute: " + attribute + " to have value: " + value);
 		By by = Selenium.getBy(control.getHook().hookStrategy,
 				control.getHook().hookString);
 		final WebElement we = browser.findElement(by);
@@ -269,6 +280,7 @@ public class Selenium implements IAutomation {
 
 	@Override
 	public void select(VSelect select, boolean isSelected) throws Exception {
+		voodoo.log.info("Selenium: setting select: " + select.toString() + " to value: " + isSelected);
 		By by = Selenium.getBy(select.getHook().hookStrategy,
 				select.getHook().hookString);
 		WebElement we = browser.findElement(by);
