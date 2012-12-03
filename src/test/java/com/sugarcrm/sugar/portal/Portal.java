@@ -1,8 +1,7 @@
 package com.sugarcrm.sugar.portal;
 
 
-import com.sugarcrm.voodoo.automation.Voodoo;
-import com.sugarcrm.voodoo.automation.control.VControl;
+import com.sugarcrm.voodoo.automation.IInterface;
 import com.sugarcrm.voodoo.utilities.Utils;
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.SugarTest;
@@ -11,44 +10,44 @@ import com.sugarcrm.sugar.cases.Case;
 
 public class Portal {
 	
-	public static void login(Voodoo voodoo, Sugar sugar, String username, String password) throws Exception {
+	public static void login(Sugar sugar, IInterface iface, String username, String password) throws Exception {
 		String sugarURL = Utils.getCascadingPropertyValue(SugarTest.sugarProps, "http://localhost/sugar/", "env.base_url");
 		String relPortalURL = Utils.getCascadingPropertyValue(SugarTest.sugarProps, "portal/", "env.portal_rel_url");
-		voodoo.auto.go(sugarURL + relPortalURL);
-		(new VControl(sugar.getHook("portallogin_textfield_username"), voodoo.auto)).sendString(username);
-		(new VControl(sugar.getHook("portallogin_textfield_password"), voodoo.auto)).sendString(password);
-		(new VControl(sugar.getHook("portallogin_button_login"), voodoo.auto)).click();
-		(new VControl(sugar.getHook("portal_navbar_menu_user"), voodoo.auto)).waitOn();
+		iface.go(sugarURL + relPortalURL);
+		iface.getControl(sugar.getHook("portallogin_textfield_username")).sendString(username);
+		iface.getControl(sugar.getHook("portallogin_textfield_password")).sendString(password);
+		iface.getControl(sugar.getHook("portallogin_button_login")).click();
+		iface.getControl(sugar.getHook("portal_navbar_menu_user")).waitOn();
 	}
 	
-	public static void logout(Voodoo voodoo, Sugar sugar) throws Exception {
-		(new VControl(sugar.getHook("portal_navbar_menu_user"), voodoo.auto)).click();
-		(new VControl(sugar.getHook("portal_navbar_menuitem_logout"), voodoo.auto)).click();
-		(new VControl(sugar.getHook("portallogin_button_login"), voodoo.auto)).waitOn();
+	public static void logout(Sugar sugar, IInterface iface) throws Exception {
+		iface.getControl(sugar.getHook("portal_navbar_menu_user")).click();
+		iface.getControl(sugar.getHook("portal_navbar_menuitem_logout")).click();
+		iface.getControl(sugar.getHook("portallogin_button_login")).waitOn();
 	}
 	
 	public static class Cases {
 		
-		public static void create(Voodoo voodoo, Sugar sugar, Case portalCase) throws Exception {
-			Portal.Cases.navigate(voodoo, sugar);
-			(new VControl(sugar.getHook("portal_cases_create"), voodoo.auto)).waitOn();
-			(new VControl(sugar.getHook("portal_cases_create"), voodoo.auto)).click();
-			(new VControl(sugar.getHook("portal_cases_textfield_subject"), voodoo.auto)).waitOn();
-			(new VControl(sugar.getHook("portal_cases_textfield_subject"), voodoo.auto)).sendString(portalCase.subject());
-			(new VControl(sugar.getHook("portal_cases_button_save"), voodoo.auto)).click();
-			(new VControl(sugar.getHook("portal_cases_header"), voodoo.auto)).waitOn();
+		public static void create(Sugar sugar, IInterface iface, Case portalCase) throws Exception {
+			Portal.Cases.navigate(sugar, iface);
+			iface.getControl(sugar.getHook("portal_cases_create")).waitOn();
+			iface.getControl(sugar.getHook("portal_cases_create")).click();
+			iface.getControl(sugar.getHook("portal_cases_textfield_subject")).waitOn();
+			iface.getControl(sugar.getHook("portal_cases_textfield_subject")).sendString(portalCase.subject());
+			iface.getControl(sugar.getHook("portal_cases_button_save")).click();
+			iface.getControl(sugar.getHook("portal_cases_header")).waitOn();
 		}
 		
-		public static String readFirstCaseSubjectText(Voodoo voodoo, Sugar sugar) throws Exception {
-			Portal.Cases.navigate(voodoo, sugar);
-			return (new VControl(sugar.getHook("portal_cases_firstcasesubject_link"), voodoo.auto)).getText();
+		public static String readFirstCaseSubjectText(Sugar sugar, IInterface iface) throws Exception {
+			Portal.Cases.navigate(sugar, iface);
+			return iface.getControl(sugar.getHook("portal_cases_firstcasesubject_link")).getText();
 		}
 		
-		public static void navigate(Voodoo voodoo, Sugar sugar) throws Exception {
-			(new VControl(sugar.getHook("portal_navbar_menu_cases"), voodoo.auto)).click();
+		public static void navigate(Sugar sugar, IInterface iface) throws Exception {
+			iface.getControl(sugar.getHook("portal_navbar_menu_cases")).click();
 		}
 		
-		public static void delete(Voodoo voodoo, Sugar sugar, Case portalCase) throws Exception {
+		public static void delete(Sugar sugar, IInterface iface, Case portalCase) throws Exception {
 			throw new Exception("deleteCase not yet supported");
 		}
 	}
