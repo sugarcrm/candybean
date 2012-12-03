@@ -1,18 +1,21 @@
-package com.sugarcrm.voodoo.automation;
+package com.sugarcrm.voodoo.automation.control;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import org.junit.Test;
 
+import com.sugarcrm.voodoo.automation.IInterface;
+import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
-import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
+import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 
 //import com.sugarcrm.voodoo.IAutomation.Strategy;
@@ -23,8 +26,9 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
 import static org.junit.Assert.assertEquals;
 
 
-public class VoodooSystemTests {
+public class VControlTest {
 	protected static Voodoo voodoo;
+	protected static VInterface iface;
 	
 	@BeforeClass
 	public static void setupOnce() throws Exception {
@@ -35,44 +39,47 @@ public class VoodooSystemTests {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
-		voodoo.auto.start();
+		iface = voodoo.getInterface();
+		iface.start();
 	}
 
-	@Test
-	public void selectTest() throws Exception {
-		VSelect dropDownList = new VSelect(new VHook(Strategy.ID, "birthday_month"), voodoo.auto);
-		String option = "Sep";
-		// 1. navigate to Facebook create account page
-		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
-		voodoo.auto.go(facebookCreateAccountUrl);
-		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
-		dropDownList.select(option);
-		// 3. Verify that 'Sep' was actually selected
-		String actual = dropDownList.getSelected();
-		String expected = option;
-		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
-	}
-	
 	@Test 
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
 	public void testDoubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
-		voodoo.auto.go(w3Url);
+		iface.go(w3Url);
 		//Checkbox control
-		VControl checkboxControl = (new VControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"), voodoo.auto));
+		VControl checkboxControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"));
 		// DoubleClick on a Checkbox
 		checkboxControl.scroll();
-		voodoo.pause(2000);
+		iface.pause(2000);
 		checkboxControl.doubleClick();
-		voodoo.pause(2000); 
+		iface.pause(2000); 
 		checkboxControl.doubleClick();
-		voodoo.pause(2000); 
+		iface.pause(2000); 
 		checkboxControl.doubleClick();
-		voodoo.pause(2000); 
+		iface.pause(2000); 
 	}
+	
 	
 	@Test
 	public void dragNDropTest() throws Exception {
+		String w3Url = "http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=6&ved=0CDoQFjAF&url=http%3A%2F%2Ftool-man.org%2Fexamples%2Fsorting.html&ei=nBGLUKi8CcGmigLah4CADg&usg=AFQjCNGL-HryUxMBRKn9gEM0F1xE_NNNyQ";
+		iface.go(w3Url);
+		iface.pause(2000);
+		VControl imgControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/ul[2]/li"));
+		VControl targetControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/ul[2]/li[2]"));
+   		imgControl.dragNDrop(targetControl);
+        iface.pause(3000);  // pause for manual inspection
+
+   		// Verify draggable has been moved to new location
+   		String actItemid = targetControl.getAttribute("itemid");
+   		String expItemid = "1";
+        Assert.assertEquals("Expected value for the itemid attribute should match: " + expItemid, expItemid, actItemid);
+	}
+	
+	@Test
+	public void dragNDropTest2() throws Exception {
 //		voodoo.go("http://www.w3schools.com/html/html5_draganddrop.asp");
 //		voodoo.waitFor(new VHook(Strategy.ID, "drag1"));
 //		voodoo.dragNDrop(new VHook(Strategy.ID, "drag1"), new VHook(Strategy.ID, "div2"));
@@ -90,23 +97,8 @@ public class VoodooSystemTests {
 //		voodoo.waitFor(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
 	}
 	
-	@Test
-	public void getSelectedTest() throws Exception {
-		String actual;
-		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
-		VSelect dropDownList = new VSelect(new VHook(Strategy.ID, "birthday_month"), voodoo.auto);
-		// 1. navigate to Facebook create account page
-		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
-		voodoo.auto.go(facebookCreateAccountUrl);
-		// 2. Get the current option from the drop-down list
-		actual = dropDownList.getSelected();
-		// 3. Verify that actual value is the expected value
-		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
-		
-	}
-	
 	@AfterClass
 	public static void cleanupOnce() throws Exception {
-		voodoo.auto.stop();
+		iface.stop();
 	}
 }	

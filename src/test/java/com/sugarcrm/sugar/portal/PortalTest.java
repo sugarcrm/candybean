@@ -41,7 +41,7 @@ public class PortalTest extends SugarTest {
 	public void setup() throws Exception {
 		super.setup();
 //		1. Portal side is installed successfully.
-		Administration.setPortalEnabled(voodoo, sugar, true);
+		Administration.setPortalEnabled(sugar, iface, true);
 //		2. Create one portal user in Sugar server side.
 //		3. Create a contact record with portal name, portal access URL, password and account fields filled, such as:
 //		Contact Name -> contact1, Account Name -> account1, Portal Name -> PortalTest1, Password-> a, check box "Portal Active"
@@ -49,26 +49,26 @@ public class PortalTest extends SugarTest {
 		Account account = (new AccountBuilder("acct_cwarmbold")).build();
 		cb.withAccount(account).withPortalName("cwarmbold").withPortalActive(true).withPortalPassword("Sugar123");
 		portalContact = cb.build();
-		Accounts.create(voodoo, sugar, account);
-		Contacts.create(voodoo, sugar, portalContact);
+		Accounts.create(sugar, iface, account);
+		Contacts.create(sugar, iface, portalContact);
 		team = (new TeamBuilder("Administrator")).build();
 	}
 	
 	@Test
 	public void test14177() throws Exception {
 //		1. Login to Portal side as a valid user mentioned in precondition2.
-		Sugar.logout(voodoo, sugar);
-		Portal.login(voodoo, sugar, portalContact.portalName(), portalContact.portalPassword());
+		Sugar.logout(sugar, iface);
+		Portal.login(sugar, iface, portalContact.portalName(), portalContact.portalPassword());
 //		2. Go to Cases module.		
 //		3. Click "Create New" link.
 //		4. Fill all mandatory fields and click "Save" button.
 		CaseBuilder portalCB = new CaseBuilder("portalCase", this.team);
 		CaseBuilder sugarCB = new CaseBuilder("sugarCase", this.team);
 		Case portalCase = portalCB.build();
-		Portal.Cases.create(voodoo, sugar, portalCase);
+		Portal.Cases.create(sugar, iface, portalCase);
 //		5. Login to Sugar server side as a valid user, such as admin user.
-		Portal.logout(voodoo, sugar);
-		Sugar.login(voodoo, sugar, SugarTest.admin.username(), SugarTest.admin.password1());
+		Portal.logout(sugar, iface);
+		Sugar.login(sugar, iface, SugarTest.admin.username(), SugarTest.admin.password1());
 //		6. Go to Cases module in server side. 
 //		7. Search the case created from above.
 //			7. ***The new case is found.
@@ -76,26 +76,26 @@ public class PortalTest extends SugarTest {
 //		8. ***The case is updated successfully in Sugar server side.
 //		9. Click Save button.
 		Case sugarCase = sugarCB.build();
-		Cases.modify(voodoo, sugar, portalCase, sugarCase);
+		Cases.modify(sugar, iface, portalCase, sugarCase);
 //		10. The same Portal user log in to Portal again.
-		Sugar.logout(voodoo, sugar);
-		Portal.login(voodoo, sugar, portalContact.portalName(), portalContact.portalPassword());
+		Sugar.logout(sugar, iface);
+		Portal.login(sugar, iface, portalContact.portalName(), portalContact.portalPassword());
 //			10.***The changes are also shown on the portal side.
 //		11. Navigate to Cases tab and search the same case.
-		String firstCaseSubjectText = Portal.Cases.readFirstCaseSubjectText(voodoo, sugar);
+		String firstCaseSubjectText = Portal.Cases.readFirstCaseSubjectText(sugar, iface);
 		Assert.assertEquals("Expected case subject does not match actual subject: " + firstCaseSubjectText, firstCaseSubjectText, sugarCase.subject());
-		Portal.logout(voodoo, sugar);
-		Sugar.login(voodoo, sugar, SugarTest.admin.username(), SugarTest.admin.password1());
+		Portal.logout(sugar, iface);
+		Sugar.login(sugar, iface, SugarTest.admin.username(), SugarTest.admin.password1());
 	}
 
 	@Override
 	@After
 	public void cleanup() throws Exception {
 		// TODO this doesn't appear to clean up the portal user entirely and it may be a bug; the username created can't be completely 'reset' for reuse
-//		Users.delete(voodoo, sugar, portalUser);
-		Contacts.deleteAll(voodoo, sugar);
-		Accounts.deleteAll(voodoo, sugar);
-		Administration.setPortalEnabled(voodoo, sugar, false);
+//		Users.delete(sugar, iface, portalUser);
+		Contacts.deleteAll(sugar, iface);
+		Accounts.deleteAll(sugar, iface);
+		Administration.setPortalEnabled(sugar, iface, false);
 		super.cleanup();
 	}
 
