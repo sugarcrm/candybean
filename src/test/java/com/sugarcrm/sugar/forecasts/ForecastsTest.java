@@ -1,5 +1,6 @@
 package com.sugarcrm.sugar.forecasts;
 
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class ForecastsTest extends SugarTest {
 	public void setup() throws Exception {
 		super.setup();
 		timePeriod = new TimePeriod("tp_new", true, "12/01/2012", "11/30/2013");
-		TimePeriods.create(voodoo, sugar, timePeriod);
+		TimePeriods.create(sugar, iface, timePeriod);
 //		1. All default Time Periods are removed from the system 
 //		2. 5 custom time periods exist with the following data (YY represents the current year, MM represents the current month, 2M represents month MM+2, 3M = MM+3, 6M = MM+6)
 //        Name      -     Start Date       -       End Date     - Is Fiscal Year    -    Fiscal Year    - Forecast Start Date

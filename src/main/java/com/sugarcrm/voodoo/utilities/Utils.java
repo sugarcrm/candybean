@@ -2,14 +2,8 @@ package com.sugarcrm.voodoo.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Properties;
-
-import com.sugarcrm.voodoo.automation.IAutomation.Strategy;
-import com.sugarcrm.voodoo.automation.control.VHook;
 
 
 /**
@@ -20,8 +14,6 @@ import com.sugarcrm.voodoo.automation.control.VHook;
  *
  */
 public class Utils {
-	
-	public static String HOOK_DELIMITER = ":";
 	
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
@@ -39,49 +31,6 @@ public class Utils {
 			line = reader.readLine();
 		}
     }
-	
-	/**
-	 * Returns a preloaded hashmap based on the given, formatted hooks (Properties) file.
-	 * 
-	 * @param hooks
-	 * @return
-	 * @throws Exception
-	 */
-	public static HashMap<String, VHook> getHooks(Properties hooks) throws Exception {
-		HashMap<String, VHook> hooksMap = new HashMap<String, VHook>();
-		for(String name : hooks.stringPropertyNames()) {
-//			System.out.println("hook name: " + name);
-			String[] strategyNHook = hooks.getProperty(name).split(HOOK_DELIMITER);
-			if (strategyNHook.length != 2) throw new Exception("Malformed hooks file for name: " + name);
-			else {
-//				System.out.println("strategy: " + strategyNHook[0] + ", hook: " + strategyNHook[1]);
-				Strategy strategy = Utils.getStrategy(strategyNHook[0]);
-				String hook = strategyNHook[1];
-				hooksMap.put(name, new VHook(strategy, hook));
-			}
-		}
-		return hooksMap;
-	}
-	
-	/**
-	 * Returns the Voodoo-defined hook strategy based on the given string.
-	 * 
-	 * @param strategy
-	 * @return
-	 * @throws Exception
-	 */
-	public static Strategy getStrategy(String strategy) throws Exception {
-		switch(strategy) {
-		case "CSS": return Strategy.CSS;
-		case "ID": return Strategy.ID;
-		case "NAME": return Strategy.NAME;
-		case "XPATH": return Strategy.XPATH;
-		case "LINK": return Strategy.LINK;
-		case "PLINK": return Strategy.PLINK;
-		default:
-			throw new Exception("Strategy not recognized: " + strategy);
-		}
-	}
 	
 	/**
 	 * Given a properties file, a default key-value pair value, and a key, this

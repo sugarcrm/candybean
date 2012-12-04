@@ -11,8 +11,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import com.sugarcrm.voodoo.automation.IAutomation.InterfaceType;
-import com.sugarcrm.voodoo.automation.framework.Selenium;
+import com.sugarcrm.voodoo.automation.IInterface.Type;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 
@@ -21,19 +20,16 @@ import com.sugarcrm.voodoo.utilities.Utils;
  *
  */
 public class Voodoo {
-
+	
 	public final Logger log;
-	public final IAutomation auto;
+	public final Properties props;
 
 	private static Voodoo instance = null;
-	private final Properties props;
 
 	private Voodoo(Properties props) throws Exception {
 		this.props = props;
 		this.log = this.getLogger();
-		this.auto = this.getAutomation();
 	}
-
 	
 	/**
 	 * @param props
@@ -45,67 +41,48 @@ public class Voodoo {
 		return Voodoo.instance;
 	}
 
-	
-	public void pause(long ms) throws Exception {
-		this.log.info("Pausing for " + ms + "ms via thread sleep.");
-		Thread.sleep(ms);
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public VInterface getInterface() throws Exception {
+		String iType = Utils.getCascadingPropertyValue(this.props, "chome", "automation.interface");
+		return this.getInterface(this.parseInterfaceType(iType));
 	}
-
 	
-	public void interact(String message) {
-		this.log.info("Interaction via popup dialog with message: " + message);
-		JOptionPane.showInputDialog(message);
+	/**
+	 * @param browserType
+	 * @return
+	 * @throws Exception
+	 */
+	public VInterface getInterface(IInterface.Type iType) throws Exception {
+		return new VInterface(this, this.props, iType);
 	}
-
 	
 	/**
 	 * @return
 	 * @throws Exception
 	 */
-	private IAutomation getAutomation() throws Exception {
-		IAutomation auto = null;
-		InterfaceType iType = this.getInterfaceType();
-		String autoString = Utils.getCascadingPropertyValue(this.props, "selenium", "automation.framework");
-		switch (autoString) {
-		case "selenium":
-			this.log.info("Instantiating Selenium automation with interface type: " + iType.name());
-			auto = new Selenium(this, props, iType);
-			break;
-		case "robotium":
-			throw new Exception("Robotium automation not yet supported.");
-		default:
-			throw new Exception("Automation framework not recognized.");
-		}
-		return auto;
-    }
-
-	
-	/**
-	 * @return
-	 * @throws Exception
-	 */
-	private InterfaceType getInterfaceType() throws Exception {
-		InterfaceType interfaceType = null;
-		String interfaceTypeString = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
-		for (InterfaceType interfaceTypeIter : InterfaceType.values()) {
-			if (interfaceTypeIter.name().equalsIgnoreCase(interfaceTypeString)) {
-				interfaceType = interfaceTypeIter;
+	private IInterface.Type parseInterfaceType(String iTypeString) throws Exception {
+		IInterface.Type iType = null;
+		for (IInterface.Type iTypeIter : IInterface.Type.values()) {
+			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
+				iType = iTypeIter;
 				break;
 			}
 		}
-		return interfaceType;
+		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
+		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
+		return iType;
 	}
-
 	
 //	public long getPageLoadTimeout() {
 //		return Long.parseLong(props.getString("perf.page_load_timeout"));
 //	}
-
 	
 //	public String getTime() {
 //		return Utils.pretruncate("" + (new Date()).getTime(), 6);
 //	}
-
 	
 	private Logger getLogger() throws Exception {
 		// check for Log directory existence
@@ -124,7 +101,6 @@ public class Voodoo {
 		tempLogPropsFile.delete();
 		return logger;
 	}
-
 	
 //	private Level getLogLevel() {
 //		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");

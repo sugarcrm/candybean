@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import com.sugarcrm.voodoo.automation.IInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.sugar.users.User;
 import com.sugarcrm.sugar.users.User.UserBuilder;
@@ -16,6 +17,7 @@ public abstract class SugarTest {
 	public static Properties sugarProps;
 	
 	protected static Voodoo voodoo;
+	protected static IInterface iface;
 	protected static Sugar sugar;
 	protected static User admin;
 
@@ -29,7 +31,7 @@ public abstract class SugarTest {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
-		voodoo.auto.start();
+		iface = voodoo.getInterface();
 		sugarProps = new Properties();
 		sugarProps.load(new FileInputStream(new File(sugarPropsPath)));
 		Properties sugarHooksProps = new Properties();
@@ -43,12 +45,12 @@ public abstract class SugarTest {
 	}
 
 	public void setup() throws Exception {
-		Sugar.login(voodoo, sugar, "admin", "asdf");
+		Sugar.login(sugar, iface, "admin", "asdf");
 	}
 
 	public void cleanup() throws Exception {
-		Sugar.logout(voodoo, sugar);
-		voodoo.auto.stop();
+		Sugar.logout(sugar, iface);
+		iface.stop();
 	}
 
 	public static void cleanupOnce() {}
