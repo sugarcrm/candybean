@@ -21,6 +21,8 @@ navbar_menuitem_cases = ID:moduleTab_AllCases
 navbar_menu_user = CSS:#globalLinks span
 navbar_menuitem_admin = ID:admin_link
 navbar_menuitem_logout = ID:logout_link
+navbar_menu_campaigns = ID:moduleTab_AllCampaigns
+navbar_menuitem_createcampaign = ID:CreateCampaign(Classic)All
 
 # ACCOUNTS
 accounts_create_header = XPATH:/html/body/div[7]/div/div/h2
@@ -34,6 +36,17 @@ accountsearch_button_search = ID:search_form_submit
 accountsearch_checkbox_selectall = ID:massall_top
 accountsearch_button_deleteall = ID:delete_listview_top
 accountsearch_link_firstitem = XPATH:/html/body/table[4]/tbody/tr[3]/td[1]/a
+
+# CAMPAIGNS
+campaigns_button_saveheader = ID:SAVE_HEADER
+campaigns_textfield_name = ID:name
+campaigns_dropdown_status = ID:status
+campaigns_dropdown_type = ID:campaign_type
+campaigns_date_enddate = ID:end_date
+campaigns_button_savefooter = ID:SAVE_FOOTER
+campaigns_button_edit = ID:edit_button
+campaignsearch_checkbox_selectall = ID:massall_top
+campaignsearch_button_deleteall = ID:delete_listview_top
 
 # CONTACTS
 contacts_button_saveheader = ID:SAVE_HEADER
