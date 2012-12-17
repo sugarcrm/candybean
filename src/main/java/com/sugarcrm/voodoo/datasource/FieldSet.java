@@ -3,7 +3,7 @@ package com.sugarcrm.voodoo.datasource;
 import java.util.HashMap;
 
 /**
- * FieldSet is the basic type returned by the DataAdapter upon converting from their original csv, xml, etc. form.
+ * FieldSet is the basic type returned by the DataAdapter from converting the original csv, xml, etc. 
  *
  */
 public class FieldSet extends HashMap<String, String> {
