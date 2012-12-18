@@ -252,43 +252,6 @@ public class VInterface implements IInterface {
   //	}
   //	
   //	
-  //	/**
-  //	 * @param tableElement
-  //	 * @param rowRelativeXPathTextKey
-  //	 * @param value
-  //	 * @return
-  //	 */
-  //	public static boolean tableContainsValue(WebElement tableElement, String rowRelativeXPathTextKey, String value) {
-  //		List<WebElement> rows = tableElement.findElements(By.tagName("tr"));
-  //		for (WebElement row : rows) {
-  //			if (row.findElement(By.xpath(rowRelativeXPathTextKey)).getText().equalsIgnoreCase(value)) return true;
-  //		}
-  //		return false;
-  //	}
-  //	
-  //	
-  //	/**
-  //	 * @param table
-  //	 * @param rowRelativeXPathTextKey
-  //	 * @param rowRelativeXPathElementValue
-  //	 * @return
-  //	 * @throws Exception
-  //	 */
-  //	public static Map<String, WebElement> loadMapFromTable(WebElement table, String rowRelativeXPathTextKey, String rowRelativeXPathElementValue) throws Exception {
-  //		Map<String, WebElement>	rowMap = new HashMap<String, WebElement>();
-  //		List<WebElement> rows = table.findElements(By.tagName("tr"));
-  ////		System.out.println("table # rows:" + rows.size());
-  //		for (WebElement row : rows) {
-  ////			List<WebElement> childTDs = row.findElements(By.tagName("td"));
-  ////			for (WebElement childTD : childTDs) System.out.println("td text:" + childTD.getText());
-  //			String k = row.findElement(By.xpath(rowRelativeXPathTextKey)).getText();
-  //			WebElement v = row.findElement(By.xpath(rowRelativeXPathElementValue));
-  ////			System.out.println("key text:" + k + ", value we:" + v.getTagName() + "/" + v.getText());
-  //			rowMap.put(k, v);
-  //		}
-  //		return rowMap;
-  //	}
-  //	
   //
   //	/**
   //	 * @param element
