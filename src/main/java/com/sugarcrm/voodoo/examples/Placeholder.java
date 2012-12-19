@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.webservices;
+package com.sugarcrm.voodoo.examples;
 
 
 /**
