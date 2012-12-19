@@ -15,7 +15,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
-import org.json.simple.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.JSONValue;
 import org.xml.sax.helpers.DefaultHandler;
@@ -41,6 +40,7 @@ public class WS {
 			    factory.setValidating(true);
 			    SAXParser saxParser = factory.newSAXParser();
 		        saxParser.parse(new ByteArrayInputStream(body.getBytes()), new DefaultHandler());
+		        //TODO
 		    	break;
 			default:
 				throw new Exception("WS:TYPE not recognized.");
