@@ -1,0 +1,1 @@
+Assert.assertEquals("Sample message, \" argument1," + "more message", "Contracts", argument3);
