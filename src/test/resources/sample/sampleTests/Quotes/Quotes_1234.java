@@ -1,0 +1,1 @@
+Assert.assertEquals("Sample message, \" message," + "more message, message...", "ERROR: cant move_pdf to $destination. You should try making the directory writable by the webserver", argument3);
