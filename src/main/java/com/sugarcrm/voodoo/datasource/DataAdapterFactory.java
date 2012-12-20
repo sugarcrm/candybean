@@ -10,7 +10,7 @@ import com.sugarcrm.voodoo.configuration.Configuration;
  *
  */
 public class DataAdapterFactory {
-	public enum DataAdapterType {CSV, XML;};
+	public enum DataAdapterType { CSV, XML };
 	protected Properties props;
 
 	public DataAdapterFactory(Properties props) {
