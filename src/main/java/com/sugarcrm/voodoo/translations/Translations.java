@@ -36,6 +36,21 @@ public class Translations {
 	// This variable is set by the following method: setAssertPosition()
 	private static int ASSERT_POSITION;
 
+	//*** NOTE, This is to run the program with command line
+	// Refer to Voodoo Translations Wiki for more info on usage
+	public static void main(String[] args) {	
+		try {
+		if (args.length == 1) Translate(args[0]);	
+		else if (args.length == 4) Translate(args[0], args[1], args[2], args[3]);	
+		else { 
+			System.out.println("Invalid number of arguments. Given number of arguments: " + args.length); 	
+			System.exit(1);
+		}	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Translation Method 1: translate a single/set of test(s) using the given
 	 * input arguments
@@ -58,13 +73,8 @@ public class Translations {
 			DB_CONNECTION = connectToDatabase();
 
 			populateListOfModules(MODULE);
-
-			// Creating output folder
-			File outputFolder = new File(OUTPUT_FOLDER);
-			if (!outputFolder.exists())
-				outputFolder.mkdir();
-
-			recursePathForTranslations(TEST_PATH);
+			createFolder(OUTPUT_FOLDER);
+			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
 
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -93,13 +103,8 @@ public class Translations {
 			DB_CONNECTION = connectToDatabase();
 
 			populateListOfModules(MODULE);
-
-			// Creating output folder
-			File outputFolder = new File(OUTPUT_FOLDER);
-			if (!outputFolder.exists())
-				outputFolder.mkdir();
-
-			recursePathForTranslations(TEST_PATH);
+			createFolder(OUTPUT_FOLDER);
+			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
 
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -114,28 +119,35 @@ public class Translations {
 	 *         
 	 * @author Wilson Li
 	 * @param testPath - a path to a single test file or a folder containing multiple test files
+	 * @param outputFolder - a path to a output folder
 	 * @throws Exception
 	 */
-	private static void recursePathForTranslations(String testPath) throws Exception {
+	private static void recursePathForTranslations(String testPath, String outputFolder) throws Exception {
 		try {
 			File inputFile = new File(testPath);
 			if (inputFile.isFile()) { // testPath: Path to a test file
-				String outputSubFolder = OUTPUT_FOLDER + File.separator + inputFile.getName() + "_" + LANGUAGE;
-				fileReaderWriter(MODULE, testPath, outputSubFolder);
+				String outputSubFolder = outputFolder + File.separator + inputFile.getName() + "_" + LANGUAGE;
+				String moduleFileName = getFileModuleName(inputFile.getName());
+				// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
+				if (isModuleExist(moduleFileName) && inputFile.getName().contains(".java")) {
+					// perform translation
+					fileReaderWriter(moduleFileName, testPath, outputSubFolder);
+				}
 			} else { // testPath: path to a folder containing test file(s)
 				File[] files = new File(testPath).listFiles();
 				for (File file : files) {
 					String testPathSubFolder = file.getAbsolutePath();
-					String outputSubFolder = OUTPUT_FOLDER	+ File.separator + file.getName() + "_" + LANGUAGE;
+					String outputSubFolder = outputFolder + File.separator + file.getName();
 					String moduleFileName = getFileModuleName(file.getName());
 					// If the item is a file that contains a name from the module(s) and is of java format then perform translation
 					if (file.isFile() && isModuleExist(moduleFileName) && file.getName().contains(".java")) {
 						// perform translation
-						fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder);
+						fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder + "_" + LANGUAGE);
 					}
 					// If the item is a directory, then recurse the function with the item's path
 					if (file.isDirectory()) {
-						recursePathForTranslations(file.getAbsolutePath());
+						createFolder(outputSubFolder);
+						recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
 					}
 				}
 			}
@@ -522,6 +534,18 @@ public class Translations {
 		}
 	}
 
+	/**
+	 * Create a folder with the given path
+	 * 
+	 * @author Wilson Li
+	 * @param path
+	 */
+	private static void createFolder(String path) {
+		File outputFolder = new File(path);
+		if (!outputFolder.exists())
+			outputFolder.mkdir();
+	}
+	
 	/**
 	 * Simple wrapper function to do a System.out.println for Translations
 	 * 
