@@ -53,4 +53,8 @@ The 'expectedValue' will be replaced with a language-specified string from the d
 ### TODO::
 + Use Centralized Database
 + Add assert robustness by adding more assert types or use a global wrapper assert method 
+
+###Last-minute Update 12-21-2012
++ Voodoo2 Translation will support .xml format tests (instead of only .java)
+
 ***
