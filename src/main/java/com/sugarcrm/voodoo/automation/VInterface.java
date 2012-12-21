@@ -19,6 +19,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 
+import com.sugarcrm.voodoo.automation.control.VAControl;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
@@ -29,7 +30,8 @@ import com.sugarcrm.voodoo.utilities.Utils;
 public class VInterface implements IInterface {
 
 	public final WebDriver wd;
-	
+	public final AndroidInterface vac; //vac as in voodoo android control
+
 	private final Voodoo voodoo;
 	private final Properties props;
 	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
@@ -45,8 +47,15 @@ public class VInterface implements IInterface {
 			throws Exception {
 		this.voodoo = voodoo;
 		this.props = props;
-		this.wd = this.getWebDriver(iType);
-		this.start();
+		if (iType == Type.ANDROID) {
+			this.vac = this.getAndroidControl();
+			this.wd = null;
+		}
+		else {
+			this.wd = this.getWebDriver(iType);
+			this.vac = null;
+			this.start();
+		}
 	}
 	
 	@Override
@@ -216,7 +225,43 @@ public class VInterface implements IInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-
+	
+	
+	// ANDROID ROBOTIUM FUNCTIONALITY
+	private AndroidInterface getAndroidControl() throws Exception {
+		AndroidInterface vac = new AndroidInterface(this.props);
+		return vac;
+	}
+	
+	public void startApp() throws Exception {
+		this.vac.startApp();
+	}
+	
+	public void finishApp() throws Exception {
+		this.vac.finishApp();
+	}
+	
+	public void setApkPath(String aut, String messenger, String testrunner) {
+		this.vac.setApkPath(aut, messenger, testrunner);
+	}
+	
+	public void ignoreInstallAUT() throws Exception {
+		this.vac.ignoreInstallAUT();
+	}
+	
+	public void ignoreInstallMessenger() throws Exception {
+		this.vac.ignoreInstallMessenger();
+	}
+	
+	public void ignoreInstallRunner() throws Exception {
+		this.vac.ignoreInstallRunner();
+	}
+	
+	public VAControl getAControl() throws Exception{
+		return new VAControl(this.voodoo, this);
+	}
+	
+	
   //	/**
   //	 * @param selectElement
   //	 * @param actionElement

@@ -5,7 +5,6 @@ import com.sugarcrm.voodoo.automation.control.VControl;
 
 
 public interface IControl {
-	
 	// VControl functionality
 	public String getAttribute(String attribute) throws Exception;
 	public String getText() throws Exception;

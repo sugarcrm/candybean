@@ -28,7 +28,7 @@ import com.sugarcrm.sugar.users.Users;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 
 
-public class TemplateTest extends SugarTest {
+public class Accounts_0005 extends SugarTest {
 	
 	@BeforeClass
 	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
