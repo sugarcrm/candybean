@@ -1,6 +1,7 @@
 package com.sugarcrm.voodoo.automation;
 
 
+import com.sugarcrm.voodoo.automation.control.VAControl;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
@@ -32,4 +33,15 @@ public interface IInterface {
 	// VSelect functionality
 	public VSelect getSelect(VHook hook) throws Exception;
 	public VSelect getSelect(Strategy strategy, String hook) throws Exception;
+	
+	// Android Setup Functionality
+	public void startApp() throws Exception;
+	public void finishApp() throws Exception;
+	public void setApkPath(String aut, String messenger, String testrunner);
+	public void ignoreInstallAUT() throws Exception;
+	public void ignoreInstallMessenger() throws Exception;
+	public void ignoreInstallRunner() throws Exception;
+	
+	// Android VAControl functionality
+	public VAControl getAControl() throws Exception;
 }
