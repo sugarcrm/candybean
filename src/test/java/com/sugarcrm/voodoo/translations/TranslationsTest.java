@@ -130,13 +130,14 @@ public class TranslationsTest {
 		System.out.println("[Translation Test]: Translation Finished!");
 
 		// Check assert Statement
-		String outputDir = currentWorkingDir + File.separator + "translated_Folder" + "_es_ES" + File.separator;
+	    String outputDir = currentWorkingDir + File.separator + "translated_Folder" + "_es_ES" + File.separator + "Accounts" + File.separator;
 		System.out.println("[Translation Test]: Performing Assert Test");
 		String expected1 = "Assert.assertEquals(\"Sample message, \\\" message,\" + \"more message, message...\", \"Contratos\", argument3);";
 		assertCheck(outputDir + Account1 + "_es_ES", expected1);
 		String expected2 = "Assert.assertEquals(\"Sample message, \\\" message,\" + \"more message, message...\", \"Proyectos\", argument3);";
 		assertCheck(outputDir + Account2 + "_es_ES", expected2);
-		String expected3 = "Assert.assertEquals(\"Sample message, \\\" message,\" + \"more message, message...\", \"ERROR: no puede moverse el archivo PDF a $destination. Intente dar permisos de escritura al servidor web para ese directorio\", argument3);";
+		outputDir = currentWorkingDir + File.separator + "translated_Folder" + "_es_ES" + File.separator + "Quotes" + File.separator;
+        String expected3 = "Assert.assertEquals(\"Sample message, \\\" message,\" + \"more message, message...\", \"ERROR: no puede moverse el archivo PDF a $destination. Intente dar permisos de escritura al servidor web para ese directorio\", argument3);";
 		assertCheck(outputDir + Quotes1 + "_es_ES", expected3);
 		String expected4 = "Assert.assertEquals(\"Sample message, \\\" message,\" + \"more message, message...\", \"Cierre Real\", argument3);";
 		assertCheck(outputDir + Quotes2 + "_es_ES", expected4);
@@ -144,7 +145,7 @@ public class TranslationsTest {
 		// Delete Folder and Files
 		System.out.println("[Translation Test]: File Checking finished! will now begin to delete files and folders");
 		CleanUpFileDirectory(TempFolderPath);
-		CleanUpFileDirectory(outputDir);
+        CleanUpFileDirectory(currentWorkingDir + File.separator + "translated_Folder" + "_es_ES" + File.separator);
 	}
 
 	/**

@@ -27,6 +27,7 @@ public class Translations {
 	private static Connection DB_CONNECTION = null;
 	private static ArrayList<String> listOfDatabaseModules = new ArrayList<String>();
 	private static Properties translateProp = null;
+	private static String TEST_FORMAT;
 
 	// if the string to be replace is not in such module then search through all DB modules
 	// currently disabled, set variable to 'true' to enable
@@ -40,17 +41,17 @@ public class Translations {
 	// Refer to Voodoo Translations Wiki for more info on usage
 	public static void main(String[] args) {	
 		try {
-		if (args.length == 1) Translate(args[0]);	
-		else if (args.length == 4) Translate(args[0], args[1], args[2], args[3]);	
-		else { 
-			System.out.println("Invalid number of arguments. Given number of arguments: " + args.length); 	
-			System.exit(1);
-		}	
+			if (args.length == 1) Translate(args[0]);	
+			else if (args.length == 4) Translate(args[0], args[1], args[2], args[3]);	
+			else { 
+				System.out.println("Invalid number of arguments. Given number of arguments: " + args.length); 	
+				System.exit(1);
+			}	
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Translation Method 1: translate a single/set of test(s) using the given
 	 * input arguments
@@ -129,7 +130,7 @@ public class Translations {
 				String outputSubFolder = outputFolder + File.separator + inputFile.getName() + "_" + LANGUAGE;
 				String moduleFileName = getFileModuleName(inputFile.getName());
 				// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
-				if (isModuleExist(moduleFileName) && inputFile.getName().contains(".java")) {
+				if (isModuleExist(moduleFileName) && setAndCheckTestFormat(inputFile.getName())) {
 					// perform translation
 					fileReaderWriter(moduleFileName, testPath, outputSubFolder);
 				}
@@ -140,7 +141,7 @@ public class Translations {
 					String outputSubFolder = outputFolder + File.separator + file.getName();
 					String moduleFileName = getFileModuleName(file.getName());
 					// If the item is a file that contains a name from the module(s) and is of java format then perform translation
-					if (file.isFile() && isModuleExist(moduleFileName) && file.getName().contains(".java")) {
+					if (file.isFile() && isModuleExist(moduleFileName) && setAndCheckTestFormat(file.getName())) {
 						// perform translation
 						fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder + "_" + LANGUAGE);
 					}
@@ -171,19 +172,67 @@ public class Translations {
 		File convertedFile = new File(outputFile);
 		Scanner fileScanner = new Scanner(file);
 		Writer output = null;
-		Pattern pattern_assert = Pattern.compile("assertEquals\\((.*?)\\)");
+
+		String assertType;
+		if (TEST_FORMAT.equals("JAVA")) { assertType = "assertEquals\\((.*?)\\)"; }//JAVA FORMAT
+		else { assertType = "assert=\"(.*?)\""; }//XML FORMAT
+
+		Pattern pattern_assert = Pattern.compile(assertType); // set depending on test file format
+		//For Voodoo (test with .xml format) use only
+		Pattern pattern_link = Pattern.compile("link text=\"(.*?)\"");
+		Pattern pattern_moduletab = Pattern.compile("id=\"moduleTab_(" + module + ")\"");
+		Pattern pattern_menuextra_all = Pattern.compile("id=\"moduleTabExtraMenu(All)\"");
+		Pattern pattern_variable = Pattern.compile("\\{");
+		Pattern pattern_pageNumber = Pattern.compile("\\(");
+		Matcher match_assert = null;
+		Matcher match_link = null;
+		Matcher match_moduletab = null;
+		Matcher match_menuextra_all = null;
+		Matcher match_variable = null;
+		Matcher match_pageNumber = null;
 
 		try {
-			Matcher match_assert = null;
 			output = new BufferedWriter(new FileWriter(convertedFile));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
 				match_assert = pattern_assert.matcher(line);
+
+				// XML use only
+				match_link = pattern_link.matcher(line);
+				match_moduletab = pattern_moduletab.matcher(line);
+				match_menuextra_all = pattern_menuextra_all.matcher(line);
+				match_variable = pattern_variable.matcher(line);
+				match_pageNumber = pattern_pageNumber.matcher(line);
+
 				if (match_assert.find()) { // Assert replacement
-					String stringToBeReplaced = getToBeReplacedAssertString(match_assert.group(1));
-					String ReplacementString = getDatabaseReplacementString(module, stringToBeReplaced);
-					String newLine = line.replace(stringToBeReplaced, ReplacementString);
-					output.write(newLine + "\r\n");
+					if (TEST_FORMAT.equals("JAVA")) {
+						String stringToBeReplaced = getToBeReplacedAssertString(match_assert.group(1));
+						String ReplacementString = getDatabaseReplacementString(module, stringToBeReplaced);
+						String newLine = line.replace(stringToBeReplaced, ReplacementString);
+						output.write(newLine + "\r\n");
+					} else {
+						if (match_variable.find() || match_pageNumber.find()){
+							printErrorMsg("Not finding translation for " + match_assert.group(1));
+							output.write(line + "\r\n");
+						} else { // no strange characters, therefore proceed in translation
+							String newLine = line.replace(match_assert.group(1), getDatabaseReplacementString(module, match_assert.group(1)));
+							output.write(newLine + "\r\n");
+						}
+					}
+				} else if (match_link.find()) { // Link replacement for (xml only)
+					if(match_variable.find() || match_pageNumber.find()){
+						printErrorMsg("Not finding translation for " + match_link.group(1));
+						output.write(line + "\r\n");
+					}else {
+						String newLine = line.replace(match_link.group(1), getDatabaseReplacementString(module, match_link.group(1)));
+						output.write(newLine + "\r\n");
+					}
+				} else if (match_moduletab.find()) { // match_moduletab replacement for (xml only)
+					String newLine = line.replace(match_moduletab.group(1), getDatabaseReplacementString("SugarFeed", "All") + "_" + module);
+					output.write(newLine);
+				} else if (match_menuextra_all.find()) { // match_menuextra_all replacement for (xml only)
+					String newLine = line.replace(match_menuextra_all.group(1), getDatabaseReplacementString("SugarFeed", match_menuextra_all.group(1)));
+					output.write(newLine);
 				} else {
 					output.write(line + "\r\n");
 				}
@@ -545,7 +594,7 @@ public class Translations {
 		if (!outputFolder.exists())
 			outputFolder.mkdir();
 	}
-	
+
 	/**
 	 * Simple wrapper function to do a System.out.println for Translations
 	 * 
@@ -563,5 +612,25 @@ public class Translations {
 	 */
 	private static void printErrorMsg(String message) {
 		System.out.println("[Translations ERROR]: " + message);		
+	}
+
+	/**
+	 *   * This is to verify if the test file is either .java or .xml to 
+	 *       * perform translations accordingly
+	 *           * 
+	 *               * @param filename
+	 *                   */
+	private static boolean setAndCheckTestFormat(String filename) {
+		if (filename.contains(".java")) { 
+			TEST_FORMAT = "JAVA";
+		}
+		else if (filename.contains(".xml")) { 
+			TEST_FORMAT = "XML";
+		}
+		else { 
+			printErrorMsg("file format is not either .java or .xml for the file: " + filename);
+			return false;   
+		}
+		return true;
 	}
 }
