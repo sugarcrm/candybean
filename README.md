@@ -54,3 +54,6 @@ The 'expectedValue' will be replaced with a language-specified string from the d
 + Use Centralized Database
 + Add assert robustness by adding more assert types or use a global wrapper assert method 
 ***
+
+## RobotiumRC
+For more information about automation with android devices please refer to Voodoo2 internal wiki 'RobotiumRC'
