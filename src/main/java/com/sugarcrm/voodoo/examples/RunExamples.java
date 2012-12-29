@@ -206,21 +206,29 @@ public class RunExamples {
       this.classes = new HashMap<String,Pair>();
 
       for (String arg: args) {
+         Class<?> cls = null;
+
          if (arg.equals("--help") || arg.equals("-h")) {
             help();  // does not return
          }
 
-         File f = new File(arg);
-         if (arg.endsWith(".class") && f.exists() && f.isFile()) {
-            Class<?> cls = loadClass(f);
-            Method entry = getEntryPoint(cls);
-            if (entry != null) {
-               this.classes.put(cls.getCanonicalName(), new Pair(cls, entry));
+         try {
+            cls = cl.loadClass(arg);
+         } catch (ClassNotFoundException e) {
+            File f = new File(arg);
+            if (arg.endsWith(".class") && f.exists() && f.isFile()) {
+               cls = loadClass(f);
             } else {
-               error(cls.toString() + " has no @Example method");
+               error("'" + arg + "' is not a class file or known class");
+               continue;
             }
+         }
+
+         Method entry = getEntryPoint(cls);
+         if (entry != null) {
+            this.classes.put(cls.getCanonicalName(), new Pair(cls, entry));
          } else {
-            error("'" + arg + "' is not a class file");
+            error(cls.toString() + " has no @Example method");
          }
       }
    }
@@ -278,6 +286,8 @@ public class RunExamples {
 
    protected void error(Throwable exc, String errm) {
       System.err.println(errm + ":");
-      exc.printStackTrace(System.err);
+      if (exc != null) {
+         exc.printStackTrace(System.err);
+      }
    }
 }
