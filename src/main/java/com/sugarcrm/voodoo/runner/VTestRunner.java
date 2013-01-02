@@ -1,450 +1,434 @@
 package com.sugarcrm.voodoo.runner;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
-import java.io.*;
-import java.util.*;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
- * VTestRunner is a test runner. It is a standalone command line utility for running 
- * tests. The test scripts should have been compiled prior to running VTestRunner. 
+ * VTestRunner is a test runner. It is a command line utility for running tests.
+ * The test scripts should have been compiled prior to running VTestRunner.
  * 
+ * @author Soon Han
+ * @author Jon duSaint
  */
+
 public class VTestRunner {
-	static Class<?> testClass;
-	static TestResults testResults = new TestResults(); // TODO. To remove
-	static final String ext = "class";
+	static final String CLASSFILE_EXTENSION = "class";
+	HashMap<String, Pair> beforeClassMethods;
+	HashMap<String, Pair> afterClassMethods;
+	// Assume annotations appear in current class plus at most one level up.
+	HashMap<String, Pair> beforeClassSuperMethods;
+	HashMap<String, Pair> afterClassSuperMethods;
+	HashMap<String, Pair> beforeMethods;
+	HashMap<String, Pair> afterMethods;
+	HashMap<String, Pair> testMethods;
+	static CL cl = new CL();
 
 	/**
-	 * Name: main 
+	 * Name: main
 	 * 
-	 * The input can be a mix of test classes and directories.
-	 * The items are space separated. When a directory is given, the files 
-	 * contained therein are run. 
-	 * Example input consisting of a test class and a test directory, assuming 
-	 * VTestRunner is run from the VoodooGrimoire directory:
-	 * "target/test-class/accounts/Accounts_0001 target/test-class/Quotes"
-	 * The extension, "class", may be omitted in the input. 
+	 * The input can be a mix of test classes and directories. The items are
+	 * space separated. When a directory is given, the files contained therein
+	 * are run. An example input is one consisting of a test class and a test
+	 * directory, assuming VTestRunner is run from the VoodooGrimoire directory:
+	 * "target/test-class/accounts/Accounts_0001 target/test-class/Quotes" The
+	 * extension, "class", may be omitted in the input.
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 
 		ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-		new VTestRunner().go(args, ext);
-
-		// TODO. Remove this TestResults() section.
-		// It's not how Voodoo2 getting pass/fail.
-		// Maybe useful just to retain the number of tests run
-		long testsRun = testResults.getNumTestsRun();
-		long failures = testResults.getNumFailures();
-		List<String> failedTests = testResults.getFailedTests();
-
-		if (failures == 0) {
-			System.out.println("OK: " + testsRun + " test" + (testsRun > 1 ? "s" : "") + " (ALL PASSED)");
-		} else {
-			System.out.println(testsRun + " tests run)");
-			System.out.println("\nNot OK: " + failures + " FAILURE"
-					+ (failures > 1 ? "S" : ""));
-			for (String failed : failedTests) {
-				System.out.println("  " + failed);
-			}
-		}
+		VTestRunner runner = new VTestRunner();
+		runner.go(args);
 	}
 
 	/**
-	 * Name: go 
+	 * Start processing the input files.
 	 * 
-	 * @param 
-	 * args : String[]. The input (test scripts/directories) from the command line. 
-	 * ext : String. The extension of file name (class)
+	 * @param args
+	 *            the input from the command line (eg. <test class>
+	 *            <scripts/directories>)
 	 * @return void
 	 */
-	private void go(String[] args, String ext) {
-		try {
-			if (args.length == 0) {
-				processDirectory(new File("."));
-			} else {
-				for (String arg : args) {
-					//System.out.println("arg = " + arg);
-					File fileArg = new File(arg);
-					if (fileArg.isDirectory()) {
-						System.out.println(arg + " is a directory");
-						processDirectory(fileArg);
+	private void go(String[] args) {
+		if (args.length == 0) {
+			processDirectory(new File("."));
+		} else {
+			for (String arg : args) {
+				File fileArg = new File(arg);
+				if (fileArg.isDirectory()) {
+					processDirectory(fileArg);
+				} else {
+					if (fileArg.exists()
+							&& !arg.endsWith("." + CLASSFILE_EXTENSION)) {
+						error(arg + " is not a class file");
+					} else if (!fileArg.exists()
+							&& (new File(arg + "." + CLASSFILE_EXTENSION))
+									.exists()) {
+
+						arg += "." + CLASSFILE_EXTENSION;
+						try {
+							processFile(new File(arg).getCanonicalFile());
+						} catch (IOException e) {
+							error(e, arg + " is not a valid file");
+						}
 					} else {
-						if (!arg.endsWith("." + ext)) // allows no ext input
-							arg += "." + ext;
-						process(new File(arg).getCanonicalFile());
+						error(arg + " does not exist and is not a class file");
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Process the given file or directory
+	 * 
+	 * @param root
+	 *            the {@link File} of the directory to process
+	 * @return void
+	 */
+	private void processDirectory(File root) {
+		ClassFilesFinder filesFinder = new ClassFilesFinder();
+
+		try {
+			Files.walkFileTree(root.toPath(), filesFinder);
 		} catch (IOException e) {
-			e.printStackTrace();
+			error(e, "Failed in walking directory tree");
 		}
-	}
 
-	/**
-	 * Name: processDirectory 
-	 * Process the given file, possibly a directory.
-	 * 
-	 * @param 
-	 * root : File. The path to a file or a directory 
-	 * @return void
-	 */
-	private static void processDirectory(File root) throws IOException {
-		FilesFinder filesFinder = new FilesFinder(ext);
-		Files.walkFileTree(root.toPath(), filesFinder);
-		List<File> files = filesFinder.getResult();
-
-		for (File file : files) {
-			process(file.getCanonicalFile());
-		}
-	}
-
-	/**
-	 * Name: process
-	 * Detailed processing a non-directory file.
-	 * Here, each method is examined for the annotations "Before, After, Test, etc." 
-	 * The methods are processed accordingly in the order specified by the annotations.
-	 * 
-	 * @param 
-	 * root : File. The path to a non-directory file
-	 * @return void
-	 */
-	private static void process(File cFile) {
 		try {
-			//System.out.println("VTestRunner: process(): "
-					//+ cFile.getCanonicalPath());
+			List<File> files = filesFinder.getFiles();
 
-			String cName = ClassNameGetter.get(cFile.getCanonicalPath());
-			// System.out.println("process(): cName = " + cName);
-			if (!cName.contains("."))
-				return; // want packaged classes only
-			testClass = Class.forName(cName);
+			for (File file : files) {
+				processFile(file.getCanonicalFile());
+			}
+		} catch (IOException e) {
+			error(e, "Failed to getCanonicalFile");
+		}
+	}
 
-			//System.out.println("process(): testClass.getName() = "
-			//		+ testClass.getName());
+	/**
+	 * Processing a regular file passed in as a {@link File}. Each method is
+	 * examined for the annotations "Before, After, Test, etc."
+	 * 
+	 * @param cFile
+	 *            a class file
+	 * @return void
+	 */
+	private void processFile(File cFile) {
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		beforeClassMethods = new HashMap<String, Pair>();
+		afterClassMethods = new HashMap<String, Pair>();
+		beforeClassSuperMethods = new HashMap<String, Pair>();
+		afterClassSuperMethods = new HashMap<String, Pair>();
+		beforeMethods = new HashMap<String, Pair>();
+		afterMethods = new HashMap<String, Pair>();
+		testMethods = new HashMap<String, Pair>();
+
+		loadCheck(cFile);
+		runMethods();
+	}
+
+	/**
+	 * load class and provide some checks on input validity.
+	 * 
+	 * @param cFile
+	 *            a class file
+	 * @return void
+	 */
+	private void loadCheck(File cFile) {
+
+		Class<?> testClass = loadClass(cFile);
+
+		addMethods(testClass);
+		addSuperClassMethods(testClass);
+
+		String cName = testClass.getCanonicalName();
+
+		if (!cName.contains(".")) {
+			log(cName + " is not a packaged class. Skipped it.");
+			return; // want packaged classes only
+		}
+	}
+
+	/**
+	 * Run all the (BeforeClass, AfterClass, Before, After, etc.) annotated
+	 * methods
+	 * 
+	 * @param None
+	 * @return void
+	 */
+	private void runMethods() {
+		for (String mName : beforeClassMethods.keySet()) {
+			// Run methods in super class which were not overridden
+			for (String mNameSuper : beforeClassSuperMethods.keySet()) {
+				if (!beforeClassMethods.containsKey(mNameSuper)) {
+					runTestMethod(beforeClassSuperMethods.get(mNameSuper).cls,
+							beforeClassSuperMethods.get(mNameSuper).method);
+				}
+			}
+
+			runTestMethod(beforeClassMethods.get(mName).cls,
+					beforeClassMethods.get(mName).method);
+
 		}
 
-		TestMethods testMethods = new TestMethods();
+		for (String mName : testMethods.keySet()) {
+			// Run the Before methods
+			for (String mNameBefore : beforeMethods.keySet()) {
+				runTestMethod(beforeMethods.get(mNameBefore).cls,
+						beforeMethods.get(mNameBefore).method);
+			}
 
-		// Assume annotations appear in current class plus at most one level up.
-		// To relax constraint later
-		Method beforeClass = null;
-		Method afterClass = null;
-		Method beforeClassSuper = null;
-		Method afterClassSuper = null;
-		Method before = null;
-		Method after = null;
+			runTestMethod(testMethods.get(mName).cls,
+					testMethods.get(mName).method);
 
-		beforeClass = isClassMethodPresent(beforeClass, testClass,
-				BeforeClass.class); // org.junit.BeforeClass
-		afterClass = isClassMethodPresent(afterClass, testClass,
-				AfterClass.class);
-
-		beforeClassSuper = isClassMethodPresent(beforeClassSuper,
-				testClass.getSuperclass(), BeforeClass.class);
-		afterClassSuper = isClassMethodPresent(afterClassSuper,
-				testClass.getSuperclass(), AfterClass.class);
-
-		before = isBeforeAfterMethodPresent(before, testClass, Before.class);
-		after = isBeforeAfterMethodPresent(after, testClass, After.class);
+			// Run the after methods
+			for (String mNameAfter : afterMethods.keySet()) {
+				runTestMethod(afterMethods.get(mNameAfter).cls,
+						afterMethods.get(mNameAfter).method);
+			}
+		}
 
 		// TODO. Need work to allow for super class deeper than 1 level
-		if (beforeClass != null) {
-			runRecurMethod(beforeClass);
-		} else {
-			runRecurMethod(beforeClassSuper);
-		}
+		for (String mName : afterClassMethods.keySet()) {
+			// Run methods in super class which are not overridden
+			for (String mNameSuper : afterClassSuperMethods.keySet()) {
+				if (!afterClassMethods.containsKey(mNameSuper)) {
+					runTestMethod(afterClassSuperMethods.get(mNameSuper).cls,
+							afterClassSuperMethods.get(mNameSuper).method);
+				}
+			}
 
+			runTestMethod(afterClassMethods.get(mName).cls,
+					afterClassMethods.get(mName).method);
+		}
+	}
+
+	/**
+	 * Add methods to hashmaps for methods that are BeforeClass, AfterClass,
+	 * Before, After, Test. The hashmaps are global.
+	 * 
+	 * @param testClass
+	 * @return void
+	 */
+	private void addMethods(Class<?> testClass) {
 		for (Method m : testClass.getDeclaredMethods()) {
-			//System.out.println("testClass.getName() = " + testClass.getName()
-			//		+ "  m.getName() = " + m.getName());
-			testMethods.addTestMethod(m);
-		}
-
-		//System.out.println("testMethods.size() = " + testMethods.size());
-
-		for (Method m : testMethods) {
-			//System.out.println("Test method = " + m.getName());
-
-			try {
-				boolean success = false;
-
-				runRecurMethod(before);
-
-				success = runTestMethod(m);
-				testResults.incrementTestRuns();
-				testResults.recordResult(m, success);
-
-				runRecurMethod(after);
-
-			} catch (Exception e) {
-				e.printStackTrace();
+			// Not sure why the STATIC check doesn't work anymore. Remove check
+			if (m.getAnnotation(BeforeClass.class) != null) {
+				log("addMethods(): added " + m.getName() + " to beforeClassMethods");
+				beforeClassMethods.put(testClass.getCanonicalName(), new Pair(
+						testClass, m));
+			} else if (m.getAnnotation(AfterClass.class) != null) {
+				log("addMethods(): added " + m.getName() + " to afterClassMethods");
+				afterClassMethods.put(testClass.getCanonicalName(), new Pair(
+						testClass, m));
+			} else if (m.getAnnotation(Before.class) != null
+					&& m.getReturnType().equals(void.class)) {
+				log("addMethods(): added " + m.getName() + " to beforeMethods");
+				beforeMethods.put(testClass.getCanonicalName(), new Pair(
+						testClass, m));
+			} else if (m.getAnnotation(After.class) != null
+					&& m.getReturnType().equals(void.class)) {
+				log("addMethods(): added " + m.getName() + " to afterMethods");
+				afterMethods.put(testClass.getCanonicalName(), new Pair(
+						testClass, m));
+			} else if (m.getAnnotation(Test.class) != null
+					&& m.getReturnType().equals(void.class)) {
+				log("addMethods(): added " + m.getName() + " to testMethods");
+				testMethods.put(testClass.getCanonicalName(), new Pair(
+						testClass, m));
 			}
-		}
-
-		// TODO. Need work to allow for super class deeper than 1 level
-		if (afterClass != null) {
-			runRecurMethod(afterClass);
-		} else {
-			runRecurMethod(afterClassSuper);
 		}
 	}
 
 	/**
-	 * Name: runTestMethod 
-	 * Run the method carrying the "Test" annotation. 
-	 * A test object is created for the purpose.
+	 * Add methods to hashmaps for BeforeClassa and AfterClass that are present
+	 * in immediate superclass. The hashmaps are global.
 	 * 
-	 * @param 
-	 * m : Method 
-	 * @return boolean
+	 * @param testClass
+	 * @return void
 	 */
-	private static boolean runTestMethod(Method m) throws Exception {
-		boolean success = false;
-		Object testObject = createTestObject();
+	private void addSuperClassMethods(Class<?> testClass) {
+		for (Method m : testClass.getSuperclass().getDeclaredMethods()) {
+			if (m.getAnnotation(BeforeClass.class) != null) {
+				log("addSuperClassMethods(): added " + m.getName() + " to beforeClassSuperMethods");
+				beforeClassSuperMethods.put(testClass.getCanonicalName(),
+						new Pair(testClass, m));
+			} else if (m.getAnnotation(AfterClass.class) != null) {
+				log("addSuperClassMethods(): added " + m.getName()
+						+ " to afterClassSuperMethods");
+				afterClassSuperMethods.put(testClass.getCanonicalName(),
+						new Pair(testClass, m));
+			}
+		}
+	}
+
+	/**
+	 * Load an example class from its class file.
+	 * 
+	 * @param f
+	 *            class file
+	 */
+
+	private static Class<?> loadClass(File f) {
+
+		Class<?> c = null;
 
 		try {
-			if (m.getReturnType().equals(boolean.class))
-				success = (boolean) m.invoke(testObject);
-			else {
-				m.invoke(testObject);
-				success = true; // if no failed assertion
-			}
+			c = cl.loadClass(f);
+		} catch (FileNotFoundException e) {
+			error("Class file '" + f + "' not found: " + e);
+		} catch (IOException e) {
+			error("Error reading class file '" + f + "': " + e);
+		}
+
+		return c;
+	}
+
+	/**
+	 * @param m
+	 *            the method to run
+	 * @return void
+	 */
+	private static void runTestMethod(Class<?> testClass, Method m) {
+
+		Object testObject = createTestObject(testClass);
+
+		try {
+			log("runTestMethod(): " + m.getName());
+			m.invoke(testObject);
+		} catch (IllegalAccessException e) {
+			error(e, "Unable to access " + testClass.getName());
 		} catch (InvocationTargetException e) {
-			System.out.println(e.getCause());
-		}
-
-		return success;
-	}
-
-	/**
-	 * Name: runRecurMethod 
-	 * Run the method carrying the "Before/After" annotation. 
-	 * A test object is created for the purpose.
-	 * 
-	 * @param 
-	 * target : Method 
-	 * @return void
-	 */
-	private static void runRecurMethod(Method target) {
-		try {
-			if (target != null) {
-				Object testObject = createTestObject();
-				target.invoke(testObject);
+			Throwable cause = e.getCause();
+			if (cause == null) {
+				cause = e;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			error(cause, "Exception during method invocation");
 		}
 	}
 
 	/**
-	 * Name: isBeforeAfterMethodPresent 
-	 * Check if "Before/After" method is present 
-	 * The "Before/After" method is returned if found.
-	 * 
-	 * @param 
-	 * classMethod : Method 
-	 * @return Method 
+	 * @param testClass
+	 *            a Class to create an Object for.
+	 * @return Object
 	 */
-	private static Method isBeforeAfterMethodPresent(Method classMethod,
-			Class<?> testClass, Class<?> clazz) {
-		for (Method m : testClass.getDeclaredMethods()) {
-			if (classMethod == null) {
-				classMethod = checkBeforeAfterMethod(m, clazz);
-				// Only one before and/or one after method
-				if (classMethod != null) {
-					break; // found the before or after method, bail out. There
-							// is only one before and/or one after method
-				}
-			}
-		}
-
-		return classMethod;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Method checkBeforeAfterMethod(Method m, Class<?> clazz) {
-		if (m.getAnnotation((Class<org.junit.Before>) clazz) == null
-				&& m.getAnnotation((Class<org.junit.After>) clazz) == null) {
-			return null;
-		}
-		m.setAccessible(true);
-		return m;
-	}
-
-	/**
-	 * Name: isClassMethodPresent 
-	 * Check if "Before/After" method is present 
-	 * The "BeforeClass/AfterClass" method is returned if found.
-	 * 
-	 * @param 
-	 * classMethod : Method 
-	 * @return Method 
-	 */
-	private static Method isClassMethodPresent(Method classMethod,
-			Class<?> testClass, Class<?> clazz) {
-		for (Method m : testClass.getDeclaredMethods()) {
-			if (classMethod == null) {
-				classMethod = checkBeforeAfterClassMethod(m, clazz);
-				// There is only one such Class method, either in the class
-				// or its super class, but not both. Valid for current Voodoo2.
-
-				if (classMethod != null) {
-
-					//System.out.println("isClassMethodPresent(): " + m.getName()
-					//		+ " is a class method");
-
-					break; // found the Class method, bail out
-				}
-			}
-		}
-
-		return classMethod;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Method checkBeforeAfterClassMethod(Method m, Class<?> clazz) {
-		if (m.getAnnotation((Class<org.junit.After>) clazz) == null
-				&& m.getAnnotation((Class<org.junit.After>) clazz) == null) {
-
-			//System.out
-				//	.println("checkBeforeAfterClassMethod(): m.getAnnotation(Class<atunit.BeforeClass>) &&  null m.getAnnotation(Class<atunit.AfterClass>) are null");
-
-			return null;
-		}
-
-		checkMethodStatic(m);
-		//System.out.println("checkBeforeAfterClassMethod(): " + m.getName());
-
-		m.setAccessible(true);
-		return m;
-	}
-
-	/**
-	 * Name: isMethodStatic
-	 * Check if the given method is static. 
-	 * The "BeforeClass/AfterClass" method must be static 
-	 * 
-	 * @param 
-	 * m : Method 
-	 * @return void 
-	 */
-	private static void checkMethodStatic(Method m) {
-		if ((m.getModifiers() & java.lang.reflect.Modifier.STATIC) < 1) {
-			throw new RuntimeException("checkMethodStatic(): Class method "
-					+ m.getName() + " must be static.");
-		}
-	}
-
-	/**
-	 * Name: checkReturnType 
-	 * Check if the given method is static. 
-	 * The "BeforeClass/AfterClass" method must be static 
-	 * 
-	 * @param 
-	 * m : Method 
-	 * @return void 
-	 */
-	private static void checkReturnType(Method m) {
-		if (!(m.getReturnType().equals(boolean.class) || m.getReturnType()
-				.equals(void.class))) {
-			throw new RuntimeException("@Test method"
-					+ " must return boolean or void");
-		}
-	}
-
-	/**
-	 * Name: createTestObject 
-	 * Create an object for the purpose of running the method
-	 * 
-	 * @param  None
-	 * @return Object 
-	 */
-	private static Object createTestObject() {
+	private static Object createTestObject(Class<?> testClass) {
 		Object instance = null;
 		try {
-			//System.out.println("createTestObject(): testClass.getName() = "
-			//		+ testClass.getName());
 			instance = testClass.newInstance();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			error(e, "Unable to access " + testClass.getName());
+		} catch (InstantiationException e) {
+			error(e, "Failed to instantiate "
+					+ com.sugarcrm.voodoo.test.Test.class.getName());
 		}
 
 		return instance;
 	}
 
+	private static void log(String m) {
+		// TODO: Can Voodoo class make log() static? If possible, this would
+		// allow
+		// other components to use log() when they don't necessarily possess a
+		// voodoo instance.
+		System.out.println(m);
+	}
+
+	private static void error(String errm) {
+		error((Throwable) null, errm);
+	}
+
+	private static void error(Throwable exc, String errm) {
+		System.err.println(errm + ":");
+		exc.printStackTrace(System.err);
+	}
+
 	/**
-	 * Class name: TestMethods 
-	 * A container class for "Test" methods. 
+	 * Class loader used to obtain class name
 	 * 
+	 * </p>This class loader supports loading classes from class files without
+	 * knowing the name of the class in advance.</p>
+	 * 
+	 * @author Jon duSaint
 	 */
-	@SuppressWarnings("serial")
-	private static class TestMethods extends ArrayList<Method> {
 
-		void addTestMethod(Method m) {
-			//System.out.println("addTestMethod(): " + m.getName());
-			for (Annotation a : m.getAnnotations()) {
-				//System.out.println("a.getClass().getName() = "
-				//		+ a.annotationType().getName());
+	private static class CL extends ClassLoader {
+		public Class<?> loadClass(File f) throws FileNotFoundException,
+				IOException {
+			FileInputStream fin = new FileInputStream(f);
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+			while (true) {
+				int b = fin.read();
+				if (b == -1) {
+					break;
+				}
+				buffer.write(b);
 			}
 
-			if (m.getAnnotation(Test.class) != null) {
-				checkReturnType(m);
-				m.setAccessible(true);
+			try {
+				fin.close();
+			} catch (IOException e) {
+				error(e, "Failed to close " + fin.getClass().getName());
+			} // Unlikely and probably safe to ignore.
 
-				//System.out.println("addTestMethod(): " + m.getName()
-				//		+ " added to TestMethods");
+			byte bytes[] = buffer.toByteArray();
 
-				add(m);
-			}
+			return defineClass(null, bytes, 0, bytes.length);
 		}
 	}
 
 	/**
-	 * Class name: TestResult
-	 * A class for keeping track of test results. 
-	 * This class is mainly for developments/debuggging.
-	 * It will be removed when the code is stable.
+	 * Container for a Class,Method pair.
 	 * 
+	 * <p>
+	 * The method half of the pair is the entry point of the first method
+	 * encountered among the methods having the same annotation.
+	 * </p>
+	 * 
+	 * @author Jon duSaint
 	 */
-	private static class TestResults {
-		static List<String> failedTests = new ArrayList<String>();
-		static long testsRun = 0;
-		static long failures = 0;
 
-		public void incrementTestRuns() {
-			testsRun++;
-		}
+	private class Pair {
 
-		public void recordResult(Method m, boolean success) {
-			System.out.println(success ? "" : "(failed)");
-			if (!success) {
-				failures++;
-				failedTests.add(testClass.getName() + ": " + m.getName());
-			}
-		}
+		/**
+		 * The class field.
+		 */
 
-		public long getNumTestsRun() {
-			return testsRun;
-		}
+		public Class<?> cls;
 
-		public long getNumFailures() {
-			return failures;
-		}
+		/**
+		 * The method field.
+		 */
 
-		public List<String> getFailedTests() {
-			return failedTests;
+		public Method method;
+
+		/**
+		 * Instantiate a Pair with a class and a method.
+		 * 
+		 * @param cls
+		 *            the example class
+		 * @param method
+		 *            the example method
+		 */
+
+		Pair(Class<?> cls, Method method) {
+			this.cls = cls;
+			this.method = method;
 		}
 	}
 }
