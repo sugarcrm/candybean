@@ -42,7 +42,6 @@ public class contacts_1460 extends SugarTest {
 	public void setup() throws Exception {
 		super.setup();
 		// Assume you're already logged into Sugar -- perform setup here
-		
 	}
 	
 	@Test
@@ -52,7 +51,7 @@ public class contacts_1460 extends SugarTest {
 //		iface.getControl(Strategy.ID, "//div[4]/div[2]/a").hover();
 //		iface.getControl(Strategy.PLINK, "accounts").click();
 //		iface.getControl(Strategy.ID, "username").sendString("username");
-//		ContactRecord myContact = (ContactRecord)Sugar.Contacts.create();
+//		ContactRecord myContact = (ContactRecord)sugar.contacts.create();
 		String lastName = "asdf";
 		//ContactBuilder cb = new ContactBuilder("asdf");
 		//Contact contact = cb.build();
@@ -73,26 +72,19 @@ public class contacts_1460 extends SugarTest {
 		iface.getControl(Strategy.ID, "search_form_submit").click();
 		iface.getControl(Strategy.PLINK, lastName).waitOn();
 		String results = iface.getControl(Strategy.CSS, "#MassUpdate table.list tbody tr.pagination td table.paginationTable tbody tr td.paginationChangeButtons span.pageNumbers").getText();
-
 		Assert.assertTrue(results.equalsIgnoreCase("(1 - 1 of 1)"));
-		
-		
-		
-		
 	}
 
 	@Override
 	@After
 	public void cleanup() throws Exception {
 		// Perform cleanup here -- remove any records that you created so you can rerun this test without conflict
-		
 		//Contacts.deleteAll(sugar, iface);
 		iface.getControl(Strategy.ID, "massall_top").click();
 		iface.getControl(Strategy.ID, "delete_listview_top").click();
 	    iface.acceptDialog();
 	    iface.getControl(Strategy.ID, "search_form_clear").click();
 	    iface.getControl(Strategy.ID, "search_form_submit").click();
-	    
 		super.cleanup();
 	}
 

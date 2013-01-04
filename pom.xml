@@ -53,7 +53,7 @@
           <artifactId>maven-dependency-plugin</artifactId>
           <version>2.6</version>
           <executions>
-             <execution>
+             <!--execution>
                 <id>copy-dependencies</id>
                 <phase>package</phase>
                 <goals>
@@ -64,7 +64,7 @@
                       ${project.build.directory}/lib
                    </outputDirectory>
                 </configuration>
-             </execution>
+             </execution-->
           </executions>
        </plugin>
     </plugins>
