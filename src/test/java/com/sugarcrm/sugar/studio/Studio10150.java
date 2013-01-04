@@ -65,19 +65,14 @@ public class Studio10150 extends SugarTest {
 		iface.getControl(Strategy.ID, "formulaInput").sendString("strToUpper($name)");
 		iface.getControl(Strategy.ID, "fomulaSaveButton").click();
 		iface.getControl(Strategy.NAME, "fsavebtn").click();
-		
 		iface.getControl(sugar.getHook("navbar_menu_accounts")).hover();
 		iface.getControl(sugar.getHook("navbar_menuitem_createaccount")).waitOn();
 		iface.getControl(sugar.getHook("navbar_menuitem_createaccount")).click();
 		iface.getControl(sugar.getHook("accounts_textfield_name")).waitOn();
 		iface.getControl(sugar.getHook("accounts_textfield_name")).hover();
-		
 		String str = "New Account";
-		
 		iface.getControl(sugar.getHook("accounts_textfield_name")).sendString(str);
 		iface.getControl(sugar.getHook("accounts_button_saveheader")).click();
-
-		
 		String fromDetailView = iface.getControl(Strategy.ID, "description").getText();
 		if(fromDetailView.equals(str.toUpperCase()))
 			voodoo.log.info("Pass");
@@ -96,9 +91,6 @@ public class Studio10150 extends SugarTest {
 		iface.getControl(sugar.getHook("accountsearch_button_deleteall")).waitOn();
 		iface.getControl(sugar.getHook("accountsearch_button_deleteall")).click();
 		iface.acceptDialog();
-
-		
-		
 		iface.getControl(Strategy.ID, "globalLinksModule").click();
 		iface.pause(1000);
 		iface.getControl(Strategy.ID, "admin_link").click();
@@ -114,7 +106,6 @@ public class Studio10150 extends SugarTest {
 		iface.getControl(Strategy.ID, "calculated").click();
 		iface.pause(1000);
 		iface.getControl(Strategy.NAME, "fsavebtn").click();
-
 		super.cleanup();
 	}
 
