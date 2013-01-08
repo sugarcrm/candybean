@@ -11,7 +11,7 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
  * <p>Voodoo2 tests use an implementation of IInterface to interact
  * with the web browser and to perform testing.	 For examples of how
  * to use <code>IInterface</code>, see the sample tests in
- * {@link com.sugarcrm.examples.*}</p>
+ * <code>com.sugarcrm.examples.*</code>.</p>
  *
  * @author cwarmbold
  */

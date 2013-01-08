@@ -36,11 +36,14 @@ public class VInterface implements IInterface {
 	private int windowIndex = 0;
 
 	/**
-	 * @param voodoo
-	 * @param props
-	 * @param browserType
+    * Instantiate VInterface
+    *
+	 * @param voodoo  {@link Voodoo} object
+	 * @param props   {@link Properties} for this test run
+	 * @param iType   {@link IInterface.Type} of web browser to run
 	 * @throws Exception
 	 */
+
 	public VInterface(Voodoo voodoo, Properties props, IInterface.Type iType)
 			throws Exception {
 		this.voodoo = voodoo;
