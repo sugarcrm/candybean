@@ -6,7 +6,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>voodoo2</name>
   <artifactId>voodoo2</artifactId>
-  <xxxbrokenbuild>
+  <build>
     <pluginManagement>
       <plugins>
         <plugin>
