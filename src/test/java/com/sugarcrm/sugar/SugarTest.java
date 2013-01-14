@@ -1,6 +1,5 @@
 package com.sugarcrm.sugar;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -10,12 +9,6 @@ import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.sugar.users.User;
 import com.sugarcrm.sugar.users.User.UserBuilder;
 import com.sugarcrm.voodoo.utilities.Utils;
-
-import org.junit.BeforeClass;
-import org.junit.Before;
-import org.junit.After;
-import org.junit.AfterClass;
-
 
 public abstract class SugarTest {
 	
@@ -32,7 +25,7 @@ public abstract class SugarTest {
 	private static final String sugarPropsPath = relPropsPath + File.separator + "sugar.properties";
 	private static final String sugarHooksPath = relPropsPath + File.separator + "sugar.hooks";
 	
-	public static void setupOnce() throws Exception {
+	public static void first() throws Exception {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
 		voodoo = Voodoo.getInstance(voodooProps);
@@ -58,5 +51,5 @@ public abstract class SugarTest {
 		iface.stop();
 	}
 
-	public static void cleanupOnce() {}
+	public static void last() throws Exception {}
 }

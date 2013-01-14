@@ -31,7 +31,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class Leads_1894 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -76,5 +76,5 @@ public class Leads_1894 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }
