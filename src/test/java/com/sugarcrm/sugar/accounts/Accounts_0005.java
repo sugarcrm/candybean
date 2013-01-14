@@ -44,7 +44,7 @@ public class Accounts_0005 extends SugarTest {
 	public void test() throws Exception {
 		// Add test steps and automation here; some examples:
 		iface.getControl(Strategy.ID, "moduleTab_AllAccounts").hover();
-		iface.getControl(Strategy.ID, "CreateAccountAll").waitOn();
+		iface.getControl(Strategy.ID, "CreateAccountAll").halt(4);
 		iface.getControl(Strategy.ID, "CreateAccountAll").click();
 		iface.getControl(Strategy.ID, "name").hover();
 		iface.getControl(Strategy.ID, "name").sendString("Acct005");

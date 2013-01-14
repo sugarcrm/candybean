@@ -46,7 +46,7 @@ public class Employees_9975 extends SugarTest {
 		iface.getControl(Strategy.ID, "welcome_link").click();
 		iface.getControl(Strategy.ID, "employees_link").click();
 		iface.getControl(Strategy.ID, "moduleTab_AllEmployees").hover();
-		iface.getControl(Strategy.ID, "CreateEmployeeAll").waitOn();
+		iface.getControl(Strategy.ID, "CreateEmployeeAll").halt(4);
 		iface.getControl(Strategy.ID, "CreateEmployeeAll").click();
 		iface.getControl(Strategy.ID, "first_name").sendString("Firstname");
 		iface.getControl(Strategy.ID, "last_name").sendString("Lastname");

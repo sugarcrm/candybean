@@ -81,7 +81,7 @@ public class VControlTest {
 	@Test
 	public void dragNDropTest2() throws Exception {
 //		voodoo.go("http://www.w3schools.com/html/html5_draganddrop.asp");
-//		voodoo.waitFor(new VHook(Strategy.ID, "drag1"));
+//		voodoo.halt(new VHook(Strategy.ID, "drag1"));
 //		voodoo.dragNDrop(new VHook(Strategy.ID, "drag1"), new VHook(Strategy.ID, "div2"));
 		
 //		WebDriver driver = new ChromeDriver();
@@ -94,7 +94,7 @@ public class VControlTest {
 //		dragAndDrop.perform();
 //		voodoo.interact("wait for it...");
 		
-//		voodoo.waitFor(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
+//		voodoo.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
 	}
 	
 	@AfterClass

@@ -61,14 +61,14 @@ public class Studio10150 extends SugarTest {
 		iface.pause(1000);
 		iface.getControl(Strategy.CSS, "#formulaRow td input.button:nth-of-type(3)").click();
 		iface.pause(1000);
-		iface.getControl(Strategy.ID, "formulaInput").waitOn();
+		iface.getControl(Strategy.ID, "formulaInput").halt(4);
 		iface.getControl(Strategy.ID, "formulaInput").sendString("strToUpper($name)");
 		iface.getControl(Strategy.ID, "fomulaSaveButton").click();
 		iface.getControl(Strategy.NAME, "fsavebtn").click();
 		iface.getControl(sugar.getHook("navbar_menu_accounts")).hover();
-		iface.getControl(sugar.getHook("navbar_menuitem_createaccount")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menuitem_createaccount")).halt(4);
 		iface.getControl(sugar.getHook("navbar_menuitem_createaccount")).click();
-		iface.getControl(sugar.getHook("accounts_textfield_name")).waitOn();
+		iface.getControl(sugar.getHook("accounts_textfield_name")).halt(4);
 		iface.getControl(sugar.getHook("accounts_textfield_name")).hover();
 		String str = "New Account";
 		iface.getControl(sugar.getHook("accounts_textfield_name")).sendString(str);
@@ -86,9 +86,9 @@ public class Studio10150 extends SugarTest {
 	public void cleanup() throws Exception {
 		// Perform cleanup here -- remove any records that you created so you can rerun this test without conflict
 		iface.getControl(Strategy.ID,"moduleTab_AllAccounts").click(); //ViewAccountsAll
-		iface.getControl(sugar.getHook("accountsearch_checkbox_selectall")).waitOn();
+		iface.getControl(sugar.getHook("accountsearch_checkbox_selectall")).halt(4);
 		iface.getControl(sugar.getHook("accountsearch_checkbox_selectall")).click();
-		iface.getControl(sugar.getHook("accountsearch_button_deleteall")).waitOn();
+		iface.getControl(sugar.getHook("accountsearch_button_deleteall")).halt(4);
 		iface.getControl(sugar.getHook("accountsearch_button_deleteall")).click();
 		iface.acceptDialog();
 		iface.getControl(Strategy.ID, "globalLinksModule").click();
