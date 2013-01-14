@@ -34,7 +34,7 @@ public class PortalTest extends SugarTest {
 	private Team team;
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -100,5 +100,5 @@ public class PortalTest extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }
