@@ -1,11 +1,11 @@
 package com.sugarcrm.voodoo.automation.control;
 
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
@@ -13,7 +13,6 @@ import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.utilities.Utils;
-
 
 /**
  * @author cwarmbold
@@ -75,6 +74,35 @@ public class VControl implements IControl {
 	}
 
 	@Override
+	public void halt(int timeout) throws Exception {
+		voodoo.log.info("Selenium: waiting for " + timeout + "ms on visibility of control: " + this.toString());
+		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(this.getBy(this.hook)));
+//		final WebElement we = this.iface.wd.findElement(this.getBy(this.hook));		
+//		WebDriverWait wait = new WebDriverWait(this.iface.wd, explicitWait);
+//		wait.until(new Function<WebDriver, Boolean>() {
+//			public Boolean apply(WebDriver driver) {
+//				return we.isDisplayed();
+//			}
+//		});
+	}
+
+	@Override
+	public void halt(String attribute, String value, int timeout) throws Exception {
+		voodoo.log.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
+				+ " to have attribute: " + attribute + " to have value: " + value);
+		final WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
+		final String vAttribute = attribute;
+		final String vValue = value;
+		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
+		wait.until(new Function<WebDriver, Boolean>() {
+			public Boolean apply(WebDriver driver) {
+				return we.getAttribute(vAttribute).contains(vValue);
+			}
+		});
+	}
+	
+	@Override
 	public void hover() throws Exception {
 		voodoo.log.info("Selenium: hovering over control: " + this.toString());
 		WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
@@ -106,36 +134,6 @@ public class VControl implements IControl {
 		we.sendKeys(input);
 	}
 
-	@Override
-	public void waitOn() throws Exception {
-		voodoo.log.info("Selenium: waiting on visibility of control: " + this.toString());
-		final WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
-		long explicitWait = Long.parseLong(Utils.getCascadingPropertyValue(
-				voodoo.props, "12000", "perf.explicit_wait"));
-		WebDriverWait wait = new WebDriverWait(this.iface.wd, explicitWait);
-		wait.until(new Function<WebDriver, Boolean>() {
-			public Boolean apply(WebDriver driver) {
-				return we.isDisplayed();
-			}
-		});
-	}
-
-	@Override
-	public void wait(String attribute, String value) throws Exception {
-		voodoo.log.info("Waiting for control: " + this.toString()
-				+ " to have attribute: " + attribute + " to have value: " + value);
-		final WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
-		final String vAttribute = attribute;
-		final String vValue = value;
-		long explicitWait = Long.parseLong(Utils.getCascadingPropertyValue(voodoo.props, "12000", "perf.explicit_wait"));
-		WebDriverWait wait = new WebDriverWait(this.iface.wd, explicitWait);
-		wait.until(new Function<WebDriver, Boolean>() {
-			public Boolean apply(WebDriver driver) {
-				return we.getAttribute(vAttribute).contains(vValue);
-			}
-		});
-	}
-	
 	@Override
 	public String toString() {
 		return "VControl(" + this.hook.toString() + ")";

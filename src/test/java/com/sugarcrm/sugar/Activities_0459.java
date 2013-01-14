@@ -50,7 +50,7 @@ public class Activities_0459 extends SugarTest {
 		iface.getControl(Strategy.ID, "moduleTabExtraMenuAll").hover();
 		
 		// Wait until Calendar tab is visible
-		iface.getControl(Strategy.ID, "moduleTab_AllCalendar").waitOn();
+		iface.getControl(Strategy.ID, "moduleTab_AllCalendar").halt(4);
 		
 		// Click on Calendar Tab
 		iface.getControl(Strategy.ID, "moduleTab_AllCalendar").click();

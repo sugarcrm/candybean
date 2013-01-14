@@ -25,7 +25,6 @@ public class VSelect extends VControl {
 	 * @param hook		  value of strategy to search for
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public VSelect(Voodoo voodoo, VInterface iface,
 						Strategy strategy, String hook) throws Exception {
 		super(voodoo, iface, strategy, hook);
@@ -39,7 +38,6 @@ public class VSelect extends VControl {
 	 * @param hook		{@link VHook} used to search for this element
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public VSelect(Voodoo voodoo, VInterface iface, VHook hook)
 		throws Exception {
 		super(voodoo, iface, hook);
@@ -56,7 +54,6 @@ public class VSelect extends VControl {
 	 *			  selected or (UnexpectedTagNameException) if the element
 	 *			  found is not a SELECT.
 	 */
-
 	public String getSelected() throws Exception {
 		super.voodoo.log.info("Selenium: getting selected value from control: " + this.toString());
 		WebElement we = super.iface.wd.findElement(super.getBy(this.hook));
@@ -74,7 +71,6 @@ public class VSelect extends VControl {
 	 * @param isSelected	 desired state of checkbox
 	 * @throws Exception if element is not found or if element is not a checkbox
 	 */
-
 	public void select(boolean isSelected) throws Exception {
 		voodoo.log.info("Selenium: setting select: " + this.toString() + " to value: " + isSelected);
 		WebElement we = super.iface.wd.findElement(super.getBy(this.hook));
@@ -90,9 +86,8 @@ public class VSelect extends VControl {
 	 * @param value  text of the option to be selected
 	 * @throws Exception	 if the element is not found
 	 */
-
 	public void select(String value) throws Exception {
-		voodoo.log.info("Selenium: selecting value from control: " + this.toString());
+		voodoo.log.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
 		WebElement we = super.iface.wd.findElement(super.getBy(this.hook));
 		Select dropDownList = new Select(we);
 		dropDownList.selectByVisibleText(value);

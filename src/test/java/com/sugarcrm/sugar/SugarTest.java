@@ -32,7 +32,6 @@ public abstract class SugarTest {
 	private static final String sugarPropsPath = relPropsPath + File.separator + "sugar.properties";
 	private static final String sugarHooksPath = relPropsPath + File.separator + "sugar.hooks";
 	
-	@BeforeClass
 	public static void setupOnce() throws Exception {
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
@@ -50,17 +49,14 @@ public abstract class SugarTest {
 		admin = ub.build();
 	}
 
-	@Before
 	public void setup() throws Exception {
 		Sugar.login(sugar, iface, "admin", "asdf");
 	}
 
-	@After
 	public void cleanup() throws Exception {
 		Sugar.logout(sugar, iface);
 		iface.stop();
 	}
 
-	@AfterClass
 	public static void cleanupOnce() {}
 }
