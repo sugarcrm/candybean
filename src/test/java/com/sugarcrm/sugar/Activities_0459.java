@@ -31,7 +31,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class Activities_0459 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -50,7 +50,7 @@ public class Activities_0459 extends SugarTest {
 		iface.getControl(Strategy.ID, "moduleTabExtraMenuAll").hover();
 		
 		// Wait until Calendar tab is visible
-		iface.getControl(Strategy.ID, "moduleTab_AllCalendar").waitOn();
+		iface.getControl(Strategy.ID, "moduleTab_AllCalendar").halt(4);
 		
 		// Click on Calendar Tab
 		iface.getControl(Strategy.ID, "moduleTab_AllCalendar").click();
@@ -72,5 +72,5 @@ public class Activities_0459 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }

@@ -35,7 +35,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class contacts_1460 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -58,9 +58,9 @@ public class contacts_1460 extends SugarTest {
 		//Contacts.create(sugar, iface, contact);
 		
 		iface.getControl(sugar.getHook("navbar_menu_contacts")).hover();
-		iface.getControl(sugar.getHook("navbar_menuitem_createcontact")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menuitem_createcontact")).halt(4);
 		iface.getControl(sugar.getHook("navbar_menuitem_createcontact")).click();
-		iface.getControl(sugar.getHook("contacts_textfield_lastname")).waitOn();
+		iface.getControl(sugar.getHook("contacts_textfield_lastname")).halt(4);
 		iface.getControl(sugar.getHook("contacts_textfield_lastname")).hover();
 		iface.getControl(sugar.getHook("contacts_textfield_lastname")).sendString(lastName);
 		iface.getControl(sugar.getHook("contacts_div_bottomlinks")).scroll();
@@ -70,7 +70,7 @@ public class contacts_1460 extends SugarTest {
 		iface.getControl(Strategy.ID, "moduleTab_AllContacts").click();
 		iface.getControl(Strategy.ID,"search_name_basic").sendString(lastName);
 		iface.getControl(Strategy.ID, "search_form_submit").click();
-		iface.getControl(Strategy.PLINK, lastName).waitOn();
+		iface.getControl(Strategy.PLINK, lastName).halt(4);
 		String results = iface.getControl(Strategy.CSS, "#MassUpdate table.list tbody tr.pagination td table.paginationTable tbody tr td.paginationChangeButtons span.pageNumbers").getText();
 		Assert.assertTrue(results.equalsIgnoreCase("(1 - 1 of 1)"));
 	}
@@ -89,5 +89,5 @@ public class contacts_1460 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }

@@ -17,25 +17,25 @@ public class Portal {
 		iface.getControl(sugar.getHook("portallogin_textfield_username")).sendString(username);
 		iface.getControl(sugar.getHook("portallogin_textfield_password")).sendString(password);
 		iface.getControl(sugar.getHook("portallogin_button_login")).click();
-		iface.getControl(sugar.getHook("portal_navbar_menu_user")).waitOn();
+		iface.getControl(sugar.getHook("portal_navbar_menu_user")).halt(4);
 	}
 	
 	public static void logout(Sugar sugar, IInterface iface) throws Exception {
 		iface.getControl(sugar.getHook("portal_navbar_menu_user")).click();
 		iface.getControl(sugar.getHook("portal_navbar_menuitem_logout")).click();
-		iface.getControl(sugar.getHook("portallogin_button_login")).waitOn();
+		iface.getControl(sugar.getHook("portallogin_button_login")).halt(4);
 	}
 	
 	public static class Cases {
 		
 		public static void create(Sugar sugar, IInterface iface, Case portalCase) throws Exception {
 			Portal.Cases.navigate(sugar, iface);
-			iface.getControl(sugar.getHook("portal_cases_create")).waitOn();
+			iface.getControl(sugar.getHook("portal_cases_create")).halt(4);
 			iface.getControl(sugar.getHook("portal_cases_create")).click();
-			iface.getControl(sugar.getHook("portal_cases_textfield_subject")).waitOn();
+			iface.getControl(sugar.getHook("portal_cases_textfield_subject")).halt(4);
 			iface.getControl(sugar.getHook("portal_cases_textfield_subject")).sendString(portalCase.subject());
 			iface.getControl(sugar.getHook("portal_cases_button_save")).click();
-			iface.getControl(sugar.getHook("portal_cases_header")).waitOn();
+			iface.getControl(sugar.getHook("portal_cases_header")).halt(4);
 		}
 		
 		public static String readFirstCaseSubjectText(Sugar sugar, IInterface iface) throws Exception {
