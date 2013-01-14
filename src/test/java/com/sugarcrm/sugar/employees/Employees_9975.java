@@ -31,7 +31,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class Employees_9975 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -46,7 +46,7 @@ public class Employees_9975 extends SugarTest {
 		iface.getControl(Strategy.ID, "welcome_link").click();
 		iface.getControl(Strategy.ID, "employees_link").click();
 		iface.getControl(Strategy.ID, "moduleTab_AllEmployees").hover();
-		iface.getControl(Strategy.ID, "CreateEmployeeAll").waitOn();
+		iface.getControl(Strategy.ID, "CreateEmployeeAll").halt(4);
 		iface.getControl(Strategy.ID, "CreateEmployeeAll").click();
 		iface.getControl(Strategy.ID, "first_name").sendString("Firstname");
 		iface.getControl(Strategy.ID, "last_name").sendString("Lastname");
@@ -79,5 +79,5 @@ public class Employees_9975 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }

@@ -32,12 +32,12 @@ public class Sugar {
 		iface.getControl(sugar.getHook("login_textfield_username")).sendString(username);
 		iface.getControl(sugar.getHook("login_textfield_password")).sendString(password);
 		iface.getControl(sugar.getHook("login_button_login")).click();
-		iface.getControl(sugar.getHook("navbar_menu_user")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menu_user")).halt(4);
 	}
 	
 	public static void logout(Sugar sugar, IInterface iface) throws Exception {
 		iface.getControl(sugar.getHook("navbar_menu_user")).click();
 		iface.getControl(sugar.getHook("navbar_menuitem_logout")).click();
-		iface.getControl(sugar.getHook("login_button_login")).waitOn();
+		iface.getControl(sugar.getHook("login_button_login")).halt(4);
 	}
 }

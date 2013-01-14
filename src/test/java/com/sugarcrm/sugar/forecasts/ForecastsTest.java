@@ -17,7 +17,7 @@ public class ForecastsTest extends SugarTest {
 	private TimePeriod timePeriod;
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -45,5 +45,5 @@ public class ForecastsTest extends SugarTest {
 	public void cleanup() throws Exception { super.cleanup(); }
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }

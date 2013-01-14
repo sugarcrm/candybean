@@ -33,7 +33,7 @@ public class Campaign_0839Test extends SugarTest {
 	
 	private Team team;
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -41,16 +41,16 @@ public class Campaign_0839Test extends SugarTest {
 		super.setup();
 		// Assume you're already logged into Sugar -- perform setup here
 		iface.getControl(sugar.getHook("navbar_menu_campaigns")).hover();
-		iface.getControl(sugar.getHook("navbar_menuitem_createcampaign")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menuitem_createcampaign")).halt(4);
 		iface.getControl(sugar.getHook("navbar_menuitem_createcampaign")).click();
-		iface.getControl(sugar.getHook("campaigns_textfield_name")).waitOn();
+		iface.getControl(sugar.getHook("campaigns_textfield_name")).halt(4);
 		iface.getControl(sugar.getHook("campaigns_textfield_name")).hover();
 		iface.getControl(sugar.getHook("campaigns_textfield_name")).sendString("HackCamp");
-		iface.getSelect(sugar.getHook("campaigns_dropdown_status")).waitOn();
+		iface.getSelect(sugar.getHook("campaigns_dropdown_status")).halt(4);
 		iface.getSelect(sugar.getHook("campaigns_dropdown_status")).select("Active");
-		iface.getSelect(sugar.getHook("campaigns_dropdown_type")).waitOn();
+		iface.getSelect(sugar.getHook("campaigns_dropdown_type")).halt(4);
 		iface.getSelect(sugar.getHook("campaigns_dropdown_type")).select("Mail");
-		iface.getControl(sugar.getHook("campaigns_date_enddate")).waitOn();
+		iface.getControl(sugar.getHook("campaigns_date_enddate")).halt(4);
 		iface.getControl(sugar.getHook("campaigns_date_enddate")).sendString("12/21/2012");
 		iface.getControl(sugar.getHook("campaigns_button_saveheader")).click();
 
@@ -67,14 +67,14 @@ public class Campaign_0839Test extends SugarTest {
 //		iface.getControl(Strategy.PLINK, "accounts").click();
 //		iface.getControl(Strategy.ID, "username").sendString("username");
 		iface.getControl(sugar.getHook("campaigns_button_edit")).click();	
-		iface.getControl(sugar.getHook("campaigns_textfield_name")).waitOn();
+		iface.getControl(sugar.getHook("campaigns_textfield_name")).halt(4);
 		iface.getControl(sugar.getHook("campaigns_textfield_name")).hover();
 		iface.getControl(sugar.getHook("campaigns_textfield_name")).sendString("HackCamp-Modified");
-		iface.getSelect(sugar.getHook("campaigns_dropdown_status")).waitOn();
+		iface.getSelect(sugar.getHook("campaigns_dropdown_status")).halt(4);
 		iface.getSelect(sugar.getHook("campaigns_dropdown_status")).select("Planning");
-		iface.getSelect(sugar.getHook("campaigns_dropdown_type")).waitOn();
+		iface.getSelect(sugar.getHook("campaigns_dropdown_type")).halt(4);
 		iface.getSelect(sugar.getHook("campaigns_dropdown_type")).select("Web");
-		iface.getControl(sugar.getHook("campaigns_date_enddate")).waitOn();
+		iface.getControl(sugar.getHook("campaigns_date_enddate")).halt(4);
 		iface.getControl(sugar.getHook("campaigns_date_enddate")).sendString("12/21/2012");
 		iface.getControl(sugar.getHook("campaigns_button_saveheader")).click();		
 
@@ -87,9 +87,9 @@ public class Campaign_0839Test extends SugarTest {
 		// Perform cleanup here -- remove any records that you created so you can rerun this test without conflict
 		iface.getControl(sugar.getHook("navbar_menu_campaigns")).click();
 		//iface.getControl(sugar.getHook("navbar_menu_user")).hover();
-		iface.getControl(sugar.getHook("campaignsearch_checkbox_selectall")).waitOn();
+		iface.getControl(sugar.getHook("campaignsearch_checkbox_selectall")).halt(4);
 		iface.getControl(sugar.getHook("campaignsearch_checkbox_selectall")).click();
-		iface.getControl(sugar.getHook("campaignsearch_button_deleteall")).waitOn();
+		iface.getControl(sugar.getHook("campaignsearch_button_deleteall")).halt(4);
 		iface.getControl(sugar.getHook("campaignsearch_button_deleteall")).click();
 		iface.acceptDialog();
 		
@@ -97,5 +97,5 @@ public class Campaign_0839Test extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }

@@ -31,7 +31,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class Accounts_0005 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -44,7 +44,7 @@ public class Accounts_0005 extends SugarTest {
 	public void test() throws Exception {
 		// Add test steps and automation here; some examples:
 		iface.getControl(Strategy.ID, "moduleTab_AllAccounts").hover();
-		iface.getControl(Strategy.ID, "CreateAccountAll").waitOn();
+		iface.getControl(Strategy.ID, "CreateAccountAll").halt(4);
 		iface.getControl(Strategy.ID, "CreateAccountAll").click();
 		iface.getControl(Strategy.ID, "name").hover();
 		iface.getControl(Strategy.ID, "name").sendString("Acct005");
@@ -63,5 +63,5 @@ public class Accounts_0005 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }
