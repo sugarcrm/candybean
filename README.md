@@ -5,7 +5,7 @@ Voodoo2
 
 
 ***
-## Feature: Translations 
+## Component: Translations 
 ### Background: 
 Files are used as a form of tests to run along an environment like Sugar. However, Sugar supports 
 many languages and therefore it is required that the test files contain the appropriate language-specific
