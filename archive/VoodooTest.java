@@ -11,7 +11,7 @@ import org.junit.Test;
 public abstract class VoodooTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception {}
+	public static void first() throws Exception {}
 
 	@Before
 	public void setup() throws Exception {}
@@ -23,7 +23,7 @@ public abstract class VoodooTest {
 	public void cleanup() throws Exception {}
 
 	@AfterClass
-	public static void cleanupOnce() {}
+	public static void last() {}
 	
 //	@Parameters
 //    public static Collection<Object[]> browsers() throws Exception {

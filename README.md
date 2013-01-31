@@ -5,7 +5,7 @@ Voodoo2
 
 
 ***
-## Feature: Translations 
+## Component: Translations 
 ### Background: 
 Files are used as a form of tests to run along an environment like Sugar. However, Sugar supports 
 many languages and therefore it is required that the test files contain the appropriate language-specific
@@ -53,4 +53,8 @@ The 'expectedValue' will be replaced with a language-specified string from the d
 ### TODO::
 + Use Centralized Database
 + Add assert robustness by adding more assert types or use a global wrapper assert method 
+
+###Last-Minute Update 12-21-2012
++ Voodoo2 Translation will support .xml format tests (instead of only .java)
+
 ***
