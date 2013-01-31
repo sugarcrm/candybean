@@ -379,7 +379,7 @@ public class Translations {
 						counter++;
 						continue;
 					}
-					printMsg("Replaced english: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
+					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
 					break; 
 				}
 				else {
