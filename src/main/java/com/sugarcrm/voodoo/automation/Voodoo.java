@@ -16,15 +16,41 @@ import com.sugarcrm.voodoo.utilities.Utils;
 
 
 /**
- * @author Conrad Warmbold
+ * Voodoo is the primary interface for tests to use.	It provides
+ * logging facilities and enables the loading of the appropriate
+ * {@link IInterface} for use by the test's runtime.
  *
+ * @author Conrad Warmbold
  */
+
 public class Voodoo {
 	
+	/**
+	 * {@link Logger} object for use by tests.
+	 */
+
 	public final Logger log;
+
+	/**
+	 * {@link Properties} object created by loading the voodoo
+	 * properties configuration file.
+	 */
+
 	public final Properties props;
 
+	/**
+	 * The one Voodoo instance.  Created when a Voodoo instance is
+	 * first called and persistent throughout the life of the tests.
+	 */
+
 	private static Voodoo instance = null;
+
+
+	/**
+	 * Instantiate a Voodoo object.
+	 *
+	 * @throws Exception if instantiating the logger fails
+	 */
 
 	private Voodoo(Properties props) throws Exception {
 		this.props = props;
@@ -32,37 +58,51 @@ public class Voodoo {
 	}
 	
 	/**
-	 * @param props
-	 * @return
-	 * @throws Exception
+	 * Get the global Voodoo instance.
+	 *
+	 * @param props  {@link Properties} object created from voodoo.properties
+	 * @return global Voodoo instance
+	 * @throws Exception if instantiating the logger fails
 	 */
+
 	public static Voodoo getInstance(Properties props) throws Exception {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
 		return Voodoo.instance;
 	}
 
 	/**
-	 * @return
-	 * @throws Exception
+	 * Get an {@link IInterface} for use by a test.
+	 *
+	 * @return a new {@link IInterface}
+	 * @throws Exception if the browser specified in voodoo.properties
+	 *							cannot be run or if WebDriver cannot be started
 	 */
+
 	public VInterface getInterface() throws Exception {
-		String iType = Utils.getCascadingPropertyValue(this.props, "chome", "automation.interface");
+		String iType = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
 		return this.getInterface(this.parseInterfaceType(iType));
 	}
 	
 	/**
-	 * @param browserType
-	 * @return
-	 * @throws Exception
+	 * Get an {@link IInterface} for use by a test.
+	 *
+	 * @param iType  type of web browser to load
+	 * @return a new {@link IInterface}
+	 * @throws Exception if the browser specified cannot be run or if
+	 *							WebDriver cannot be started
 	 */
+
 	public VInterface getInterface(IInterface.Type iType) throws Exception {
 		return new VInterface(this, this.props, iType);
 	}
 	
 	/**
-	 * @return
-	 * @throws Exception
+	 * Convert a browser string into {@link IInterface.Type}
+	 *
+	 * @return browser type or null if the type is unrecognized
+	 * @throws Exception if the browser type is unimplemented
 	 */
+
 	private IInterface.Type parseInterfaceType(String iTypeString) throws Exception {
 		IInterface.Type iType = null;
 		for (IInterface.Type iTypeIter : IInterface.Type.values()) {
@@ -84,6 +124,13 @@ public class Voodoo {
 //		return Utils.pretruncate("" + (new Date()).getTime(), 6);
 //	}
 	
+	/**
+	 * Load the loggers specified in logging.properties.
+	 *
+	 * @return the initialized {@link Logger} object
+	 * @throws Exception if initializing a logger fails
+	 */
+
 	private Logger getLogger() throws Exception {
 		// check for Log directory existence
 		String currentWorkingPath = System.getProperty("user.dir");

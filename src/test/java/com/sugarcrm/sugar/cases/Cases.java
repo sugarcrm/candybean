@@ -15,9 +15,9 @@ public class Cases {
 	
 	public static void modify(Sugar sugar, IInterface iface, Case oldCase, Case newCase) throws Exception {
 		Cases.search(sugar, iface, oldCase);
-		iface.getControl(new VHook(Strategy.PLINK, oldCase.subject())).waitOn();
+		iface.getControl(new VHook(Strategy.PLINK, oldCase.subject())).halt(4);
 		iface.getControl(new VHook(Strategy.PLINK, oldCase.subject())).click();
-		iface.getControl(sugar.getHook("cases_button_edit")).waitOn();
+		iface.getControl(sugar.getHook("cases_button_edit")).halt(4);
 		iface.getControl(sugar.getHook("cases_button_edit")).click();
 		iface.getControl(sugar.getHook("cases_textfield_subject")).sendString(newCase.subject());
 		iface.getControl(sugar.getHook("cases_button_team")).click();
@@ -30,11 +30,11 @@ public class Cases {
 	
 	public static void search(Sugar sugar, IInterface iface, Case sugarCase) throws Exception {
 		iface.getControl(sugar.getHook("navbar_menu_more")).click();
-		iface.getControl(sugar.getHook("navbar_menuitem_showmore")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menuitem_showmore")).halt(4);
 		iface.getControl(sugar.getHook("navbar_menuitem_showmore")).click();
-		iface.getControl(sugar.getHook("navbar_menuitem_cases")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menuitem_cases")).halt(4);
 		iface.getControl(sugar.getHook("navbar_menuitem_cases")).click();
-		iface.getControl(sugar.getHook("cases_textfield_subjectsearch")).waitOn();
+		iface.getControl(sugar.getHook("cases_textfield_subjectsearch")).halt(4);
 		iface.getControl(sugar.getHook("cases_textfield_subjectsearch")).sendString(sugarCase.subject());
 		iface.getControl(sugar.getHook("cases_button_search")).click();
 	}

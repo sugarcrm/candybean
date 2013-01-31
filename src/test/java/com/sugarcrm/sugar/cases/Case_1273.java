@@ -31,7 +31,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class Case_1273 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	String testName = "Accounts_0001";
 	String testCaseName = "Cases_0001";
@@ -132,5 +132,5 @@ public class Case_1273 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }

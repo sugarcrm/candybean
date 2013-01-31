@@ -35,14 +35,13 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class contacts_1460 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
 	public void setup() throws Exception {
 		super.setup();
 		// Assume you're already logged into Sugar -- perform setup here
-		
 	}
 	
 	@Test
@@ -52,16 +51,16 @@ public class contacts_1460 extends SugarTest {
 //		iface.getControl(Strategy.ID, "//div[4]/div[2]/a").hover();
 //		iface.getControl(Strategy.PLINK, "accounts").click();
 //		iface.getControl(Strategy.ID, "username").sendString("username");
-//		ContactRecord myContact = (ContactRecord)Sugar.Contacts.create();
+//		ContactRecord myContact = (ContactRecord)sugar.contacts.create();
 		String lastName = "asdf";
 		//ContactBuilder cb = new ContactBuilder("asdf");
 		//Contact contact = cb.build();
 		//Contacts.create(sugar, iface, contact);
 		
 		iface.getControl(sugar.getHook("navbar_menu_contacts")).hover();
-		iface.getControl(sugar.getHook("navbar_menuitem_createcontact")).waitOn();
+		iface.getControl(sugar.getHook("navbar_menuitem_createcontact")).halt(4);
 		iface.getControl(sugar.getHook("navbar_menuitem_createcontact")).click();
-		iface.getControl(sugar.getHook("contacts_textfield_lastname")).waitOn();
+		iface.getControl(sugar.getHook("contacts_textfield_lastname")).halt(4);
 		iface.getControl(sugar.getHook("contacts_textfield_lastname")).hover();
 		iface.getControl(sugar.getHook("contacts_textfield_lastname")).sendString(lastName);
 		iface.getControl(sugar.getHook("contacts_div_bottomlinks")).scroll();
@@ -71,31 +70,24 @@ public class contacts_1460 extends SugarTest {
 		iface.getControl(Strategy.ID, "moduleTab_AllContacts").click();
 		iface.getControl(Strategy.ID,"search_name_basic").sendString(lastName);
 		iface.getControl(Strategy.ID, "search_form_submit").click();
-		iface.getControl(Strategy.PLINK, lastName).waitOn();
+		iface.getControl(Strategy.PLINK, lastName).halt(4);
 		String results = iface.getControl(Strategy.CSS, "#MassUpdate table.list tbody tr.pagination td table.paginationTable tbody tr td.paginationChangeButtons span.pageNumbers").getText();
-
 		Assert.assertTrue(results.equalsIgnoreCase("(1 - 1 of 1)"));
-		
-		
-		
-		
 	}
 
 	@Override
 	@After
 	public void cleanup() throws Exception {
 		// Perform cleanup here -- remove any records that you created so you can rerun this test without conflict
-		
 		//Contacts.deleteAll(sugar, iface);
 		iface.getControl(Strategy.ID, "massall_top").click();
 		iface.getControl(Strategy.ID, "delete_listview_top").click();
 	    iface.acceptDialog();
 	    iface.getControl(Strategy.ID, "search_form_clear").click();
 	    iface.getControl(Strategy.ID, "search_form_submit").click();
-	    
 		super.cleanup();
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }
