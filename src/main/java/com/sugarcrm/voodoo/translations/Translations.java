@@ -214,7 +214,7 @@ public class Translations {
 
 		try {
 			System.out.println("Writing file: " + outputFile);
-			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile, "UTF-8"));
+			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
 				match_assert = pattern_assert.matcher(line);
@@ -326,7 +326,7 @@ public class Translations {
 					result = englishString;
 				}
 				else {
-					printMsg("Replaced english: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
+					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
 				}
 			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
 				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
