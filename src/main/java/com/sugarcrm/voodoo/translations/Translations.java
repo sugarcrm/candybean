@@ -96,11 +96,11 @@ public class Translations {
 			translateProp = new Properties();
 			translateProp.load((new FileInputStream(propPath)));
 
-			DATABASE = getCascadingPropertyValue(translateProp, "null", "translate.database");
-			MODULE = getCascadingPropertyValue(translateProp, "null", "translate.module");
-			LANGUAGE = getCascadingPropertyValue(translateProp, "null", "translate.language");
-			TEST_PATH = getCascadingPropertyValue(translateProp, "null", "translate.testpath");
-			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "null", "translate.output") + "_" + LANGUAGE;
+			DATABASE = getCascadingPropertyValue(translateProp, "", "translate.database");
+			MODULE = getCascadingPropertyValue(translateProp, "", "translate.module");
+			LANGUAGE = getCascadingPropertyValue(translateProp, "", "translate.language");
+			TEST_PATH = getCascadingPropertyValue(translateProp, "", "translate.testpath");
+			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "", "translate.output") + "_" + LANGUAGE;
 			DB_CONNECTION = connectToDatabase();
 
 			populateListOfModules(MODULE);
@@ -191,7 +191,6 @@ public class Translations {
 	 */
 	private static void fileReaderWriter(String module, String inputFile, String outputFile) throws Exception {
 		File file = new File(inputFile);
-		File convertedFile = new File(outputFile);
 		Scanner fileScanner = new Scanner(file);
 		Writer output = null;
 
@@ -214,7 +213,7 @@ public class Translations {
 		Matcher match_pageNumber = null;
 
 		try {
-			output = new BufferedWriter(new FileWriter(convertedFile));
+			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
 				match_assert = pattern_assert.matcher(line);
@@ -277,10 +276,10 @@ public class Translations {
 	private static Connection connectToDatabase() throws Exception {
 		Connection con = null;
 		// TODO: May use centralized DB here
-		String serverName = getCascadingPropertyValue(translateProp, "10.8.31.10", "translate.serverName");
-		String username = getCascadingPropertyValue(translateProp, "translator", "translate.username");
-		String password = getCascadingPropertyValue(translateProp, "Sugar123!", "translate.password");
-		printMsg("connecting with: " + serverName + " " + username + " " + password);
+		String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
+		String username = getCascadingPropertyValue(translateProp, "", "translate.username");
+		String password = getCascadingPropertyValue(translateProp, "", "translate.password");
+		printMsg("Creating database connection: \nDatabase: " + serverName + "\nUsername: " + username + "\nPassword: " + password);
 		try {
 			// Create a connection to the database
 			String driverName = "com.mysql.jdbc.Driver"; // MySQL MM JDBC driver
@@ -288,6 +287,8 @@ public class Translations {
 			String url = "jdbc:mysql://" + serverName + File.separator + DATABASE; // a JDBC url
 			con = DriverManager.getConnection(url, username, password);
 			printMsg("Connection to database successfull!");
+			PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
+			pst.executeQuery();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -325,6 +326,7 @@ public class Translations {
 				}
 				else {
 					printMsg("Replaced english: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
+					printMsg(result);
 				}
 			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
 				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
@@ -355,11 +357,10 @@ public class Translations {
 		String result = null;
 		int counter = 0;
 		String[] tables = getAllModuleNamesFromDB();
-
+		
 		while (tables[counter] != null) {
 			PreparedStatement pst_ifExists = null;
 			ResultSet rs_ifExists = null;
-
 			pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + tables[counter] + "` where field='" + LANGUAGE + "'");
 			rs_ifExists = pst_ifExists.executeQuery();
 
@@ -379,6 +380,7 @@ public class Translations {
 						continue;
 					}
 					printMsg("Replaced english: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
+					printMsg(result);
 					break; 
 				}
 				else {
@@ -537,13 +539,13 @@ public class Translations {
 		private static String getCascadingPropertyValue(Properties props, String defaultValue, String key) {
 			String value = defaultValue;
 			if (props != null) {
-				if (props.containsKey(key) && value.equals("null"))
+				if (props.containsKey(key) && value.equals(""))
 					value = props.getProperty(key);
-				if (props.containsKey(key) && !value.equals("null"))
+				if (props.containsKey(key) && !value.equals(""))
 					value = props.getProperty(key);
 				if (System.getProperties().containsKey(key))
 					value = System.getProperty(key);
-				if (!props.containsKey(key) && value.equals("null")) {
+				if (!props.containsKey(key) && value.equals("")) {
 					printErrorMsg("System's property or property file does not contain such key: " + key);
 					System.exit(0);
 				}
