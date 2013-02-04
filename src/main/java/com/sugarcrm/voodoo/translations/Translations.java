@@ -213,7 +213,8 @@ public class Translations {
 		Matcher match_pageNumber = null;
 
 		try {
-			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
+			System.out.println("Writing file: " + outputFile);
+			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));//, "UTF-8"));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
 				match_assert = pattern_assert.matcher(line);
@@ -287,8 +288,8 @@ public class Translations {
 			String url = "jdbc:mysql://" + serverName + File.separator + DATABASE; // a JDBC url
 			con = DriverManager.getConnection(url, username, password);
 			printMsg("Connection to database successfull!");
-			PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
-			pst.executeQuery();
+			//PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
+			//pst.executeQuery();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -326,7 +327,6 @@ public class Translations {
 				}
 				else {
 					printMsg("Replaced english: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
-					printMsg(result);
 				}
 			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
 				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
@@ -380,7 +380,6 @@ public class Translations {
 						continue;
 					}
 					printMsg("Replaced english: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
-					printMsg(result);
 					break; 
 				}
 				else {
