@@ -16,6 +16,7 @@ public class TranslationsTest {
 	 *  This method will test for the translation of 1 single test (Accounts_0105.java)
 	 *  which uses arguments presented by the user (instead of using the properties file)
 	 */
+	/*
 	@Test
 	public void SingleTestTranslation() throws Exception {
 		try {
@@ -56,13 +57,15 @@ public class TranslationsTest {
 		}
 
 	}
-
+	*/
+	
 	/**
 	 *  This method will test for the translation of multiple test files (e.g. directory with tests)
 	 *  - It will also use a properties file instead of argument inputs (properties file path given as a argument)
 	 */
 	@Test
 	public void MutilpleTestsTranslation() throws Exception {
+		/*
 		// Create a temporary folder containing two directories with two test files each
 		String TempFolder = "tempFolder";
 		String TempFolderPath = currentWorkingDir + File.separator + TempFolder;
@@ -122,13 +125,15 @@ public class TranslationsTest {
 		String prop7 = prop6 + "\r\n" + "translate.password = Sugar123!";
 		String prop8 = prop7 + "\r\n" + "translate.output = " + currentWorkingDir + File.separator + "translated_Folder";
 		createFile(propNamePath, prop8, "new");
-
+		*/
 
 		// Perform translations on the the above File
 		System.out.println("[Translation Test]: Translation will now begin!");
-		Translations.Translate(propNamePath);
+		//Translations.Translate(propNamePath);
+		Translations.Translate("/home/suga/Workspace/Voodoo2/src/test/resources/translate.properties");
 		System.out.println("[Translation Test]: Translation Finished!");
 
+		/*
 		// Check assert Statement
 		String outputDir = currentWorkingDir + File.separator + "translated_Folder" + "_es_ES" + File.separator;
 		System.out.println("[Translation Test]: Performing Assert Test");
@@ -145,6 +150,7 @@ public class TranslationsTest {
 		System.out.println("[Translation Test]: File Checking finished! will now begin to delete files and folders");
 		CleanUpFileDirectory(TempFolderPath);
 		CleanUpFileDirectory(outputDir);
+		*/
 	}
 
 	/**
