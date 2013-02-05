@@ -1,61 +1,55 @@
 package com.sugarcrm.sugar;
 
-
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.SugarTest;
-import com.sugarcrm.sugar.accounts.Account;
-import com.sugarcrm.sugar.accounts.Account.AccountBuilder;
-import com.sugarcrm.sugar.accounts.Accounts;
-import com.sugarcrm.sugar.admin.Administration;
-import com.sugarcrm.sugar.cases.Case;
-import com.sugarcrm.sugar.cases.Case.CaseBuilder;
-import com.sugarcrm.sugar.contacts.Contact;
-import com.sugarcrm.sugar.contacts.Contact.ContactBuilder;
-import com.sugarcrm.sugar.contacts.Contacts;
-import com.sugarcrm.sugar.cases.Cases;
-import com.sugarcrm.sugar.teams.Team;
-import com.sugarcrm.sugar.teams.Team.TeamBuilder;
-import com.sugarcrm.sugar.users.User;
-import com.sugarcrm.sugar.users.Users;
-import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-
 
 public class TemplateTest extends SugarTest {
 	
 	@BeforeClass
-	public static void first() throws Exception { SugarTest.first(); }
-
-	@Override
-	@Before
-	public void setup() throws Exception {
-		super.setup();
-		// Assume you're already logged into Sugar -- perform setup here
+	public static void first() {
+		try { SugarTest.first(); }
+		catch (Exception e) { e.printStackTrace(); }
 	}
 	
+	@Before
+	public void setup() {
+		try {
+			super.setup();
+			Sugar.login(sugar, iface, SugarTest.admin.username(), SugarTest.admin.password1());
+		} catch (Exception e) {
+			e.printStackTrace();			
+			/* QA ENTERS SETUP HERE */
+		}
+	}
+
 	@Test
-	public void test() throws Exception {
-		// Add test steps and automation here; some examples:
-//		iface.getControl(Strategy.XPATH, "//td[3]/a").click();
-//		iface.getControl(Strategy.ID, "//div[4]/div[2]/a").hover();
-//		iface.getControl(Strategy.PLINK, "accounts").click();
-//		iface.getControl(Strategy.ID, "username").sendString("username");
+	public void execute() {
+		try {
+			/* QA ENTERS TEST STEPS HERE */
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	@Override
 	@After
-	public void cleanup() throws Exception {
-		// Perform cleanup here -- remove any records that you created so you can rerun this test without conflict
-		super.cleanup();
+	public void cleanup() {
+		try {
+			Sugar.logout(sugar, iface);
+			super.cleanup();
+			/* QA ENTERS CLEANUP HERE */
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
+	
 	@AfterClass
-	public static void last() throws Exception { SugarTest.last(); }
+	public static void last() {
+		try { SugarTest.last();	}
+		catch (Exception e) { e.printStackTrace(); }
+	}
 }

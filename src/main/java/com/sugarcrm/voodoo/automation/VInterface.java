@@ -25,7 +25,6 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 import com.sugarcrm.voodoo.utilities.Utils;
 
-
 public class VInterface implements IInterface {
 
 	public final WebDriver wd;
@@ -43,7 +42,6 @@ public class VInterface implements IInterface {
 	 * @param iType   {@link IInterface.Type} of web browser to run
 	 * @throws Exception
 	 */
-
 	public VInterface(Voodoo voodoo, Properties props, IInterface.Type iType)
 			throws Exception {
 		this.voodoo = voodoo;
