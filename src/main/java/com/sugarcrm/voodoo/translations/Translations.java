@@ -214,7 +214,7 @@ public class Translations {
 
 		try {
 			System.out.println("Writing file: " + outputFile);
-			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));//, "UTF-8"));
+			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile, "UTF-8"));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
 				match_assert = pattern_assert.matcher(line);
