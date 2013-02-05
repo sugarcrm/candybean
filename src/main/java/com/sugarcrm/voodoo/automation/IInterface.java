@@ -21,7 +21,6 @@ public interface IInterface {
 	/**
 	 * Which web browser to run the test against.
 	 */
-
 	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS; }
 	
 	//////////// General functionality ////////////
@@ -32,7 +31,6 @@ public interface IInterface {
 	 * @param ms  duration of pause in milliseconds
 	 * @throws Exception	 if the underlying {@link Thread#sleep} is interrupted
 	 */
-
 	public void pause(long ms) throws Exception;
 
 	/**
@@ -41,7 +39,6 @@ public interface IInterface {
 	 * @param message	 String to display on the dialog box
 	 * @throws Exception	 if the program is running headless (with no GUI)
 	 */
-
 	public void interact(String message);
 	
 	//////////// General automation functionality ////////////
@@ -50,7 +47,6 @@ public interface IInterface {
 	 * Launch and initialize a web browser.
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public void start() throws Exception;
 
 	/**
@@ -58,7 +54,6 @@ public interface IInterface {
 	 *
 	 * @throws Exception	  <i>not thrown</i>
 	 */
-
 	public void stop() throws Exception;
 
 	/**
@@ -67,7 +62,6 @@ public interface IInterface {
 	 *
 	 * @throws Exception	 if no dialog box is present
 	 */
-
 	public void acceptDialog() throws Exception;
 
 	/**
@@ -75,7 +69,6 @@ public interface IInterface {
 	 *
 	 * @throws Exception	  <i>not thrown</i>
 	 */
-
 	public void closeWindow() throws Exception;
 
 	/**
@@ -88,7 +81,6 @@ public interface IInterface {
 	 * @param index  the window index
 	 * @throws Exception	 if the specified window cannot be found
 	 */
-
 	public void focusByIndex(int index) throws Exception;
 
 	/**
@@ -100,7 +92,6 @@ public interface IInterface {
 	 * @param title  the exact window title to be matched
 	 * @throws Exception	  if the specified window cannot be found
 	 */
-
 	public void focusByTitle(String title) throws Exception;
 
 	/**
@@ -112,7 +103,6 @@ public interface IInterface {
 	 * @param url	the URL to be matched
 	 * @throws Exception	  if the specified window cannot be found
 	 */
-
 	public void focusByUrl(String url) throws Exception;
 
 	/**
@@ -121,7 +111,6 @@ public interface IInterface {
 	 * @param url	the URL to be loaded by the browser
 	 * @throws Exception		<i>not thrown</i>
 	 */
-
 	public void go(String url) throws Exception;
 
 	/**
@@ -129,7 +118,6 @@ public interface IInterface {
 	 *
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public void maximize() throws Exception;
 
 	//////////// VControl functionality ////////////
@@ -140,7 +128,6 @@ public interface IInterface {
 	 * @param hook	 description of how to find the control
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public VControl getControl(VHook hook) throws Exception;
 
 	/**
@@ -150,7 +137,6 @@ public interface IInterface {
 	 * @param hook		  string to find using the specified strategy
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public VControl getControl(Strategy strategy, String hook) throws Exception;
 
 	//////////// VSelect functionality ////////////
@@ -161,7 +147,6 @@ public interface IInterface {
 	 * @param hook	 description of how to find the control
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public VSelect getSelect(VHook hook) throws Exception;
 
 	/**
@@ -171,6 +156,5 @@ public interface IInterface {
 	 * @param hook		  string to find using the specified strategy
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-
 	public VSelect getSelect(Strategy strategy, String hook) throws Exception;
 }

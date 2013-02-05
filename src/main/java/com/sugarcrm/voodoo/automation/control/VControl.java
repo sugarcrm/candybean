@@ -1,5 +1,7 @@
 package com.sugarcrm.voodoo.automation.control;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -52,8 +54,9 @@ public class VControl implements IControl {
 	@Override
 	public void click() throws Exception {
 		voodoo.log.info("Selenium: clicking on control: " + this.toString());
-		WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
-		we.click();
+		List<WebElement> wes = this.iface.wd.findElements(this.getBy(this.hook));
+		if (wes.size() != 1) throw new Exception("Only 1 web element expected; more or none found...");
+		wes.get(0).click();
 	}
 
 	@Override
@@ -129,9 +132,10 @@ public class VControl implements IControl {
 	@Override
 	public void sendString(String input) throws Exception {
 		voodoo.log.info("Selenium: sending string: " + input + " to control: " + this.toString());
-		WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
-		we.clear();
-		we.sendKeys(input);
+		List<WebElement> wes = this.iface.wd.findElements(this.getBy(this.hook));
+		if (wes.size() != 1) throw new Exception("Only 1 web element expected; more or none found...");
+		wes.get(0).clear();
+		wes.get(0).sendKeys(input);
 	}
 
 	@Override
