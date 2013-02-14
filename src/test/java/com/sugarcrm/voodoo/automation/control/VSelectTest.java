@@ -31,7 +31,7 @@ public class VSelectTest {
 	protected static VInterface iface;
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception {
+	public static void first() throws Exception {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
 		String voodooPropsPath = relPropsPath + File.separator + "voodoo.properties";
@@ -109,7 +109,7 @@ public class VSelectTest {
 	}
 	
 	@AfterClass
-	public static void cleanupOnce() throws Exception {
+	public static void last() throws Exception {
 		iface.stop();
 	}
 }	

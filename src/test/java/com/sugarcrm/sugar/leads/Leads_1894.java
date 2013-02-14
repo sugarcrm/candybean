@@ -31,7 +31,7 @@ import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 public class Leads_1894 extends SugarTest {
 	
 	@BeforeClass
-	public static void setupOnce() throws Exception { SugarTest.setupOnce(); }
+	public static void first() throws Exception { SugarTest.first(); }
 
 	@Override
 	@Before
@@ -53,16 +53,16 @@ public class Leads_1894 extends SugarTest {
 //		Leads.create(lead);
 		
 		iface.getControl(Strategy.ID, "moduleTabExtraMenuAll").hover();
-		iface.getControl(Strategy.ID, "moduleTab_AllLeads").waitOn();
+		iface.getControl(Strategy.ID, "moduleTab_AllLeads").halt(4);
 		iface.getControl(Strategy.ID, "moduleTab_AllLeads").click();
-		iface.getControl(Strategy.ID, "CreateLeadAll").waitOn();
+		iface.getControl(Strategy.ID, "CreateLeadAll").halt(4);
 		iface.getControl(Strategy.ID, "CreateLeadAll").click();
 //		iface.getControl(Strategy.ID, "last_name").hover();
 		iface.getControl(Strategy.ID, "last_name").sendString(lastName);
 		iface.getControl(Strategy.ID, "SAVE_HEADER").click();
 		iface.getControl(Strategy.XPATH, "//*[@id=\"detail_header_action_menu\"]/li/span").click();
 		iface.getControl(Strategy.ID, "duplicate_button").click();
-		iface.getControl(Strategy.ID, "last_name").waitOn();
+		iface.getControl(Strategy.ID, "last_name").halt(4);
 		iface.getControl(Strategy.ID, "last_name").sendString(lastNameDup);
 		iface.getControl(Strategy.ID, "SAVE_HEADER").click();
 		
@@ -76,5 +76,5 @@ public class Leads_1894 extends SugarTest {
 	}
 
 	@AfterClass
-	public static void cleanupOnce() { SugarTest.cleanupOnce(); }
+	public static void last() throws Exception { SugarTest.last(); }
 }
