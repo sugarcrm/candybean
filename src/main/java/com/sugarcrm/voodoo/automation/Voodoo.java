@@ -9,8 +9,6 @@ import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-
 import com.sugarcrm.voodoo.automation.IInterface.Type;
 import com.sugarcrm.voodoo.utilities.Utils;
 
@@ -69,6 +67,7 @@ public class Voodoo {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
 		return Voodoo.instance;
 	}
+	
 
 	/**
 	 * Get an {@link IInterface} for use by a test.
@@ -111,7 +110,7 @@ public class Voodoo {
 				break;
 			}
 		}
-		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
+		//if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
 		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
 		return iType;
 	}
