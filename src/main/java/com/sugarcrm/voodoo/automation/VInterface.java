@@ -29,7 +29,7 @@ import com.sugarcrm.voodoo.utilities.Utils;
 public class VInterface implements IInterface {
 
 	public final WebDriver wd;
-	public final AndroidInterface vac; //vac as in voodoo android control
+//	public final AndroidInterface vac; //vac as in voodoo android control
 
 	private final Voodoo voodoo;
 	private final Properties props;
@@ -49,12 +49,12 @@ public class VInterface implements IInterface {
 		this.voodoo = voodoo;
 		this.props = props;
 		if (iType == Type.ANDROID) {
-			this.vac = this.getAndroidControl();
+//			this.vac = this.getAndroidControl();
 			this.wd = null;
 		}
 		else {
 			this.wd = this.getWebDriver(iType);
-			this.vac = null;
+//			this.vac = null;
 			this.start();
 		}
 	}
@@ -229,38 +229,38 @@ public class VInterface implements IInterface {
 	
 	
 	// ANDROID ROBOTIUM FUNCTIONALITY
-	private AndroidInterface getAndroidControl() throws Exception {
-		AndroidInterface vac = new AndroidInterface(this.props);
-		return vac;
-	}
-	
-	public void startApp() throws Exception {
-		this.vac.startApp();
-	}
-	
-	public void finishApp() throws Exception {
-		this.vac.finishApp();
-	}
-	
-	public void setApkPath(String aut, String messenger, String testrunner) {
-		this.vac.setApkPath(aut, messenger, testrunner);
-	}
-	
-	public void ignoreInstallAUT() throws Exception {
-		this.vac.ignoreInstallAUT();
-	}
-	
-	public void ignoreInstallMessenger() throws Exception {
-		this.vac.ignoreInstallMessenger();
-	}
-	
-	public void ignoreInstallRunner() throws Exception {
-		this.vac.ignoreInstallRunner();
-	}
-	
-	public VAControl getAControl() throws Exception{
-		return new VAControl(this.voodoo, this);
-	}
+//	private AndroidInterface getAndroidControl() throws Exception {
+//		AndroidInterface vac = new AndroidInterface(this.props);
+//		return vac;
+//	}
+//	
+//	public void startApp() throws Exception {
+//		this.vac.startApp();
+//	}
+//	
+//	public void finishApp() throws Exception {
+//		this.vac.finishApp();
+//	}
+//	
+//	public void setApkPath(String aut, String messenger, String testrunner) {
+//		this.vac.setApkPath(aut, messenger, testrunner);
+//	}
+//	
+//	public void ignoreInstallAUT() throws Exception {
+//		this.vac.ignoreInstallAUT();
+//	}
+//	
+//	public void ignoreInstallMessenger() throws Exception {
+//		this.vac.ignoreInstallMessenger();
+//	}
+//	
+//	public void ignoreInstallRunner() throws Exception {
+//		this.vac.ignoreInstallRunner();
+//	}
+//	
+//	public VAControl getAControl() throws Exception{
+//		return new VAControl(this.voodoo, this);
+//	}
 	
 	
   //	/**
