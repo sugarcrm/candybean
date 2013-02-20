@@ -63,6 +63,7 @@ public class Voodoo {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
 		return Voodoo.instance;
 	}
+	
 
 	/**
 	 * Get an {@link IInterface} for use by a test.
@@ -102,7 +103,7 @@ public class Voodoo {
 				break;
 			}
 		}
-		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
+		//if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
 		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
 		return iType;
 	}
