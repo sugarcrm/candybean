@@ -156,14 +156,14 @@ public interface IInterface {
 	 */
 	public VSelect getSelect(Strategy strategy, String hook) throws Exception;
 	
-	// Android Setup Functionality
-	public void startApp() throws Exception;
-	public void finishApp() throws Exception;
-	public void setApkPath(String aut, String messenger, String testrunner);
-	public void ignoreInstallAUT() throws Exception;
-	public void ignoreInstallMessenger() throws Exception;
-	public void ignoreInstallRunner() throws Exception;
-	
-	// Android VAControl functionality
-	public VAControl getAControl() throws Exception;
+//	// Android Setup Functionality
+//	public void startApp() throws Exception;
+//	public void finishApp() throws Exception;
+//	public void setApkPath(String aut, String messenger, String testrunner);
+//	public void ignoreInstallAUT() throws Exception;
+//	public void ignoreInstallMessenger() throws Exception;
+//	public void ignoreInstallRunner() throws Exception;
+//	
+//	// Android VAControl functionality
+//	public VAControl getAControl() throws Exception;
 }
