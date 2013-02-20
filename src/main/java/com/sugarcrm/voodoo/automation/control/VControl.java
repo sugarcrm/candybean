@@ -54,9 +54,9 @@ public class VControl implements IControl {
 	@Override
 	public void click() throws Exception {
 		voodoo.log.info("Selenium: clicking on control: " + this.toString());
-		List<WebElement> wes = this.iface.wd.findElements(this.getBy(this.hook));
-		if (wes.size() != 1) throw new Exception("Only 1 web element expected; more or none found...");
-		wes.get(0).click();
+		WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
+//		if (wes.size() != 1) throw new Exception("Only 1 web element expected; more or none found...");
+		we.click();
 	}
 
 	@Override
@@ -132,10 +132,11 @@ public class VControl implements IControl {
 	@Override
 	public void sendString(String input) throws Exception {
 		voodoo.log.info("Selenium: sending string: " + input + " to control: " + this.toString());
-		List<WebElement> wes = this.iface.wd.findElements(this.getBy(this.hook));
-		if (wes.size() != 1) throw new Exception("Only 1 web element expected; more or none found...");
-		wes.get(0).clear();
-		wes.get(0).sendKeys(input);
+		WebElement we = this.iface.wd.findElement(this.getBy(this.hook));
+//		if (wes.size() == 0) throw new Exception("Only 1 web element expected; none found...");
+//		if (wes.size() > 1) throw new Exception("Only 1 web element expected; more than one found...");
+		we.clear();
+		we.sendKeys(input);
 	}
 
 	@Override
