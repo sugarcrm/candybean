@@ -16,7 +16,7 @@ import java.lang.System;
 
 /**
  * @author Wilson Li
- *
+ * 
  */
 public class Translations {
 	private static String DATABASE;
@@ -29,7 +29,8 @@ public class Translations {
 	private static Properties translateProp = null;
 	private static String TEST_FORMAT;
 
-	// if the string to be replace is not in such module then search through all DB modules
+	// if the string to be replace is not in such module then search through all
+	// DB modules
 	// currently disabled, set variable to 'true' to enable
 	private static boolean SEARCH_ALL_MODULES = true;
 
@@ -37,17 +38,21 @@ public class Translations {
 	// This variable is set by the following method: setAssertPosition()
 	private static int ASSERT_POSITION;
 
-	//*** NOTE, This is to run the program with command line
+	// *** NOTE, This is to run the program with command line
 	// Refer to Voodoo Translations Wiki for more info on usage
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
 		try {
-			if (args.length == 1) Translate(args[0]);	
-			else if (args.length == 4) Translate(args[0], args[1], args[2], args[3]);	
-			else { 
-				System.out.println("Invalid number of arguments. Given number of arguments: " + args.length); 	
+			if (args.length == 1)
+				Translate(args[0]);
+			else if (args.length == 4)
+				Translate(args[0], args[1], args[2], args[3]);
+			else {
+				System.out
+						.println("Invalid number of arguments. Given number of arguments: "
+								+ args.length);
 				System.exit(1);
-			}	
-		}catch (Exception e) {
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -57,20 +62,28 @@ public class Translations {
 	 * input arguments
 	 * 
 	 * @author Wilson Li
-	 * @param db - database name (ie: translate_6_3, translate_6_2, translate_6_1)
-	 * @param mod - module(s) name (ie: Account, Quotes, Contacts, etc)
-	 * @param lang - language (ie: fr_FR, ja_JP, zh_CH, en_UK, etc)
-	 * @param testP - path to a test file or to a folder containing multiple tests
+	 * @param db
+	 *            - database name (ie: translate_6_3, translate_6_2,
+	 *            translate_6_1)
+	 * @param mod
+	 *            - module(s) name (ie: Account, Quotes, Contacts, etc)
+	 * @param lang
+	 *            - language (ie: fr_FR, ja_JP, zh_CH, en_UK, etc)
+	 * @param testP
+	 *            - path to a test file or to a folder containing multiple tests
 	 * @throws Exception
 	 */
-	public static void Translate(String db, String mod, String lang, String testP) throws Exception {
+	public static void Translate(String db, String mod, String lang,
+			String testP) throws Exception {
 		try {
 			DATABASE = db;
 			MODULE = mod;
 			LANGUAGE = lang;
 			TEST_PATH = testP;
-			String defaultOutputPath = System.getProperty("user.dir") + File.separator	+ "translated_Files_" + LANGUAGE;
-			OUTPUT_FOLDER = getCascadingPropertyValue(null, defaultOutputPath, "translate.output");
+			String defaultOutputPath = System.getProperty("user.dir")
+					+ File.separator + "translated_Files_" + LANGUAGE;
+			OUTPUT_FOLDER = getCascadingPropertyValue(null, defaultOutputPath,
+					"translate.output");
 			DB_CONNECTION = connectToDatabase();
 
 			populateListOfModules(MODULE);
@@ -88,7 +101,9 @@ public class Translations {
 	 * a translation
 	 * 
 	 * @author Wilson Li
-	 * @param propPath - path to a properties file containing required translation information (ie: translate.properties)
+	 * @param propPath
+	 *            - path to a properties file containing required translation
+	 *            information (ie: translate.properties)
 	 * @throws Exception
 	 */
 	public static void Translate(String propPath) throws Exception {
@@ -96,11 +111,16 @@ public class Translations {
 			translateProp = new Properties();
 			translateProp.load((new FileInputStream(propPath)));
 
-			DATABASE = getCascadingPropertyValue(translateProp, "", "translate.database");
-			MODULE = getCascadingPropertyValue(translateProp, "", "translate.module");
-			LANGUAGE = getCascadingPropertyValue(translateProp, "", "translate.language");
-			TEST_PATH = getCascadingPropertyValue(translateProp, "", "translate.testpath");
-			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "", "translate.output") + "_" + LANGUAGE;
+			DATABASE = getCascadingPropertyValue(translateProp, "",
+					"translate.database");
+			MODULE = getCascadingPropertyValue(translateProp, "",
+					"translate.module");
+			LANGUAGE = getCascadingPropertyValue(translateProp, "",
+					"translate.language");
+			TEST_PATH = getCascadingPropertyValue(translateProp, "",
+					"translate.testpath");
+			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "",
+					"translate.output") + "_" + LANGUAGE;
 			DB_CONNECTION = connectToDatabase();
 
 			populateListOfModules(MODULE);
@@ -113,35 +133,42 @@ public class Translations {
 	}
 
 	/**
-	 * A wrapper function that will recursively run all tests (translate) from the given path
-	 * Condition:
-	 * - If testPath is a test file then perform translation (fileReaderWriter) 
-	 * - If testPath is a folder then recursively run each item on the conditional check 
-	 *         
+	 * A wrapper function that will recursively run all tests (translate) from
+	 * the given path Condition: - If testPath is a test file then perform
+	 * translation (fileReaderWriter) - If testPath is a folder then recursively
+	 * run each item on the conditional check
+	 * 
 	 * @author Wilson Li
-	 * @param testPath - a path to a single test file or a folder containing multiple test files
-	 * @param outputFolder - a path to a output folder
+	 * @param testPath
+	 *            - a path to a single test file or a folder containing multiple
+	 *            test files
+	 * @param outputFolder
+	 *            - a path to a output folder
 	 * @throws Exception
 	 */
-	private static void recursePathForTranslations(String testPath, String outputFolder) throws Exception {
+	private static void recursePathForTranslations(String testPath,
+			String outputFolder) throws Exception {
 		try {
 			File inputFile = new File(testPath);
 			if (inputFile.isFile()) { // testPath: Path to a test file
-				String outputSubFolder = outputFolder + File.separator + inputFile.getName();
+				String outputSubFolder = outputFolder + File.separator
+						+ inputFile.getName();
 				String moduleFileName = getFileModuleName(inputFile.getName());
-				// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
-				if (isModuleExist(moduleFileName) && setAndCheckTestFormat(inputFile.getName())) {
+				// If the inputFile is a file that contains a name from the
+				// module(s) and is of java format then perform translation
+				if (isModuleExist(moduleFileName)
+						&& setAndCheckTestFormat(inputFile.getName())) {
 					// perform translation
-					String[] splitPathAndExtension = outputSubFolder.split("\\.");
+					String[] splitPathAndExtension = outputSubFolder
+							.split("\\.");
 					String splitPath = splitPathAndExtension[0];
 					String splitExt = splitPathAndExtension[1];
 					if (splitPathAndExtension.length == 1) {
 						fileReaderWriter(moduleFileName, testPath, splitPath);
-					}
-					else if (splitPathAndExtension.length == 2) {
-						fileReaderWriter(moduleFileName, testPath, splitPath + "_" + LANGUAGE + "." + splitExt);
-					}
-					else {
+					} else if (splitPathAndExtension.length == 2) {
+						fileReaderWriter(moduleFileName, testPath, splitPath
+								+ "_" + LANGUAGE + "." + splitExt);
+					} else {
 						printErrorMsg("Problem with path splitting, make sure there is at most 1 '.' in file name");
 					}
 				}
@@ -149,28 +176,34 @@ public class Translations {
 				File[] files = new File(testPath).listFiles();
 				for (File file : files) {
 					String testPathSubFolder = file.getAbsolutePath();
-					String outputSubFolder = outputFolder + File.separator + file.getName();
+					String outputSubFolder = outputFolder + File.separator
+							+ file.getName();
 					String moduleFileName = getFileModuleName(file.getName());
-					// If the item is a file that contains a name from the module(s) and is of java format then perform translation
-					if (file.isFile() && isModuleExist(moduleFileName) && setAndCheckTestFormat(file.getName())) {
+					// If the item is a file that contains a name from the
+					// module(s) and is of java format then perform translation
+					if (file.isFile() && isModuleExist(moduleFileName)
+							&& setAndCheckTestFormat(file.getName())) {
 						// perform translation
-						String[] splitPathAndExtension = outputSubFolder.split("\\.");
+						String[] splitPathAndExtension = outputSubFolder
+								.split("\\.");
 						String splitPath = splitPathAndExtension[0];
 						String splitExt = splitPathAndExtension[1];
 						if (splitPathAndExtension.length == 1) {
-							fileReaderWriter(moduleFileName, testPathSubFolder, splitPath + "_" + LANGUAGE);
-						}
-						else if (splitPathAndExtension.length == 2) {
-							fileReaderWriter(moduleFileName, testPathSubFolder, splitPath + "_" + LANGUAGE + "." + splitExt);
-						}
-						else {
+							fileReaderWriter(moduleFileName, testPathSubFolder,
+									splitPath + "_" + LANGUAGE);
+						} else if (splitPathAndExtension.length == 2) {
+							fileReaderWriter(moduleFileName, testPathSubFolder,
+									splitPath + "_" + LANGUAGE + "." + splitExt);
+						} else {
 							printErrorMsg("Problem with path splitting, make sure there is at most 1 '.' in file name");
 						}
 					}
-					// If the item is a directory, then recurse the function with the item's path
+					// If the item is a directory, then recurse the function
+					// with the item's path
 					if (file.isDirectory()) {
 						createFolder(outputSubFolder);
-						recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
+						recursePathForTranslations(file.getAbsolutePath(),
+								outputSubFolder);
 					}
 				}
 			}
@@ -180,29 +213,41 @@ public class Translations {
 	}
 
 	/**
-	 * Scan through the test file to replace (translate) the assert string
-	 * to a language-specified string and write to a new file
+	 * Scan through the test file to replace (translate) the assert string to a
+	 * language-specified string and write to a new file
 	 * 
 	 * @author Wilson Li
-	 * @param module - database module 
-	 * @param inputFile - the test file to be translated
-	 * @param outputFile - translated test file
+	 * @param module
+	 *            - database module
+	 * @param inputFile
+	 *            - the test file to be translated
+	 * @param outputFile
+	 *            - translated test file
 	 * @throws Exception
 	 */
-	private static void fileReaderWriter(String module, String inputFile, String outputFile) throws Exception {
+	private static void fileReaderWriter(String module, String inputFile,
+			String outputFile) throws Exception {
 		File file = new File(inputFile);
 		Scanner fileScanner = new Scanner(file);
 		Writer output = null;
 
 		String assertType;
-		if (TEST_FORMAT.equals("JAVA")) { assertType = "assertEquals\\((.*?)\\)"; }//JAVA FORMAT
-		else { assertType = "assert=\"(.*?)\""; }//XML FORMAT
+		if (TEST_FORMAT.equals("JAVA")) {
+			assertType = "assertEquals\\((.*?)\\)";
+		}// JAVA FORMAT
+		else {
+			assertType = "assert=\"(.*?)\"";
+		}// XML FORMAT
 
-		Pattern pattern_assert = Pattern.compile(assertType); // set depending on test file format
-		//For Voodoo (test with .xml format) use only
+		Pattern pattern_assert = Pattern.compile(assertType); // set depending
+																// on test file
+																// format
+		// For Voodoo (test with .xml format) use only
 		Pattern pattern_link = Pattern.compile("link text=\"(.*?)\"");
-		Pattern pattern_moduletab = Pattern.compile("id=\"moduleTab_(" + module + ")\"");
-		Pattern pattern_menuextra_all = Pattern.compile("id=\"moduleTabExtraMenu(All)\"");
+		Pattern pattern_moduletab = Pattern.compile("id=\"moduleTab_(" + module
+				+ ")\"");
+		Pattern pattern_menuextra_all = Pattern
+				.compile("id=\"moduleTabExtraMenu(All)\"");
 		Pattern pattern_variable = Pattern.compile("\\{");
 		Pattern pattern_pageNumber = Pattern.compile("\\(");
 		Matcher match_assert = null;
@@ -214,7 +259,8 @@ public class Translations {
 
 		try {
 			System.out.println("Writing file: " + outputFile);
-			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
+			output = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(outputFile), "UTF-8"));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
 				match_assert = pattern_assert.matcher(line);
@@ -228,32 +274,54 @@ public class Translations {
 
 				if (match_assert.find()) { // Assert replacement
 					if (TEST_FORMAT.equals("JAVA")) {
-						String stringToBeReplaced = getToBeReplacedAssertString(match_assert.group(1));
-						String ReplacementString = getDatabaseReplacementString(module, stringToBeReplaced);
-						String newLine = line.replace(stringToBeReplaced, ReplacementString);
+						String stringToBeReplaced = getToBeReplacedAssertString(match_assert
+								.group(1));
+						String ReplacementString = getDatabaseReplacementString(
+								module, stringToBeReplaced);
+						String newLine = line.replace(stringToBeReplaced,
+								ReplacementString);
 						output.write(newLine + "\r\n");
 					} else {
-						if (match_variable.find() || match_pageNumber.find()){
-							//printErrorMsg("Not finding translation for " + match_assert.group(1));
+						if (match_variable.find() || match_pageNumber.find()) {
+							// printErrorMsg("Not finding translation for " +
+							// match_assert.group(1));
 							output.write(line + "\r\n");
-						} else { // no strange characters, therefore proceed in translation
-							String newLine = line.replace(match_assert.group(1), getDatabaseReplacementString(module, match_assert.group(1)));
+						} else { // no strange characters, therefore proceed in
+									// translation
+							String newLine = line.replace(
+									match_assert.group(1),
+									getDatabaseReplacementString(module,
+											match_assert.group(1)));
 							output.write(newLine + "\r\n");
 						}
 					}
-				} else if (match_link.find()) { // Link replacement for (xml only)
-					if(match_variable.find() || match_pageNumber.find()){
-						//printErrorMsg("Not finding translation for " + match_link.group(1));
+				} else if (match_link.find()) { // Link replacement for (xml
+												// only)
+					if (match_variable.find() || match_pageNumber.find()) {
+						// printErrorMsg("Not finding translation for " +
+						// match_link.group(1));
 						output.write(line + "\r\n");
-					}else {
-						String newLine = line.replace(match_link.group(1), getDatabaseReplacementString(module, match_link.group(1)));
+					} else {
+						String newLine = line.replace(
+								match_link.group(1),
+								getDatabaseReplacementString(module,
+										match_link.group(1)));
 						output.write(newLine + "\r\n");
 					}
-				} else if (match_moduletab.find()) { // match_moduletab replacement for (xml only)
-					String newLine = line.replace(match_moduletab.group(1), getDatabaseReplacementString("SugarFeed", "All") + "_" + module);
+				} else if (match_moduletab.find()) { // match_moduletab
+														// replacement for (xml
+														// only)
+					String newLine = line.replace(match_moduletab.group(1),
+							getDatabaseReplacementString("SugarFeed", "All")
+									+ "_" + module);
 					output.write(newLine);
-				} else if (match_menuextra_all.find()) { // match_menuextra_all replacement for (xml only)
-					String newLine = line.replace(match_menuextra_all.group(1), getDatabaseReplacementString("SugarFeed", match_menuextra_all.group(1)));
+				} else if (match_menuextra_all.find()) { // match_menuextra_all
+															// replacement for
+															// (xml only)
+					String newLine = line.replace(
+							match_menuextra_all.group(1),
+							getDatabaseReplacementString("SugarFeed",
+									match_menuextra_all.group(1)));
 					output.write(newLine);
 				} else {
 					output.write(line + "\r\n");
@@ -277,19 +345,25 @@ public class Translations {
 	private static Connection connectToDatabase() throws Exception {
 		Connection con = null;
 		// TODO: May use centralized DB here
-		String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
-		String username = getCascadingPropertyValue(translateProp, "", "translate.username");
-		String password = getCascadingPropertyValue(translateProp, "", "translate.password");
-		printMsg("Creating database connection: \nDatabase: " + serverName + "\nUsername: " + username + "\nPassword: " + password);
+		String serverName = getCascadingPropertyValue(translateProp, "",
+				"translate.serverName");
+		String username = getCascadingPropertyValue(translateProp, "",
+				"translate.username");
+		String password = getCascadingPropertyValue(translateProp, "",
+				"translate.password");
+		printMsg("Creating database connection: \nDatabase: " + serverName
+				+ "\nUsername: " + username + "\nPassword: " + password);
 		try {
 			// Create a connection to the database
 			String driverName = "com.mysql.jdbc.Driver"; // MySQL MM JDBC driver
 			Class.forName(driverName);
-			String url = "jdbc:mysql://" + serverName + File.separator + DATABASE; // a JDBC url
+			String url = "jdbc:mysql://" + serverName + File.separator
+					+ DATABASE; // a JDBC url
 			con = DriverManager.getConnection(url, username, password);
 			printMsg("Connection to database successfull!");
-			//PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
-			//pst.executeQuery();
+			// PreparedStatement pst =
+			// DB_CONNECTION.prepareStatement("SET NAMES utf8");
+			// pst.executeQuery();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -298,9 +372,10 @@ public class Translations {
 	}
 
 	/**
-	 * Queries the module table that is passed. However, if the translation does not exist
-	 * within the current module, there will be a search in all modules by calling searchAllModules
-	 * method (That is if SEARCH_ALL_MODULES is set to true)
+	 * Queries the module table that is passed. However, if the translation does
+	 * not exist within the current module, there will be a search in all
+	 * modules by calling searchAllModules method (That is if SEARCH_ALL_MODULES
+	 * is set to true)
 	 * 
 	 * @author Wilson Li
 	 * @param module
@@ -309,31 +384,37 @@ public class Translations {
 	 * 
 	 */
 	@SuppressWarnings("finally")
-	private static String getDatabaseReplacementString(String module, String englishString) throws Exception {
+	private static String getDatabaseReplacementString(String module,
+			String englishString) throws Exception {
 		String result = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
+			String query = "SELECT " + LANGUAGE + " FROM " + module
+					+ " WHERE english = " + "\'" + englishString + "\'";
 			pst = DB_CONNECTION.prepareStatement(query);
 			rs = pst.executeQuery();
 
-			// if there is a result due to the query, the translated value is returned. 
+			// if there is a result due to the query, the translated value is
+			// returned.
 			if (rs.next()) {
 				result = (rs.getString(1));
 				if (result == null) {
 					printErrorMsg("Database translation entry is 'null', translation is not yet available");
 					result = englishString;
+				} else {
+					printMsg("Replaced English: '" + englishString + "' with "
+							+ LANGUAGE + ": '" + result + "'.");
 				}
-				else {
-					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
-				}
-			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
-				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
-				//printMsg("Proceeding to search through all modules");
+			} else if (SEARCH_ALL_MODULES) { // Search through the rest of the
+												// modules
+				// printErrorMsg("Could not find the translation for " +
+				// englishString + " in the " + module + " module");
+				// printMsg("Proceeding to search through all modules");
 				result = searchAllModules(englishString);
 			} else { // Else return ERROR message no such replacement string
-				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
+				// printErrorMsg("Could not find the translation for " +
+				// englishString + " in the " + module + " module");
 				result = englishString;
 			}
 		} catch (SQLException e) {
@@ -344,24 +425,26 @@ public class Translations {
 	}
 
 	/**
-	 * Perform a Query search on all modules. This can be called when a string is not found 
-	 * on a specified module. However it is currently disabled. Enable this feature by changing 
-	 * the constant SEARCH_ALL_MODULES to true.
+	 * Perform a Query search on all modules. This can be called when a string
+	 * is not found on a specified module. However it is currently disabled.
+	 * Enable this feature by changing the constant SEARCH_ALL_MODULES to true.
 	 * 
 	 * @author Wilson Li
 	 * @param englishString
 	 * @return the translated string
 	 * @throws Exception
 	 */
-	private static String searchAllModules(String englishString) throws Exception {
+	private static String searchAllModules(String englishString)
+			throws Exception {
 		String result = null;
 		int counter = 0;
 		String[] tables = getAllModuleNamesFromDB();
-		
+
 		while (tables[counter] != null) {
 			PreparedStatement pst_ifExists = null;
 			ResultSet rs_ifExists = null;
-			pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + tables[counter] + "` where field='" + LANGUAGE + "'");
+			pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `"
+					+ tables[counter] + "` where field='" + LANGUAGE + "'");
 			rs_ifExists = pst_ifExists.executeQuery();
 
 			// checks to see if the language is in that particular module
@@ -369,7 +452,9 @@ public class Translations {
 				PreparedStatement pst_temp = null;
 				ResultSet rs_temp = null;
 
-				pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + tables[counter] + " WHERE english = " + "\'" + englishString + "\'");
+				pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE
+						+ " FROM " + tables[counter] + " WHERE english = "
+						+ "\'" + englishString + "\'");
 				rs_temp = pst_temp.executeQuery();
 				if (rs_temp.next()) {
 					result = (rs_temp.getString(1));
@@ -379,301 +464,332 @@ public class Translations {
 						counter++;
 						continue;
 					}
-					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
-					break; 
-				}
-				else {
-					//printErrorMsg("Could not find the translation for " + englishString + " in the " + tables[counter] + " module");
-					if (tables[counter] == "WorkFlowTriggerShells") { // WorkFlowTriggerShells is the last module, translation cannot be found
-						printErrorMsg("Could not find the translation for '" + englishString + "'");
+					printMsg("Replaced English: '" + englishString + "' with "
+							+ LANGUAGE + ": '" + result + "' from the '"
+							+ tables[counter] + "' module");
+					break;
+				} else {
+					// printErrorMsg("Could not find the translation for " +
+					// englishString + " in the " + tables[counter] +
+					// " module");
+					if (tables[counter] == "WorkFlowTriggerShells") { // WorkFlowTriggerShells
+																		// is
+																		// the
+																		// last
+																		// module,
+																		// translation
+																		// cannot
+																		// be
+																		// found
+						printErrorMsg("Could not find the translation for '"
+								+ englishString + "'");
 						break;
-					}
-					else {
+					} else {
 						result = englishString;
 						rs_temp.close();
 						pst_temp.close();
 						counter++;
 					}
-				} 
-			}
-			else {
-				//printErrorMsg("The table: " + tables[counter] + " does not contain the language: " + LANGUAGE);
+				}
+			} else {
+				// printErrorMsg("The table: " + tables[counter] +
+				// " does not contain the language: " + LANGUAGE);
 				counter++;
 			}
 		}
 		return result;
 	}
-	
 
-		/**
-		 * Get an array of all the module names from the Database
-		 * 
-		 * @author Wilson Li
-		 * @return an array of module names within the database that is being queried
-		 */
-		private static String[] getAllModuleNamesFromDB() throws Exception {
-			int counter = 0;
-			try {
-				DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
-				String[] tables = new String[dbmd.getMaxTablesInSelect()];
-				String[] types = { "TABLE" };
-				ResultSet resultSet = dbmd.getTables(null, null, "%", types);
-				// Get the table names
-				while (resultSet.next()) {
-					String tableName = resultSet.getString(3);
-					tables[counter] = tableName;
-					counter++;
-				}
-				return tables;
-			} catch (SQLException e) {
-				throw new SQLException(e.getMessage());
+	/**
+	 * Get an array of all the module names from the Database
+	 * 
+	 * @author Wilson Li
+	 * @return an array of module names within the database that is being
+	 *         queried
+	 */
+	private static String[] getAllModuleNamesFromDB() throws Exception {
+		int counter = 0;
+		try {
+			DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
+			String[] tables = new String[dbmd.getMaxTablesInSelect()];
+			String[] types = { "TABLE" };
+			ResultSet resultSet = dbmd.getTables(null, null, "%", types);
+			// Get the table names
+			while (resultSet.next()) {
+				String tableName = resultSet.getString(3);
+				tables[counter] = tableName;
+				counter++;
 			}
-		}
-
-		/**
-		 * This function was implemented for Voodoo2 to replace the
-		 * [Expected Value] from the following assert statement:
-		 * Assert.assertEquals( [Message], [Expected Value], [Actual Value]); 
-		 * to a language-specific value retrieved from the database
-		 * 
-		 * @author Wilson Li
-		 * @param assertStr
-		 * @return a string representing the value to be translated
-		 */
-		private static String getToBeReplacedAssertString(String assertStr) throws Exception {
-			String tempString = "";
-			String prevString = "";
-			String[] statement = assertStr.split("");
-			ArrayList<String> argumentListString = new ArrayList<String>();
-			boolean withinQuote = false;
-
-			// loop through each character to find the desire string. In this 
-			// case, the second argument from an assert statement
-			for (int index = 0; index < statement.length; index++) {
-				if (statement[index].equals("\"") && !withinQuote) {
-					// beginning of a quoted string
-					prevString = statement[index];
-					tempString += statement[index]; // build tempString
-					withinQuote = true;
-				} else if (withinQuote) { // within a quoted string
-					if (!prevString.equals("\\") && statement[index].equals("\"")) {
-						// Is within quote but has reached the end fo the quoted string
-						prevString = statement[index];
-						tempString += statement[index];
-						withinQuote = false;
-					} else { // still within quoted string and not yet the end
-						// keep building the string
-						prevString = statement[index];
-						tempString += statement[index];
-					}
-				} else { // This is not within a quote
-					// simply a variable - loop until a comma is seen
-					if (statement[index].equals(",")) {
-						// if a comma is seen then place tempString into the
-						// ArgumentList
-						prevString = statement[index];
-						argumentListString.add(tempString);
-						tempString = "";
-					} else {
-						// else keep building the tempString
-						prevString = statement[index];
-						tempString += statement[index];
-					}
-				}
-			}
-			// Concatenating the last element
-			argumentListString.add(tempString);
-			// Defining assertType according to the number of arguments retrieved
-			setAssertPosition(argumentListString.size());
-			// get argument string and trim off white spaces
-			String ret = argumentListString.get(ASSERT_POSITION).trim();
-			// if needed, trim off beginning and ending quote marks
-			return trimBorderQuoteMarks(ret);
-		}
-
-		/**
-		 * This method will set the ASSERT_POSITION for specific string replacement in an assert statement.
-		 * The position indicates the expectedValue of an assert statement. Two types of asserts currently
-		 * support.
-		 * 
-		 * @author Wilson Li
-		 * @param numberOfArguments
-		 * @throws Exception
-		 */
-		private static void setAssertPosition(int numberOfArguments) throws Exception {
-			switch (numberOfArguments) {
-			case 2: ASSERT_POSITION = 0; break; // assertEquals(expectedValue, actualValue); 
-			case 3:	ASSERT_POSITION = 1; break; // assertEquals(message, expectedValue, actualValue);
-			default: throw new Exception("Invalid Number of Arguments, got " + numberOfArguments + " argument(s)");	
-			}
-		}
-
-		/**
-		 * This will trim off any start and end quote marks from the string (if it has)
-		 * 
-		 * @author Wilson Li
-		 * @param value - a string that could contain a beginning and ending quote marks 
-		 * @return - a string that does not contain any beginning and ending quote marks
-		 */
-		private static String trimBorderQuoteMarks(String value) {
-			if (value.substring(0, 1).equals("\"") && value.substring(value.length() - 1, value.length()).equals("\"")) {
-				value = value.substring(1, value.length() - 1);
-				return value;
-			} else {
-				return value;
-			}
-		}
-
-
-		/**
-		 * Get values from the properties file/System property with cascading functionality
-		 * Precedence (left-to-right): System property > properties file > default value 
-		 * 
-		 * @author Wilson Li
-		 * @param props
-		 * @param defaultValue
-		 * @param key
-		 * @return a string representing the value from a given key
-		 */
-		private static String getCascadingPropertyValue(Properties props, String defaultValue, String key) {
-			String value = defaultValue;
-			if (props != null) {
-				if (props.containsKey(key) && value.equals(""))
-					value = props.getProperty(key);
-				if (props.containsKey(key) && !value.equals(""))
-					value = props.getProperty(key);
-				if (System.getProperties().containsKey(key))
-					value = System.getProperty(key);
-				if (!props.containsKey(key) && value.equals("")) {
-					printErrorMsg("System's property or property file does not contain such key: " + key);
-					System.exit(0);
-				}
-			} else {
-				if (System.getProperties().containsKey(key))
-					value = System.getProperty(key);
-			}
-			printMsg("Using value: '" + value + "' for key: " + "'" + key + "'.");
-			return value;
-		}
-
-		/**
-		 * Gets the Module string from the file name (e.g. Accounts_0123.java = Accounts)
-		 * 
-		 * @author Wilson Li
-		 * @param fileName
-		 * @return a string representing the the module name
-		 */
-		private static String getFileModuleName(String fileName) {
-			String fileModuleName = "";
-			for (int index = 0; index < fileName.length(); index++) {
-				String character = fileName.substring(index, index + 1);
-				if (character.equals("_"))
-					break;
-				else {
-					fileModuleName += character;
-				}
-			}
-			return fileModuleName;
-		}
-
-		/**
-		 * Check whether a module name (String) exists in the listOfDatabaseModules list 
-		 * 
-		 * @author Wilson Li
-		 * @param moduleName
-		 * @return a boolean value, true if the module name exists in the listOfDatabaseModules list, else return false
-		 */
-		private static boolean isModuleExist(String moduleName) {
-			for (String module : listOfDatabaseModules) {
-				if (module.equals(moduleName))
-					return true;
-			}
-			return false;
-		}
-
-		/**
-		 * Read from a file (a list of modules from the given path) and
-		 * place them into a list (listOfDatabaseModules)
-		 * 
-		 * @author Wilson Li
-		 * @param path - can either be a path to a file containing a list of modules or 
-		 * it can just be a single module name (ie, Accounts)
-		 */
-		private static void populateListOfModules(String path) throws Exception {
-			BufferedReader BR = null;
-			String line = null;
-			try {
-				File testFile = new File(path);
-				if (!testFile.isFile()) {
-					printMsg("Using the following module: " + path);
-					listOfDatabaseModules.add(path.trim());
-				} else {
-					printMsg("Obtaining modules from file: " + path);
-					BR = new BufferedReader(new FileReader(path));
-					while ((line = BR.readLine()) != null) {
-						listOfDatabaseModules.add(line.trim());
-					}
-				}
-			} catch (Exception e) {
-				throw new Exception(e.getMessage());
-			} finally {
-				try {
-					if (BR != null)
-						BR.close();
-				} catch (IOException e) {
-					throw new Exception(e.getMessage());
-				}
-			}
-		}
-
-		/**
-		 * Create a folder with the given path
-		 * 
-		 * @author Wilson Li
-		 * @param path
-		 */
-		private static void createFolder(String path) {
-			File outputFolder = new File(path);
-			if (!outputFolder.exists())
-				outputFolder.mkdir();
-		}
-
-		/**
-		 * Simple wrapper function to do a System.out.println for Translations
-		 * 
-		 * @author Wilson Li
-		 * @param message
-		 */
-		private static void printMsg(String message) {
-			System.out.println("[Translations]: " + message);
-		}
-
-		/**
-		 * Simple wrapper function to do a System.out.println for Translations' Errors
-		 * @author Wilson Li
-		 * @param message
-		 */
-		private static void printErrorMsg(String message) {
-			System.out.println("[Translations ERROR]: " + message);		
-		}
-
-		/**
-		 *   * This is to verify if the test file is either .java or .xml to 
-		 *       * perform translations accordingly
-		 *           * 
-		 *               * @param filename
-		 *                   */
-		private static boolean setAndCheckTestFormat(String filename) {
-			if (filename.contains(".java")) { 
-				TEST_FORMAT = "JAVA";
-			}
-			else if (filename.contains(".xml")) { 
-				TEST_FORMAT = "XML";
-			}
-			else { 
-				printErrorMsg("file format is not either .java or .xml for the file: " + filename);
-				return false;   
-			}
-			return true;
+			return tables;
+		} catch (SQLException e) {
+			throw new SQLException(e.getMessage());
 		}
 	}
+
+	/**
+	 * This function was implemented for Voodoo2 to replace the [Expected Value]
+	 * from the following assert statement: Assert.assertEquals( [Message],
+	 * [Expected Value], [Actual Value]); to a language-specific value retrieved
+	 * from the database
+	 * 
+	 * @author Wilson Li
+	 * @param assertStr
+	 * @return a string representing the value to be translated
+	 */
+	private static String getToBeReplacedAssertString(String assertStr)
+			throws Exception {
+		String tempString = "";
+		String prevString = "";
+		String[] statement = assertStr.split("");
+		ArrayList<String> argumentListString = new ArrayList<String>();
+		boolean withinQuote = false;
+
+		// loop through each character to find the desire string. In this
+		// case, the second argument from an assert statement
+		for (int index = 0; index < statement.length; index++) {
+			if (statement[index].equals("\"") && !withinQuote) {
+				// beginning of a quoted string
+				prevString = statement[index];
+				tempString += statement[index]; // build tempString
+				withinQuote = true;
+			} else if (withinQuote) { // within a quoted string
+				if (!prevString.equals("\\") && statement[index].equals("\"")) {
+					// Is within quote but has reached the end fo the quoted
+					// string
+					prevString = statement[index];
+					tempString += statement[index];
+					withinQuote = false;
+				} else { // still within quoted string and not yet the end
+					// keep building the string
+					prevString = statement[index];
+					tempString += statement[index];
+				}
+			} else { // This is not within a quote
+				// simply a variable - loop until a comma is seen
+				if (statement[index].equals(",")) {
+					// if a comma is seen then place tempString into the
+					// ArgumentList
+					prevString = statement[index];
+					argumentListString.add(tempString);
+					tempString = "";
+				} else {
+					// else keep building the tempString
+					prevString = statement[index];
+					tempString += statement[index];
+				}
+			}
+		}
+		// Concatenating the last element
+		argumentListString.add(tempString);
+		// Defining assertType according to the number of arguments retrieved
+		setAssertPosition(argumentListString.size());
+		// get argument string and trim off white spaces
+		String ret = argumentListString.get(ASSERT_POSITION).trim();
+		// if needed, trim off beginning and ending quote marks
+		return trimBorderQuoteMarks(ret);
+	}
+
+	/**
+	 * This method will set the ASSERT_POSITION for specific string replacement
+	 * in an assert statement. The position indicates the expectedValue of an
+	 * assert statement. Two types of asserts currently support.
+	 * 
+	 * @author Wilson Li
+	 * @param numberOfArguments
+	 * @throws Exception
+	 */
+	private static void setAssertPosition(int numberOfArguments)
+			throws Exception {
+		switch (numberOfArguments) {
+		case 2:
+			ASSERT_POSITION = 0;
+			break; // assertEquals(expectedValue, actualValue);
+		case 3:
+			ASSERT_POSITION = 1;
+			break; // assertEquals(message, expectedValue, actualValue);
+		default:
+			throw new Exception("Invalid Number of Arguments, got "
+					+ numberOfArguments + " argument(s)");
+		}
+	}
+
+	/**
+	 * This will trim off any start and end quote marks from the string (if it
+	 * has)
+	 * 
+	 * @author Wilson Li
+	 * @param value
+	 *            - a string that could contain a beginning and ending quote
+	 *            marks
+	 * @return - a string that does not contain any beginning and ending quote
+	 *         marks
+	 */
+	private static String trimBorderQuoteMarks(String value) {
+		if (value.substring(0, 1).equals("\"")
+				&& value.substring(value.length() - 1, value.length()).equals(
+						"\"")) {
+			value = value.substring(1, value.length() - 1);
+			return value;
+		} else {
+			return value;
+		}
+	}
+
+	/**
+	 * Get values from the properties file/System property with cascading
+	 * functionality Precedence (left-to-right): System property > properties
+	 * file > default value
+	 * 
+	 * @author Wilson Li
+	 * @param props
+	 * @param defaultValue
+	 * @param key
+	 * @return a string representing the value from a given key
+	 */
+	private static String getCascadingPropertyValue(Properties props,
+			String defaultValue, String key) {
+		String value = defaultValue;
+		if (props != null) {
+			if (props.containsKey(key) && value.equals(""))
+				value = props.getProperty(key);
+			if (props.containsKey(key) && !value.equals(""))
+				value = props.getProperty(key);
+			if (System.getProperties().containsKey(key))
+				value = System.getProperty(key);
+			if (!props.containsKey(key) && value.equals("")) {
+				printErrorMsg("System's property or property file does not contain such key: "
+						+ key);
+				System.exit(0);
+			}
+		} else {
+			if (System.getProperties().containsKey(key))
+				value = System.getProperty(key);
+		}
+		printMsg("Using value: '" + value + "' for key: " + "'" + key + "'.");
+		return value;
+	}
+
+	/**
+	 * Gets the Module string from the file name (e.g. Accounts_0123.java =
+	 * Accounts)
+	 * 
+	 * @author Wilson Li
+	 * @param fileName
+	 * @return a string representing the the module name
+	 */
+	private static String getFileModuleName(String fileName) {
+		String fileModuleName = "";
+		for (int index = 0; index < fileName.length(); index++) {
+			String character = fileName.substring(index, index + 1);
+			if (character.equals("_"))
+				break;
+			else {
+				fileModuleName += character;
+			}
+		}
+		return fileModuleName;
+	}
+
+	/**
+	 * Check whether a module name (String) exists in the listOfDatabaseModules
+	 * list
+	 * 
+	 * @author Wilson Li
+	 * @param moduleName
+	 * @return a boolean value, true if the module name exists in the
+	 *         listOfDatabaseModules list, else return false
+	 */
+	private static boolean isModuleExist(String moduleName) {
+		for (String module : listOfDatabaseModules) {
+			if (module.equals(moduleName))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Read from a file (a list of modules from the given path) and place them
+	 * into a list (listOfDatabaseModules)
+	 * 
+	 * @author Wilson Li
+	 * @param path
+	 *            - can either be a path to a file containing a list of modules
+	 *            or it can just be a single module name (ie, Accounts)
+	 */
+	private static void populateListOfModules(String path) throws Exception {
+		BufferedReader BR = null;
+		String line = null;
+		try {
+			File testFile = new File(path);
+			if (!testFile.isFile()) {
+				printMsg("Using the following module: " + path);
+				listOfDatabaseModules.add(path.trim());
+			} else {
+				printMsg("Obtaining modules from file: " + path);
+				BR = new BufferedReader(new FileReader(path));
+				while ((line = BR.readLine()) != null) {
+					listOfDatabaseModules.add(line.trim());
+				}
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			try {
+				if (BR != null)
+					BR.close();
+			} catch (IOException e) {
+				throw new Exception(e.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * Create a folder with the given path
+	 * 
+	 * @author Wilson Li
+	 * @param path
+	 */
+	private static void createFolder(String path) {
+		File outputFolder = new File(path);
+		if (!outputFolder.exists())
+			outputFolder.mkdir();
+	}
+
+	/**
+	 * Simple wrapper function to do a System.out.println for Translations
+	 * 
+	 * @author Wilson Li
+	 * @param message
+	 */
+	private static void printMsg(String message) {
+		System.out.println("[Translations]: " + message);
+	}
+
+	/**
+	 * Simple wrapper function to do a System.out.println for Translations'
+	 * Errors
+	 * 
+	 * @author Wilson Li
+	 * @param message
+	 */
+	private static void printErrorMsg(String message) {
+		System.out.println("[Translations ERROR]: " + message);
+	}
+
+	/**
+	 * * This is to verify if the test file is either .java or .xml to * perform
+	 * translations accordingly * * @param filename
+	 * */
+	private static boolean setAndCheckTestFormat(String filename) {
+		if (filename.contains(".java")) {
+			TEST_FORMAT = "JAVA";
+		} else if (filename.contains(".xml")) {
+			TEST_FORMAT = "XML";
+		} else {
+			printErrorMsg("file format is not either .java or .xml for the file: "
+					+ filename);
+			return false;
+		}
+		return true;
+	}
+}
