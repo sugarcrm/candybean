@@ -150,9 +150,9 @@ public class Translations {
                                                 createFolder(outputSubFolder);
                                                 recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
                                         }
-				 	if (file.isFile() && setAndCheckTestFormat(file.getName())) {
+				 	else if (file.isFile() && setAndCheckTestFormat(file.getName())) {
 						// perform translation
-						fileReaderWriter(moduleFileName, testPath, outputSubFolder);
+						fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder);
 					}
 				}
 			}
