@@ -135,18 +135,7 @@ public class Translations {
 				// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
 				if (setAndCheckTestFormat(inputFile.getName())) {
 					// perform translation
-					String[] splitPathAndExtension = outputSubFolder.split("\\.");
-					String splitPath = splitPathAndExtension[0];
-					String splitExt = splitPathAndExtension[1];
-					if (splitPathAndExtension.length == 1) {
-						fileReaderWriter(moduleFileName, testPath, splitPath);
-					}
-					else if (splitPathAndExtension.length == 2) {
-						fileReaderWriter(moduleFileName, testPath, splitPath + "_" + LANGUAGE + "." + splitExt);
-					}
-					else {
-						printErrorMsg("Problem with path splitting, make sure there is at most 1 '.' in file name");
-					}
+					fileReaderWriter(moduleFileName, testPath, outputSubFolder);
 				}
 			} else { // testPath: path to a folder containing test file(s)
 				//System.out.println("   IS FOLDER");
@@ -163,18 +152,7 @@ public class Translations {
                                         }
 				 	if (file.isFile() && setAndCheckTestFormat(file.getName())) {
 						// perform translation
-						String[] splitPathAndExtension = outputSubFolder.split("\\.");
-						String splitPath = splitPathAndExtension[0];
-						String splitExt = splitPathAndExtension[1];
-						if (splitPathAndExtension.length == 1) {
-							fileReaderWriter(moduleFileName, testPathSubFolder, splitPath + "_" + LANGUAGE);
-						}
-						else if (splitPathAndExtension.length == 2) {
-							fileReaderWriter(moduleFileName, testPathSubFolder, splitPath + "_" + LANGUAGE + "." + splitExt);
-						}
-						else {
-							printErrorMsg("Problem with path splitting, make sure there is at most 1 '.' in file name");
-						}
+						fileReaderWriter(moduleFileName, testPath, outputSubFolder);
 					}
 				}
 			}
