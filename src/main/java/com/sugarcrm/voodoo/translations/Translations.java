@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
 import java.lang.System;
+import java.util.Arrays;
 
 /**
  * @author Wilson Li
@@ -100,7 +101,7 @@ public class Translations {
 			MODULE = getCascadingPropertyValue(translateProp, "", "translate.module");
 			LANGUAGE = getCascadingPropertyValue(translateProp, "", "translate.language");
 			TEST_PATH = getCascadingPropertyValue(translateProp, "", "translate.testpath");
-			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "", "translate.output") + "_" + LANGUAGE;
+			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "", "translate.output");
 			DB_CONNECTION = connectToDatabase();
 
 			populateListOfModules(MODULE);
@@ -126,11 +127,13 @@ public class Translations {
 	private static void recursePathForTranslations(String testPath, String outputFolder) throws Exception {
 		try {
 			File inputFile = new File(testPath);
+			//System.out.println("Current path: " + testPath);
 			if (inputFile.isFile()) { // testPath: Path to a test file
+				//System.out.println("   IS FILE");
 				String outputSubFolder = outputFolder + File.separator + inputFile.getName();
 				String moduleFileName = getFileModuleName(inputFile.getName());
 				// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
-				if (isModuleExist(moduleFileName) && setAndCheckTestFormat(inputFile.getName())) {
+				if (setAndCheckTestFormat(inputFile.getName())) {
 					// perform translation
 					String[] splitPathAndExtension = outputSubFolder.split("\\.");
 					String splitPath = splitPathAndExtension[0];
@@ -146,13 +149,19 @@ public class Translations {
 					}
 				}
 			} else { // testPath: path to a folder containing test file(s)
+				//System.out.println("   IS FOLDER");
 				File[] files = new File(testPath).listFiles();
+				// System.out.println(Arrays.deepToString(files));
 				for (File file : files) {
 					String testPathSubFolder = file.getAbsolutePath();
 					String outputSubFolder = outputFolder + File.separator + file.getName();
 					String moduleFileName = getFileModuleName(file.getName());
-					// If the item is a file that contains a name from the module(s) and is of java format then perform translation
-					if (file.isFile() && isModuleExist(moduleFileName) && setAndCheckTestFormat(file.getName())) {
+					// If the item is a directory, then recurse the function with the item's path
+                                        if (file.isDirectory()) {
+                                                createFolder(outputSubFolder);
+                                                recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
+                                        }
+				 	if (file.isFile() && setAndCheckTestFormat(file.getName())) {
 						// perform translation
 						String[] splitPathAndExtension = outputSubFolder.split("\\.");
 						String splitPath = splitPathAndExtension[0];
@@ -166,11 +175,6 @@ public class Translations {
 						else {
 							printErrorMsg("Problem with path splitting, make sure there is at most 1 '.' in file name");
 						}
-					}
-					// If the item is a directory, then recurse the function with the item's path
-					if (file.isDirectory()) {
-						createFolder(outputSubFolder);
-						recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
 					}
 				}
 			}
@@ -217,6 +221,7 @@ public class Translations {
 			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
 			while (fileScanner.hasNextLine()) {
 				String line = fileScanner.nextLine();
+				//System.out.println("Scanned line: " + line);
 				match_assert = pattern_assert.matcher(line);
 
 				// XML use only
@@ -242,25 +247,33 @@ public class Translations {
 						}
 					}
 				} else if (match_link.find()) { // Link replacement for (xml only)
+					//System.out.println("LINK MATCH");
 					if(match_variable.find() || match_pageNumber.find()){
 						//printErrorMsg("Not finding translation for " + match_link.group(1));
 						output.write(line + "\r\n");
-					}else {
+					} else {
+						//System.out.println("Replacing link text");
+						//System.out.println(match_link.group(1));
+						//System.out.println(getDatabaseReplacementString(module, match_link.group(1))); // ERRORS WHEN THIS IS NULL
 						String newLine = line.replace(match_link.group(1), getDatabaseReplacementString(module, match_link.group(1)));
 						output.write(newLine + "\r\n");
 					}
 				} else if (match_moduletab.find()) { // match_moduletab replacement for (xml only)
+					//System.out.println("MODULETAB MATCH");
 					String newLine = line.replace(match_moduletab.group(1), getDatabaseReplacementString("SugarFeed", "All") + "_" + module);
 					output.write(newLine);
 				} else if (match_menuextra_all.find()) { // match_menuextra_all replacement for (xml only)
+					//System.out.println("MENU MATCH");
 					String newLine = line.replace(match_menuextra_all.group(1), getDatabaseReplacementString("SugarFeed", match_menuextra_all.group(1)));
 					output.write(newLine);
 				} else {
+					//System.out.println("NO MATCH");
 					output.write(line + "\r\n");
 				}
 			}
 			output.close();
 			fileScanner.close();
+			//System.out.println("Finished writing");
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -321,13 +334,7 @@ public class Translations {
 			// if there is a result due to the query, the translated value is returned. 
 			if (rs.next()) {
 				result = (rs.getString(1));
-				if (result == null) {
-					printErrorMsg("Database translation entry is 'null', translation is not yet available");
-					result = englishString;
-				}
-				else {
-					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
-				}
+				//printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'.");
 			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
 				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
 				//printMsg("Proceeding to search through all modules");
@@ -339,6 +346,10 @@ public class Translations {
 		} catch (SQLException e) {
 			throw new Exception(e.getMessage());
 		} finally {
+			if (result == null) {
+				result = englishString;
+				printMsg("Unsuccessful translation, string to be translated remains English");
+			}
 			return result;
 		}
 	}
@@ -354,7 +365,8 @@ public class Translations {
 	 * @throws Exception
 	 */
 	private static String searchAllModules(String englishString) throws Exception {
-		String result = null;
+		if (englishString == null) printErrorMsg("englishString in searchAllModules is null");
+		String result = englishString;
 		int counter = 0;
 		String[] tables = getAllModuleNamesFromDB();
 		
@@ -374,22 +386,20 @@ public class Translations {
 				if (rs_temp.next()) {
 					result = (rs_temp.getString(1));
 					if (result == null) {
-						printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
-						result = englishString;
+						//printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
 						counter++;
 						continue;
 					}
-					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
+					//printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
 					break; 
 				}
 				else {
 					//printErrorMsg("Could not find the translation for " + englishString + " in the " + tables[counter] + " module");
 					if (tables[counter] == "WorkFlowTriggerShells") { // WorkFlowTriggerShells is the last module, translation cannot be found
-						printErrorMsg("Could not find the translation for '" + englishString + "'");
+						//printErrorMsg("Could not find the translation for '" + englishString + "'");
 						break;
 					}
 					else {
-						result = englishString;
 						rs_temp.close();
 						pst_temp.close();
 						counter++;
@@ -401,6 +411,7 @@ public class Translations {
 				counter++;
 			}
 		}
+		//if (result == null) printMsg("searchAllModules returned null");
 		return result;
 	}
 	
