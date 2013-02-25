@@ -672,25 +672,28 @@ public class Translations {
 		File file = new File(outputFile);
 		Writer output = null;
 		try{
-			output = new BufferedWriter(new FileWriter(outputFile));
-			if (!file.exists()) {
+			if (file.exists()) {
+				System.out.println("login_translate.xml exists");
+			} else {	
 				System.out.println("Writing login_translate.xml: " + outputFile);
+				output = new BufferedWriter(new FileWriter(outputFile));
 				output.write("<soda>" +
 						"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
 						"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
 						"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
 						"\n\t<link text=\"Locale\"/>" +
-						"\n\t<select name=\"default_language\" setreal=\"LANGUAGE\" />" +
+						"\n\t<select name=\"default_language\" setreal=\"" + LANGUAGE + "\" />" +
 						"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
 						"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
 						"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
 						"\n</soda>");
 			}
-			System.out.println("login_translate.xml exists");
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
-			output.close();
+			if (output != null) {
+				output.close();
+			}
 		}
 	}
 }
