@@ -148,11 +148,11 @@ public class Translations {
 					String outputSubFolder = outputFolder + File.separator + file.getName();
 					String moduleFileName = getFileModuleName(file.getName());
 					// If the item is a directory, then recurse the function with the item's path
-                                        if (file.isDirectory()) {
-                                                createFolder(outputSubFolder);
-                                                recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
-                                        }
-				 	else if (file.isFile() && setAndCheckTestFormat(file.getName())) {
+					if (file.isDirectory()) {
+						createFolder(outputSubFolder);
+						recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
+					}
+					else if (file.isFile() && setAndCheckTestFormat(file.getName())) {
 						// perform translation
 						fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder);
 					}
@@ -349,7 +349,7 @@ public class Translations {
 		String result = englishString;
 		int counter = 0;
 		String[] tables = getAllModuleNamesFromDB();
-		
+
 		while (tables[counter] != null) {
 			PreparedStatement pst_ifExists = null;
 			ResultSet rs_ifExists = null;
@@ -394,298 +394,298 @@ public class Translations {
 		//if (result == null) printMsg("searchAllModules returned null");
 		return result;
 	}
-	
 
-		/**
-		 * Get an array of all the module names from the Database
-		 * 
-		 * @author Wilson Li
-		 * @return an array of module names within the database that is being queried
-		 */
-		private static String[] getAllModuleNamesFromDB() throws Exception {
-			int counter = 0;
-			try {
-				DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
-				String[] tables = new String[dbmd.getMaxTablesInSelect()];
-				String[] types = { "TABLE" };
-				ResultSet resultSet = dbmd.getTables(null, null, "%", types);
-				// Get the table names
-				while (resultSet.next()) {
-					String tableName = resultSet.getString(3);
-					tables[counter] = tableName;
-					counter++;
-				}
-				return tables;
-			} catch (SQLException e) {
-				throw new SQLException(e.getMessage());
+
+	/**
+	 * Get an array of all the module names from the Database
+	 * 
+	 * @author Wilson Li
+	 * @return an array of module names within the database that is being queried
+	 */
+	private static String[] getAllModuleNamesFromDB() throws Exception {
+		int counter = 0;
+		try {
+			DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
+			String[] tables = new String[dbmd.getMaxTablesInSelect()];
+			String[] types = { "TABLE" };
+			ResultSet resultSet = dbmd.getTables(null, null, "%", types);
+			// Get the table names
+			while (resultSet.next()) {
+				String tableName = resultSet.getString(3);
+				tables[counter] = tableName;
+				counter++;
 			}
+			return tables;
+		} catch (SQLException e) {
+			throw new SQLException(e.getMessage());
 		}
+	}
 
-		/**
-		 * This function was implemented for Voodoo2 to replace the
-		 * [Expected Value] from the following assert statement:
-		 * Assert.assertEquals( [Message], [Expected Value], [Actual Value]); 
-		 * to a language-specific value retrieved from the database
-		 * 
-		 * @author Wilson Li
-		 * @param assertStr
-		 * @return a string representing the value to be translated
-		 */
-		private static String getToBeReplacedAssertString(String assertStr) throws Exception {
-			String tempString = "";
-			String prevString = "";
-			String[] statement = assertStr.split("");
-			ArrayList<String> argumentListString = new ArrayList<String>();
-			boolean withinQuote = false;
+	/**
+	 * This function was implemented for Voodoo2 to replace the
+	 * [Expected Value] from the following assert statement:
+	 * Assert.assertEquals( [Message], [Expected Value], [Actual Value]); 
+	 * to a language-specific value retrieved from the database
+	 * 
+	 * @author Wilson Li
+	 * @param assertStr
+	 * @return a string representing the value to be translated
+	 */
+	private static String getToBeReplacedAssertString(String assertStr) throws Exception {
+		String tempString = "";
+		String prevString = "";
+		String[] statement = assertStr.split("");
+		ArrayList<String> argumentListString = new ArrayList<String>();
+		boolean withinQuote = false;
 
-			// loop through each character to find the desire string. In this 
-			// case, the second argument from an assert statement
-			for (int index = 0; index < statement.length; index++) {
-				if (statement[index].equals("\"") && !withinQuote) {
-					// beginning of a quoted string
+		// loop through each character to find the desire string. In this 
+		// case, the second argument from an assert statement
+		for (int index = 0; index < statement.length; index++) {
+			if (statement[index].equals("\"") && !withinQuote) {
+				// beginning of a quoted string
+				prevString = statement[index];
+				tempString += statement[index]; // build tempString
+				withinQuote = true;
+			} else if (withinQuote) { // within a quoted string
+				if (!prevString.equals("\\") && statement[index].equals("\"")) {
+					// Is within quote but has reached the end fo the quoted string
 					prevString = statement[index];
-					tempString += statement[index]; // build tempString
-					withinQuote = true;
-				} else if (withinQuote) { // within a quoted string
-					if (!prevString.equals("\\") && statement[index].equals("\"")) {
-						// Is within quote but has reached the end fo the quoted string
-						prevString = statement[index];
-						tempString += statement[index];
-						withinQuote = false;
-					} else { // still within quoted string and not yet the end
-						// keep building the string
-						prevString = statement[index];
-						tempString += statement[index];
-					}
-				} else { // This is not within a quote
-					// simply a variable - loop until a comma is seen
-					if (statement[index].equals(",")) {
-						// if a comma is seen then place tempString into the
-						// ArgumentList
-						prevString = statement[index];
-						argumentListString.add(tempString);
-						tempString = "";
-					} else {
-						// else keep building the tempString
-						prevString = statement[index];
-						tempString += statement[index];
-					}
+					tempString += statement[index];
+					withinQuote = false;
+				} else { // still within quoted string and not yet the end
+					// keep building the string
+					prevString = statement[index];
+					tempString += statement[index];
+				}
+			} else { // This is not within a quote
+				// simply a variable - loop until a comma is seen
+				if (statement[index].equals(",")) {
+					// if a comma is seen then place tempString into the
+					// ArgumentList
+					prevString = statement[index];
+					argumentListString.add(tempString);
+					tempString = "";
+				} else {
+					// else keep building the tempString
+					prevString = statement[index];
+					tempString += statement[index];
 				}
 			}
-			// Concatenating the last element
-			argumentListString.add(tempString);
-			// Defining assertType according to the number of arguments retrieved
-			setAssertPosition(argumentListString.size());
-			// get argument string and trim off white spaces
-			String ret = argumentListString.get(ASSERT_POSITION).trim();
-			// if needed, trim off beginning and ending quote marks
-			return trimBorderQuoteMarks(ret);
 		}
+		// Concatenating the last element
+		argumentListString.add(tempString);
+		// Defining assertType according to the number of arguments retrieved
+		setAssertPosition(argumentListString.size());
+		// get argument string and trim off white spaces
+		String ret = argumentListString.get(ASSERT_POSITION).trim();
+		// if needed, trim off beginning and ending quote marks
+		return trimBorderQuoteMarks(ret);
+	}
 
-		/**
-		 * This method will set the ASSERT_POSITION for specific string replacement in an assert statement.
-		 * The position indicates the expectedValue of an assert statement. Two types of asserts currently
-		 * support.
-		 * 
-		 * @author Wilson Li
-		 * @param numberOfArguments
-		 * @throws Exception
-		 */
-		private static void setAssertPosition(int numberOfArguments) throws Exception {
-			switch (numberOfArguments) {
-			case 2: ASSERT_POSITION = 0; break; // assertEquals(expectedValue, actualValue); 
-			case 3:	ASSERT_POSITION = 1; break; // assertEquals(message, expectedValue, actualValue);
-			default: throw new Exception("Invalid Number of Arguments, got " + numberOfArguments + " argument(s)");	
-			}
+	/**
+	 * This method will set the ASSERT_POSITION for specific string replacement in an assert statement.
+	 * The position indicates the expectedValue of an assert statement. Two types of asserts currently
+	 * support.
+	 * 
+	 * @author Wilson Li
+	 * @param numberOfArguments
+	 * @throws Exception
+	 */
+	private static void setAssertPosition(int numberOfArguments) throws Exception {
+		switch (numberOfArguments) {
+		case 2: ASSERT_POSITION = 0; break; // assertEquals(expectedValue, actualValue); 
+		case 3:	ASSERT_POSITION = 1; break; // assertEquals(message, expectedValue, actualValue);
+		default: throw new Exception("Invalid Number of Arguments, got " + numberOfArguments + " argument(s)");	
 		}
+	}
 
-		/**
-		 * This will trim off any start and end quote marks from the string (if it has)
-		 * 
-		 * @author Wilson Li
-		 * @param value - a string that could contain a beginning and ending quote marks 
-		 * @return - a string that does not contain any beginning and ending quote marks
-		 */
-		private static String trimBorderQuoteMarks(String value) {
-			if (value.substring(0, 1).equals("\"") && value.substring(value.length() - 1, value.length()).equals("\"")) {
-				value = value.substring(1, value.length() - 1);
-				return value;
-			} else {
-				return value;
-			}
-		}
-
-
-		/**
-		 * Get values from the properties file/System property with cascading functionality
-		 * Precedence (left-to-right): System property > properties file > default value 
-		 * 
-		 * @author Wilson Li
-		 * @param props
-		 * @param defaultValue
-		 * @param key
-		 * @return a string representing the value from a given key
-		 */
-		private static String getCascadingPropertyValue(Properties props, String defaultValue, String key) {
-			String value = defaultValue;
-			if (props != null) {
-				if (props.containsKey(key) && value.equals(""))
-					value = props.getProperty(key);
-				if (props.containsKey(key) && !value.equals(""))
-					value = props.getProperty(key);
-				if (System.getProperties().containsKey(key))
-					value = System.getProperty(key);
-				if (!props.containsKey(key) && value.equals("")) {
-					printErrorMsg("System's property or property file does not contain such key: " + key);
-					System.exit(0);
-				}
-			} else {
-				if (System.getProperties().containsKey(key))
-					value = System.getProperty(key);
-			}
-			printMsg("Using value: '" + value + "' for key: " + "'" + key + "'.");
+	/**
+	 * This will trim off any start and end quote marks from the string (if it has)
+	 * 
+	 * @author Wilson Li
+	 * @param value - a string that could contain a beginning and ending quote marks 
+	 * @return - a string that does not contain any beginning and ending quote marks
+	 */
+	private static String trimBorderQuoteMarks(String value) {
+		if (value.substring(0, 1).equals("\"") && value.substring(value.length() - 1, value.length()).equals("\"")) {
+			value = value.substring(1, value.length() - 1);
+			return value;
+		} else {
 			return value;
 		}
+	}
 
-		/**
-		 * Gets the Module string from the file name (e.g. Accounts_0123.java = Accounts)
-		 * 
-		 * @author Wilson Li
-		 * @param fileName
-		 * @return a string representing the the module name
-		 */
-		private static String getFileModuleName(String fileName) {
-			String fileModuleName = "";
-			for (int index = 0; index < fileName.length(); index++) {
-				String character = fileName.substring(index, index + 1);
-				if (character.equals("_"))
-					break;
-				else {
-					fileModuleName += character;
+
+	/**
+	 * Get values from the properties file/System property with cascading functionality
+	 * Precedence (left-to-right): System property > properties file > default value 
+	 * 
+	 * @author Wilson Li
+	 * @param props
+	 * @param defaultValue
+	 * @param key
+	 * @return a string representing the value from a given key
+	 */
+	private static String getCascadingPropertyValue(Properties props, String defaultValue, String key) {
+		String value = defaultValue;
+		if (props != null) {
+			if (props.containsKey(key) && value.equals(""))
+				value = props.getProperty(key);
+			if (props.containsKey(key) && !value.equals(""))
+				value = props.getProperty(key);
+			if (System.getProperties().containsKey(key))
+				value = System.getProperty(key);
+			if (!props.containsKey(key) && value.equals("")) {
+				printErrorMsg("System's property or property file does not contain such key: " + key);
+				System.exit(0);
+			}
+		} else {
+			if (System.getProperties().containsKey(key))
+				value = System.getProperty(key);
+		}
+		printMsg("Using value: '" + value + "' for key: " + "'" + key + "'.");
+		return value;
+	}
+
+	/**
+	 * Gets the Module string from the file name (e.g. Accounts_0123.java = Accounts)
+	 * 
+	 * @author Wilson Li
+	 * @param fileName
+	 * @return a string representing the the module name
+	 */
+	private static String getFileModuleName(String fileName) {
+		String fileModuleName = "";
+		for (int index = 0; index < fileName.length(); index++) {
+			String character = fileName.substring(index, index + 1);
+			if (character.equals("_"))
+				break;
+			else {
+				fileModuleName += character;
+			}
+		}
+		return fileModuleName;
+	}
+
+	/**
+	 * Check whether a module name (String) exists in the listOfDatabaseModules list 
+	 * 
+	 * @author Wilson Li
+	 * @param moduleName
+	 * @return a boolean value, true if the module name exists in the listOfDatabaseModules list, else return false
+	 */
+	private static boolean isModuleExist(String moduleName) {
+		for (String module : listOfDatabaseModules) {
+			if (module.equals(moduleName))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Read from a file (a list of modules from the given path) and
+	 * place them into a list (listOfDatabaseModules)
+	 * 
+	 * @author Wilson Li
+	 * @param path - can either be a path to a file containing a list of modules or 
+	 * it can just be a single module name (ie, Accounts)
+	 */
+	private static void populateListOfModules(String path) throws Exception {
+		BufferedReader BR = null;
+		String line = null;
+		try {
+			File testFile = new File(path);
+			if (!testFile.isFile()) {
+				printMsg("Using the following module: " + path);
+				listOfDatabaseModules.add(path.trim());
+			} else {
+				printMsg("Obtaining modules from file: " + path);
+				BR = new BufferedReader(new FileReader(path));
+				while ((line = BR.readLine()) != null) {
+					listOfDatabaseModules.add(line.trim());
 				}
 			}
-			return fileModuleName;
-		}
-
-		/**
-		 * Check whether a module name (String) exists in the listOfDatabaseModules list 
-		 * 
-		 * @author Wilson Li
-		 * @param moduleName
-		 * @return a boolean value, true if the module name exists in the listOfDatabaseModules list, else return false
-		 */
-		private static boolean isModuleExist(String moduleName) {
-			for (String module : listOfDatabaseModules) {
-				if (module.equals(moduleName))
-					return true;
-			}
-			return false;
-		}
-
-		/**
-		 * Read from a file (a list of modules from the given path) and
-		 * place them into a list (listOfDatabaseModules)
-		 * 
-		 * @author Wilson Li
-		 * @param path - can either be a path to a file containing a list of modules or 
-		 * it can just be a single module name (ie, Accounts)
-		 */
-		private static void populateListOfModules(String path) throws Exception {
-			BufferedReader BR = null;
-			String line = null;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
 			try {
-				File testFile = new File(path);
-				if (!testFile.isFile()) {
-					printMsg("Using the following module: " + path);
-					listOfDatabaseModules.add(path.trim());
-				} else {
-					printMsg("Obtaining modules from file: " + path);
-					BR = new BufferedReader(new FileReader(path));
-					while ((line = BR.readLine()) != null) {
-						listOfDatabaseModules.add(line.trim());
-					}
-				}
-			} catch (Exception e) {
+				if (BR != null)
+					BR.close();
+			} catch (IOException e) {
 				throw new Exception(e.getMessage());
-			} finally {
-				try {
-					if (BR != null)
-						BR.close();
-				} catch (IOException e) {
-					throw new Exception(e.getMessage());
-				}
-			}
-		}
-
-		/**
-		 * Create a folder with the given path
-		 * 
-		 * @author Wilson Li
-		 * @param path
-		 */
-		private static void createFolder(String path) {
-			File outputFolder = new File(path);
-			if (!outputFolder.exists())
-				outputFolder.mkdir();
-		}
-
-		/**
-		 * Simple wrapper function to do a System.out.println for Translations
-		 * 
-		 * @author Wilson Li
-		 * @param message
-		 */
-		private static void printMsg(String message) {
-			System.out.println("[Translations]: " + message);
-		}
-
-		/**
-		 * Simple wrapper function to do a System.out.println for Translations' Errors
-		 * @author Wilson Li
-		 * @param message
-		 */
-		private static void printErrorMsg(String message) {
-			System.out.println("[Translations ERROR]: " + message);		
-		}
-
-		/**
-		 *   * This is to verify if the test file is either .java or .xml to 
-		 *       * perform translations accordingly
-		 *           * 
-		 *               * @param filename
-		 *                   */
-		private static boolean setAndCheckTestFormat(String filename) {
-			if (filename.contains(".java")) { 
-				TEST_FORMAT = "JAVA";
-			}
-			else if (filename.contains(".xml")) { 
-				TEST_FORMAT = "XML";
-			}
-			else { 
-				printErrorMsg("file format is not either .java or .xml for the file: " + filename);
-				return false;   
-			}
-			return true;
-		}
-		
-		private static void createLoginXMLFile(String outputFile) throws Exception {
-			File file = new File(outputFile);
-			Writer output = new BufferedWriter(new FileWriter(outputFile));
-			try {
-				output.write("<soda>" +
-								"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
-								"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
-								"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
-								"\n\t<link text=\"Locale\"/>" +
-								"\n\t<select name=\"default_language\" setreal=\"zh_CN\" />" +
-								"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
-								"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
-								"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
-								"\n</soda>");
-			} catch (Exception e) {
-				throw new Exception(e.getMessage());
-			} finally {
-				output.close();
 			}
 		}
 	}
+
+	/**
+	 * Create a folder with the given path
+	 * 
+	 * @author Wilson Li
+	 * @param path
+	 */
+	private static void createFolder(String path) {
+		File outputFolder = new File(path);
+		if (!outputFolder.exists())
+			outputFolder.mkdir();
+	}
+
+	/**
+	 * Simple wrapper function to do a System.out.println for Translations
+	 * 
+	 * @author Wilson Li
+	 * @param message
+	 */
+	private static void printMsg(String message) {
+		System.out.println("[Translations]: " + message);
+	}
+
+	/**
+	 * Simple wrapper function to do a System.out.println for Translations' Errors
+	 * @author Wilson Li
+	 * @param message
+	 */
+	private static void printErrorMsg(String message) {
+		System.out.println("[Translations ERROR]: " + message);		
+	}
+
+	/**
+	 *   * This is to verify if the test file is either .java or .xml to 
+	 *       * perform translations accordingly
+	 *           * 
+	 *               * @param filename
+	 *                   */
+	private static boolean setAndCheckTestFormat(String filename) {
+		if (filename.contains(".java")) { 
+			TEST_FORMAT = "JAVA";
+		}
+		else if (filename.contains(".xml")) { 
+			TEST_FORMAT = "XML";
+		}
+		else { 
+			printErrorMsg("file format is not either .java or .xml for the file: " + filename);
+			return false;   
+		}
+		return true;
+	}
+
+	private static void createLoginXMLFile(String outputFile) throws Exception {
+		File file = new File(outputFile);
+		Writer output = new BufferedWriter(new FileWriter(outputFile));
+		try {
+			output.write("<soda>" +
+					"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
+					"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
+					"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
+					"\n\t<link text=\"Locale\"/>" +
+					"\n\t<select name=\"default_language\" setreal=\"zh_CN\" />" +
+					"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
+					"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
+					"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
+					"\n</soda>");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			output.close();
+		}
+	}
+}
