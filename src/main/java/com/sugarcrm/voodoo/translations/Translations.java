@@ -674,7 +674,7 @@ public class Translations {
 		Writer output = new BufferedWriter(new FileWriter(outputFile));
 		try {
 			if (!file.exists()) {
-				System.out.println("Writing file: " + outputFile);
+				System.out.println("Writing login_translate.xml: " + outputFile);
 				output.write("<soda>" +
 						"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
 						"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
@@ -686,6 +686,7 @@ public class Translations {
 						"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
 						"\n</soda>");
 			}
+			System.out.println("login_translate.xml exists");
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
