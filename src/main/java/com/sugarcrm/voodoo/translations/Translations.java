@@ -74,8 +74,7 @@ public class Translations {
 			OUTPUT_FOLDER = getCascadingPropertyValue(null, defaultOutputPath, "translate.output");
 			DB_CONNECTION = connectToDatabase();
 
-			//populateListOfModules(MODULE);
-			
+			//populateListOfModules(MODULE);			
 			createLoginXMLFile(TEST_PATH + "/../../login_translate.xml");
 			createFolder(OUTPUT_FOLDER);
 			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
@@ -671,8 +670,9 @@ public class Translations {
 
 	private static void createLoginXMLFile(String outputFile) throws Exception {
 		File file = new File(outputFile);
-		Writer output = new BufferedWriter(new FileWriter(outputFile));
-		try {
+		Writer output = null;
+		try{
+			output = new BufferedWriter(new FileWriter(outputFile));
 			if (!file.exists()) {
 				System.out.println("Writing login_translate.xml: " + outputFile);
 				output.write("<soda>" +
