@@ -75,6 +75,7 @@ public class Translations {
 			DB_CONNECTION = connectToDatabase();
 
 			//populateListOfModules(MODULE);
+			
 			createLoginXMLFile(TEST_PATH + "/../../login_translate.xml");
 			createFolder(OUTPUT_FOLDER);
 			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
@@ -672,16 +673,19 @@ public class Translations {
 		File file = new File(outputFile);
 		Writer output = new BufferedWriter(new FileWriter(outputFile));
 		try {
-			output.write("<soda>" +
-					"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
-					"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
-					"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
-					"\n\t<link text=\"Locale\"/>" +
-					"\n\t<select name=\"default_language\" setreal=\"zh_CN\" />" +
-					"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
-					"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
-					"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
-					"\n</soda>");
+			if (!file.exists()) {
+				System.out.println("Writing file: " + outputFile);
+				output.write("<soda>" +
+						"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
+						"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
+						"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
+						"\n\t<link text=\"Locale\"/>" +
+						"\n\t<select name=\"default_language\" setreal=\"LANGUAGE\" />" +
+						"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
+						"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
+						"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
+						"\n</soda>");
+			}
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
