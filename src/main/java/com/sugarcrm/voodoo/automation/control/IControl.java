@@ -17,6 +17,7 @@ public interface IControl {
 	 *							 cannot be found
 	 */
 	public String getAttribute(String attribute) throws Exception;
+	public String getAttribute(String attribute, int index) throws Exception;
 	
 	/**
 	 * Get the visible text of this element.
@@ -25,6 +26,7 @@ public interface IControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public String getText() throws Exception;
+	public String getText(int index) throws Exception;
 	
 	/**
 	 * Click the element.
@@ -32,6 +34,7 @@ public interface IControl {
 	 * @throws Exception	 if the element can not be found
 	 */
 	public void click() throws Exception;
+	public void click(int index) throws Exception;
 	
 	/**
 	 * Double-click the element.
@@ -39,6 +42,7 @@ public interface IControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void doubleClick() throws Exception;
+	public void doubleClick(int index) throws Exception;
 	
 	/**
 	 * Drag this control and drop onto another control.
@@ -47,6 +51,7 @@ public interface IControl {
 	 * @throws Exception	 if either element cannot be found
 	 */
 	public void dragNDrop(VControl dropControl) throws Exception;
+	public void dragNDrop(VControl dropControl, int dragIndex, int dropIndex) throws Exception;
 	
 	/**
 	 * Explicit wait until this control is displayed or the timeout (s) 
@@ -78,6 +83,7 @@ public interface IControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void hover() throws Exception;
+	public void hover(int index) throws Exception;
 	
 	/**
 	 * Right-click this control.
@@ -85,6 +91,7 @@ public interface IControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void rightClick() throws Exception;
+	public void rightClick(int index) throws Exception;
 	
 	/**
 	 * Scroll the browser window to this control.
@@ -92,6 +99,7 @@ public interface IControl {
 	 * @throws Exception	 if the element cannot be found or if the scroll fails
 	 */
 	public void scroll() throws Exception;
+	public void scroll(int index) throws Exception;
 	
 	/**
 	 * Send a string to this control.
@@ -100,4 +108,5 @@ public interface IControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void sendString(String input) throws Exception;
+	public void sendString(String input, int index) throws Exception;
 }

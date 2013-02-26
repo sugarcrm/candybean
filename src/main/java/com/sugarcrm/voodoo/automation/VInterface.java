@@ -19,15 +19,16 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 
-import com.sugarcrm.voodoo.automation.control.VAControl;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 import com.sugarcrm.voodoo.utilities.Utils;
 
-public class VInterface implements IInterface {
+public class VInterface {
 
+	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS; }
+	
 	public final WebDriver wd;
 //	public final AndroidInterface vac; //vac as in voodoo android control
 
@@ -44,7 +45,7 @@ public class VInterface implements IInterface {
 	 * @param iType   {@link IInterface.Type} of web browser to run
 	 * @throws Exception
 	 */
-	public VInterface(Voodoo voodoo, Properties props, IInterface.Type iType)
+	public VInterface(Voodoo voodoo, Properties props, Type iType)
 			throws Exception {
 		this.voodoo = voodoo;
 		this.props = props;
@@ -59,49 +60,90 @@ public class VInterface implements IInterface {
 		}
 	}
 	
-	@Override
+	/**
+	 * Pause the test for the specified duration.
+	 *
+	 * @param ms  duration of pause in milliseconds
+	 * @throws Exception	 if the underlying {@link Thread#sleep} is interrupted
+	 */
 	public void pause(long ms) throws Exception {
 		voodoo.log.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
 	
-	@Override
+	/**
+	 * Display a modal dialog box to the test user.
+	 *
+	 * @param message	 String to display on the dialog box
+	 * @throws Exception	 if the program is running headless (with no GUI)
+	 */
 	public void interact(String message) {
 		voodoo.log.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
 	}
 	
-	@Override
+	/**
+	 * Launch and initialize a web browser.
+	 * @throws Exception	 <i>not thrown</i>
+	 */
 	public void start() throws Exception {
 		voodoo.log.info("Starting browser.");
 	}
 
-	@Override
+	/**
+	 * Close the web browser and perform final cleanup.
+	 *
+	 * @throws Exception	  <i>not thrown</i>
+	 */
 	public void stop() throws Exception {
 		voodoo.log.info("Stopping automation.");
 		this.wd.quit();
 	}
 
+	/**
+	 * Close the current browser window.
+	 *
+	 * @throws Exception	  <i>not thrown</i>
+	 */
 	public void closeWindow() throws Exception {
 		voodoo.log.info("Closing window.");
 		this.wd.close();
 	}
 
-	@Override
+	/**
+	 * Load a URL in the browser window.
+	 *
+	 * @param url	the URL to be loaded by the browser
+	 * @throws Exception		<i>not thrown</i>
+	 */
 	public void go(String url) throws Exception {
 		voodoo.log.info("Going to URL and switching to window: " + url);
 		this.wd.get(url);
 		this.wd.switchTo().window(this.wd.getWindowHandle());
 	}
 
-	@Override
+	/**
+	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
+	 * as a &quot;javascript dialog&quot;).
+	 *
+	 * @throws Exception	 if no dialog box is present
+	 */
 	public void acceptDialog() throws Exception {
 		voodoo.log.info("Accepting dialog.");
 		Alert alert = this.wd.switchTo().alert();
 		alert.accept();
 	}
 
-	@Override
+	/**
+	 * Focus a browser window by its index.
+	 *
+	 * <p>The order of browser windows is somewhat arbitrary and not
+	 * guaranteed, although window creation time ordering seems to be
+	 * the most common.</p>
+	 *
+	 * @param index  the window index
+	 * @throws Exception	 if the specified window cannot be found
+	 */
 	public void focusByIndex(int index) throws Exception {
 		voodoo.log.info("Focusing window by index: " + index);
 		Set<String> Handles = this.wd.getWindowHandles();
@@ -116,7 +158,15 @@ public class VInterface implements IInterface {
 		this.wd.switchTo().window(windowHandles.get(index));
 	}
 
-	@Override
+	/**
+	 * Focus a browser window by its window title.
+	 *
+	 * <p>If more than one window has the same title, the first
+	 * encountered is the one that is focused.</p>
+	 *
+	 * @param title  the exact window title to be matched
+	 * @throws Exception	  if the specified window cannot be found
+	 */
 	public void focusByTitle(String title) throws Exception {
 		voodoo.log.info("Focusing window by title: " + title);
 		Set<String> handles = this.wd.getWindowHandles();
@@ -130,7 +180,15 @@ public class VInterface implements IInterface {
 		}
 	}
 
-	@Override
+	/**
+	 * Focus a browser window by its URL.
+	 *
+	 * <p>If more than one window has the same URL, the first
+	 * encountered is the one that is focused.</p>
+	 *
+	 * @param url	the URL to be matched
+	 * @throws Exception	  if the specified window cannot be found
+	 */
 	public void focusByUrl(String url) throws Exception {
 		voodoo.log.info("Focusing window by url: " + url);
 		Set<String> handles = this.wd.getWindowHandles();
@@ -144,7 +202,11 @@ public class VInterface implements IInterface {
 		}
 	}
 
-	@Override
+	/**
+	 * Maximize the browser window.
+	 *
+	 * @throws Exception	 <i>not thrown</i>
+	 */
 	public void maximize() {
 		voodoo.log.info("Maximizing window");
 		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit()
@@ -152,27 +214,49 @@ public class VInterface implements IInterface {
 		this.wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
-	@Override
+	/**
+	 * Get a control from the current page.
+	 *
+	 * @param hook	 description of how to find the control
+	 * @throws Exception	 <i>not thrown</i>
+	 */
 	public VControl getControl(VHook hook) throws Exception {
 		return new VControl(this.voodoo, this, hook);
 	}
 
-	@Override
+	/**
+	 * Get a control from the current page.
+	 *
+	 * @param strategy  method to use to search for the control
+	 * @param hook		  string to find using the specified strategy
+	 * @throws Exception	 <i>not thrown</i>
+	 */
 	public VControl getControl(Strategy strategy, String hook) throws Exception {
 		return this.getControl(new VHook(strategy, hook));
 	}
 
-	@Override
+	/**
+	 * Get a &lt;SELECT&gt; control from the current page.
+	 *
+	 * @param hook	 description of how to find the control
+	 * @throws Exception	 <i>not thrown</i>
+	 */
 	public VSelect getSelect(VHook hook) throws Exception {
 		return new VSelect(this.voodoo, this, hook);
 	}
 
-	@Override
+	/**
+	 * Get a &lt;SELECT&gt; control from the current page.
+	 *
+	 * @param strategy  method to use to search for the control
+	 * @param hook		  string to find using the specified strategy
+	 * @throws Exception	 <i>not thrown</i>
+	 */
 	public VSelect getSelect(Strategy strategy, String hook) throws Exception {
 		return this.getSelect(new VHook(strategy, hook));
 	}
 	
-	private WebDriver getWebDriver(IInterface.Type iType) throws Exception {
+	private WebDriver getWebDriver(Type iType) throws Exception {
 		WebDriver wd = null;
 		switch (iType) {
 		case FIREFOX:
