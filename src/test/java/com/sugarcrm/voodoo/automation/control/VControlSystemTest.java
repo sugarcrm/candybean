@@ -11,7 +11,6 @@ import org.junit.Ignore;
 
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.automation.IInterface;
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VControl;
@@ -25,7 +24,6 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
 //import com.sugarcrm.voodoo.Voodoo;
 
 import static org.junit.Assert.assertEquals;
-
 
 public class VControlSystemTest {
 	protected static Voodoo voodoo;
