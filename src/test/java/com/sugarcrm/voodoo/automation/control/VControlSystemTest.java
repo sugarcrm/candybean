@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
 import static org.junit.Assert.assertEquals;
 
 
-public class VControlTest {
+public class VControlSystemTest {
 	protected static Voodoo voodoo;
 	protected static VInterface iface;
 	
@@ -43,9 +44,38 @@ public class VControlTest {
 		iface.start();
 	}
 
-	@Test 
+	@Test
+	public void getAttributeTest() throws Exception {
+		String w3Url = "http://www.w3schools.com/html/default.asp";
+		iface.go(w3Url);
+		String actAltValue = iface.getControl(Strategy.XPATH, "//*[@id=\"topLogo\"]/a[2]/img").getAttribute("alt");
+		String expAltValue = "W3Schools.com";
+		Assert.assertEquals("Expecting: " + expAltValue + ", actual: " + actAltValue, actAltValue, expAltValue);
+		String actHrefValue = iface.getControl(Strategy.CLASS, "topnav").getAttribute("alt", 1);
+		String expHrefValue = "/html/default.asp";
+		Assert.assertEquals("Expecting: " + expHrefValue + ", actual: " + actHrefValue, actHrefValue, expHrefValue);
+	}
+	
+	@Test
+	public void getTextTest() throws Exception {
+		String w3Url = "http://www.w3schools.com/html/default.asp";
+		iface.go(w3Url);
+		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
+		String expChapterText = "W3Schools Home";
+		Assert.assertEquals("Expecting: " + expChapterText + ", actual: " + actChapterText, expChapterText, actChapterText);
+//		String text2 = getText(int index);
+	}
+	
+	@Ignore
+	@Test
+	public void clickTest() throws Exception {
+//		click();
+//		click(int index);
+	}
+	
+	@Test
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
-	public void testDoubleClickTest() throws Exception {
+	public void doubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
 		//Checkbox control
@@ -58,10 +88,11 @@ public class VControlTest {
 		checkboxControl.doubleClick();
 		iface.pause(2000); 
 		checkboxControl.doubleClick();
-		iface.pause(2000); 
+		iface.pause(2000);
+//		doubleClick(int index);
 	}
 	
-	
+//	@Ignore
 	@Test
 	public void dragNDropTest() throws Exception {
 		String w3Url = "http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=6&ved=0CDoQFjAF&url=http%3A%2F%2Ftool-man.org%2Fexamples%2Fsorting.html&ei=nBGLUKi8CcGmigLah4CADg&usg=AFQjCNGL-HryUxMBRKn9gEM0F1xE_NNNyQ";
@@ -76,8 +107,10 @@ public class VControlTest {
    		String actItemid = targetControl.getAttribute("itemid");
    		String expItemid = "1";
         Assert.assertEquals("Expected value for the itemid attribute should match: " + expItemid, expItemid, actItemid);
+//		dragNDrop(VControl dropControl, int dragIndex, int dropIndex);
 	}
 	
+	@Ignore
 	@Test
 	public void dragNDropTest2() throws Exception {
 //		voodoo.go("http://www.w3schools.com/html/html5_draganddrop.asp");
@@ -97,8 +130,34 @@ public class VControlTest {
 //		voodoo.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
 	}
 	
-	@AfterClass
-	public static void last() throws Exception {
-		iface.stop();
+	@Ignore
+	@Test
+	public void hoverTest() throws Exception {
+//		hover();
+//		hover(int index);
 	}
+	
+	@Ignore
+	@Test
+	public void rightClickTest() throws Exception {
+//		rightClick();
+//		rightClick(int index);
+	}
+	
+	@Ignore
+	@Test
+	public void scrollTest() throws Exception {
+//		scroll();
+//		scroll(int index);
+	}
+
+	@Ignore
+	@Test
+	public void sendStringTest() throws Exception {
+//		sendString(String input);
+//		sendString(String input, int index);
+	}
+	
+	@AfterClass
+	public static void last() throws Exception { iface.stop(); }
 }	
