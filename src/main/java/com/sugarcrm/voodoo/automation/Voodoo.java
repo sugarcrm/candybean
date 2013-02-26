@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import com.sugarcrm.voodoo.automation.IInterface.Type;
+import com.sugarcrm.voodoo.automation.VInterface.Type;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 /**
@@ -85,7 +85,7 @@ public class Voodoo {
 	 * @throws Exception if the browser specified cannot be run or if
 	 *							WebDriver cannot be started
 	 */
-	public VInterface getInterface(IInterface.Type iType) throws Exception {
+	public VInterface getInterface(VInterface.Type iType) throws Exception {
 		return new VInterface(this, this.props, iType);
 	}
 	
@@ -95,9 +95,9 @@ public class Voodoo {
 	 * @return browser type or null if the type is unrecognized
 	 * @throws Exception if the browser type is unimplemented
 	 */
-	private IInterface.Type parseInterfaceType(String iTypeString) throws Exception {
-		IInterface.Type iType = null;
-		for (IInterface.Type iTypeIter : IInterface.Type.values()) {
+	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
+		VInterface.Type iType = null;
+		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
 			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
 				iType = iTypeIter;
 				break;
