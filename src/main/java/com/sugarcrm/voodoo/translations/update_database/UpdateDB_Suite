@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Author: Jason Lin (ylin)
+# Purpose: Update a database (create it if necessary) with the provided php files containing key-value pairs. Each key-value pair is a label-to-text mapping for some language.
+#	   Note this script merely runs a collection of other scripts. See each of those files for their documentation.
+# Output: A database containing tables of language strings that can be used for translations. Each table contains a common label and texts in different languages.
+# Input: workspace for_dir sugar_ver db_name
+#	 workspace - workspace path of a Jenkins job
+#	 for_dir - directory path containing foreign language php files (Sugar installation or sugarcrm/translations repository)
+#	 sugar_ver - version of Sugar to be downloaded, for example 6_7 or 6_7_1
+#	 db_name - name of the database to be updated (or created if necessary), for example Translations_6_7
+
+if [ $# != 4 ]
+then
+	echo "Usage: $0 workspace for_dir sugar_version db_name
+	workspace - workspace path of a Jenkins job
+	for_dir - directory path containing foreign language php files (Sugar installation or sugarcrm/translations repository)
+	sugar_version - version of Sugar to be downloaded
+	db_name - name of the database to be updated (or created if necessary)"
+	exit
+fi
+
+if [[ $1 == */ ]]
+then
+	workspace=${1%?}
+else
+	workspace=$1
+fi
+
+if [[ $2 == */ ]]
+then
+	for_dir=${2%?}
+else
+	for_dir=$2
+fi
+
+sugar_ver=$3; db_name=$4
+
+ruby downloadSugar.rb $workspace $sugar_ver
+
+./generateLangsAndModules $workspace/sugar
+
+cd $workspace/translations/modules/ModuleBuilder/language; rm * 
+
+git ls-files -d | xargs git checkout --
+
+cd $workspace/AutoUtils/Translations
+
+./bypassModuleBuilder $workspace/sugar $for_dir
+
+php -f updateDB.php $db_name $workspace/sugar $for_dir localhost root root 

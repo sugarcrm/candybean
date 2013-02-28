@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Author: Jason Lin (ylin)
+# Purpose: Generate a list of language codes and a list of modules used by updateDB.php.
+# Output: A file named updateDB_LangsAndModules.php in the same directory as this script.
+# Input: Directory path of a Sugar installation, see SugarWiki for more information on installing Sugar.
+
+# display error message if number of arguments is not 1
+if [ $# != 1 ]
+then
+	echo "Usage: $0 path-to-sugar-installation"
+	exit
+fi
+
+outputFile=updateDB_LangsAndModules.php
+
+# handle extra / entered at the end of path-to-sugar-installation
+if [[ $1 = */ ]]
+then
+	# remove the last char of $1
+	dir=${1%?}
+else
+	dir=$1
+fi
+
+# slashCount is equal to the number of occurrences of / in dir
+slash=${dir//[^\/]}
+slashCount=${#slash}
+
+# check (very simple) dir is the path to a sugar installation
+if [ ! -e $dir/modules ]
+then
+	echo "$dir does not contain 'modules' folder, enter a correct path"
+fi
+
+# delete outputFile if it exists
+if [ -e $outputFile ]
+then
+	rm $outputFile
+fi
+
+# find and print a list of language codes in path-to-sugar-installation/modules/Accounts/language, also print other text to complete a php file
+echo '<?php
+
+// Array used to store all the languages available for translation
+$language = array(' >> $outputFile
+
+for file in $dir/modules/Accounts/language/*
+do
+	if [[ $file != *en_us* ]]
+	then
+		echo $'\t'"'`echo $file | cut -d/ -f $((slashCount + 5)) | cut -c 1-5`'," >> $outputFile
+	fi
+done
+
+# remove the last character from outputFile (extra comma)
+sed -i '$s/.$//' $outputFile
+
+echo ');
+' >> $outputFile
+
+# find and print a list of modules in path-to-sugar-installation/modules that can be translated (i.e. is a folder and contains a folder named 'language'), also print other text to complete a php file
+echo '// Array used to store all of the modules available for translation
+$module = array(' >> $outputFile
+
+for folder in $dir/modules/*
+do
+	if [ -d $folder -a -e $folder/language ]
+	then
+		echo $'\t'"'`echo $folder | cut -d/ -f $((slashCount + 3))`'," >> $outputFile
+	fi	
+done
+
+# remove the last character from outputFile (extra comma)
+sed -i '$s/.$//' $outputFile
+
+echo ');
+
+?>' >> $outputFile
