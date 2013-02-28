@@ -312,17 +312,17 @@ public class Translations {
 			rs = pst.executeQuery();
 
 			// if there is a result due to the query, the translated value is returned. 
-			if (rs.next()) {
-				result = (rs.getString(1));
-				printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'" + " from " + module + " module");
-			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
-				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
-				//printMsg("Proceeding to search through all modules");
-				result = searchAllModules(englishString);
-			} else { // Else return ERROR message no such replacement string
-				//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
-				result = englishString;
-			}
+			//if (rs.next()) {
+			//result = (rs.getString(1));
+			//printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'" + " from " + module + " module");
+			//} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
+			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
+			//printMsg("Proceeding to search through all modules");
+			result = searchAllModules(englishString);
+			//} else { // Else return ERROR message no such replacement string
+			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
+			//result = englishString;
+			//}
 		} catch (SQLException e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -344,55 +344,59 @@ public class Translations {
 	 * @return the translated string
 	 * @throws Exception
 	 */
+	@SuppressWarnings("finally")
 	private static String searchAllModules(String englishString) throws Exception {
-		if (englishString == null) printErrorMsg("englishString in searchAllModules is null");
 		String result = englishString;
 		int counter = 0;
 		String[] tables = getAllModuleNamesFromDB();
 
-		while (tables[counter] != null) {
-			PreparedStatement pst_ifExists = null;
-			ResultSet rs_ifExists = null;
-			pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + tables[counter] + "` where field='" + LANGUAGE + "'");
-			rs_ifExists = pst_ifExists.executeQuery();
+		try {
+			while (tables[counter] != null) {
+				PreparedStatement pst_ifExists = null;
+				ResultSet rs_ifExists = null;
+				pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + tables[counter] + "` where field='" + LANGUAGE + "'");
+				rs_ifExists = pst_ifExists.executeQuery();
 
-			// checks to see if the language is in that particular module
-			if (rs_ifExists.next()) {
-				PreparedStatement pst_temp = null;
-				ResultSet rs_temp = null;
+				// checks to see if the language is in that particular module
+				if (rs_ifExists.next()) {
+					PreparedStatement pst_temp = null;
+					ResultSet rs_temp = null;
 
-				pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + tables[counter] + " WHERE english = " + "\'" + englishString + "\'");
-				rs_temp = pst_temp.executeQuery();
-				if (rs_temp.next()) {
-					result = (rs_temp.getString(1));
-					if (result == null) {
-						//printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
-						counter++;
-						continue;
-					}
-					printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
-					break; 
-				}
-				else {
-					//printErrorMsg("Could not find the translation for " + englishString + " in the " + tables[counter] + " module");
-					if (tables[counter] == "WorkFlowTriggerShells") { // WorkFlowTriggerShells is the last module, translation cannot be found
-						//printErrorMsg("Could not find the translation for '" + englishString + "'");
-						break;
+					pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + tables[counter] + " WHERE english = " + "\'" + englishString + "\'");
+					rs_temp = pst_temp.executeQuery();
+					if (rs_temp.next()) {
+						result = (rs_temp.getString(1));
+						if (result == null) {
+							//printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
+							counter++;
+							continue;
+						}
+						printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
+						break; 
 					}
 					else {
-						rs_temp.close();
-						pst_temp.close();
-						counter++;
-					}
-				} 
+						//printErrorMsg("Could not find the translation for " + englishString + " in the " + tables[counter] + " module");
+						if (tables[counter] == "WorkFlowTriggerShells") { // WorkFlowTriggerShells is the last module, translation cannot be found
+							//printErrorMsg("Could not find the translation for '" + englishString + "'");
+							break;
+						}
+						else {
+							rs_temp.close();
+							pst_temp.close();
+							counter++;
+						}
+					} 
+				}
+				else {
+					//printErrorMsg("The table: " + tables[counter] + " does not contain the language: " + LANGUAGE);
+					counter++;
+				}
 			}
-			else {
-				//printErrorMsg("The table: " + tables[counter] + " does not contain the language: " + LANGUAGE);
-				counter++;
-			}
+		} catch (Exception e) {
+			throw new Exception (e.getMessage());
+		} finally {
+			return result;
 		}
-		//if (result == null) printMsg("searchAllModules returned null");
-		return result;
 	}
 
 
