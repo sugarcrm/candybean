@@ -36,16 +36,16 @@ fi
 
 sugar_ver=$3; db_name=$4
 
-ruby downloadSugar.rb $workspace $sugar_ver
+ruby DownloadSugar.rb $workspace $sugar_ver
 
-./generateLangsAndModules $workspace/sugar
+./GenerateLangsAndModules $workspace/sugar
 
-cd $workspace/translations/modules/ModuleBuilder/language; rm * 
+cd ~/git_repos/translations/modules/ModuleBuilder/language; rm * 
 
 git ls-files -d | xargs git checkout --
 
-cd $workspace/AutoUtils/Translations
+cd ~/git_repos/Voodoo2/src/main/java/com/sugarcrm/voodoo/translations/update_database
 
-./bypassModuleBuilder $workspace/sugar $for_dir
+./BypassModuleBuilder $workspace/sugar $for_dir
 
-php -f updateDB.php $db_name $workspace/sugar $for_dir localhost root root 
+php -f UpdateDB.php $db_name $workspace/sugar $for_dir localhost root root 
