@@ -12,7 +12,7 @@ then
 	exit
 fi
 
-outputFile=updateDB_LangsAndModules.php
+outputFile=UpdateDB_LangsAndModules.php
 
 # handle extra / entered at the end of path-to-sugar-installation
 if [[ $1 = */ ]]
@@ -49,7 +49,7 @@ for file in $dir/modules/Accounts/language/*
 do
 	if [[ $file != *en_us* ]]
 	then
-		echo $'\t'"'`echo $file | cut -d/ -f $((slashCount + 5)) | cut -c 1-5`'," >> $outputFile
+		echo $'\t'"'`echo $file | cut -d/ -f$((slashCount + 5)) | cut -c 1-5`'," >> $outputFile
 	fi
 done
 
@@ -67,7 +67,7 @@ for folder in $dir/modules/*
 do
 	if [ -d $folder -a -e $folder/language ]
 	then
-		echo $'\t'"'`echo $folder | cut -d/ -f $((slashCount + 3))`'," >> $outputFile
+		echo $'\t'"'`echo $folder | cut -d/ -f$((slashCount + 3))`'," >> $outputFile
 	fi	
 done
 
