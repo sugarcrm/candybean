@@ -3,17 +3,19 @@ Note the following requires you have access to sugarcrm/translations and sugarcr
 Create a job on Jenkins named UpdateDatabase > Configure UpdateDatabase > Add build step > Execute shell > Copy and paste the code below
 
 cd $WORKSPACE
-if [ ! -e "./translations" ]
+if [ ! -e ~/git_repos/translations ]
 then
+   mkdir -p ~/git_repos; cd ~/git_repos
    git clone git@github.com:sugarcrm/translations.git
 fi
-cd translations; git pull; git checkout master; cd ..
+cd translations; git pull; git checkout master
 
-if [ ! -e "./AutoUtils" ]
+if [ ! -e ~/git_repos/Voodoo2 ]
 then
-  git clone git@github.com:sugarcrm/AutoUtils.git
+  cd ~/git_repos
+  git clone git@github.com:sugarcrm/Voodoo2.git
 fi
 
-cd AutoUtils/Translations; git pull
+cd ~/git_repos/Voodoo2/src/main/java/com/sugarcrm/voodoo/translations/update_database; git pull
 
-./updateDB_Suite $WORKSPACE $WORKSPACE/translations 6_7 Translations_6_7
+./UpdateDatabaseSuite $WORKSPACE $WORKSPACE/translations 6_7 Translations_6_7
