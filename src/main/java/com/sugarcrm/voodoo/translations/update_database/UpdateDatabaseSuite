@@ -9,14 +9,19 @@
 #	 for_dir - directory path containing foreign language php files (Sugar installation or sugarcrm/translations repository)
 #	 sugar_ver - version of Sugar to be downloaded, for example 6_7 or 6_7_1
 #	 db_name - name of the database to be updated (or created if necessary), for example Translations_6_7
+#	 db_server - database server (centralized server: 10.8.31.10)
+#	 db_user - database username (centralized server: translator)
+#	 db_pass - database password (centralized server: Sugar123!)
 
-if [ $# != 4 ]
+if [ $# != 7 ]
 then
 	echo "Usage: $0 workspace for_dir sugar_version db_name
 	workspace - workspace path of a Jenkins job
 	for_dir - directory path containing foreign language php files (Sugar installation or sugarcrm/translations repository)
 	sugar_version - version of Sugar to be downloaded
-	db_name - name of the database to be updated (or created if necessary)"
+	db_name - name of the database to be updated (or created if necessary)		db_server - database server (centralized server: 10.8.31.10)
+	db_user - database username (centralized server: translator)
+	db_pass - database password (centralized server: Sugar123!)"
 	exit
 fi
 
@@ -34,7 +39,7 @@ else
 	for_dir=$2
 fi
 
-sugar_ver=$3; db_name=$4
+sugar_ver=$3; db_name=$4; db_server=$5; db_user=$6; db_pass=$7
 
 ruby DownloadSugar.rb $workspace $sugar_ver
 
@@ -48,4 +53,4 @@ cd ~/git_repos/Voodoo2/src/main/java/com/sugarcrm/voodoo/translations/update_dat
 
 ./BypassModuleBuilder $workspace/sugar $for_dir
 
-php -f UpdateDB.php $db_name $workspace/sugar $for_dir localhost root root 
+php -f UpdateDB.php $db_name $workspace/sugar $for_dir $db_server $db_user $db_pass
