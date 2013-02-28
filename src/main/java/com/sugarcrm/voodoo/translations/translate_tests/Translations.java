@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.translateTests;
+package com.sugarcrm.voodoo.translations.translate_tests;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -273,7 +273,7 @@ public class Translations {
 		String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
 		String username = getCascadingPropertyValue(translateProp, "", "translate.username");
 		String password = getCascadingPropertyValue(translateProp, "", "translate.password");
-		printMsg("Creating database connection: \nDatabase: " + serverName + "\nUsername: " + username + "\nPassword: " + password);
+		printMsg("Creating database connection: \n\tDatabase: " + serverName + "\n\tUsername: " + username + "\n\tPassword: " + password);
 		try {
 			// Create a connection to the database
 			String driverName = "com.mysql.jdbc.Driver"; // MySQL MM JDBC driver
@@ -636,7 +636,7 @@ public class Translations {
 	 * @param message
 	 */
 	private static void printMsg(String message) {
-		System.out.println("[Translations]: " + message);
+		System.out.println(message);
 	}
 
 	/**
@@ -645,7 +645,7 @@ public class Translations {
 	 * @param message
 	 */
 	private static void printErrorMsg(String message) {
-		System.out.println("[Translations ERROR]: " + message);		
+		System.out.println("ERROR: " + message);		
 	}
 
 	/**
@@ -673,7 +673,7 @@ public class Translations {
 		Writer output = null;
 		try{
 			if (file.exists()) {
-				System.out.println("login_translate.xml exists");
+				System.out.println("\nFile login_translate.xml exists\n");
 			} else {	
 				System.out.println("Writing login_translate.xml: " + outputFile);
 				output = new BufferedWriter(new FileWriter(outputFile));
