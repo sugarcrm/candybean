@@ -16,14 +16,12 @@ import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.automation.control.VSelect;
 
 //import com.sugarcrm.voodoo.IAutomation.Strategy;
 //import com.sugarcrm.voodoo.automation.VHook;
 //import com.sugarcrm.voodoo.IAutomation;
 //import com.sugarcrm.voodoo.Voodoo;
-
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
 public class VControlSystemTest {
 	protected static Voodoo voodoo;
@@ -42,6 +40,7 @@ public class VControlSystemTest {
 		iface.start();
 	}
 
+	@Ignore
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
@@ -49,11 +48,26 @@ public class VControlSystemTest {
 		String actAltValue = iface.getControl(Strategy.XPATH, "//*[@id=\"topLogo\"]/a[2]/img").getAttribute("alt");
 		String expAltValue = "W3Schools.com";
 		Assert.assertEquals("Expecting: " + expAltValue + ", actual: " + actAltValue, actAltValue, expAltValue);
-		String actHrefValue = iface.getControl(Strategy.CLASS, "topnav").getAttribute("alt", 1);
+		String actHrefValue = iface.getControl(Strategy.CLASS, "topnav").getAttribute("alt");
 		String expHrefValue = "/html/default.asp";
 		Assert.assertEquals("Expecting: " + expHrefValue + ", actual: " + actHrefValue, actHrefValue, expHrefValue);
 	}
 	
+	@Test
+	public void getControlTest() throws Exception {
+		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+		String expString = "testString";
+		iface.go(w3Url);
+		iface.getControl(Strategy.NAME, "input0").scroll();
+		iface.getControl(Strategy.NAME, "input0").getControl(new VHook(Strategy.NAME, "user"), 0).sendString(expString);
+		iface.getControl(Strategy.NAME, "input0").getControl(new VHook(Strategy.TAG, "input"), 1).click();
+//		iface.focusByIndex(1);
+//		String actFullString = iface.getControl(Strategy.TAG, "h3", 1).getText();
+//		Assert.assertTrue("Expecting: " + expString + ", actual full string: " + actFullString, actFullString.endsWith(expString));
+//		String text2 = getText(int index);
+	}
+	
+	@Ignore
 	@Test
 	public void getTextTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
@@ -71,6 +85,7 @@ public class VControlSystemTest {
 //		click(int index);
 	}
 	
+	@Ignore
 	@Test
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
 	public void doubleClickTest() throws Exception {
@@ -90,7 +105,7 @@ public class VControlSystemTest {
 //		doubleClick(int index);
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void dragNDropTest() throws Exception {
 		String w3Url = "http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=6&ved=0CDoQFjAF&url=http%3A%2F%2Ftool-man.org%2Fexamples%2Fsorting.html&ei=nBGLUKi8CcGmigLah4CADg&usg=AFQjCNGL-HryUxMBRKn9gEM0F1xE_NNNyQ";

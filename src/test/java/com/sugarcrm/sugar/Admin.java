@@ -29,6 +29,6 @@ public class Admin {
 	public static void navTo(Sugar sugar) throws Exception {
 		sugar.i.getControl(sugar.getHook("navbar_menu_user")).click();
 		sugar.i.getControl(sugar.getHook("navbar_menuitem_admin")).click();
-		sugar.i.getControl(sugar.getHook("admin_header")).halt(4);
+//		sugar.i.getControl(sugar.getHook("admin_header")).halt(4);
 	}
 }

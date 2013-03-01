@@ -1,4 +1,4 @@
-package com.sugarcrm.voodooo.android;
+package com.sugarcrm.voodoo.android;
 
 import static org.junit.Assert.assertTrue;
 
