@@ -225,6 +225,16 @@ public class VInterface {
 	}
 
 	/**
+	 * Get a control from the current page by index.
+	 *
+	 * @param hook	 description of how to find the control
+	 * @throws Exception	 <i>not thrown</i>
+	 */
+	public VControl getControl(VHook hook, int index) throws Exception {
+		return new VControl(this.voodoo, this, hook, index);
+	}
+
+	/**
 	 * Get a control from the current page.
 	 *
 	 * @param strategy  method to use to search for the control
@@ -233,6 +243,17 @@ public class VInterface {
 	 */
 	public VControl getControl(Strategy strategy, String hook) throws Exception {
 		return this.getControl(new VHook(strategy, hook));
+	}
+
+	/**
+	 * Get a control from the current page by index.
+	 *
+	 * @param strategy  method to use to search for the control
+	 * @param hook		  string to find using the specified strategy
+	 * @throws Exception	 <i>not thrown</i>
+	 */
+	public VControl getControl(Strategy strategy, String hook, int index) throws Exception {
+		return this.getControl(new VHook(strategy, hook), index);
 	}
 
 	/**
@@ -263,7 +284,7 @@ public class VInterface {
 			String profileName = Utils.getCascadingPropertyValue(this.props,
 					"default", "browser.firefox_profile");
 			String ffBinaryPath = Utils.getCascadingPropertyValue(this.props,
-					"//home//conrad//Applications//firefox-10//firefox",
+					"/Applications/Firefox.app/Contents/MacOS/firefox",
 					"browser.firefox_binary");
 			FirefoxProfile ffProfile = (new ProfilesIni())
 					.getProfile(profileName);

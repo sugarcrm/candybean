@@ -1,4 +1,4 @@
-package com.sugarcrm.voodooo.android;
+package com.sugarcrm.voodoo.android;
 
 import java.io.File;
 import java.io.FileInputStream;
