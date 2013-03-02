@@ -38,4 +38,5 @@ do
 
 		java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translate_tests/Translations ~/git_repos/Voodoo2/src/test/resources/Translations.properties
 	fi
+	printf "\n"
 done
