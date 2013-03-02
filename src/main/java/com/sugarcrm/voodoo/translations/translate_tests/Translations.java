@@ -304,12 +304,12 @@ public class Translations {
 	@SuppressWarnings("finally")
 	private static String getDatabaseReplacementString(String module, String englishString) throws Exception {
 		String result = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
+		//PreparedStatement pst = null;
+		//ResultSet rs = null;
 		try {
-			String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
-			pst = DB_CONNECTION.prepareStatement(query);
-			rs = pst.executeQuery();
+			//String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
+			//pst = DB_CONNECTION.prepareStatement(query);
+			//rs = pst.executeQuery();
 
 			// if there is a result due to the query, the translated value is returned. 
 			//if (rs.next()) {
@@ -326,10 +326,10 @@ public class Translations {
 		} catch (SQLException e) {
 			throw new Exception(e.getMessage());
 		} finally {
-			if (result == null) {
+			/*if (result == null) {
 				result = englishString;
 				printMsg("Unsuccessful translation, string to be translated remains English");
-			}
+			}*/
 			return result;
 		}
 	}
@@ -347,49 +347,42 @@ public class Translations {
 	@SuppressWarnings("finally")
 	private static String searchAllModules(String englishString) throws Exception {
 		String result = englishString;
-		int counter = 0;
 		String[] tables = getAllModuleNamesFromDB();
 
 		try {
-			while (tables[counter] != null) {
-				PreparedStatement pst_ifExists = null;
-				ResultSet rs_ifExists = null;
-				pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + tables[counter] + "` where field='" + LANGUAGE + "'");
-				rs_ifExists = pst_ifExists.executeQuery();
+			for (String table : tables) {
+				PreparedStatement pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + table + "` where field='" + LANGUAGE + "'");
+				ResultSet rs_ifExists = pst_ifExists.executeQuery();
 
 				// checks to see if the language is in that particular module
 				if (rs_ifExists.next()) {
 					PreparedStatement pst_temp = null;
 					ResultSet rs_temp = null;
 
-					pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + tables[counter] + " WHERE english = " + "\'" + englishString + "\'");
+					pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + table + " WHERE en_us ='" + englishString + "'");
 					rs_temp = pst_temp.executeQuery();
 					if (rs_temp.next()) {
 						result = (rs_temp.getString(1));
-						if (result == null) {
-							//printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
-							counter++;
-							continue;
-						}
-						printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + tables[counter] + "' module");
-						break; 
+						while (result == null && rs_temp.next()) {
+							result = rs_temp.getString(1);
+							printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
+						} 
+						if (result != null) {
+							printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + table + "' module");
+							break;
+						} 
 					}
 					else {
-						//printErrorMsg("Could not find the translation for " + englishString + " in the " + tables[counter] + " module");
-						if (tables[counter] == "WorkFlowTriggerShells") { // WorkFlowTriggerShells is the last module, translation cannot be found
-							//printErrorMsg("Could not find the translation for '" + englishString + "'");
-							break;
+						if (table == "WorkFlowTriggerShells") {
+							printMsg("Could not find the translation for '" + englishString + "'.");
 						}
-						else {
-							rs_temp.close();
-							pst_temp.close();
-							counter++;
-						}
+						//printErrorMsg("Could not find the translation for " + englishString + " in the " + table + " module");
+						rs_temp.close();
+						pst_temp.close();
 					} 
 				}
 				else {
-					//printErrorMsg("The table: " + tables[counter] + " does not contain the language: " + LANGUAGE);
-					counter++;
+					printErrorMsg("The table: " + table + " does not contain the language: " + LANGUAGE);
 				}
 			}
 		} catch (Exception e) {
@@ -666,7 +659,6 @@ public class Translations {
 			TEST_FORMAT = "XML";
 		}
 		else { 
-			printErrorMsg("file format is not either .java or .xml for the file: " + filename);
 			return false;   
 		}
 		return true;
