@@ -266,10 +266,8 @@ public class Translations {
 	 * @return - a MySQL connection object that is used for database queries
 	 * @throws Exception
 	 */
-	@SuppressWarnings("finally")
 	private static Connection connectToDatabase() throws Exception {
 		Connection con = null;
-		// TODO: May use centralized DB here
 		String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
 		String username = getCascadingPropertyValue(translateProp, "", "translate.username");
 		String password = getCascadingPropertyValue(translateProp, "", "translate.password");
@@ -281,12 +279,9 @@ public class Translations {
 			String url = "jdbc:mysql://" + serverName + File.separator + DATABASE; // a JDBC url
 			con = DriverManager.getConnection(url, username, password);
 			printMsg("Connection to database successfull!");
-			//PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
-			//pst.executeQuery();
+			return con;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
-		} finally {
-			return con;
 		}
 	}
 
