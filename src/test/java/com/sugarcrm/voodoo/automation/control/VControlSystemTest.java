@@ -55,15 +55,12 @@ public class VControlSystemTest {
 	
 	@Test
 	public void getControlTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
-		String expString = "testString";
+		String w3Url = "http://www.w3schools.com/";
+		String expH2 = "HTML5 Introduction";
 		iface.go(w3Url);
-		iface.getControl(Strategy.NAME, "input0").scroll();
-		iface.getControl(Strategy.NAME, "input0").getControl(new VHook(Strategy.NAME, "user"), 0).sendString(expString);
-		iface.getControl(Strategy.NAME, "input0").getControl(new VHook(Strategy.TAG, "input"), 1).click();
-//		iface.focusByIndex(1);
-//		String actFullString = iface.getControl(Strategy.TAG, "h3", 1).getText();
-//		Assert.assertTrue("Expecting: " + expString + ", actual full string: " + actFullString, actFullString.endsWith(expString));
+		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
+		String actH2 = iface.getControl(Strategy.TAG, "h1").getText().trim();
+		Assert.assertEquals("Expecting: " + expH2+ ", actual H2: " + actH2, actH2, expH2);
 //		String text2 = getText(int index);
 	}
 	

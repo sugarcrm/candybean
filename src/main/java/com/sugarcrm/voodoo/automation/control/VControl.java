@@ -1,21 +1,13 @@
 package com.sugarcrm.voodoo.automation.control;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.google.common.base.Function;
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.utilities.Utils;
 
 /**
  * @author cwarmbold
@@ -24,6 +16,7 @@ public class VControl {
 	
 	protected final Voodoo voodoo;
 	protected final VInterface iface;
+	protected final VHook hook;
 	protected final WebElement we;
 	
 	public VControl(Voodoo voodoo, VInterface iface, Strategy strategy, String hook) throws Exception {
@@ -42,11 +35,13 @@ public class VControl {
 		this.voodoo = voodoo;
 		this.iface = iface;
 		this.we = iface.wd.findElements(this.getBy(hook)).get(index);
+		this.hook = hook;
 	}
 	
-	private VControl(Voodoo voodoo, VInterface iface, WebElement we) throws Exception {
+	private VControl(Voodoo voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
 		this.voodoo = voodoo;
 		this.iface = iface;
+		this.hook = hook;
 		this.we = we;
 	}
 	
@@ -116,7 +111,7 @@ public class VControl {
 	public VControl getControl(VHook hook, int index) throws Exception {
 		voodoo.log.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
 		WebElement childWe = this.we.findElements(this.getBy(hook)).get(index);
-		return new VControl(this.voodoo, this.iface, childWe);
+		return new VControl(this.voodoo, this.iface, hook, childWe);
 	}
 
 	public VControl getControl(Strategy strategy, String hookString) throws Exception {
@@ -210,7 +205,7 @@ public class VControl {
 
 	@Override
 	public String toString() {
-		return "VControl(" + this.we.toString() + ")";
+		return "VControl(" + this.hook.toString() + ")";
 	}
 	
 	protected By getBy(VHook hook) throws Exception {
