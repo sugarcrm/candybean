@@ -30,7 +30,7 @@ do
 		translate.serverName = $db_server
 		translate.username = $db_user
 		translate.password = $db_pass
-		translate.module = Accounts" > ~/git_repos/Voodoo2/src/test/resources/Translations.properties
+		translate.module = `echo $file | rev | cut -d/ -f 1 | rev`" > ~/git_repos/Voodoo2/src/test/resources/Translations.properties
 
 		mkdir -p $output_subfolder
 		cd ~/git_repos/Voodoo2/src/main/java

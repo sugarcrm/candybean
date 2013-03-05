@@ -38,5 +38,5 @@ sed -i "s/\.\./\./g" $en_dir/en_us.lang.php
 for file in $for_dir/*
 do
 	sed -i "s/SugarThemeRegistry::current()->getImage(\"icon_calculated\", '', null, null, \".gif\", \"Calculated Value\")//g" $file
-	sed -i "s/\.\./\./g" $en_dir/en_us.lang.php
+	sed -i "s/\.\./\./g" $file
 done	
