@@ -222,12 +222,13 @@ public class Translations {
 							//printErrorMsg("Not finding translation for " + match_assert.group(1));
 							output.write(line + "\r\n");
 						} else { // no strange characters, therefore proceed in translation
+							System.out.println("ASSERT MATCH");
 							String newLine = line.replace(match_assert.group(1), getDatabaseReplacementString(module, match_assert.group(1)));
 							output.write(newLine + "\r\n");
 						}
 					}
 				} else if (match_link.find()) { // Link replacement for (xml only)
-					//System.out.println("LINK MATCH");
+					System.out.println("LINK MATCH");
 					if(match_variable.find() || match_pageNumber.find()){
 						//printErrorMsg("Not finding translation for " + match_link.group(1));
 						output.write(line + "\r\n");
@@ -239,11 +240,11 @@ public class Translations {
 						output.write(newLine + "\r\n");
 					}
 				} else if (match_moduletab.find()) { // match_moduletab replacement for (xml only)
-					//System.out.println("MODULETAB MATCH");
+					System.out.println("MODULETAB MATCH");
 					String newLine = line.replace(match_moduletab.group(1), getDatabaseReplacementString("SugarFeed", "All") + "_" + module);
 					output.write(newLine);
 				} else if (match_menuextra_all.find()) { // match_menuextra_all replacement for (xml only)
-					//System.out.println("MENU MATCH");
+					System.out.println("MENU MATCH");
 					String newLine = line.replace(match_menuextra_all.group(1), getDatabaseReplacementString("SugarFeed", match_menuextra_all.group(1)));
 					output.write(newLine);
 				} else {
@@ -299,32 +300,23 @@ public class Translations {
 	@SuppressWarnings("finally")
 	private static String getDatabaseReplacementString(String module, String englishString) throws Exception {
 		String result = null;
-		//PreparedStatement pst = null;
-		//ResultSet rs = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
 		try {
-			//String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
-			//pst = DB_CONNECTION.prepareStatement(query);
-			//rs = pst.executeQuery();
+			String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
+			pst = DB_CONNECTION.prepareStatement(query);
+			rs = pst.executeQuery();
 
 			// if there is a result due to the query, the translated value is returned. 
-			//if (rs.next()) {
-			//result = (rs.getString(1));
-			//printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'" + " from " + module + " module");
-			//} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
-			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
-			//printMsg("Proceeding to search through all modules");
-			result = searchAllModules(englishString);
-			//} else { // Else return ERROR message no such replacement string
-			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
-			//result = englishString;
-			//}
+			if (rs.next()) {
+				result = (rs.getString(1));
+				printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'" + " from " + module + " module");
+			} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
+				result = searchAllModules(englishString);
+			}
 		} catch (SQLException e) {
 			throw new Exception(e.getMessage());
 		} finally {
-			/*if (result == null) {
-				result = englishString;
-				printMsg("Unsuccessful translation, string to be translated remains English");
-			}*/
 			return result;
 		}
 	}

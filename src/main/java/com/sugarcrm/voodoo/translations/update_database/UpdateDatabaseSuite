@@ -45,7 +45,7 @@ ruby DownloadSugar.rb $workspace $sugar_ver
 
 ./GenerateLangsAndModules $workspace/sugar
 
-cd ~/git_repos/translations/modules/ModuleBuilder/language; rm * 
+cd $for_dir/modules/ModuleBuilder/language; rm * 
 
 git ls-files -d | xargs git checkout --
 

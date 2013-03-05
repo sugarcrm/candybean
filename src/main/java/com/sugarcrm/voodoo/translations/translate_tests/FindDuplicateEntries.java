@@ -14,16 +14,13 @@ public class FindDuplicateEntries {
 			CONNECTION = connectToDB();
 			System.out.println("Successfully connected to database [add db_name parameter]");
 			tables = getDBTables();
-			writeDuplicates(tables);
+			writeDuplicates(tables, "/var/lib/jenkins/DuplicateEntries2.txt");
 
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -63,18 +60,18 @@ public class FindDuplicateEntries {
 		return result;
 	}
 
-	private static void writeDuplicates(ArrayList<String> modules) throws SQLException, IOException {
+	private static void writeDuplicates(ArrayList<String> modules, String output_file) throws SQLException, IOException {
 		ArrayList<String> texts = new ArrayList<String>();
 		ResultSet rs = null;
 		String last_label = null;
 		String last_value = null;
-		BufferedWriter bw = new BufferedWriter(new FileWriter("/var/lib/jenkins/DuplicateEntries.txt"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(output_file));
+		Boolean written_last = false;
 
 		for (String module : modules) {
-			bw.write("Inside module: " + module);
+			bw.write("Inside module " + module + ":\n");
 			texts = getENTexts(module);
 			for (int i = 0; i < texts.size(); i++) {
-				
 				if (i == 0) {
 					String[] s = texts.get(i).split("=");
 					last_label = s[1];
@@ -83,13 +80,20 @@ public class FindDuplicateEntries {
 				String current_label = texts.get(i).split("=")[1];
 				String current_value = texts.get(i).split("=")[0];
 				if (i > 0 && last_value.equals(current_value)) {
-					bw.write(current_label + "=" + current_value + "\n");
+					if (!written_last) {
+						bw.write("\n   " + last_label + "='" + last_value + "'\n");
+						written_last = true;
+					}
+					bw.write("   " + current_label + "='" + current_value + "'\n");
 				} else {
+					last_label = current_label;
 					last_value = current_value;
+					written_last = false;
 				}
 			}
 			bw.write("\n");
 		}
+		bw.close();
 	}
 
 	private static ResultSet execQuery(String query) throws SQLException {
