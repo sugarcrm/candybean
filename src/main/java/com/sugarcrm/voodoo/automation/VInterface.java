@@ -135,6 +135,18 @@ public class VInterface {
 	}
 
 	/**
+	 * Dismisses a modal dialog box (usually referred to
+	 * as a &quot;javascript dialog&quot;).
+	 *
+	 * @throws Exception	 if no dialog box is present
+	 */
+	public void dismissDialog() throws Exception {
+		voodoo.log.info("Dismissing dialog.");
+		Alert alert = this.wd.switchTo().alert();
+		alert.dismiss();
+	}
+
+	/**
 	 * Focus a browser window by its index.
 	 *
 	 * <p>The order of browser windows is somewhat arbitrary and not
@@ -211,7 +223,7 @@ public class VInterface {
 		voodoo.log.info("Maximizing window");
 		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit()
 				.getScreenSize();
-		this.wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+		this.wd.manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
 	/**
