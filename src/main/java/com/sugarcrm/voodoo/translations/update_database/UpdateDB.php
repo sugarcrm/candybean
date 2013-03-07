@@ -98,7 +98,6 @@ function array_to_db($link, $module, $array_data, $language)
 {
 	$add_column = "ALTER TABLE " . $module . " ADD " . $language . " TEXT";
 	mysqli_query($link, $add_column) or die (mysqli_error($link));
-	echo "add column query: $add_column\n";
 	$db_index = 1;
 	array_to_db_recursive($link, $module, $array_data, $language, "", $db_index);
 }
