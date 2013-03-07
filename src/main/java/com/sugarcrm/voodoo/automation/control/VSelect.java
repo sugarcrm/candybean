@@ -7,7 +7,6 @@ import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 
-
 /**
  * VSelect is a control that allows for interaction with the SELECT element.
  *
@@ -56,8 +55,7 @@ public class VSelect extends VControl {
 	 */
 	public String getSelected() throws Exception {
 		super.voodoo.log.info("Selenium: getting selected value from control: " + this.toString());
-		WebElement we = super.iface.wd.findElement(super.getBy(this.hook));
-		Select dropDownList = new Select(we);
+		Select dropDownList = new Select(super.we);
 		WebElement selectedOption = dropDownList.getFirstSelectedOption();
 		return selectedOption.getText();
 	}
@@ -73,11 +71,10 @@ public class VSelect extends VControl {
 	 */
 	public void select(boolean isSelected) throws Exception {
 		voodoo.log.info("Selenium: setting select: " + this.toString() + " to value: " + isSelected);
-		WebElement we = super.iface.wd.findElement(super.getBy(this.hook));
-		if (!we.getAttribute("type").equals("checkbox"))
+		if (!super.we.getAttribute("type").equals("checkbox"))
 			throw new Exception("Selenium: web element is not a checkbox.");
-		if (we.isSelected() != isSelected)
-			we.click();
+		if (super.we.isSelected() != isSelected)
+			super.we.click();
 	}
 
 	/**
@@ -88,8 +85,7 @@ public class VSelect extends VControl {
 	 */
 	public void select(String value) throws Exception {
 		voodoo.log.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
-		WebElement we = super.iface.wd.findElement(super.getBy(this.hook));
-		Select dropDownList = new Select(we);
+		Select dropDownList = new Select(super.we);
 		dropDownList.selectByVisibleText(value);
 	}
 	

@@ -7,7 +7,7 @@
 
 package com.sugarcrm.voodoo.examples;
 
-import com.sugarcrm.voodoo.automation.IInterface;
+import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -59,7 +59,7 @@ public class Basic {
    public void runExample()  {
       Properties p;
       Voodoo v = null;
-      IInterface i = null;
+      VInterface i = null;
 
       log("*** Example of basic VDD2 usage ***");
 

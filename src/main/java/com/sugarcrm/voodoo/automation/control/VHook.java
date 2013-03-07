@@ -1,15 +1,13 @@
 package com.sugarcrm.voodoo.automation.control;
 
-
 import java.util.HashMap;
 import java.util.Properties;
-
 
 public class VHook {
 	
 	public static String HOOK_DELIMITER = ":";
 	
-	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK; }
+	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK, CLASS, TAG; }
 	public final Strategy hookStrategy;
 	public final String hookString;
 
@@ -56,6 +54,8 @@ public class VHook {
 		case "XPATH": return Strategy.XPATH;
 		case "LINK": return Strategy.LINK;
 		case "PLINK": return Strategy.PLINK;
+		case "CLASS": return Strategy.CLASS;
+		case "TAG": return Strategy.TAG;
 		default:
 			throw new Exception("Strategy not recognized: " + strategy);
 		}
