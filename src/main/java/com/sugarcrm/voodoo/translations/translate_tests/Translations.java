@@ -64,33 +64,23 @@ public class Translations {
 	 * @param testP - path to a test file or to a folder containing multiple tests
 	 * @throws Exception
 	 */
-	public static void Translate(String db, String mod, String lang, String testP) {
-		DATABASE = db;
-		//MODULE = mod;
-		LANGUAGE = lang;
-		TEST_PATH = testP;
-		String defaultOutputPath = System.getProperty("user.dir") + File.separator	+ "translated_Files_" + LANGUAGE;
-		OUTPUT_FOLDER = getCascadingPropertyValue(null, defaultOutputPath, "translate.output");
+	public static void Translate(String db, String mod, String lang, String testP) throws Exception {
 		try {
+			DATABASE = db;
+			MODULE = mod;
+			LANGUAGE = lang;
+			TEST_PATH = testP;
+			String defaultOutputPath = System.getProperty("user.dir") + File.separator	+ "translated_Files_" + LANGUAGE;
+			OUTPUT_FOLDER = getCascadingPropertyValue(null, defaultOutputPath, "translate.output");
 			DB_CONNECTION = connectToDatabase();
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		//populateListOfModules(MODULE);			
-		try {
+			//populateListOfModules(MODULE);			
 			createLoginXMLFile(TEST_PATH + "/../../login_translate.xml");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		createFolder(OUTPUT_FOLDER);
-		try {
+			createFolder(OUTPUT_FOLDER);
 			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		} catch (Exception e) {
+			throw new Exception(e);
 		}
 	}
 
@@ -103,43 +93,26 @@ public class Translations {
 	 * @param propPath - path to a properties file containing required translation information (ie: translate.properties)
 	 * @throws Exception
 	 */
-	public static void Translate(String propPath) {
-		translateProp = new Properties();
+	public static void Translate(String propPath) throws Exception {
 		try {
+			translateProp = new Properties();
 			translateProp.load((new FileInputStream(propPath)));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		DATABASE = getCascadingPropertyValue(translateProp, "", "translate.database");
-		//MODULE = getCascadingPropertyValue(translateProp, "", "translate.module");
-		LANGUAGE = getCascadingPropertyValue(translateProp, "", "translate.language");
-		TEST_PATH = getCascadingPropertyValue(translateProp, "", "translate.testpath");
-		OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "", "translate.output");
-		try {
+			DATABASE = getCascadingPropertyValue(translateProp, "", "translate.database");
+			MODULE = getCascadingPropertyValue(translateProp, "", "translate.module");
+			LANGUAGE = getCascadingPropertyValue(translateProp, "", "translate.language");
+			TEST_PATH = getCascadingPropertyValue(translateProp, "", "translate.testpath");
+			OUTPUT_FOLDER = getCascadingPropertyValue(translateProp, "", "translate.output");
 			DB_CONNECTION = connectToDatabase();
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		//populateListOfModules(MODULE);
-		try {
+			//populateListOfModules(MODULE);
 			createLoginXMLFile(TEST_PATH + "/../../login_translate.xml");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		createFolder(OUTPUT_FOLDER);
-
-		try {
+			createFolder(OUTPUT_FOLDER);
 			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
 	}
 
 	/**
@@ -151,40 +124,42 @@ public class Translations {
 	 * @author Wilson Li
 	 * @param testPath - a path to a single test file or a folder containing multiple test files
 	 * @param outputFolder - a path to a output folder
-	 * @throws IOException 
-	 * @throws SQLException 
 	 * @throws Exception
 	 */
-	private static void recursePathForTranslations(String testPath, String outputFolder) throws SQLException, IOException {
-		File inputFile = new File(testPath);
-		//System.out.println("Current path: " + testPath);
-		if (inputFile.isFile()) { // testPath: Path to a test file
-			//System.out.println("   IS FILE");
-			String outputSubFolder = outputFolder + File.separator + inputFile.getName();
-			String moduleFileName = getFileModuleName(inputFile.getName());
-			// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
-			if (setAndCheckTestFormat(inputFile.getName())) {
-				// perform translation
-				fileReaderWriter(moduleFileName, testPath, outputSubFolder);
-			}
-		} else { // testPath: path to a folder containing test file(s)
-			//System.out.println("   IS FOLDER");
-			File[] files = new File(testPath).listFiles();
-			// System.out.println(Arrays.deepToString(files));
-			for (File file : files) {
-				String testPathSubFolder = file.getAbsolutePath();
-				String outputSubFolder = outputFolder + File.separator + file.getName();
-				String moduleFileName = getFileModuleName(file.getName());
-				// If the item is a directory, then recurse the function with the item's path
-				if (file.isDirectory()) {
-					createFolder(outputSubFolder);
-					recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
-				}
-				else if (file.isFile() && setAndCheckTestFormat(file.getName())) {
+	private static void recursePathForTranslations(String testPath, String outputFolder) throws Exception {
+		try {
+			File inputFile = new File(testPath);
+			//System.out.println("Current path: " + testPath);
+			if (inputFile.isFile()) { // testPath: Path to a test file
+				//System.out.println("   IS FILE");
+				String outputSubFolder = outputFolder + File.separator + inputFile.getName();
+				String moduleFileName = getFileModuleName(inputFile.getName());
+				// If the inputFile is a file that contains a name from the module(s) and is of java format then perform translation
+				if (setAndCheckTestFormat(inputFile.getName())) {
 					// perform translation
-					fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder);
+					fileReaderWriter(moduleFileName, testPath, outputSubFolder);
+				}
+			} else { // testPath: path to a folder containing test file(s)
+				//System.out.println("   IS FOLDER");
+				File[] files = new File(testPath).listFiles();
+				// System.out.println(Arrays.deepToString(files));
+				for (File file : files) {
+					String testPathSubFolder = file.getAbsolutePath();
+					String outputSubFolder = outputFolder + File.separator + file.getName();
+					String moduleFileName = getFileModuleName(file.getName());
+					// If the item is a directory, then recurse the function with the item's path
+					if (file.isDirectory()) {
+						createFolder(outputSubFolder);
+						recursePathForTranslations(file.getAbsolutePath(), outputSubFolder);
+					}
+					else if (file.isFile() && setAndCheckTestFormat(file.getName())) {
+						// perform translation
+						fileReaderWriter(moduleFileName, testPathSubFolder, outputSubFolder);
+					}
 				}
 			}
+		} catch (Exception e) {
+			throw new Exception(e);
 		}
 	}
 
@@ -196,11 +171,9 @@ public class Translations {
 	 * @param module - database module 
 	 * @param inputFile - the test file to be translated
 	 * @param outputFile - translated test file
-	 * @throws SQLException 
-	 * @throws IOException 
 	 * @throws Exception
 	 */
-	private static void fileReaderWriter(String module, String inputFile, String outputFile) throws SQLException, IOException {
+	private static void fileReaderWriter(String module, String inputFile, String outputFile) throws Exception {
 		File file = new File(inputFile);
 		Scanner fileScanner = new Scanner(file);
 		Writer output = null;
@@ -223,65 +196,67 @@ public class Translations {
 		Matcher match_variable = null;
 		Matcher match_pageNumber = null;
 
+		try {
+			System.out.println("Writing file: " + outputFile);
+			output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
+			while (fileScanner.hasNextLine()) {
+				String line = fileScanner.nextLine();
+				//System.out.println("Scanned line: " + line);
+				match_assert = pattern_assert.matcher(line);
 
-		System.out.println("Writing file: " + outputFile);
-		output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
-		while (fileScanner.hasNextLine()) {
-			String line = fileScanner.nextLine();
-			//System.out.println("Scanned line: " + line);
-			match_assert = pattern_assert.matcher(line);
+				// XML use only
+				match_link = pattern_link.matcher(line);
+				match_moduletab = pattern_moduletab.matcher(line);
+				match_menuextra_all = pattern_menuextra_all.matcher(line);
+				match_variable = pattern_variable.matcher(line);
+				match_pageNumber = pattern_pageNumber.matcher(line);
 
-			// XML use only
-			match_link = pattern_link.matcher(line);
-			match_moduletab = pattern_moduletab.matcher(line);
-			match_menuextra_all = pattern_menuextra_all.matcher(line);
-			match_variable = pattern_variable.matcher(line);
-			match_pageNumber = pattern_pageNumber.matcher(line);
-
-			if (match_assert.find()) { // Assert replacement
-				if (TEST_FORMAT.equals("JAVA")) {
-					String stringToBeReplaced = getToBeReplacedAssertString(match_assert.group(1));
-					String ReplacementString = getDatabaseReplacementString(module, stringToBeReplaced);
-					String newLine = line.replace(stringToBeReplaced, ReplacementString);
-					output.write(newLine + "\r\n");
-				} else {
-					if (match_variable.find() || match_pageNumber.find()){
-						//printErrorMsg("Not finding translation for " + match_assert.group(1));
+				if (match_assert.find()) { // Assert replacement
+					if (TEST_FORMAT.equals("JAVA")) {
+						String stringToBeReplaced = getToBeReplacedAssertString(match_assert.group(1));
+						String ReplacementString = getDatabaseReplacementString(module, stringToBeReplaced);
+						String newLine = line.replace(stringToBeReplaced, ReplacementString);
+						output.write(newLine + "\r\n");
+					} else {
+						if (match_variable.find() || match_pageNumber.find()){
+							//printErrorMsg("Not finding translation for " + match_assert.group(1));
+							output.write(line + "\r\n");
+						} else { // no strange characters, therefore proceed in translation
+							String newLine = line.replace(match_assert.group(1), getDatabaseReplacementString(module, match_assert.group(1)));
+							output.write(newLine + "\r\n");
+						}
+					}
+				} else if (match_link.find()) { // Link replacement for (xml only)
+					//System.out.println("LINK MATCH");
+					if(match_variable.find() || match_pageNumber.find()){
+						//printErrorMsg("Not finding translation for " + match_link.group(1));
 						output.write(line + "\r\n");
-					} else { // no strange characters, therefore proceed in translation
-						System.out.println("ASSERT MATCH");
-						String newLine = line.replace(match_assert.group(1), getDatabaseReplacementString(module, match_assert.group(1)));
+					} else {
+						//System.out.println("Replacing link text");
+						//System.out.println(match_link.group(1));
+						//System.out.println(getDatabaseReplacementString(module, match_link.group(1))); // ERRORS WHEN THIS IS NULL
+						String newLine = line.replace(match_link.group(1), getDatabaseReplacementString(module, match_link.group(1)));
 						output.write(newLine + "\r\n");
 					}
-				}
-			} else if (match_link.find()) { // Link replacement for (xml only)
-				System.out.println("LINK MATCH");
-				if(match_variable.find() || match_pageNumber.find()){
-					//printErrorMsg("Not finding translation for " + match_link.group(1));
-					output.write(line + "\r\n");
+				} else if (match_moduletab.find()) { // match_moduletab replacement for (xml only)
+					//System.out.println("MODULETAB MATCH");
+					String newLine = line.replace(match_moduletab.group(1), getDatabaseReplacementString("SugarFeed", "All") + "_" + module);
+					output.write(newLine);
+				} else if (match_menuextra_all.find()) { // match_menuextra_all replacement for (xml only)
+					//System.out.println("MENU MATCH");
+					String newLine = line.replace(match_menuextra_all.group(1), getDatabaseReplacementString("SugarFeed", match_menuextra_all.group(1)));
+					output.write(newLine);
 				} else {
-					//System.out.println("Replacing link text");
-					//System.out.println(match_link.group(1));
-					//System.out.println(getDatabaseReplacementString(module, match_link.group(1))); // ERRORS WHEN THIS IS NULL
-					String newLine = line.replace(match_link.group(1), getDatabaseReplacementString(module, match_link.group(1)));
-					output.write(newLine + "\r\n");
+					//System.out.println("NO MATCH");
+					output.write(line + "\r\n");
 				}
-			} else if (match_moduletab.find()) { // match_moduletab replacement for (xml only)
-				System.out.println("MODULETAB MATCH");
-				String newLine = line.replace(match_moduletab.group(1), getDatabaseReplacementString("SugarFeed", "All") + "_" + module);
-				output.write(newLine);
-			} else if (match_menuextra_all.find()) { // match_menuextra_all replacement for (xml only)
-				System.out.println("MENU MATCH");
-				String newLine = line.replace(match_menuextra_all.group(1), getDatabaseReplacementString("SugarFeed", match_menuextra_all.group(1)));
-				output.write(newLine);
-			} else {
-				//System.out.println("NO MATCH");
-				output.write(line + "\r\n");
 			}
+			output.close();
+			fileScanner.close();
+			//System.out.println("Finished writing");
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
 		}
-		output.close();
-		fileScanner.close();
-		//System.out.println("Finished writing");
 	}
 
 	/**
@@ -289,24 +264,30 @@ public class Translations {
 	 * 
 	 * @author Wilson Li
 	 * @return - a MySQL connection object that is used for database queries
-	 * @throws ClassNotFoundException 
-	 * @throws SQLException 
 	 * @throws Exception
 	 */
-	private static Connection connectToDatabase() throws ClassNotFoundException, SQLException {
+	@SuppressWarnings("finally")
+	private static Connection connectToDatabase() throws Exception {
 		Connection con = null;
+		// TODO: May use centralized DB here
 		String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
 		String username = getCascadingPropertyValue(translateProp, "", "translate.username");
 		String password = getCascadingPropertyValue(translateProp, "", "translate.password");
 		printMsg("Creating database connection: \n\tDatabase: " + serverName + "\n\tUsername: " + username + "\n\tPassword: " + password);
-		// Create a connection to the database
-		String driverName = "com.mysql.jdbc.Driver"; // MySQL MM JDBC driver
-		Class.forName(driverName);
-		String url = "jdbc:mysql://" + serverName + File.separator + DATABASE; // a JDBC url
-		con = DriverManager.getConnection(url, username, password);
-		printMsg("Connection to database successfull!");
-		return con;
-
+		try {
+			// Create a connection to the database
+			String driverName = "com.mysql.jdbc.Driver"; // MySQL MM JDBC driver
+			Class.forName(driverName);
+			String url = "jdbc:mysql://" + serverName + File.separator + DATABASE; // a JDBC url
+			con = DriverManager.getConnection(url, username, password);
+			printMsg("Connection to database successfull!");
+			//PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
+			//pst.executeQuery();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			return con;
+		}
 	}
 
 	/**
@@ -318,26 +299,39 @@ public class Translations {
 	 * @param module
 	 * @param englishString
 	 * @return the translated string
-	 * @throws SQLException 
 	 * 
 	 */
-	private static String getDatabaseReplacementString(String module, String englishString) throws SQLException {
+	@SuppressWarnings("finally")
+	private static String getDatabaseReplacementString(String module, String englishString) throws Exception {
 		String result = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
+		//PreparedStatement pst = null;
+		//ResultSet rs = null;
+		try {
+			//String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
+			//pst = DB_CONNECTION.prepareStatement(query);
+			//rs = pst.executeQuery();
 
-		String query = "SELECT " + LANGUAGE + " FROM " + module + " WHERE english = " + "\'" + englishString + "\'";
-		pst = DB_CONNECTION.prepareStatement(query);
-		rs = pst.executeQuery();
-
-		// if there is a result due to the query, the translated value is returned. 
-		if (rs.next()) {
-			result = (rs.getString(1));
-			printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'" + " from " + module + " module");
-		} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
+			// if there is a result due to the query, the translated value is returned. 
+			//if (rs.next()) {
+			//result = (rs.getString(1));
+			//printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "'" + " from " + module + " module");
+			//} else if (SEARCH_ALL_MODULES){  // Search through the rest of the modules
+			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
+			//printMsg("Proceeding to search through all modules");
 			result = searchAllModules(englishString);
+			//} else { // Else return ERROR message no such replacement string
+			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
+			//result = englishString;
+			//}
+		} catch (SQLException e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			/*if (result == null) {
+				result = englishString;
+				printMsg("Unsuccessful translation, string to be translated remains English");
+			}*/
+			return result;
 		}
-		return result;
 	}
 
 	/**
@@ -348,49 +342,54 @@ public class Translations {
 	 * @author Wilson Li
 	 * @param englishString
 	 * @return the translated string
-	 * @throws SQLException 
 	 * @throws Exception
 	 */
-	private static String searchAllModules(String englishString) throws SQLException {
+	@SuppressWarnings("finally")
+	private static String searchAllModules(String englishString) throws Exception {
 		String result = englishString;
 		String[] tables = getAllModuleNamesFromDB();
 
-		for (String table : tables) {
-			PreparedStatement pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + table + "` where field='" + LANGUAGE + "'");
-			ResultSet rs_ifExists = pst_ifExists.executeQuery();
+		try {
+			for (String table : tables) {
+				PreparedStatement pst_ifExists = DB_CONNECTION.prepareStatement("SHOW columns from `" + table + "` where field='" + LANGUAGE + "'");
+				ResultSet rs_ifExists = pst_ifExists.executeQuery();
 
-			// checks to see if the language is in that particular module
-			if (rs_ifExists.next()) {
-				PreparedStatement pst_temp = null;
-				ResultSet rs_temp = null;
+				// checks to see if the language is in that particular module
+				if (rs_ifExists.next()) {
+					PreparedStatement pst_temp = null;
+					ResultSet rs_temp = null;
 
-				pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + table + " WHERE en_us ='" + englishString + "'");
-				rs_temp = pst_temp.executeQuery();
-				if (rs_temp.next()) {
-					result = (rs_temp.getString(1));
-					while (result == null && rs_temp.next()) {
-						result = rs_temp.getString(1);
-						printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
-					} 
-					if (result != null) {
-						printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + table + "' module");
-						break;
+					pst_temp = DB_CONNECTION.prepareStatement("SELECT " + LANGUAGE + " FROM " + table + " WHERE en_us ='" + englishString + "'");
+					rs_temp = pst_temp.executeQuery();
+					if (rs_temp.next()) {
+						result = (rs_temp.getString(1));
+						while (result == null && rs_temp.next()) {
+							result = rs_temp.getString(1);
+							printErrorMsg("Database translation entry is 'null', look for possible translation in next module");
+						} 
+						if (result != null) {
+							//printMsg("Replaced English: '" + englishString + "' with " + LANGUAGE + ": '" + result + "' from the '" + table + "' module");
+							break;
+						} 
+					}
+					else {
+						if (table == "WorkFlowTriggerShells") {
+							printMsg("Could not find the translation for '" + englishString + "'.");
+						}
+						//printErrorMsg("Could not find the translation for " + englishString + " in the " + table + " module");
+						rs_temp.close();
+						pst_temp.close();
 					} 
 				}
 				else {
-					if (table == "WorkFlowTriggerShells") {
-						printMsg("Could not find the translation for '" + englishString + "'.");
-					}
-					//printErrorMsg("Could not find the translation for " + englishString + " in the " + table + " module");
-					rs_temp.close();
-					pst_temp.close();
-				} 
+					printErrorMsg("The table: " + table + " does not contain the language: " + LANGUAGE);
+				}
 			}
-			else {
-				printErrorMsg("The table: " + table + " does not contain the language: " + LANGUAGE);
-			}
+		} catch (Exception e) {
+			throw new Exception (e.getMessage());
+		} finally {
+			return result;
 		}
-		return result;
 	}
 
 
@@ -399,21 +398,24 @@ public class Translations {
 	 * 
 	 * @author Wilson Li
 	 * @return an array of module names within the database that is being queried
-	 * @throws SQLException 
 	 */
-	private static String[] getAllModuleNamesFromDB() throws SQLException {
+	private static String[] getAllModuleNamesFromDB() throws Exception {
 		int counter = 0;
-		DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
-		String[] tables = new String[dbmd.getMaxTablesInSelect()];
-		String[] types = { "TABLE" };
-		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
-		// Get the table names
-		while (resultSet.next()) {
-			String tableName = resultSet.getString(3);
-			tables[counter] = tableName;
-			counter++;
+		try {
+			DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
+			String[] tables = new String[dbmd.getMaxTablesInSelect()];
+			String[] types = { "TABLE" };
+			ResultSet resultSet = dbmd.getTables(null, null, "%", types);
+			// Get the table names
+			while (resultSet.next()) {
+				String tableName = resultSet.getString(3);
+				tables[counter] = tableName;
+				counter++;
+			}
+			return tables;
+		} catch (SQLException e) {
+			throw new SQLException(e.getMessage());
 		}
-		return tables;
 	}
 
 	/**
@@ -425,9 +427,8 @@ public class Translations {
 	 * @author Wilson Li
 	 * @param assertStr
 	 * @return a string representing the value to be translated
-	 * @throws Exception 
 	 */
-	private static String getToBeReplacedAssertString(String assertStr) {
+	private static String getToBeReplacedAssertString(String assertStr) throws Exception {
 		String tempString = "";
 		String prevString = "";
 		String[] statement = assertStr.split("");
@@ -487,10 +488,11 @@ public class Translations {
 	 * @param numberOfArguments
 	 * @throws Exception
 	 */
-	private static void setAssertPosition(int numberOfArguments) {
+	private static void setAssertPosition(int numberOfArguments) throws Exception {
 		switch (numberOfArguments) {
 		case 2: ASSERT_POSITION = 0; break; // assertEquals(expectedValue, actualValue); 
 		case 3:	ASSERT_POSITION = 1; break; // assertEquals(message, expectedValue, actualValue);
+		default: throw new Exception("Invalid Number of Arguments, got " + numberOfArguments + " argument(s)");	
 		}
 	}
 
@@ -662,25 +664,32 @@ public class Translations {
 		return true;
 	}
 
-	private static void createLoginXMLFile(String outputFile) throws IOException {
+	private static void createLoginXMLFile(String outputFile) throws Exception {
 		File file = new File(outputFile);
 		Writer output = null;
-		if (file.exists()) {
-			System.out.println("\nFile login_translate.xml exists\n");
-		} else {	
-			System.out.println("Writing login_translate.xml: " + outputFile);
-			output = new BufferedWriter(new FileWriter(outputFile));
-			output.write("<soda>" +
-					"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
-					"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
-					"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
-					"\n\t<link text=\"Locale\"/>" +
-					"\n\t<select name=\"default_language\" setreal=\"" + LANGUAGE + "\" />" +
-					"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
-					"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
-					"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
-					"\n</soda>");
+		try{
+			if (file.exists()) {
+				System.out.println("\nFile login_translate.xml exists\n");
+			} else {	
+				System.out.println("Writing login_translate.xml: " + outputFile);
+				output = new BufferedWriter(new FileWriter(outputFile));
+				output.write("<soda>" +
+						"\n\t<script file=\"tests/modules/lib/login.xml\" />" +
+						"\n\t<var var=\"nav_action\" set=\"admin_link\"/>" +
+						"\n\t<script file=\"{@global.scriptsdir}/modules/lib/Nav_UserActions.xml\" />" +
+						"\n\t<link text=\"Locale\"/>" +
+						"\n\t<select name=\"default_language\" setreal=\"" + LANGUAGE + "\" />" +
+						"\n\t<button name=\"save\" required=\"false\" timeout=\"2\" />" +
+						"\n\t<script file=\"tests/modules/lib/logout.xml\" />" +
+						"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
+						"\n</soda>");
+			}
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			if (output != null) {
+				output.close();
+			}
 		}
-		output.close();
 	}
 }
