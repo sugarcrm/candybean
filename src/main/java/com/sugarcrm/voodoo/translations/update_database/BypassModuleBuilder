@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # Author: Jason Lin (ylin)
-# Purpose: Remove text that causes a missing function error in all php files for the ModuleBuilder module. Without this script, updateDB.php will always halt at ModuleBuilder (fatal parsing error: missing function).
+# Purpose: Remove text that causes a fatal parsing error (missing function) in all php files for the ModuleBuilder module.
 # Output: Modified php files inside en_dir and for_dir.
 # Input: en_dir for_dir
 #	 en_dir - directory path containing en_us.lang.php for ModuleBuilder
-#	 for_dir - direcotry path containing foreign language php files for ModuleBuilder
+#	 for_dir - directory path containing foreign language php files for ModuleBuilder
+#	 en_dir and for_dir can be the same directory
 
 if [ $# != 2 ]
 then
