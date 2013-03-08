@@ -81,7 +81,6 @@ public class FindDuplicateEntries {
 		String value = null;
 		String module = null;
 		BufferedWriter bw = new BufferedWriter(new FileWriter(output_file)); 
-		Boolean written_last = false;
 
 		for (int i = 0; i < dup_entries.size(); i++) {
 			String[] s = dup_entries.get(i).split("===", 3);
