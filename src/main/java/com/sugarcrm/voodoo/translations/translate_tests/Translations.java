@@ -80,7 +80,7 @@ public class Translations {
 			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
 
 		} catch (Exception e) {
-			throw new Exception(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -111,7 +111,7 @@ public class Translations {
 			recursePathForTranslations(TEST_PATH, OUTPUT_FOLDER);
 
 		} catch (Exception e) {
-			throw new Exception(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -255,7 +255,7 @@ public class Translations {
 			fileScanner.close();
 			//System.out.println("Finished writing");
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new Exception();
 		}
 	}
 
@@ -266,7 +266,6 @@ public class Translations {
 	 * @return - a MySQL connection object that is used for database queries
 	 * @throws Exception
 	 */
-	@SuppressWarnings("finally")
 	private static Connection connectToDatabase() throws Exception {
 		Connection con = null;
 		// TODO: May use centralized DB here
@@ -283,10 +282,9 @@ public class Translations {
 			printMsg("Connection to database successfull!");
 			//PreparedStatement pst = DB_CONNECTION.prepareStatement("SET NAMES utf8");
 			//pst.executeQuery();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		} finally {
 			return con;
+		} catch (Exception e) {
+			throw new Exception();
 		}
 	}
 
@@ -301,7 +299,6 @@ public class Translations {
 	 * @return the translated string
 	 * 
 	 */
-	@SuppressWarnings("finally")
 	private static String getDatabaseReplacementString(String module, String englishString) throws Exception {
 		String result = null;
 		//PreparedStatement pst = null;
@@ -323,14 +320,9 @@ public class Translations {
 			//printErrorMsg("Could not find the translation for " + englishString + " in the " + module + " module");
 			//result = englishString;
 			//}
-		} catch (SQLException e) {
-			throw new Exception(e.getMessage());
-		} finally {
-			/*if (result == null) {
-				result = englishString;
-				printMsg("Unsuccessful translation, string to be translated remains English");
-			}*/
 			return result;
+		} catch (SQLException e) {
+			throw new Exception();
 		}
 	}
 
@@ -344,7 +336,6 @@ public class Translations {
 	 * @return the translated string
 	 * @throws Exception
 	 */
-	@SuppressWarnings("finally")
 	private static String searchAllModules(String englishString) throws Exception {
 		String result = englishString;
 		String[] tables = getAllModuleNamesFromDB();
@@ -385,10 +376,9 @@ public class Translations {
 					printErrorMsg("The table: " + table + " does not contain the language: " + LANGUAGE);
 				}
 			}
-		} catch (Exception e) {
-			throw new Exception (e.getMessage());
-		} finally {
 			return result;
+		} catch (Exception e) {
+			throw new Exception ();
 		}
 	}
 
@@ -414,7 +404,7 @@ public class Translations {
 			}
 			return tables;
 		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
+			throw new SQLException();
 		}
 	}
 
@@ -602,15 +592,14 @@ public class Translations {
 					listOfDatabaseModules.add(line.trim());
 				}
 			}
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		} finally {
 			try {
 				if (BR != null)
 					BR.close();
 			} catch (IOException e) {
-				throw new Exception(e.getMessage());
+				throw new Exception();
 			}
+		} catch (Exception e) {
+			throw new Exception();
 		}
 	}
 
@@ -684,12 +673,11 @@ public class Translations {
 						"\n\t<script file=\"tests/modules/lib/browserclose.xml\" />" +
 						"\n</soda>");
 			}
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		} finally {
 			if (output != null) {
 				output.close();
 			}
+		} catch (Exception e) {
+			throw new Exception();
 		}
 	}
 }
