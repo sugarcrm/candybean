@@ -20,11 +20,7 @@ public class FindDuplicateEntries {
 			DUP_ENTRIES = getDupEntries(EN_ENTRIES);
 			writeDuplicates(DUP_ENTRIES, "/var/lib/jenkins/DuplicateEntries.txt");
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}
 	}
