@@ -89,7 +89,7 @@ public class FindDuplicateEntries {
 			value = s[0];
 			module = s[1];
 			if (value.contains("\n")) {
-				bw.write("\nIn module " + module + ", " + label + "='" + value + "'\n");
+				bw.write("\nIn module " + module + ", " + label + "='" + value.substring(1) + "'\n");
 			} else {
 				bw.write("In module " + module + ", " + label + "='" + value + "'\n");
 			}
