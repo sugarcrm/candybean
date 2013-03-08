@@ -8,7 +8,6 @@ import java.util.Collections;
 public class FindSingleTranslation {
 	private static Connection CONNECTION;
 	private static ArrayList<String> MODULES;
-	private static ArrayList<String> ENTRIES;
 
 	public static void main(String args[]) {
 		try {
@@ -42,7 +41,6 @@ public class FindSingleTranslation {
 	}
 
 	private static void Translate(ArrayList<String> modules, String en_string, String lang) throws SQLException {
-		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs = null;
 
 		for (String module : modules) {
