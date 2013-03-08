@@ -52,7 +52,14 @@ public class FindAffectedSodaTests {
 			MODULES = Utils.getTables();
 			EN_ENTRIES = FindDuplicateEntries.getAllENEntries(MODULES);
 			DUP_ENTRIES = FindDuplicateEntries.getDupEntries(EN_ENTRIES);
+			
+			for (String entry : DUP_ENTRIES) {
+				System.out.println(entry);
+			}
+			
+			BFWRITER = new BufferedWriter(new FileWriter(OUTPUT));
 			recursivelyFindAffectedTests(INPUT_PATH);
+			BFWRITER.close();
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,40 +67,44 @@ public class FindAffectedSodaTests {
 	}
 	
 	private static void isFileAffected(String testFile) throws IOException {
-		BFWRITER = new BufferedWriter(new FileWriter(OUTPUT));
 		SCANNER = new Scanner(new File(testFile));
-		
-		System.out.println("\nInside testFile:\n");		
+
+		BFWRITER.write("\nInside " + testFile + "\n");		
 		while (SCANNER.hasNext()) {
 			String line = SCANNER.nextLine();
 			LINK_MATCHER = LINK_PATTERN.matcher(line);
 			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
-			LINK_MATCHER.find();
-			ASSERT_MATCHER.find();
-			LINK_MATCH = LINK_MATCHER.group(1);
-			ASSERT_MATCH = ASSERT_MATCHER.group(1);
 			
-			if (DUP_ENTRIES.contains(LINK_MATCH)) {
-				BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
-			} else if (DUP_ENTRIES.contains(ASSERT_MATCH)) {
-				BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
+			if (LINK_MATCHER.find()) {
+				System.out.println("Link match");
+				LINK_MATCH = LINK_MATCHER.group(1);
+				System.out.println("\t" + LINK_MATCH);	
+				if (DUP_ENTRIES.contains(LINK_MATCH)) {
+                                	BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
+                        	}
+			}
+			if (ASSERT_MATCHER.find()) {
+				System.out.println("Assert match");
+				ASSERT_MATCH = ASSERT_MATCHER.group(1);
+				System.out.println("\t" + ASSERT_MATCH);
+				if (DUP_ENTRIES.contains(ASSERT_MATCH)) {
+					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
+                        	}
 			}
 		}
 	}
 	
 	private static void recursivelyFindAffectedTests(String pathString) throws IOException {
 		File path = new File(pathString);
-		
-		if (path.isFile()) {
+		String fileName = path.getName();
+		if (path.isFile() && fileName.contains(".xml")) {
 			isFileAffected(pathString);
-		} else {
+		} else if (path.isDirectory()) {
 			File[] files = path.listFiles();
 			for (File file : files) {
 				recursivelyFindAffectedTests(pathString + File.separator + file.getName());
 			}
 			
-		}
-		
-		BFWRITER.close();
+		}	
 	}
 }
