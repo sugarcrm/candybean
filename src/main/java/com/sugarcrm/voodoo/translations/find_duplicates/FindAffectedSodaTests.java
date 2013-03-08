@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.sugarcrm.voodoo.translations.find_duplicates.FindDuplicateEntries;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 public class FindAffectedSodaTests {
 	private static ArrayList<String> MODULES;
+	private static ArrayList<String> ENTRIES;
 	private static Pattern LINK_PATTERN = Pattern.compile("link text=\"(.*?)\"");
 	private static Pattern ASSERT_PATTERN = Pattern.compile("assert=\"(.*?)\"");
 	private static Matcher LINK_MATCHER;
@@ -25,6 +27,7 @@ public class FindAffectedSodaTests {
 		try {
 			Utils.connectToDB(args[0], args[1], args[2], args[3]);
 			MODULES = Utils.getTables();
+			ENTRIES = FindDuplicateEntries.getAllENEntries(MODULES);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
