@@ -4,19 +4,19 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import com.sugarcrm.voodoo.utilities.Utils;
 
 public class FindDuplicateEntries2 {
-	private static Connection CONNECTION;
 	private static ArrayList<String> MODULES;
 	private static ArrayList<String> ENTRIES;
 
 	public static void main(String args[]) {
 		try {
-			CONNECTION = connectToDB();
+			Utils.connectToDB("10.8.31.10", "Translations_6_7_latest", "translator", "Sugar123!");
 			System.out.println("Successfully connected to database [add db_name parameter]");
-			MODULES = getDBTables();
+			MODULES = Utils.getTables();
 			ENTRIES = getAllENEntries(MODULES);
-			writeDuplicates(ENTRIES, "/var/lib/jenkins/DuplicateEntries2.txt");
+			writeDuplicates(ENTRIES, "/var/lib/jenkins/DuplicateEntries.txt");
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -27,29 +27,12 @@ public class FindDuplicateEntries2 {
 		}
 	}
 
-	private static Connection connectToDB() throws ClassNotFoundException, SQLException {
-		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://localhost/Translations_6_7?useUnicode=true&characterEncoding=utf-8", "root", "root");
-	}
-
-	private static ArrayList<String> getDBTables() throws SQLException {
-		DatabaseMetaData dbmd = CONNECTION.getMetaData();
-		ArrayList<String> tables = new ArrayList<String>();
-		String[] types = { "TABLE" };
-		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
-		while (resultSet.next()) {
-			String tableName = resultSet.getString("TABLE_NAME");
-			tables.add(tableName);
-		}
-		return tables;
-	}
-
-	private static ArrayList<String> getAllENEntries(ArrayList<String> modules) throws SQLException {
+	public static ArrayList<String> getAllENEntries(ArrayList<String> modules) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs = null;
-
+	
 		for (String module : modules) {
-			rs = execQuery("SELECT Label, en_us FROM " + module);
+			rs = Utils.execQuery("SELECT Label, en_us FROM " + module);
 			while (rs.next()) {
 				String label = rs.getString("Label");
 				String value = rs.getString("en_us");
@@ -96,10 +79,5 @@ public class FindDuplicateEntries2 {
 			}
 		}
 		bw.close();
-	}
-
-	private static ResultSet execQuery(String query) throws SQLException {
-		PreparedStatement ps = CONNECTION.prepareStatement(query);
-		return ps.executeQuery();
 	}
 }

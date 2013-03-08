@@ -127,7 +127,7 @@ public class Translations {
 	 * @throws Exception
 	 */
 	private static void recursePathForTranslations(String testPath, String outputFolder) throws Exception {
-		private static File inputFile = null;
+		File inputFile = null;
 
 		try {
 			inputFile = new File(testPath);
@@ -176,27 +176,27 @@ public class Translations {
 	 * @throws Exception
 	 */
 	private static void fileReaderWriter(String module, String inputFile, String outputFile) throws Exception {
-		private static File file = new File(inputFile);
-		private static Scanner fileScanner = new Scanner(file);
-		private static Writer output = null;
+		File file = new File(inputFile);
+		Scanner fileScanner = new Scanner(file);
+		Writer output = null;
 
 		String assertType;
 		if (TEST_FORMAT.equals("JAVA")) { assertType = "assertEquals\\((.*?)\\)"; }//JAVA FORMAT
 		else { assertType = "assert=\"(.*?)\""; }//XML FORMAT
 
-		private static Pattern pattern_assert = Pattern.compile(assertType); // set depending on test file format
+		Pattern pattern_assert = Pattern.compile(assertType); // set depending on test file format
 		//For Voodoo (test with .xml format) use only
-		private static Pattern pattern_link = Pattern.compile("link text=\"(.*?)\"");
-		private static Pattern pattern_moduletab = Pattern.compile("id=\"moduleTab_(" + module + ")\"");
-		private static Pattern pattern_menuextra_all = Pattern.compile("id=\"moduleTabExtraMenu(All)\"");
-		private static Pattern pattern_variable = Pattern.compile("\\{");
-		private static Pattern pattern_pageNumber = Pattern.compile("\\(");
-		private static Matcher match_assert = null;
-		private static Matcher match_link = null;
-		private static Matcher match_moduletab = null;
-		private static Matcher match_menuextra_all = null;
-		private static Matcher match_variable = null;
-		private static Matcher match_pageNumber = null;
+		Pattern pattern_link = Pattern.compile("link text=\"(.*?)\"");
+		Pattern pattern_moduletab = Pattern.compile("id=\"moduleTab_(" + module + ")\"");
+		Pattern pattern_menuextra_all = Pattern.compile("id=\"moduleTabExtraMenu(All)\"");
+		Pattern pattern_variable = Pattern.compile("\\{");
+		Pattern pattern_pageNumber = Pattern.compile("\\(");
+		Matcher match_assert = null;
+		Matcher match_link = null;
+		Matcher match_moduletab = null;
+		Matcher match_menuextra_all = null;
+		Matcher match_variable = null;
+		Matcher match_pageNumber = null;
 
 		try {
 			System.out.println("Writing file: " + outputFile);
@@ -272,11 +272,11 @@ public class Translations {
 	 * @throws Exception
 	 */
 	private static Connection connectToDatabase() throws Exception {
-		private static Connection con = null;
+		Connection con = null;
 		// TODO: May use centralized DB here
-		private static String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
-		private static String username = getCascadingPropertyValue(translateProp, "", "translate.username");
-		private static String password = getCascadingPropertyValue(translateProp, "", "translate.password");
+		String serverName = getCascadingPropertyValue(translateProp, "", "translate.serverName");
+		String username = getCascadingPropertyValue(translateProp, "", "translate.username");
+		String password = getCascadingPropertyValue(translateProp, "", "translate.password");
 		printMsg("Creating database connection: \n\tDatabase: " + serverName + "\n\tUsername: " + username + "\n\tPassword: " + password);
 		
 		try {
@@ -307,7 +307,7 @@ public class Translations {
 	 * 
 	 */
 	private static String getDatabaseReplacementString(String module, String englishString) throws Exception {
-		private static String result = null;
+		String result = null;
 		//PreparedStatement pst = null;
 		//ResultSet rs = null;
 		try {
@@ -345,8 +345,8 @@ public class Translations {
 	 * @throws Exception
 	 */
 	private static String searchAllModules(String englishString) throws Exception {
-		private static String result = englishString;
-		private static String[] tables = getAllModuleNamesFromDB();
+		String result = englishString;
+		String[] tables = getAllModuleNamesFromDB();
 
 		try {
 			for (String table : tables) {
@@ -399,8 +399,8 @@ public class Translations {
 	 * @return an array of module names within the database that is being queried
 	 */
 	private static String[] getAllModuleNamesFromDB() throws Exception {
-		private static int counter = 0;
-		private static String[] tables = null;
+		int counter = 0;
+		String[] tables = null;
 
 		try {
 			DatabaseMetaData dbmd = DB_CONNECTION.getMetaData();
@@ -431,11 +431,11 @@ public class Translations {
 	 * @return a string representing the value to be translated
 	 */
 	private static String getToBeReplacedAssertString(String assertStr) throws Exception {
-		private static String tempString = "";
-		private static String prevString = "";
-		private static String[] statement = assertStr.split("");
-		private static ArrayList<String> argumentListString = new ArrayList<String>();
-		private static boolean withinQuote = false;
+		String tempString = "";
+		String prevString = "";
+		String[] statement = assertStr.split("");
+		ArrayList<String> argumentListString = new ArrayList<String>();
+		boolean withinQuote = false;
 
 		// loop through each character to find the desire string. In this 
 		// case, the second argument from an assert statement
@@ -526,7 +526,7 @@ public class Translations {
 	 * @return a string representing the value from a given key
 	 */
 	private static String getCascadingPropertyValue(Properties props, String defaultValue, String key) {
-		private static String value = defaultValue;
+		String value = defaultValue;
 		
 		if (props != null) {
 			if (props.containsKey(key) && value.equals(""))
@@ -555,7 +555,7 @@ public class Translations {
 	 * @return a string representing the the module name
 	 */
 	private static String getFileModuleName(String fileName) {
-		private static String fileModuleName = "";
+		String fileModuleName = "";
 		
 		for (int index = 0; index < fileName.length(); index++) {
 			String character = fileName.substring(index, index + 1);
@@ -593,8 +593,8 @@ public class Translations {
 	 * it can just be a single module name (ie, Accounts)
 	 */
 	private static void populateListOfModules(String path) throws Exception {
-		private static BufferedReader BR = null;
-		private static String line = null;
+		BufferedReader BR = null;
+		String line = null;
 		
 		try {
 			File testFile = new File(path);
@@ -626,7 +626,7 @@ public class Translations {
 	 * @param path
 	 */
 	private static void createFolder(String path) {
-		private static File outputFolder = new File(path);
+		File outputFolder = new File(path);
 		
 		if (!outputFolder.exists())
 			outputFolder.mkdir();
