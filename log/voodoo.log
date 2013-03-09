@@ -1,0 +1,22 @@
+[03-03-2013 17:17:12:353] com.sugarcrm.voodoo.automation.VInterface getWebDriver
+INFO: Instantiating Chrome with:
+    log path:./log/chromedriver.log
+    driver path: ./lib/chromedriver-mac
+[03-03-2013 17:17:13:790] org.apache.http.impl.client.DefaultRequestDirector tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request: The target server failed to respond
+[03-03-2013 17:17:13:791] org.apache.http.impl.client.DefaultRequestDirector tryExecute
+INFO: Retrying request
+[03-03-2013 17:17:14:060] com.sugarcrm.voodoo.automation.VInterface start
+INFO: Starting browser.
+[03-03-2013 17:17:14:062] com.sugarcrm.voodoo.automation.VInterface start
+INFO: Starting browser.
+[03-03-2013 17:17:14:066] com.sugarcrm.voodoo.automation.VInterface go
+INFO: Going to URL and switching to window: http://www.w3schools.com/
+[03-03-2013 17:17:15:325] com.sugarcrm.voodoo.automation.control.VControl getControl
+INFO: Selenium: getting control: VHook(TAG,a) from control: VControl(VHook(ID,leftcolumn)) with index: 1
+[03-03-2013 17:17:15:349] com.sugarcrm.voodoo.automation.control.VControl click
+INFO: Selenium: clicking on control: VControl(VHook(TAG,a))
+[03-03-2013 17:17:17:259] com.sugarcrm.voodoo.automation.control.VControl getText
+INFO: Selenium: getting text for control: VControl(VHook(TAG,h1))
+[03-03-2013 17:17:17:282] com.sugarcrm.voodoo.automation.VInterface stop
+INFO: Stopping automation.
