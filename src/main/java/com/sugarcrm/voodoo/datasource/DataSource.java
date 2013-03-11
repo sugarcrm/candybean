@@ -7,8 +7,6 @@ import java.util.HashMap;
  *
  */
 public class DataSource {
-//public class DataSource extends HashMap<String, String> {
-	//private static final long serialVersionUID = 1L;  // to quell warning 
 	
 	protected FieldSetList data = null;
 	protected String filename = "";
