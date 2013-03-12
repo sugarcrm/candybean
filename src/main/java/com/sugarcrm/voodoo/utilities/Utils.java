@@ -24,24 +24,6 @@ public class Utils {
 	private static Connection CONNECTION;
 	
 	/**
-	 * Getter for a database connection. First, use the connectToDB method to establish a connection.
-	 * @return
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
-	 */
-	public static Connection getConnection() throws ClassNotFoundException, SQLException {
-		if (CONNECTION == null) {
-			System.out.println("Connection is null. Establish a connection first.");
-		}
-		return CONNECTION;
-	}
-	
-	public static Connection getConnection(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
-		connectToDB(dbServer, dbName, dbUser, dbPass);
-		return CONNECTION;
-	}
-	
-	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
 	 * 
 	 * @param cmd 
@@ -124,7 +106,7 @@ public class Utils {
 	}
 
 	/**
-	 * Populates an ArrayList<String> with the tables in the database currently being used.
+	 * Retrieves all tables from the database currently connected to and store them in an ArrayList of Strings.
 	 * @return
 	 * @throws SQLException
 	 */
@@ -141,7 +123,7 @@ public class Utils {
 	}
 
 	/**
-	 * Establishes a connection to a given database. 
+	 * Establishes a connection to a database. 
 	 * @param dbServer - database server
 	 * @param dbName - name of the database to use
 	 * @param dbUser - database username
