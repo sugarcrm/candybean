@@ -66,6 +66,25 @@ public class FindAffectedSodaTests {
 		}	
 	}
 	
+	private static boolean isDuplicate(String text) {
+		for (String entry : DUP_ENTRIES) {
+			String[] s = entry.split("===", 3);
+			String value;
+			
+			if (s[0].contains("\n")) {
+				value = s[0].substring(1);
+			} else {
+				value = s[0];
+			}
+			
+			if (text.equals(value)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	private static void isFileAffected(String testFile) throws IOException {
 		SCANNER = new Scanner(new File(testFile));
 
@@ -79,7 +98,7 @@ public class FindAffectedSodaTests {
 				System.out.println("Link match");
 				LINK_MATCH = LINK_MATCHER.group(1);
 				System.out.println("\t" + LINK_MATCH);	
-				if (DUP_ENTRIES.contains(LINK_MATCH)) {
+				if (isDuplicate(LINK_MATCH)) {
                                 	BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
                         	}
 			}
@@ -87,7 +106,7 @@ public class FindAffectedSodaTests {
 				System.out.println("Assert match");
 				ASSERT_MATCH = ASSERT_MATCHER.group(1);
 				System.out.println("\t" + ASSERT_MATCH);
-				if (DUP_ENTRIES.contains(ASSERT_MATCH)) {
+				if (isDuplicate(ASSERT_MATCH)) {
 					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
                         	}
 			}
