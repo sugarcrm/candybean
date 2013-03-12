@@ -53,10 +53,6 @@ public class FindAffectedSodaTests {
 			EN_ENTRIES = FindDuplicateEntries.getAllENEntries(MODULES);
 			DUP_ENTRIES = FindDuplicateEntries.getDupEntries(EN_ENTRIES);
 
-			for (String entry : DUP_ENTRIES) {
-				System.out.println(entry);
-			}
-
 			BFWRITER = new BufferedWriter(new FileWriter(OUTPUT));
 			recursivelyFindAffectedTests(INPUT_PATH);
 			BFWRITER.close();
@@ -87,6 +83,7 @@ public class FindAffectedSodaTests {
 
 	private static void isFileAffected(String testFile) throws IOException {
 		SCANNER = new Scanner(new File(testFile));
+		boolean foundDup = false;
 		boolean written = false;
 
 		while (SCANNER.hasNext()) {
@@ -95,7 +92,8 @@ public class FindAffectedSodaTests {
 			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
 
 			if (LINK_MATCHER.find()) {
-				if (!written) {
+				foundDup = true;
+				if (foundDup && !written) {
 					BFWRITER.write("\nInside " + testFile + "\n");
 					written = true;
 				}
@@ -105,7 +103,8 @@ public class FindAffectedSodaTests {
 				}
 			}
 			if (ASSERT_MATCHER.find()) {
-				if (!written) {
+				foundDup = true;
+				if (foundDup && !written) {
 					BFWRITER.write("\nInside " + testFile + "\n");
 					written = true;
 				}
