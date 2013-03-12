@@ -92,24 +92,24 @@ public class FindAffectedSodaTests {
 			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
 
 			if (LINK_MATCHER.find()) {
-				foundDup = true;
-				if (foundDup && !written) {
-					BFWRITER.write("\nInside " + testFile + "\n");
-					written = true;
-				}
 				LINK_MATCH = LINK_MATCHER.group(1);	
 				if (isDuplicate(LINK_MATCH)) {
+					foundDup = true;
+					if (foundDup && !written) {
+						BFWRITER.write("\nInside " + testFile + "\n");
+						written = true;
+					}
 					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
 				}
 			}
 			if (ASSERT_MATCHER.find()) {
-				foundDup = true;
-				if (foundDup && !written) {
-					BFWRITER.write("\nInside " + testFile + "\n");
-					written = true;
-				}
 				ASSERT_MATCH = ASSERT_MATCHER.group(1);
 				if (isDuplicate(ASSERT_MATCH)) {
+					foundDup = true;
+					if (foundDup && !written) {
+						BFWRITER.write("\nInside " + testFile + "\n");
+						written = true;
+					}
 					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
 				}
 			}
