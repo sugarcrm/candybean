@@ -18,7 +18,7 @@ public class FindAffectedSodaTests {
 	private static ArrayList<String> DUP_ENTRIES;
 
 	private static Pattern LINK_PATTERN = Pattern.compile("link text=\"(.*?)\"");
-	private static Pattern ASSERT_PATTERN = Pattern.compile("assert=\"(.*?)\"");
+	private static Pattern ASSERT_PATTERN = Pattern.compile("browser assert=\"(.*?)\"");
 	private static Matcher LINK_MATCHER;
 	private static Matcher ASSERT_MATCHER;
 	private static String LINK_MATCH;
