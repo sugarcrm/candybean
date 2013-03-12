@@ -85,8 +85,10 @@ public class FindAffectedSodaTests {
 		SCANNER = new Scanner(new File(testFile));
 		boolean foundDup = false;
 		boolean written = false;
+		int lineNumber = 0;
 
 		while (SCANNER.hasNext()) {
+			lineNumber++;
 			String line = SCANNER.nextLine();
 			LINK_MATCHER = LINK_PATTERN.matcher(line);
 			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
@@ -96,10 +98,10 @@ public class FindAffectedSodaTests {
 				if (isDuplicate(LINK_MATCH)) {
 					foundDup = true;
 					if (foundDup && !written) {
-						BFWRITER.write("\nInside " + testFile + "\n");
+						BFWRITER.write("\nInside " + testFile.substring(testFile.indexOf("SodaIceBox")) + "\n");
 						written = true;
 					}
-					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
+					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line " + lineNumber + ":\n\t\t" + line.trim() + "\n");
 				}
 			}
 			if (ASSERT_MATCHER.find()) {
@@ -107,10 +109,10 @@ public class FindAffectedSodaTests {
 				if (isDuplicate(ASSERT_MATCH)) {
 					foundDup = true;
 					if (foundDup && !written) {
-						BFWRITER.write("\nInside " + testFile + "\n");
+						BFWRITER.write("\nInside " + testFile.substring(testFile.indexOf("SodaIceBox")) + "\n");
 						written = true;
 					}
-					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
+					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line " + lineNumber + ":\n\t\t" + line.trim() + "\n");
 				}
 			}
 		}
