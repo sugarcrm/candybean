@@ -16,7 +16,6 @@ import com.sugarcrm.voodoo.utilities.Utils;
  * 
  */
 public class CsvDataAdapter extends DataAdapter {
-	//String property;
 
 	public CsvDataAdapter(Properties grimoireProps) {
 		super(grimoireProps);
@@ -32,7 +31,7 @@ public class CsvDataAdapter extends DataAdapter {
 	public HashMap<String, DataSource> getData(String testData) {
 
 		List<File> csvFileList = getCsvFileList(testData);
-		printCsvFileList(csvFileList);
+		//printCsvFileList(csvFileList);
 		HashMap<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
 
 		return dataSourceHashMap;
@@ -43,7 +42,7 @@ public class CsvDataAdapter extends DataAdapter {
 		selection = select;  // determines whether to select all the files based on file pattern
 		
 		List<File> csvFileList = getCsvFileList(testData);
-		printCsvFileList(csvFileList);
+		//printCsvFileList(csvFileList);
 		HashMap<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
 
 		return dataSourceHashMap;
@@ -62,8 +61,6 @@ public class CsvDataAdapter extends DataAdapter {
 
 		String dataFilename = dataFileCanonical.getName();
 		String dataParent = dataFileCanonical.getParent();
-		// System.out.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
-		// + dataFilename + "  dataParent = " + dataParent);
 
 		File[] files = getAllFilesBasedOnPattern(dataParent, dataFilename,
 				"csv");
@@ -80,26 +77,26 @@ public class CsvDataAdapter extends DataAdapter {
 		String csvBaseDir = Utils.getCascadingPropertyValue(props,
 				//"/home/testData", "datasource.csv.basedir");
 				"/home/testData", property);
-		System.out
-				.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
-						+ csvBaseDir);
+		//System.out
+		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
+		//				+ csvBaseDir);
 
 		// String fileFullPath = grimoireDir + File.separator + csvDirPath;
 		String fileFullPath = currDir + File.separator + csvBaseDir;
-		System.out
-				.println("CsvDataAdapter.csv: getDataBaseDirFromProp(): fileFullPath = "
-						+ fileFullPath);
+		//System.out
+		//		.println("CsvDataAdapter.csv: getDataBaseDirFromProp(): fileFullPath = "
+		//				+ fileFullPath);
 
 		return fileFullPath; // it seems returning just filePath still works
 	}
 
 	private static File getDataFullPathCanonical(String dataPath) {
-		System.out.println("CsvDataAdapter.java: getCsvFileList(): testData = "
-				+ dataPath);
+		//System.out.println("CsvDataAdapter.java: getCsvFileList(): testData = "
+		//		+ dataPath);
 		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.properties, DataAdapter.dataBasePath);
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
-						+ dataBaseDir);
+		//System.out
+		//		.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
+		//				+ dataBaseDir);
 
 		String dataFullPath = dataBaseDir + File.separator + dataPath;
 
@@ -111,7 +108,7 @@ public class CsvDataAdapter extends DataAdapter {
 			e.printStackTrace();
 		}
 
-		printDataFilePath(dataFileCanonical);
+		//printDataFilePath(dataFileCanonical);
 
 		return dataFileCanonical;
 	}
