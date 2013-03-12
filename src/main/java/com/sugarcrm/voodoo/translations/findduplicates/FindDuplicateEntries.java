@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.find_duplicates;
+package com.sugarcrm.voodoo.translations.findduplicates;
 
 import java.io.*;
 import java.sql.*;
@@ -10,15 +10,29 @@ public class FindDuplicateEntries {
 	private static ArrayList<String> MODULES;
 	private static ArrayList<String> EN_ENTRIES;
 	private static ArrayList<String> DUP_ENTRIES;
+	private static Connection CONNECTION;
+	private static String DB_SERVER;
+	private static String DB_NAME;
+	private static String DB_USER;
+	private static String DB_PASS;
+	private static String OUTPUT_PATH;
 
 	public static void main(String args[]) {
 		try {
-			Utils.connectToDB("10.8.31.10", "Translations_6_7_latest", "translator", "Sugar123!");
-			System.out.println("Successfully connected to database [add db_name parameter]");
-			MODULES = Utils.getTables();
+			DB_SERVER = args[0];
+			DB_NAME = args[1];
+			DB_USER = args[2];
+			DB_PASS = args[3];
+			OUTPUT_PATH = args[4];
+			
+			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
+			System.out.println("Connected to " + DB_SERVER + ", using database " + DB_NAME + "\n");
+			
+			MODULES = Utils.getTables(CONNECTION);
 			EN_ENTRIES = getAllENEntries(MODULES);
 			DUP_ENTRIES = getDupEntries(EN_ENTRIES);
-			writeDuplicates(DUP_ENTRIES, "/var/lib/jenkins/DuplicateEntries.txt");
+			
+			writeDuplicates(DUP_ENTRIES, OUTPUT_PATH);
 
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
@@ -30,7 +44,7 @@ public class FindDuplicateEntries {
 		ResultSet rs = null;
 
 		for (String module : modules) {
-			rs = Utils.execQuery("SELECT Label, en_us FROM " + module);
+			rs = Utils.execQuery("SELECT Label, en_us FROM " + module, CONNECTION);
 			while (rs.next()) {
 				String label = rs.getString("Label");
 				String value = rs.getString("en_us");

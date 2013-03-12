@@ -1,15 +1,17 @@
-package com.sugarcrm.voodoo.translations.find_duplicates;
+package com.sugarcrm.voodoo.translations.findduplicates;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.sugarcrm.voodoo.translations.find_duplicates.FindDuplicateEntries;
+
+import com.sugarcrm.voodoo.translations.findduplicates.FindDuplicateEntries;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 public class FindAffectedSodaTests {
@@ -30,6 +32,7 @@ public class FindAffectedSodaTests {
 	private static Scanner SCANNER;
 	private static BufferedWriter BFWRITER;
 
+	private static Connection CONNECTION;
 	private static String DB_SERVER;
 	private static String DB_NAME;
 	private static String DB_USER;
@@ -42,14 +45,15 @@ public class FindAffectedSodaTests {
 			DB_NAME = args[1];
 			DB_USER = args[2];
 			DB_PASS = args[3];
-			Utils.connectToDB(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
-			System.out.println("Connected to " + DB_SERVER + ", using database " + DB_NAME + "\n");
-
 			INPUT_PATH = args[4];
 			OUTPUT_PATH = args[5];
+			
+			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
+			System.out.println("Connected to " + DB_SERVER + ", using database " + DB_NAME + "\n");
+	
 			OUTPUT = new File(OUTPUT_PATH);
 
-			MODULES = Utils.getTables();
+			MODULES = Utils.getTables(CONNECTION);
 			EN_ENTRIES = FindDuplicateEntries.getAllENEntries(MODULES);
 			DUP_ENTRIES = FindDuplicateEntries.getDupEntries(EN_ENTRIES);
 
@@ -85,10 +89,8 @@ public class FindAffectedSodaTests {
 		SCANNER = new Scanner(new File(testFile));
 		boolean foundDup = false;
 		boolean written = false;
-		int lineNumber = 0;
 
 		while (SCANNER.hasNext()) {
-			lineNumber++;
 			String line = SCANNER.nextLine();
 			LINK_MATCHER = LINK_PATTERN.matcher(line);
 			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
@@ -98,10 +100,10 @@ public class FindAffectedSodaTests {
 				if (isDuplicate(LINK_MATCH)) {
 					foundDup = true;
 					if (foundDup && !written) {
-						BFWRITER.write("\nInside " + testFile.substring(testFile.indexOf("SodaIceBox")) + "\n");
+						BFWRITER.write("\nInside " + testFile + "\n");
 						written = true;
 					}
-					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line " + lineNumber + ":\n\t\t" + line.trim() + "\n");
+					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
 				}
 			}
 			if (ASSERT_MATCHER.find()) {
@@ -109,10 +111,10 @@ public class FindAffectedSodaTests {
 				if (isDuplicate(ASSERT_MATCH)) {
 					foundDup = true;
 					if (foundDup && !written) {
-						BFWRITER.write("\nInside " + testFile.substring(testFile.indexOf("SodaIceBox")) + "\n");
+						BFWRITER.write("\nInside " + testFile + "\n");
 						written = true;
 					}
-					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line " + lineNumber + ":\n\t\t" + line.trim() + "\n");
+					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
 				}
 			}
 		}
@@ -121,10 +123,12 @@ public class FindAffectedSodaTests {
 	private static void recursivelyFindAffectedTests(String pathString) throws IOException {
 		File path = new File(pathString);
 		String fileName = path.getName();
+		
 		if (path.isFile() && fileName.contains(".xml")) {
 			isFileAffected(pathString);
 		} else if (path.isDirectory()) {
 			File[] files = path.listFiles();
+			
 			for (File file : files) {
 				recursivelyFindAffectedTests(pathString + File.separator + file.getName());
 			}

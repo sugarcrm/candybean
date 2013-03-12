@@ -2,9 +2,9 @@
 
 if [ $# != 6 -o $1 = "-h" -o $1 = "-help" -o $1 = "--help" ]
 then
-	echo "Usage: $0 db_server db_name db_user db_pass input_path output_path
+        echo "Usage: $0 db_server db_name db_user db_pass input_path output_path
 Example: ./FindAffectedSodaTests 10.8.31.10 Translations_6_7_latest translator Sugar123! ~/git_repos/SodaIceBox/soda/tests/ ~/AffectedSodaTests.txt"
-	exit
+        exit
 fi
 
 db_server=$1; db_name=$2; db_user=$3; db_pass=$4; 
