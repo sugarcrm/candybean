@@ -7,6 +7,16 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class Configuration extends Properties {
+	
+	// Default zero argument constructor
+	public Configuration() {
+		super();
+	}
+
+	// Constructs a Configuration object by constructing a Properties object that has a default fall-back to props
+	public Configuration(Properties props) {
+		super(props);
+	}
 
 	/**
 	 * NOTE: This method takes in a path of type String instead of a FileInputStream object

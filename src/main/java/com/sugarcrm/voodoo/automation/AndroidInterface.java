@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 //import com.jayway.android.robotium.remotecontrol.solo.Solo;
 import com.sugarcrm.voodoo.utilities.Utils;
 
-// For more functionality Visit the remoteContorl.solo.SoloTest
+// For more functionality Visit the remoteControl.solo.SoloTest
 public class AndroidInterface{
 //	public Solo solo = null;
 //	private final Properties props;

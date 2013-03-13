@@ -3,6 +3,13 @@ package com.sugarcrm.voodoo.utilities;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 
@@ -10,10 +17,11 @@ import java.util.Properties;
  * Utils is simply a container for automation/Java-related helper functions that
  * are relatively non-specific to any particular library/framework.
  * 
- * @author cwarmbold
+ * @author cwarmbold, ylin
  *
  */
 public class Utils {
+	private static Connection CONNECTION;
 	
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
@@ -86,6 +94,48 @@ public class Utils {
 		return tempPath;
 	}
 	
+	/**
+	 * Executes a query written as a String and return the ResultSet containing the results of the query.
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public static ResultSet execQuery(String query) throws SQLException {
+		PreparedStatement ps = CONNECTION.prepareStatement(query);
+		return ps.executeQuery();
+	}
+
+	/**
+	 * Retrieves all tables from the database currently connected to and store them in an ArrayList of Strings.
+	 * @return
+	 * @throws SQLException
+	 */
+	public static ArrayList<String> getTables() throws SQLException {
+		DatabaseMetaData dbmd = CONNECTION.getMetaData();
+		ArrayList<String> tables = new ArrayList<String>();
+		String[] types = { "TABLE" };
+		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
+		while (resultSet.next()) {
+			String tableName = resultSet.getString("TABLE_NAME");
+			tables.add(tableName);
+		}
+		return tables;
+	}
+
+	/**
+	 * Establishes a connection to a database. 
+	 * @param dbServer - database server
+	 * @param dbName - name of the database to use
+	 * @param dbUser - database username
+	 * @param dbPass - database password
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public static void connectToDB(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver");
+		CONNECTION = DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
+	}
+
 	/**
 	 * Pair is a python-2-tuple lightweight equivalent for convenience.
 	 * 
