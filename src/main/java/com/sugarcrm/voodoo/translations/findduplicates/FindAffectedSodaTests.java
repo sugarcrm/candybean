@@ -18,9 +18,12 @@ public class FindAffectedSodaTests {
 	private static ArrayList<String> MODULES;
 	private static ArrayList<String> EN_ENTRIES;
 	private static ArrayList<String> DUP_ENTRIES;
+	public static ArrayList<String> AFFECTED_FILES;
 
-	private static Pattern LINK_PATTERN = Pattern.compile("link text=\"(.*?)\"");
-	private static Pattern ASSERT_PATTERN = Pattern.compile("browser assert=\"(.*?)\"");
+	private static Pattern LINK_PATTERN = Pattern
+			.compile("link text=\"(.*?)\"");
+	private static Pattern ASSERT_PATTERN = Pattern
+			.compile("browser assert=\"(.*?)\"");
 	private static Matcher LINK_MATCHER;
 	private static Matcher ASSERT_MATCHER;
 	private static String LINK_MATCH;
@@ -29,6 +32,8 @@ public class FindAffectedSodaTests {
 	private static String INPUT_PATH;
 	private static String OUTPUT_PATH;
 	private static File OUTPUT;
+	private static String MODE;
+
 	private static Scanner SCANNER;
 	private static BufferedWriter BFWRITER;
 
@@ -38,7 +43,6 @@ public class FindAffectedSodaTests {
 	private static String DB_USER;
 	private static String DB_PASS;
 
-
 	public static void main(String[] args) {
 		try {
 			DB_SERVER = args[0];
@@ -47,10 +51,13 @@ public class FindAffectedSodaTests {
 			DB_PASS = args[3];
 			INPUT_PATH = args[4];
 			OUTPUT_PATH = args[5];
-			
-			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
-			System.out.println("Connected to " + DB_SERVER + ", using database " + DB_NAME + "\n");
-	
+			MODE = args[6];
+
+			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER,
+					DB_PASS);
+			System.out.println("Connected to " + DB_SERVER
+					+ ", using database " + DB_NAME + "\n");
+
 			OUTPUT = new File(OUTPUT_PATH);
 
 			MODULES = Utils.getTables(CONNECTION);
@@ -58,12 +65,16 @@ public class FindAffectedSodaTests {
 			DUP_ENTRIES = FindDuplicateEntries.getDupEntries(EN_ENTRIES);
 
 			BFWRITER = new BufferedWriter(new FileWriter(OUTPUT));
-			recursivelyFindAffectedTests(INPUT_PATH);
+			recursivelyFindAffectedTests(INPUT_PATH, MODE);
 			BFWRITER.close();
+			
+			for (String file : AFFECTED_FILES) {
+				System.out.println(file);
+			}
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
 
 	private static boolean isDuplicate(String text) {
@@ -85,7 +96,44 @@ public class FindAffectedSodaTests {
 		return false;
 	}
 
-	private static void isFileAffected(String testFile) throws IOException {
+	private static void writeAffectedFile(String testFile) throws IOException {
+		SCANNER = new Scanner(new File(testFile));
+		boolean foundDup = false;
+		boolean written = false;
+
+		while (SCANNER.hasNext()) {
+			String line = SCANNER.nextLine();
+			LINK_MATCHER = LINK_PATTERN.matcher(line);
+			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
+
+			if (LINK_MATCHER.find()) {
+				LINK_MATCH = LINK_MATCHER.group(1);
+				if (isDuplicate(LINK_MATCH)) {
+					foundDup = true;
+					if (foundDup && !written) {
+						BFWRITER.write("\nInside " + testFile + "\n");
+						written = true;
+					}
+					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH
+							+ "' found in line:\n\t\t" + line + "\n");
+				}
+			}
+			if (ASSERT_MATCHER.find()) {
+				ASSERT_MATCH = ASSERT_MATCHER.group(1);
+				if (isDuplicate(ASSERT_MATCH)) {
+					foundDup = true;
+					if (foundDup && !written) {
+						BFWRITER.write("\nInside " + testFile + "\n");
+						written = true;
+					}
+					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH
+							+ "' found in line:\n\t\t" + line + "\n");
+				}
+			}
+		}
+	}
+
+	private static void addAffectedFile(String testFile) throws IOException {
 		SCANNER = new Scanner(new File(testFile));
 		boolean foundDup = false;
 		boolean written = false;
@@ -100,10 +148,9 @@ public class FindAffectedSodaTests {
 				if (isDuplicate(LINK_MATCH)) {
 					foundDup = true;
 					if (foundDup && !written) {
-						BFWRITER.write("\nInside " + testFile + "\n");
+						AFFECTED_FILES.add(testFile);
 						written = true;
 					}
-					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH + "' found in line:\n\t\t" + line + "\n");
 				}
 			}
 			if (ASSERT_MATCHER.find()) {
@@ -111,28 +158,33 @@ public class FindAffectedSodaTests {
 				if (isDuplicate(ASSERT_MATCH)) {
 					foundDup = true;
 					if (foundDup && !written) {
-						BFWRITER.write("\nInside " + testFile + "\n");
+						AFFECTED_FILES.add(testFile);
 						written = true;
 					}
-					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH + "' found in line:\n\t\t" + line + "\n");
 				}
 			}
 		}
 	}
 
-	private static void recursivelyFindAffectedTests(String pathString) throws IOException {
+	private static void recursivelyFindAffectedTests(String pathString, String mode)
+			throws IOException {
 		File path = new File(pathString);
 		String fileName = path.getName();
-		
+
 		if (path.isFile() && fileName.contains(".xml")) {
-			isFileAffected(pathString);
+			if (mode == "add")
+				addAffectedFile(pathString);
+			if (mode == "write")
+				writeAffectedFile(pathString);
+			
 		} else if (path.isDirectory()) {
 			File[] files = path.listFiles();
-			
+
 			for (File file : files) {
-				recursivelyFindAffectedTests(pathString + File.separator + file.getName());
+				recursivelyFindAffectedTests(pathString + File.separator
+						+ file.getName(), mode);
 			}
 
-		}	
+		}
 	}
 }

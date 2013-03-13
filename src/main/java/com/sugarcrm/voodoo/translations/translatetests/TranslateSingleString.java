@@ -1,22 +1,31 @@
 package com.sugarcrm.voodoo.translations.translatetests;
 
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
+
+import com.sugarcrm.voodoo.utilities.Utils;
 
 public class TranslateSingleString {
 	private static Connection CONNECTION;
 	private static ArrayList<String> MODULES;
-	private static ArrayList<String> ENTRIES;
+	
+	private static String DB_SERVER;
+	private static String DB_NAME;
+	private static String DB_USER;
+	private static String DB_PASS;
 
 	public static void main(String args[]) {
 		try {
-			CONNECTION = connectToDB();
-			System.out.println("Successfully connected to database");
-			MODULES = getDBTables();
-			Translate(MODULES, args[0], args[1]);
-
+			DB_SERVER = args[0];
+			DB_NAME = args[1];
+			DB_USER = args[2];
+			DB_PASS = args[3];
+			
+			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
+			MODULES = Utils.getTables(CONNECTION);
+			
+			Translate(MODULES, args[4], args[5]);
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -24,31 +33,13 @@ public class TranslateSingleString {
 		}
 	}
 
-	private static Connection connectToDB() throws ClassNotFoundException, SQLException {
-		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://10.8.31.10/Translations_6_7?useUnicode=true&characterEncoding=utf-8", "translator", "Sugar123!");
-	}
-
-	private static ArrayList<String> getDBTables() throws SQLException {
-		DatabaseMetaData dbmd = CONNECTION.getMetaData();
-		ArrayList<String> tables = new ArrayList<String>();
-		String[] types = { "TABLE" };
-		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
-		while (resultSet.next()) {
-			String tableName = resultSet.getString("TABLE_NAME");
-			tables.add(tableName);
-		}
-		return tables;
-	}
-
 	private static void Translate(ArrayList<String> modules, String en_string, String lang) throws SQLException {
-		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 
 		for (String module : modules) {
-			rs = execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
-			rs2 = execQuery("SHOW COLUMNS FROM " + module + " WHERE FIELD='" + lang + "'");
+			rs = Utils.execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'", CONNECTION);
+			rs2 = Utils.execQuery("SHOW COLUMNS FROM " + module + " WHERE FIELD='" + lang + "'", CONNECTION);
 			if (rs2.next()) {
 				while (rs.next()) {
 					String label = rs.getString("Label");
@@ -57,10 +48,5 @@ public class TranslateSingleString {
 				}
 			}
 		}
-	}
-
-	private static ResultSet execQuery(String query) throws SQLException {
-		PreparedStatement ps = CONNECTION.prepareStatement(query);
-		return ps.executeQuery();
 	}
 }
