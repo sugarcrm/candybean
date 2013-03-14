@@ -3,5 +3,4 @@
 .settings/
 target/
 chromedriver.log
-src/test/resources/voodoo.properties
 #log/*.log
