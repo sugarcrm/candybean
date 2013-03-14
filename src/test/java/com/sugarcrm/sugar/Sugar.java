@@ -30,10 +30,10 @@ public class Sugar {
 	
 	public Sugar() throws Exception {
 		Properties voodooProps = new Properties();
-		String voodooPropsFilename = System.getProperty("voodoo_prop");
+		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
 		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
 		voodooPropsPath = relPropsPath + File.separator + voodooPropsFilename;
-		voodooProps.load(new FileInputStream(voodooPropsPath));
+		voodooProps.load(new 	FileInputStream(voodooPropsPath));
     	props = new Properties();
     	props.load(new FileInputStream(new File(sugarPropsPath)));
 		Properties sugarHooksProps = new Properties();
