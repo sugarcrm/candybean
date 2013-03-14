@@ -130,7 +130,7 @@ public class TranslationsTest {
 		// Perform translations on the the above File
 		System.out.println("[Translation Test]: Translation will now begin!");
 		//Translations.Translate(propNamePath);
-		Translations.Translate("/home/suga/Workspace/Voodoo2/src/test/resources/translate.properties");
+		Translations.Translate("/home/suga/Workspace/Voodoo2/src/test/resources/translations.properties");
 		System.out.println("[Translation Test]: Translation Finished!");
 
 		/*
