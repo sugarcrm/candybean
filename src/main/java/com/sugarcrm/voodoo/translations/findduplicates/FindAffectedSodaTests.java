@@ -61,16 +61,15 @@ public class FindAffectedSodaTests {
 			OUTPUT = new File(OUTPUT_PATH);
 
 			MODULES = Utils.getTables(CONNECTION);
-			EN_ENTRIES = FindDuplicateEntries.getAllENEntries(MODULES);
+			EN_ENTRIES = FindDuplicateEntries.getAllENEntries(MODULES, CONNECTION);
 			DUP_ENTRIES = FindDuplicateEntries.getDupEntries(EN_ENTRIES);
 
-			BFWRITER = new BufferedWriter(new FileWriter(OUTPUT));
+			if (MODE.equals("write"))
+				BFWRITER = new BufferedWriter(new FileWriter(OUTPUT));
 			recursivelyFindAffectedTests(INPUT_PATH, MODE);
-			BFWRITER.close();
+			if (MODE.equals("write"))
+				BFWRITER.close();
 			
-			for (String file : AFFECTED_FILES) {
-				System.out.println(file);
-			}
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,8 +99,10 @@ public class FindAffectedSodaTests {
 		SCANNER = new Scanner(new File(testFile));
 		boolean foundDup = false;
 		boolean written = false;
+		int lineNumber = 0;
 
 		while (SCANNER.hasNext()) {
+			lineNumber++;
 			String line = SCANNER.nextLine();
 			LINK_MATCHER = LINK_PATTERN.matcher(line);
 			ASSERT_MATCHER = ASSERT_PATTERN.matcher(line);
@@ -115,7 +116,7 @@ public class FindAffectedSodaTests {
 						written = true;
 					}
 					BFWRITER.write("\tDuplicate entry '" + LINK_MATCH
-							+ "' found in line:\n\t\t" + line + "\n");
+							+ "' found on line " + lineNumber + ":\n\t\t" + line.trim() + "\n");
 				}
 			}
 			if (ASSERT_MATCHER.find()) {
@@ -127,7 +128,7 @@ public class FindAffectedSodaTests {
 						written = true;
 					}
 					BFWRITER.write("\tDuplicate entry '" + ASSERT_MATCH
-							+ "' found in line:\n\t\t" + line + "\n");
+							+ "' found in line " + lineNumber + ":\n\t\t" + line.trim() + "\n");
 				}
 			}
 		}
@@ -170,11 +171,15 @@ public class FindAffectedSodaTests {
 			throws IOException {
 		File path = new File(pathString);
 		String fileName = path.getName();
+		if (mode.equals("add") && AFFECTED_FILES == null) {
+			System.out.println("Initializing AFFECTED_FILES");
+			AFFECTED_FILES = new ArrayList<String>();
+		}
 
 		if (path.isFile() && fileName.contains(".xml")) {
-			if (mode == "add")
+			if (mode.equals("add"))
 				addAffectedFile(pathString);
-			if (mode == "write")
+			if (mode.equals("write"))
 				writeAffectedFile(pathString);
 			
 		} else if (path.isDirectory()) {

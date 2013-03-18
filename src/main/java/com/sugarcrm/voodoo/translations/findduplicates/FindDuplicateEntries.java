@@ -29,7 +29,7 @@ public class FindDuplicateEntries {
 			System.out.println("Connected to " + DB_SERVER + ", using database " + DB_NAME + "\n");
 			
 			MODULES = Utils.getTables(CONNECTION);
-			EN_ENTRIES = getAllENEntries(MODULES);
+			EN_ENTRIES = getAllENEntries(MODULES, CONNECTION);
 			DUP_ENTRIES = getDupEntries(EN_ENTRIES);
 			
 			writeDuplicates(DUP_ENTRIES, OUTPUT_PATH);
@@ -39,12 +39,12 @@ public class FindDuplicateEntries {
 		}
 	}
 
-	public static ArrayList<String> getAllENEntries(ArrayList<String> modules) throws SQLException {
+	public static ArrayList<String> getAllENEntries(ArrayList<String> modules, Connection con) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs = null;
 
 		for (String module : modules) {
-			rs = Utils.execQuery("SELECT Label, en_us FROM " + module, CONNECTION);
+			rs = Utils.execQuery("SELECT Label, en_us FROM " + module, con);
 			while (rs.next()) {
 				String label = rs.getString("Label");
 				String value = rs.getString("en_us");
