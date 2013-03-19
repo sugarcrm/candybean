@@ -24,13 +24,16 @@ public class Sugar {
 	
 	private static final String curWorkDir = System.getProperty("user.dir");
 	private static final String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-	private static final String voodooPropsPath = relPropsPath + File.separator + "voodoo.properties";
 	private static final String sugarPropsPath = relPropsPath + File.separator + "sugar.properties";
 	private static final String sugarHooksPath = relPropsPath + File.separator + "sugar.hooks";
-
+	private static String voodooPropsPath;
+	
 	public Sugar() throws Exception {
 		Properties voodooProps = new Properties();
-		voodooProps.load(new FileInputStream(voodooPropsPath));
+		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
+		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
+		voodooPropsPath = relPropsPath + File.separator + voodooPropsFilename;
+		voodooProps.load(new 	FileInputStream(voodooPropsPath));
     	props = new Properties();
     	props.load(new FileInputStream(new File(sugarPropsPath)));
 		Properties sugarHooksProps = new Properties();
