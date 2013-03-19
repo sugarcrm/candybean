@@ -1,8 +1,15 @@
 package com.sugarcrm.voodoo.utilities;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -21,8 +28,7 @@ import java.util.Properties;
  *
  */
 public class Utils {
-	private static Connection CONNECTION;
-	
+
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
 	 * 
@@ -38,8 +44,8 @@ public class Utils {
 			System.out.println(line);
 			line = reader.readLine();
 		}
-    }
-	
+	}
+
 	/**
 	 * Given a properties file, a default key-value pair value, and a key, this
 	 * function returns:\n a) the default value\n b) or, if exists, the
@@ -62,7 +68,7 @@ public class Utils {
 		return value;
 	}
 
-	
+
 	/**
 	 * Given a string, this function returns the suffix of that string matching the given length.
 	 * 
@@ -93,25 +99,53 @@ public class Utils {
 		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
 		return tempPath;
 	}
-	
+
+	public static void closeStream(Closeable s) {
+		try {
+			if (s != null)
+				s.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Executes a query written as a String and return the ResultSet containing the results of the query.
 	 * @param query
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ResultSet execQuery(String query) throws SQLException {
-		PreparedStatement ps = CONNECTION.prepareStatement(query);
+	public static ResultSet execQuery(String query, Connection connection) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement(query);
 		return ps.executeQuery();
 	}
 
+	public static void openWebpage(URI uri) {
+		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+			try {
+				desktop.browse(uri);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void openWebpage(URL url) {
+		try {
+			openWebpage(url.toURI());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Retrieves all tables from the database currently connected to and store them in an ArrayList of Strings.
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ArrayList<String> getTables() throws SQLException {
-		DatabaseMetaData dbmd = CONNECTION.getMetaData();
+	public static ArrayList<String> getTables(Connection connection) throws SQLException {
+		DatabaseMetaData dbmd = connection.getMetaData();
 		ArrayList<String> tables = new ArrayList<String>();
 		String[] types = { "TABLE" };
 		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
@@ -131,9 +165,9 @@ public class Utils {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public static void connectToDB(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
+	public static Connection getDBConnection(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		CONNECTION = DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
+		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
 	}
 
 	/**
@@ -172,13 +206,13 @@ public class Utils {
 		public final X x; 
 		public final Y y; 
 		public final Z z;
-		
+
 		public Triplet(X x, Y y, Z z) { 
 			this.x = x; 
 			this.y = y;
 			this.z = z;
 		} 
-		
+
 		@Override
 		public String toString() {
 			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
