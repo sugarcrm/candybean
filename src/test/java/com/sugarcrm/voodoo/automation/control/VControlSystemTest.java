@@ -31,7 +31,10 @@ public class VControlSystemTest {
 	public static void first() throws Exception {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String voodooPropsPath = relPropsPath + File.separator + "voodoo.properties";
+		String voodooPropsPath = relPropsPath + File.separator;
+		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
+		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
+		voodooPropsPath += voodooPropsFilename;
 		
 		Properties voodooProps = new Properties();
 		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
