@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd ~/Voodoo2/src/main/java
+cd ~/git_repos/Voodoo2/src/main/java
 javac -d . com/sugarcrm/voodoo/translations/findduplicates/FindLocationsOfAPattern.java
-java com/sugarcrm/voodoo/translations/findduplicates/FindLocationsOfAPattern ~/DistinctDuplicateEntries.txt ~/git_repos/SodaIceBox/soda/tests/modules ~/duplicates
+java com/sugarcrm/voodoo/translations/findduplicates/FindLocationsOfAPattern ~/DistinctDuplicateEntries.txt ~/git_repos/SodaIceBox/soda/tests/modules ~/duplicates "0_patterns.txt" 
