@@ -26,6 +26,7 @@ public class FindLocationsOfAPattern {
 				lineNumber++;
 				bw.write(lineNumber + ". " + s.nextLine().trim() + "\n");
 			}
+			s.close();
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
