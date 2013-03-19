@@ -120,7 +120,7 @@ public class Utils {
 		return ps.executeQuery();
 	}
 
-	public static void openWebpage(URI uri) {
+	public static void openWebPage(URI uri) {
 		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
 		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
 			try {
@@ -131,9 +131,9 @@ public class Utils {
 		}
 	}
 	
-	public static void openWebpage(URL url) {
+	public static void openWebPage(URL url) {
 		try {
-			openWebpage(url.toURI());
+			openWebPage(url.toURI());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
