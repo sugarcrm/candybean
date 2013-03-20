@@ -10,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Properties;
-
 
 /**
  * Utils is simply a container for automation/Java-related helper functions that
@@ -39,29 +37,6 @@ public class Utils {
 			line = reader.readLine();
 		}
     }
-	
-	/**
-	 * Given a properties file, a default key-value pair value, and a key, this
-	 * function returns:\n a) the default value\n b) or, if exists, the
-	 * key-value value in the properties file\n c) or, if exists, the system
-	 * property key-value value. This function is used to override configuration
-	 * files in cascading fashion.
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
-	 */
-	public static String getCascadingPropertyValue(Properties props,
-			String defaultValue, String key) {
-		String value = defaultValue;
-		if (props.containsKey(key))
-			value = props.getProperty(key);
-		if (System.getProperties().containsKey(key))
-			value = System.getProperty(key);
-		return value;
-	}
-
 	
 	/**
 	 * Given a string, this function returns the suffix of that string matching the given length.

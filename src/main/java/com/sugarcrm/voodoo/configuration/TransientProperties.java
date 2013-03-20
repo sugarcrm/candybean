@@ -1,10 +1,7 @@
 package com.sugarcrm.voodoo.configuration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
-
-import org.apache.commons.io.FileUtils;
 
 import junit.framework.Assert;
 import com.sugarcrm.voodoo.automation.Voodoo;

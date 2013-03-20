@@ -9,8 +9,7 @@ package com.sugarcrm.voodoo.examples;
 
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
-import java.io.FileInputStream;
-import java.util.Properties;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 /**
  * Basic example class.
@@ -57,13 +56,13 @@ public class Basic {
 
    @Example
    public void runExample()  {
-      Properties p;
+      Configuration c;
       Voodoo v = null;
       VInterface i = null;
 
       log("*** Example of basic VDD2 usage ***");
 
-      p = new Properties();
+      c = new Configuration();
       try {
          /*
           * This path should be replaced by the correct path to the
@@ -73,7 +72,7 @@ public class Basic {
           * getting the path to this.  Hard-coded paths are fragile
           * and almost certainly wrong.
           */
-         p.load(new FileInputStream("/home/jon/w/VDD2/Voodoo2/src/test/resources/voodoo.properties"));
+         c.load("/home/jon/w/VDD2/Voodoo2/src/test/resources/voodoo.properties");
       } catch (java.io.FileNotFoundException e) {
          System.err.println("voodoo.properties not found");
          return;
@@ -83,7 +82,7 @@ public class Basic {
       }
 
       try {
-         v = Voodoo.getInstance(p);
+         v = Voodoo.getInstance(c);
       } catch (Exception e) {
          ve(e, "during Voodoo instantiation");
          return;

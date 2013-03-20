@@ -9,7 +9,7 @@ import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import com.sugarcrm.voodoo.automation.VInterface.Type;
-import com.sugarcrm.voodoo.utilities.Utils;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -29,7 +29,7 @@ public class Voodoo {
 	 * {@link Properties} object created by loading the voodoo
 	 * properties configuration file.
 	 */
-	public final Properties props;
+	public final Configuration config;
 
 	/**
 	 * The one Voodoo instance.  Created when a Voodoo instance is
@@ -44,10 +44,10 @@ public class Voodoo {
 	 *
 	 * @throws Exception if instantiating the logger fails
 	 */
-	private Voodoo(Properties props) throws Exception {
-		this.props = props;
+	private Voodoo(Configuration config) throws Exception {
+		this.config = config;
 		this.log = this.getLogger();
-		debug = Boolean.parseBoolean(Utils.getCascadingPropertyValue(this.props, "false", "debug"));
+		debug = Boolean.parseBoolean(this.config.getProperty("debug", "false"));
 	}
 	
 	public boolean debug() { return Voodoo.debug; }
@@ -59,8 +59,8 @@ public class Voodoo {
 	 * @return global Voodoo instance
 	 * @throws Exception if instantiating the logger fails
 	 */
-	public static Voodoo getInstance(Properties props) throws Exception {
-		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(props); 
+	public static Voodoo getInstance(Configuration config) throws Exception {
+		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(config); 
 		return Voodoo.instance;
 	}
 	
@@ -73,7 +73,7 @@ public class Voodoo {
 	 *							cannot be run or if WebDriver cannot be started
 	 */
 	public VInterface getInterface() throws Exception {
-		String iType = Utils.getCascadingPropertyValue(this.props, "chrome", "automation.interface");
+		String iType = this.config.getProperty("automation.interface", "chrome");
 		return this.getInterface(this.parseInterfaceType(iType));
 	}
 	
@@ -86,7 +86,7 @@ public class Voodoo {
 	 *							WebDriver cannot be started
 	 */
 	public VInterface getInterface(VInterface.Type iType) throws Exception {
-		return new VInterface(this, this.props, iType);
+		return new VInterface(this, this.config, iType);
 	}
 	
 	/**
@@ -130,7 +130,7 @@ public class Voodoo {
 //		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
 //		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
 		OutputStream output = new FileOutputStream(tempLogPropsFile);
-		this.props.store(output, "");
+		this.config.store(output, "");
 //		JOptionPane.showInputDialog("pause");
 		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
