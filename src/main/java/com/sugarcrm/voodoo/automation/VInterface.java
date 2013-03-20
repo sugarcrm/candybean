@@ -23,43 +23,44 @@ import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
+import com.sugarcrm.voodoo.configuration.Configuration;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 public class VInterface {
 
 	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS; }
-	
+
 	public final WebDriver wd;
-//	public final AndroidInterface vac; //vac as in voodoo android control
+	//	public final AndroidInterface vac; //vac as in voodoo android control
 
 	private final Voodoo voodoo;
-	private final Properties props;
+	private final Configuration config;
 	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
 	private int windowIndex = 0;
 
 	/**
-    * Instantiate VInterface
-    *
+	 * Instantiate VInterface
+	 *
 	 * @param voodoo  {@link Voodoo} object
 	 * @param props   {@link Properties} for this test run
 	 * @param iType   {@link IInterface.Type} of web browser to run
 	 * @throws Exception
 	 */
-	public VInterface(Voodoo voodoo, Properties props, Type iType)
+	public VInterface(Voodoo voodoo, Configuration config, Type iType)
 			throws Exception {
 		this.voodoo = voodoo;
-		this.props = props;
+		this.config = config;
 		if (iType == Type.ANDROID) {
-//			this.vac = this.getAndroidControl();
+			//			this.vac = this.getAndroidControl();
 			this.wd = null;
 		}
 		else {
 			this.wd = this.getWebDriver(iType);
-//			this.vac = null;
+			//			this.vac = null;
 			this.start();
 		}
 	}
-	
+
 	/**
 	 * Pause the test for the specified duration.
 	 *
@@ -70,7 +71,7 @@ public class VInterface {
 		voodoo.log.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
-	
+
 	/**
 	 * Display a modal dialog box to the test user.
 	 *
@@ -81,7 +82,7 @@ public class VInterface {
 		voodoo.log.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
 	}
-	
+
 	/**
 	 * Launch and initialize a web browser.
 	 * @throws Exception	 <i>not thrown</i>
@@ -288,16 +289,13 @@ public class VInterface {
 	public VSelect getSelect(Strategy strategy, String hook) throws Exception {
 		return this.getSelect(new VHook(strategy, hook));
 	}
-	
+
 	private WebDriver getWebDriver(Type iType) throws Exception {
 		WebDriver wd = null;
 		switch (iType) {
 		case FIREFOX:
-			String profileName = Utils.getCascadingPropertyValue(this.props,
-					"default", "browser.firefox_profile");
-			String ffBinaryPath = Utils.getCascadingPropertyValue(this.props,
-					"/Applications/Firefox.app/Contents/MacOS/firefox",
-					"browser.firefox_binary");
+			String profileName = this.config.getProperty("browser.firefox_profile", "default");
+			String ffBinaryPath = this.config.getProperty("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
 			FirefoxProfile ffProfile = (new ProfilesIni())
 					.getProfile(profileName);
 			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
@@ -314,13 +312,9 @@ public class VInterface {
 		case CHROME:
 			String workingDir = System.getProperty("user.dir");
 			ChromeOptions chromeOptions = new ChromeOptions();
-			String chromeDriverLogPath = Utils.getCascadingPropertyValue(props,
-					workingDir + "/log/chromedriver.log",
-					"browser.chrome_driver_log_path");
+			String chromeDriverLogPath = this.config.getProperty("browser.chrome_driver_log_path", workingDir + "/log/chromedriver.log");
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-			String chromeDriverPath = Utils.getCascadingPropertyValue(props,
-					workingDir + "/etc/chromedriver-mac",
-					"browser.chrome_driver_path");
+			String chromeDriverPath = this.config.getPathProperty("browser.chrome_driver_path", workingDir + "/etc/chromedriver-mac");
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with:\n    log path:"
@@ -335,7 +329,7 @@ public class VInterface {
 		default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-		long implicitWait = Long.parseLong(props.getProperty("perf.implicit_wait"));
+		long implicitWait = Long.parseLong(config.getProperty("perf.implicit_wait"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
@@ -343,104 +337,104 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-	
-	
+
+
 	// ANDROID ROBOTIUM FUNCTIONALITY
-//	private AndroidInterface getAndroidControl() throws Exception {
-//		AndroidInterface vac = new AndroidInterface(this.props);
-//		return vac;
-//	}
-//	
-//	public void startApp() throws Exception {
-//		this.vac.startApp();
-//	}
-//	
-//	public void finishApp() throws Exception {
-//		this.vac.finishApp();
-//	}
-//	
-//	public void setApkPath(String aut, String messenger, String testrunner) {
-//		this.vac.setApkPath(aut, messenger, testrunner);
-//	}
-//	
-//	public void ignoreInstallAUT() throws Exception {
-//		this.vac.ignoreInstallAUT();
-//	}
-//	
-//	public void ignoreInstallMessenger() throws Exception {
-//		this.vac.ignoreInstallMessenger();
-//	}
-//	
-//	public void ignoreInstallRunner() throws Exception {
-//		this.vac.ignoreInstallRunner();
-//	}
-//	
-//	public VAControl getAControl() throws Exception{
-//		return new VAControl(this.voodoo, this);
-//	}
-	
-	
-  //	/**
-  //	 * @param selectElement
-  //	 * @param actionElement
-  //	 */
-  //	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
-  //		List<WebElement> options = selectElement.getOptions();
-  //		for (WebElement option : options) {
-  //			selectElement.selectByVisibleText(option.getText());
-  //			actionElement.click();
-  //		}
-  //	}
-  //	
-  //	
-  //	/**
-  //	 * @param selectElement
-  //	 * @param actionOptionValues
-  //	 * @param actionElement
-  //	 * @throws Exception
-  //	 */
-  //	public static void optionAction(Select selectElement, Set<String> actionOptionValues, WebElement actionElement) throws Exception {
-  //		List<WebElement> allOptions = selectElement.getOptions();
-  //		HashSet<String> optionValues = new HashSet<String>();
-  //		for(WebElement option : allOptions) {
-  //			optionValues.add(option.getText());
-  ////			System.out.println("Adding to options set:" + option.getText());
-  //		}
-  //		if(optionValues.containsAll(actionOptionValues)) {
-  //			for(String option : actionOptionValues) {
-  //				selectElement.selectByVisibleText(option);
-  //				actionElement.click();
-  //			}
-  //		} else throw new Exception("Specified select option unavailable...");
-  //	}
-  //	
-  //	
-  //
-  //	/**
-  //	 * @param element
-  //	 * @return
-  //	 */
-  //	public static String webElementToString(WebElement element) {
-  //		List<WebElement> childElements = element.findElements(By.xpath("*"));
-  //		String s = element.getTagName() + ":" + element.getText() + " ";
-  //		for(WebElement we : childElements) {
-  //			s += we.getTagName() + ":" + we.getText() + " ";
-  //		}
-  //		return s;
-  //	}
-  //	
-  //	
-  //	/**
-  //	 * @param nativeOptions
-  //	 * @param queryOptionNames
-  //	 * @return
-  //	 */
-  //	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
-  //		Set<String> nativeOptionNames = new HashSet<String>();
-  //		for (WebElement option : nativeOptions) {
-  //			nativeOptionNames.add(option.getText());
-  //		}
-  //		if (nativeOptionNames.containsAll(queryOptionNames) && queryOptionNames.containsAll(nativeOptionNames)) return true;
-  //		else return false;
-  //	}
+	//	private AndroidInterface getAndroidControl() throws Exception {
+	//		AndroidInterface vac = new AndroidInterface(this.props);
+	//		return vac;
+	//	}
+	//	
+	//	public void startApp() throws Exception {
+	//		this.vac.startApp();
+	//	}
+	//	
+	//	public void finishApp() throws Exception {
+	//		this.vac.finishApp();
+	//	}
+	//	
+	//	public void setApkPath(String aut, String messenger, String testrunner) {
+	//		this.vac.setApkPath(aut, messenger, testrunner);
+	//	}
+	//	
+	//	public void ignoreInstallAUT() throws Exception {
+	//		this.vac.ignoreInstallAUT();
+	//	}
+	//	
+	//	public void ignoreInstallMessenger() throws Exception {
+	//		this.vac.ignoreInstallMessenger();
+	//	}
+	//	
+	//	public void ignoreInstallRunner() throws Exception {
+	//		this.vac.ignoreInstallRunner();
+	//	}
+	//	
+	//	public VAControl getAControl() throws Exception{
+	//		return new VAControl(this.voodoo, this);
+	//	}
+
+
+	//	/**
+	//	 * @param selectElement
+	//	 * @param actionElement
+	//	 */
+	//	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
+	//		List<WebElement> options = selectElement.getOptions();
+	//		for (WebElement option : options) {
+	//			selectElement.selectByVisibleText(option.getText());
+	//			actionElement.click();
+	//		}
+	//	}
+	//	
+	//	
+	//	/**
+	//	 * @param selectElement
+	//	 * @param actionOptionValues
+	//	 * @param actionElement
+	//	 * @throws Exception
+	//	 */
+	//	public static void optionAction(Select selectElement, Set<String> actionOptionValues, WebElement actionElement) throws Exception {
+	//		List<WebElement> allOptions = selectElement.getOptions();
+	//		HashSet<String> optionValues = new HashSet<String>();
+	//		for(WebElement option : allOptions) {
+	//			optionValues.add(option.getText());
+	////			System.out.println("Adding to options set:" + option.getText());
+	//		}
+	//		if(optionValues.containsAll(actionOptionValues)) {
+	//			for(String option : actionOptionValues) {
+	//				selectElement.selectByVisibleText(option);
+	//				actionElement.click();
+	//			}
+	//		} else throw new Exception("Specified select option unavailable...");
+	//	}
+	//	
+	//	
+	//
+	//	/**
+	//	 * @param element
+	//	 * @return
+	//	 */
+	//	public static String webElementToString(WebElement element) {
+	//		List<WebElement> childElements = element.findElements(By.xpath("*"));
+	//		String s = element.getTagName() + ":" + element.getText() + " ";
+	//		for(WebElement we : childElements) {
+	//			s += we.getTagName() + ":" + we.getText() + " ";
+	//		}
+	//		return s;
+	//	}
+	//	
+	//	
+	//	/**
+	//	 * @param nativeOptions
+	//	 * @param queryOptionNames
+	//	 * @return
+	//	 */
+	//	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
+	//		Set<String> nativeOptionNames = new HashSet<String>();
+	//		for (WebElement option : nativeOptions) {
+	//			nativeOptionNames.add(option.getText());
+	//		}
+	//		if (nativeOptionNames.containsAll(queryOptionNames) && queryOptionNames.containsAll(nativeOptionNames)) return true;
+	//		else return false;
+	//	}
 }

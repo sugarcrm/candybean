@@ -2,20 +2,22 @@ package com.sugarcrm.voodoo.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 public class Configuration extends Properties {
+	public Logger log;
 	
 	// Default zero argument constructor
-	public Configuration() {
-		super();
-	}
-
-	// Constructs a Configuration object by constructing a Properties object that has a default fall-back to props
-	public Configuration(Properties props) {
-		super(props);
+	public Configuration() {}
+	
+	public Configuration(Logger log) {
+		this.log = log;
 	}
 
 	/**
@@ -25,12 +27,25 @@ public class Configuration extends Properties {
 	 * @author wli
 	 * 
 	 * @param filePath
+	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 * @throws Exception
 	 */
-	public void load(String filePath) throws Exception {
-		String adjustedFilePath = adjustPath(filePath);
-		FileInputStream fileIS = new FileInputStream(new File(adjustedFilePath));
-		this.load(fileIS);
+	public void load(String filePath) {
+		String adjustedPath = adjustPath(filePath);
+		try {
+			load(new FileInputStream(new File(adjustedPath)));
+		} catch (IOException e) {
+			log.severe("Configuration file " + adjustedPath.substring(adjustedPath.lastIndexOf('/')) + " was not properly loaded.");
+		}
+	}
+
+	public void load(File file) {
+		try {
+			load(new FileInputStream(file));
+		} catch (IOException e) {
+			log.severe("Configuration file " + file.getName() + " was not properly loaded.");
+		}
 	}
 
 	/**
@@ -41,12 +56,23 @@ public class Configuration extends Properties {
 	 * 
 	 * @param filePath
 	 * @param comments
+	 * @throws IOException 
 	 * @throws Exception
 	 */
-	public void store(String filePath, String comments) throws Exception {
-		String adjustedFilePath = adjustPath(filePath);
-		FileOutputStream fileOS = new FileOutputStream(new File(adjustedFilePath));
-		this.store(fileOS, comments);
+	public void store(String filePath, String comments) {
+		try {
+			store(new FileOutputStream(new File(adjustPath(filePath))), comments);
+		} catch (IOException e) {
+			log.severe("Configuration file was not properly created.");
+		}
+	}
+
+	public void store(File file, String comments) {
+		try {
+			store(new FileOutputStream(file), comments);
+		} catch (IOException e) {
+			log.severe("Configuration file was not properly created.");
+		}
 	}
 
 	/**
@@ -102,9 +128,19 @@ public class Configuration extends Properties {
 	 * @param delimiter
 	 * @return
 	 */
-	public String[] getPropertyValues(String key, String delimiter) {
-		String propValues = getProperty(key);
-		return propValues.split(delimiter);
+	public String[] getPropertiesArray(String key, String delimiter) {
+		String values = getProperty(key);
+		return values.split(delimiter);
+	}
+
+	public ArrayList<String> getPropertiesArrayList(String key, String delimiter) {
+		String values = getProperty(key);
+		String[] arrayOfValues = values.split(delimiter);
+		ArrayList<String> result = new ArrayList<String>();
+		for (String value : arrayOfValues) {
+			result.add(value);
+		}
+		return result;
 	}
 
 	/**
@@ -113,15 +149,32 @@ public class Configuration extends Properties {
 	 * 
 	 * @param listOfProperties
 	 */
-	public void setProperties(ArrayList<String> listOfProperties) {
+	public void setPropertiesArrayList(ArrayList<String> listOfProperties) {
 		for (String property : listOfProperties) {
 			String[] keyValueHolder = property.split("=");
 			String key = keyValueHolder[0].trim();
 			String value = keyValueHolder[1].trim();
-			setProperty(key,value);
+			setProperty(key, value);
 		}
 	}
 
+	public void setPropertiesArray(String[] listOfProperties) {
+		for (String property : listOfProperties) {
+			String[] keyValueHolder = property.split("=");
+			String key = keyValueHolder[0].trim();
+			String value = keyValueHolder[1].trim();
+			setProperty(key, value);
+		}
+	}
+	
+	public void setPropertiesString(String listOfProperties, String delimiter) {
+		for (String property : listOfProperties.split(delimiter)) {
+			String[] keyValueHolder = property.split("=");
+			String key = keyValueHolder[0].trim();
+			String value = keyValueHolder[1].trim();
+			setProperty(key, value);
+		}
+	}
 	/**
 	 * This method adds robustness to a given path for different platforms.
 	 * 
@@ -130,13 +183,9 @@ public class Configuration extends Properties {
 	 * @param path
 	 * @return
 	 */
-	private static String adjustPath(String path){
-		String tempPath = path;
-		// replace all single backslash (not followed by space) with forward slash
-		tempPath = tempPath.replaceAll("\\\\(?! )", "/"); 
-		// replace all one or more consecutive forward slashes with a File Separator
-		tempPath = tempPath.replaceAll("/+", File.separator);
-		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
+	private String adjustPath(String path){
+		String tempPath = path.replaceAll("(?<!^)(\\\\|/){2,}", Matcher.quoteReplacement(File.separator));  
+		if (!tempPath.equals(path)) log.info("The following path: " + path + " has been adjusted to: " + tempPath);
 		return tempPath;
 	}
 

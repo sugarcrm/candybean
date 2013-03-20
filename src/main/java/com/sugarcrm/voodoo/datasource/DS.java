@@ -1,7 +1,6 @@
 package com.sugarcrm.voodoo.datasource;
 
 import java.util.HashMap;
-import java.util.Properties;
 
 import com.sugarcrm.voodoo.datasource.DataAdapter;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
@@ -9,6 +8,7 @@ import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
 import com.sugarcrm.voodoo.datasource.DataSource;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 import com.sugarcrm.voodoo.datasource.FieldSetList;
+import com.sugarcrm.voodoo.configuration.Configuration;
 import com.sugarcrm.voodoo.configuration.TransientProperties;
 
 public class DS {
@@ -29,10 +29,10 @@ public class DS {
 		this.propValue = propValue; 
 		config = new TransientProperties(testName);
 		config.setProperties(this.propName, this.propValue);
-		Properties myProps = config.getProperties();
+		Configuration myConfig = (Configuration) config.getProperties();
 		
         DataAdapterType type = getDataType(dataType);
-		adapterFactory = new DataAdapterFactory(myProps);
+		adapterFactory = new DataAdapterFactory(myConfig);
 		dataAdapter = adapterFactory.createDataAdapter(type);
 	}
 	
