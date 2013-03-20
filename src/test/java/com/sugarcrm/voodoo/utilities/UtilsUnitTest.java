@@ -2,14 +2,11 @@ package com.sugarcrm.voodoo.utilities;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.Properties;
-
 import org.junit.Assert;
+
 import org.junit.Test;
 
-import com.sugarcrm.voodoo.automation.control.VHook;
-import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
+import com.sugarcrm.voodoo.configuration.Configuration;
 import com.sugarcrm.voodoo.utilities.Utils;
 import com.sugarcrm.voodoo.utilities.Utils.Pair;
 import com.sugarcrm.voodoo.utilities.Utils.Triplet;
@@ -32,21 +29,21 @@ public class UtilsUnitTest {
 			// Resource setup
 			File propsFile = new File(propsFilePath);
 			propsFile.createNewFile();
-			Properties voodooProps = new Properties();
-			voodooProps.setProperty(propKey, propConfigVal);
-			voodooProps.setProperty(propSysKey, propConfigVal);
+			Configuration voodooConfig = new Configuration();
+			voodooConfig.setProperty(propKey, propConfigVal);
+			voodooConfig.setProperty(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
-			voodooProps.store(new FileOutputStream(propsFile), null);
+			voodooConfig.store(new FileOutputStream(propsFile), null);
 			//			JOptionPane.showInputDialog("pause");
 
 			// Test
-			String actualDefaultVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, "NULL");
+			String actualDefaultVal = voodooConfig.getProperty("NULL", propDefaultVal);
 			//			System.out.println("actualDefaultVal: " + actualDefaultVal);
 			Assert.assertEquals("Expected default value.", propDefaultVal, actualDefaultVal);
-			String actualConfigVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, propKey);
+			String actualConfigVal = voodooConfig.getProperty(propKey, propDefaultVal);
 			//			System.out.println("actualConfigVal: " + actualConfigVal);
 			Assert.assertEquals("Expected configuration value.", propConfigVal, actualConfigVal);
-			String actualSysVal = Utils.getCascadingPropertyValue(voodooProps, propDefaultVal, propSysKey);
+			String actualSysVal = voodooConfig.getProperty(propSysKey, propDefaultVal);
 			//			System.out.println("actualSysVal: " + actualSysVal);
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
