@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.utilities.Utils;
-import com.sugarcrm.voodoo.utilities.Utils.Pair;
-import com.sugarcrm.voodoo.utilities.Utils.Triplet;
 
 
 public class VHookUnitTest {

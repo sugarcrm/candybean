@@ -1,8 +1,6 @@
 package com.sugarcrm.voodoo.automation.control;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -16,6 +14,7 @@ import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 //import com.sugarcrm.voodoo.IAutomation.Strategy;
 //import com.sugarcrm.voodoo.automation.VHook;
@@ -37,9 +36,9 @@ public class VSelectTest {
 		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
 		voodooPropsPath += voodooPropsFilename;
 		
-		Properties voodooProps = new Properties();
-		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
-		voodoo = Voodoo.getInstance(voodooProps);
+		Configuration voodooConfig = new Configuration();
+		voodooConfig.load(new File(voodooPropsPath));
+		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
 		iface.start();
 	}
