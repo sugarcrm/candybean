@@ -12,7 +12,7 @@ public class TransientProperties {
 	String propFileDirPath;
 	String propFilePath;
 	File propFileDir;
-	Configuration prop = new Configuration();
+	Configuration config = new Configuration();
 	Voodoo voodoo = null;
 	
 	public TransientProperties(String testName) {
@@ -34,11 +34,11 @@ public class TransientProperties {
 	
 	public TransientProperties(String testName, String property, String value) {
 	    this(testName);
-		prop.setProperty(property, value);
+		config.setProperty(property, value);
 	}
 	
 	public void setProperties(String property, String value) {
-		prop.setProperty(property, value);
+		config.setProperty(property, value);
 	}
 	
 	public Properties getProperties() {
@@ -56,7 +56,7 @@ public class TransientProperties {
 		}
 		
 		try {
-			prop.store(propFilePath, null);
+			config.store(propFilePath, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,12 +68,12 @@ public class TransientProperties {
 				propFile.exists());
 
 		try {
-			prop.load(propFilePath);
+			config.load(propFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return prop;
+		return config;
 	}
 
 	public void cleanup() { 
