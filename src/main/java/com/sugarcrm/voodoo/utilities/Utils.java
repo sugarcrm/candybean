@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 /**
  * Utils is simply a container for automation/Java-related helper functions that
@@ -19,7 +20,6 @@ import java.util.ArrayList;
  *
  */
 public class Utils {
-	private static Connection CONNECTION;
 	
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
@@ -64,7 +64,7 @@ public class Utils {
 		// replace all single backslash (not followed by space) with forward slash
 		tempPath = tempPath.replaceAll("\\\\(?! )", "/"); 
 		// replace all one or more consecutive forward slashes with a File Separator
-		tempPath = tempPath.replaceAll("/+", File.separator);
+		tempPath = tempPath.replaceAll("/+", Matcher.quoteReplacement(File.separator));
 		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
 		return tempPath;
 	}
@@ -75,8 +75,8 @@ public class Utils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ResultSet execQuery(String query) throws SQLException {
-		PreparedStatement ps = CONNECTION.prepareStatement(query);
+	public static ResultSet execQuery(String query, Connection connection) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement(query);
 		return ps.executeQuery();
 	}
 
@@ -85,8 +85,8 @@ public class Utils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ArrayList<String> getTables() throws SQLException {
-		DatabaseMetaData dbmd = CONNECTION.getMetaData();
+	public static ArrayList<String> getTables(Connection connection) throws SQLException {
+		DatabaseMetaData dbmd = connection.getMetaData();
 		ArrayList<String> tables = new ArrayList<String>();
 		String[] types = { "TABLE" };
 		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
@@ -106,9 +106,9 @@ public class Utils {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public static void connectToDB(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
+	public static Connection connectToDB(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		CONNECTION = DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
+		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
 	}
 
 	/**
