@@ -61,6 +61,16 @@ public class VSelect extends VControl {
 	}
 
 	/**
+	 * Determine whether or not this element is selected or not. This operation only applies to input
+	 * elements such as checkboxes, options in a select and radio buttons.
+	 * 
+	 * @return True if the element is currently selected or checked, false otherwise.
+	 */
+	public boolean isSelected(){
+		return super.we.isSelected();
+	}
+	
+	/**
 	 * Toggle the state of a CHECKBOX element.
 	 *
 	 * <p>N.b. This method operates on CHECKBOX elements rather than
