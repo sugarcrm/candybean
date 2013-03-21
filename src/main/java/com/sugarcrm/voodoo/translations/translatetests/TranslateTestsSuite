@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Author: Jason Lin (ylin)
+# Purpose: 
+# Output:
+# Input: 1 or 6
+# 1 - properties file, 6 - arguments for properties file
+# arglist: $output $language $db_name $db_server $db_user $db_pass
+
+if ([ $# != 1 -a $# != 6 ] || [ $1 = "-h" -o $1 = "-help" -o $1 = "--help" ])
+then
+	echo "Usage: $0 1 or 6 arguments please"
+	exit
+fi
+
+output=$1; language=$2; db_name=$3; db_server=$4; db_user=$5; db_pass=$6
+
+for file in ~/git_repos/SodaIceBox/soda/tests/modules/*
+do
+	if [ -d $file ]
+	then
+		# translate.module can be ignored, Translations will iterate through all modules by default
+		output_subfolder="$output-$language/`echo $file | rev | cut -d/ -f 1-2 | rev`"
+		echo $output_subfolder
+		mkdir -p $output_subfolder;
+		echo "translate.testpath = $file
+		translate.output = $output_subfolder
+		translate.language = $language
+		translate.database = $db_name
+		translate.serverName = $db_server
+		translate.username = $db_user
+		translate.password = $db_pass
+		translate.module = Accounts" > ~/git_repos/Voodoo2/src/test/resources/Translations.properties
+
+		mkdir -p $output_subfolder
+		cd ~/git_repos/Voodoo2/src/main/java
+		javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations.java
+
+		java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/git_repos/Voodoo2/src/test/resources/Translations.properties
+	fi
+	printf "\n"
+done
