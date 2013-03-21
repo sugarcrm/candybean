@@ -120,25 +120,6 @@ public class Utils {
 		return ps.executeQuery();
 	}
 
-	public static void openWebPage(URI uri) {
-		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-			try {
-				desktop.browse(uri);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public static void openWebPage(URL url) {
-		try {
-			openWebPage(url.toURI());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Retrieves all tables from the database currently connected to and store them in an ArrayList of Strings.
 	 * @return
