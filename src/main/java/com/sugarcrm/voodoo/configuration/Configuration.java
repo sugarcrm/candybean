@@ -10,7 +10,10 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
+import com.sugarcrm.voodoo.utilities.Utils;
+
 public class Configuration extends Properties {
+	private static final long serialVersionUID = 1L;
 	public Logger log;
 	
 	// Default zero argument constructor
@@ -22,7 +25,7 @@ public class Configuration extends Properties {
 
 	/**
 	 * NOTE: This method takes in a path of type String instead of a FileInputStream object
-	 * to add path robustness by calling 'adjustPath' and then the actual load method
+	 * to add path robustness by calling 'Utils.adjustPath' and then the actual load method
 	 * 
 	 * @author wli
 	 * 
@@ -32,7 +35,7 @@ public class Configuration extends Properties {
 	 * @throws Exception
 	 */
 	public void load(String filePath) {
-		String adjustedPath = adjustPath(filePath);
+		String adjustedPath = Utils.adjustPath(filePath);
 		try {
 			load(new FileInputStream(new File(adjustedPath)));
 		} catch (FileNotFoundException e) {
@@ -54,7 +57,7 @@ public class Configuration extends Properties {
 
 	/**
 	 * NOTE: This method takes in a path of type String instead of a FileOutputStream object
-	 * to add path robustness by calling 'adjustPath' and then the actual store method
+	 * to add path robustness by calling 'Utils.adjustPath' and then the actual store method
 	 * 
 	 * @author wli
 	 * 
@@ -65,7 +68,7 @@ public class Configuration extends Properties {
 	 */
 	public void store(String filePath, String comments) {
 		try {
-			store(new FileOutputStream(new File(adjustPath(filePath))), comments);
+			store(new FileOutputStream(new File(Utils.adjustPath(filePath))), comments);
 		} catch (IOException e) {
 			log.severe("Configuration file was not properly created.");
 		}
@@ -94,7 +97,7 @@ public class Configuration extends Properties {
 
 	/**
 	 * This is a newly added method (with defaultValue) to retrieve a path
-	 * from the properties file and safely return it after calling adjustPath
+	 * from the properties file and safely return it after calling Utils.adjustPath
 	 * 
 	 * @author wli
 	 * 
@@ -104,12 +107,12 @@ public class Configuration extends Properties {
 	 */
 	public String getPathProperty(String key, String defaultValue) {
 		String pathValue = getCascadingPropertyValue(this, key, defaultValue);
-		return adjustPath(pathValue);
+		return Utils.adjustPath(pathValue);
 	}
 
 	/**
 	 * This is a newly added method (without defaultValue) to retrieve a path 
-	 * from the properties file and safely return it after calling adjustPath
+	 * from the properties file and safely return it after calling Utils.adjustPath
 	 * 
 	 * @author wli
 	 * 
@@ -118,7 +121,7 @@ public class Configuration extends Properties {
 	 */
 	public String getPathProperty(String key) {
 		String pathValue = getProperty(key);
-		return adjustPath(pathValue);
+		return Utils.adjustPath(pathValue);
 	}
 
 	/**
@@ -179,20 +182,7 @@ public class Configuration extends Properties {
 			setProperty(key, value);
 		}
 	}
-	/**
-	 * This method adds robustness to a given path for different platforms.
-	 * 
-	 * @author wli
-	 * 
-	 * @param path
-	 * @return
-	 */
-	private String adjustPath(String path){
-		String tempPath = path.replaceAll("(?<!^)(\\\\|/){2,}", Matcher.quoteReplacement(File.separator));  
-		if (!tempPath.equals(path)) log.info("The following path: " + path + " has been adjusted to: " + tempPath);
-		return tempPath;
-	}
-
+	
 	/**
 	 * Given a properties file, a default key-value pair value, and a key, this
 	 * function returns:\n a) the default value\n b) or, if exists, the
