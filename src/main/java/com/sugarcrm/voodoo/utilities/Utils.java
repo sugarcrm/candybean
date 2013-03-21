@@ -106,7 +106,7 @@ public class Utils {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public static Connection connectToDB(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
+	public static Connection getDBConnection(String dbServer, String dbName, String dbUser, String dbPass) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
 	}
