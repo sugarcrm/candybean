@@ -35,16 +35,20 @@ public class Configuration extends Properties {
 		String adjustedPath = adjustPath(filePath);
 		try {
 			load(new FileInputStream(new File(adjustedPath)));
+		} catch (FileNotFoundException e) {
+			log.severe(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.");
 		} catch (IOException e) {
-			log.severe("Configuration file " + adjustedPath.substring(adjustedPath.lastIndexOf('/')) + " was not properly loaded.");
+			log.severe("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".");
 		}
 	}
 
 	public void load(File file) {
 		try {
 			load(new FileInputStream(file));
+		} catch (FileNotFoundException e) {
+			log.severe(file.getName() + " not found.");
 		} catch (IOException e) {
-			log.severe("Configuration file " + file.getName() + " was not properly loaded.");
+			log.severe("Unable to load " + file.getName() + ".");
 		}
 	}
 

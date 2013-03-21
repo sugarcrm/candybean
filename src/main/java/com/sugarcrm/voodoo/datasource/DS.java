@@ -16,7 +16,7 @@ public class DS {
 	String testName;
 	DataAdapterFactory adapterFactory;
 	DataAdapter dataAdapter;
-	String propName;
+	String propKey;
 	String propValue;
 	TransientProperties config = null;
 	
@@ -24,12 +24,11 @@ public class DS {
 		this.testName = testName;
 	}
 	
-	public void init(DataType dataType, String propName, String propValue) {
-		this.propName = propName; 
+	public void init(DataType dataType, String propKey, String propValue) {
+		this.propKey = propKey; 
 		this.propValue = propValue; 
-		config = new TransientProperties(testName);
-		config.setProperties(this.propName, this.propValue);
-		Configuration myConfig = (Configuration) config.getProperties();
+		Configuration myConfig = new Configuration();
+		myConfig.setProperty(propKey, propValue);
 		
         DataAdapterType type = getDataType(dataType);
 		adapterFactory = new DataAdapterFactory(myConfig);
@@ -45,7 +44,7 @@ public class DS {
 	public DataSource getDataSource(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
 		HashMap<String, DataSource> dataSourceHashMap = dataAdapter
-				.setDataBasePath(propName).getData(dataSet,
+				.setDataBasePath(propKey).getData(dataSet,
 						DataAdapter.Selection.SINGLE);
 		DataSource ds = dataSourceHashMap.get(dataSet);
 		//printDataSourceSingle(ds);
@@ -65,7 +64,7 @@ public class DS {
 	public HashMap<String, DataSource> getDataSources(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
 		HashMap<String, DataSource> dataSourceHashMap = dataAdapter
-				.setDataBasePath(propName).getData(dataSet);
+				.setDataBasePath(propKey).getData(dataSet);
 		//printDataSource(dataSourceHashMap);
 		
 		return dataSourceHashMap;

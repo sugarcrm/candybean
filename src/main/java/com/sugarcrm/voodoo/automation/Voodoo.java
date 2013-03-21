@@ -45,8 +45,9 @@ public class Voodoo {
 	 * @throws Exception if instantiating the logger fails
 	 */
 	private Voodoo(Configuration config) throws Exception {
-		this.config = config;
 		this.log = this.getLogger();
+		this.config = config;
+		this.config.log = this.log;
 		debug = Boolean.parseBoolean(this.config.getProperty("debug", "false"));
 	}
 	
