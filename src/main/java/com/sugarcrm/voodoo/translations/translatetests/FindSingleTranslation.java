@@ -1,9 +1,7 @@
 package com.sugarcrm.voodoo.translations.translatetests;
 
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class FindSingleTranslation {
 	private static Connection CONNECTION;

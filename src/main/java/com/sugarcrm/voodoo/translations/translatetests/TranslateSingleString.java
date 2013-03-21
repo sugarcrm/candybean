@@ -35,7 +35,6 @@ public class TranslateSingleString {
 
 	private static void Translate(ArrayList<String> modules, String inputString, String lang) throws SQLException {
 		ResultSet rs = null;
-		ResultSet rs2 = null;
 
 		System.out.println("Matching '" + inputString + "' with English strings");
 		for (String module : modules) {
@@ -51,7 +50,6 @@ public class TranslateSingleString {
 		for (String module : modules) {
 			rs = Utils.execQuery("SELECT Label, " + lang + " FROM " + module + " WHERE Label='" + inputString + "'", CONNECTION);
 			while (rs.next()) {
-				String label = rs.getString("Label");
 				String translated = rs.getString(lang);
 				System.out.println("Module: " + module + ", Label: " + inputString + "\n\t" + lang + ": " + translated);
 			}
