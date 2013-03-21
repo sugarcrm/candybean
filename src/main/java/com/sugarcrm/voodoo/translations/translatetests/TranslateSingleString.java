@@ -23,7 +23,7 @@ public class TranslateSingleString {
 			
 			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
 			MODULES = Utils.getTables(CONNECTION);
-			
+		
 			Translate(MODULES, args[4], args[5]);
 			
 		} catch (ClassNotFoundException e) {
@@ -33,19 +33,27 @@ public class TranslateSingleString {
 		}
 	}
 
-	private static void Translate(ArrayList<String> modules, String en_string, String lang) throws SQLException {
+	private static void Translate(ArrayList<String> modules, String inputString, String lang) throws SQLException {
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 
+		System.out.println("Matching '" + inputString + "' with English strings");
 		for (String module : modules) {
-			rs = Utils.execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'", CONNECTION);
-			rs2 = Utils.execQuery("SHOW COLUMNS FROM " + module + " WHERE FIELD='" + lang + "'", CONNECTION);
-			if (rs2.next()) {
-				while (rs.next()) {
-					String label = rs.getString("Label");
-					String translated = rs.getString(lang);
-					System.out.println("Module: " + module + ", Label: " + label + "\n\ten_us: " + en_string + "\n\t" + lang + ": " + translated);
-				}
+			rs = Utils.execQuery("SELECT Label, " + lang + " FROM " + module + " WHERE en_us='" + inputString + "'", CONNECTION);
+			while (rs.next()) {
+				String label = rs.getString("Label");
+				String translated = rs.getString(lang);
+				System.out.println("Module: " + module + ", Label: " + label + "\n\ten_us: " + inputString + "\n\t" + lang + ": " + translated);
+			}
+		}
+
+		System.out.println("\nMatching '" + inputString + "' with labels");
+		for (String module : modules) {
+			rs = Utils.execQuery("SELECT Label, " + lang + " FROM " + module + " WHERE Label='" + inputString + "'", CONNECTION);
+			while (rs.next()) {
+				String label = rs.getString("Label");
+				String translated = rs.getString(lang);
+				System.out.println("Module: " + module + ", Label: " + inputString + "\n\t" + lang + ": " + translated);
 			}
 		}
 	}
