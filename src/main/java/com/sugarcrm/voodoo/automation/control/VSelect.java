@@ -83,7 +83,7 @@ public class VSelect extends VControl {
 	public void select(boolean isSelected) throws Exception {
 		voodoo.log.info("Selenium: setting select: " + this.toString() + " to value: " + isSelected);
 		String type = super.we.getAttribute("type");
-		if (!type.equals("checkbox") || !type.equals("radio"))
+		if (!type.equals("checkbox") && !type.equals("radio"))
 			throw new Exception("Selenium: web element is not a checkbox or radio.");
 		if (super.we.isSelected() != isSelected)
 			super.we.click();
