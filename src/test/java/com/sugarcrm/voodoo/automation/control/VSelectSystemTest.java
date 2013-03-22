@@ -24,7 +24,7 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
 
 import static org.junit.Assert.assertEquals;
 
-public class VSelectTest {
+public class VSelectSystemTest {
 	protected static Voodoo voodoo;
 	protected static VInterface iface;
 	
@@ -50,42 +50,37 @@ public class VSelectTest {
 		// Checking checkbox select 
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
-		iface.pause(2000);
+		VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]/input[1]"));
+		Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(), select.isSelected(), false);
+		select.select(true);
+		Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(), select.isSelected(), true);
 		
-		VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"));
-		select.select(true);
-        iface.pause(5000);  // pause for manual inspection
-		select.select(false);
-        iface.pause(5000); 
-		select.select(true);
-        iface.pause(2000);  
-        
         // Exception should throw for non-checkbox element
         //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
 		//voodoo.select(nonCheckboxHook, true);  // yes, verified exception was thrown
         
         // Checking getAttributeValue()
-		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
-		String actText = control.getAttribute("type");
-        String expText = "text";
-        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
-        
-		String actSize = control.getAttribute("size");
-        String expSize = "20";
-        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
-        
-		String actName = control.getAttribute("name");
-        String expName = "firstname";
-        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
+//		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+//		String actText = control.getAttribute("type");
+//        String expText = "text";
+//        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
+//        
+//		String actSize = control.getAttribute("size");
+//        String expSize = "20";
+//        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
+//        
+//		String actName = control.getAttribute("name");
+//        String expName = "firstname";
+//        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
 	}
 	
 	@Test
 	public void selectTest() throws Exception {
-		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "birthday_month"));
 		String option = "Sep";
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
 		iface.go(facebookCreateAccountUrl);
+		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "birthday_month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		dropDownList.select(option);
 		// 3. Verify that 'Sep' was actually selected
@@ -98,10 +93,10 @@ public class VSelectTest {
 	public void getSelectedTest() throws Exception {
 		String actual;
 		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
-		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "birthday_month"));
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
 		iface.go(facebookCreateAccountUrl);
+		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "birthday_month"));
 		// 2. Get the current option from the drop-down list
 		actual = dropDownList.getSelected();
 		// 3. Verify that actual value is the expected value
