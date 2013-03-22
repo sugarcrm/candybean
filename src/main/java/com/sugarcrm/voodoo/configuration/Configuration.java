@@ -8,19 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 
+import com.sugarcrm.voodoo.utilities.OptionalLogger;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 public class Configuration extends Properties {
 	private static final long serialVersionUID = 1L;
-	public Logger log;
-	
-	// Default zero argument constructor
+	public OptionalLogger log;
+
 	public Configuration() {}
-	
+
 	public Configuration(Logger log) {
-		this.log = log;
+		this.log = new OptionalLogger(log);
 	}
 
 	/**
@@ -39,19 +38,25 @@ public class Configuration extends Properties {
 		try {
 			load(new FileInputStream(new File(adjustedPath)));
 		} catch (FileNotFoundException e) {
-			log.severe(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.");
+			// get file name using substring of adjustedPath that starts after the last /
+			log.severe(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found. ");
+			e.printStackTrace();
 		} catch (IOException e) {
-			log.severe("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".");
+			log.severe("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ". ");
+			e.printStackTrace();
 		}
 	}
+
 
 	public void load(File file) {
 		try {
 			load(new FileInputStream(file));
 		} catch (FileNotFoundException e) {
-			log.severe(file.getName() + " not found.");
+			log.severe(file.getName() + " not found. ");
+			e.printStackTrace();
 		} catch (IOException e) {
-			log.severe("Unable to load " + file.getName() + ".");
+			log.severe("Unable to load " + file.getName() + ". ");
+			e.printStackTrace();
 		}
 	}
 
@@ -67,10 +72,12 @@ public class Configuration extends Properties {
 	 * @throws Exception
 	 */
 	public void store(String filePath, String comments) {
+		String adjustedPath = Utils.adjustPath(filePath);
 		try {
-			store(new FileOutputStream(new File(Utils.adjustPath(filePath))), comments);
+			store(new FileOutputStream(new File(adjustedPath)), comments);
 		} catch (IOException e) {
-			log.severe("Configuration file was not properly created.");
+			log.severe("Unable to store " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1));
+			e.printStackTrace();
 		}
 	}
 
@@ -78,7 +85,8 @@ public class Configuration extends Properties {
 		try {
 			store(new FileOutputStream(file), comments);
 		} catch (IOException e) {
-			log.severe("Configuration file was not properly created.");
+			log.severe("Unable to store "	+ file.getName());
+			e.printStackTrace();
 		}
 	}
 
@@ -173,7 +181,7 @@ public class Configuration extends Properties {
 			setProperty(key, value);
 		}
 	}
-	
+
 	public void setPropertiesString(String listOfProperties, String delimiter) {
 		for (String property : listOfProperties.split(delimiter)) {
 			String[] keyValueHolder = property.split("=");
@@ -182,7 +190,7 @@ public class Configuration extends Properties {
 			setProperty(key, value);
 		}
 	}
-	
+
 	/**
 	 * Given a properties file, a default key-value pair value, and a key, this
 	 * function returns:\n a) the default value\n b) or, if exists, the

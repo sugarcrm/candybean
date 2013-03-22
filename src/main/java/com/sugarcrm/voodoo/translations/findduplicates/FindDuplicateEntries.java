@@ -18,13 +18,17 @@ public class FindDuplicateEntries {
 	private static String OUTPUT_PATH;
 
 	public static void main(String args[]) {
-		try {
+		//try {
 			DB_SERVER = args[0];
 			DB_NAME = args[1];
 			DB_USER = args[2];
 			DB_PASS = args[3];
 			OUTPUT_PATH = args[4];
 			
+			String s = "0123456789";
+			System.out.println(s.substring(0, s.lastIndexOf('7')));
+			System.out.println(s.substring(s.lastIndexOf('7')));
+			/*
 			CONNECTION = Utils.getDBConnection(DB_SERVER, DB_NAME, DB_USER, DB_PASS);
 			System.out.println("Connected to " + DB_SERVER + ", using database " + DB_NAME + "\n");
 			
@@ -33,10 +37,10 @@ public class FindDuplicateEntries {
 			DUP_ENTRIES = getDupEntries(EN_ENTRIES);
 			
 			writeDuplicates(DUP_ENTRIES, OUTPUT_PATH);
-
+			
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	public static ArrayList<String> getAllENEntries(ArrayList<String> modules, Connection con) throws SQLException {

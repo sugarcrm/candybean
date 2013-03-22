@@ -10,6 +10,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import com.sugarcrm.voodoo.automation.VInterface.Type;
 import com.sugarcrm.voodoo.configuration.Configuration;
+import com.sugarcrm.voodoo.utilities.OptionalLogger;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -19,7 +20,7 @@ import com.sugarcrm.voodoo.configuration.Configuration;
  * @author Conrad Warmbold
  */
 public class Voodoo {
-	
+
 	/**
 	 * {@link Logger} object for use by tests.
 	 */
@@ -29,7 +30,7 @@ public class Voodoo {
 	 * {@link Properties} object created by loading the voodoo
 	 * properties configuration file.
 	 */
-	public final Configuration config;
+	private Configuration config;
 
 	/**
 	 * The one Voodoo instance.  Created when a Voodoo instance is
@@ -47,12 +48,12 @@ public class Voodoo {
 	private Voodoo(Configuration config) throws Exception {
 		this.log = this.getLogger();
 		this.config = config;
-		this.config.log = this.log;
+		this.config.log = new OptionalLogger(this.log);
 		debug = Boolean.parseBoolean(this.config.getProperty("debug", "false"));
 	}
-	
+
 	public boolean debug() { return Voodoo.debug; }
-	
+
 	/**
 	 * Get the global Voodoo instance.
 	 *
@@ -64,7 +65,7 @@ public class Voodoo {
 		if (Voodoo.instance == null) Voodoo.instance = new Voodoo(config); 
 		return Voodoo.instance;
 	}
-	
+
 
 	/**
 	 * Get an {@link VInterface} for use by a test.
@@ -77,7 +78,7 @@ public class Voodoo {
 		String iType = this.config.getProperty("automation.interface", "chrome");
 		return this.getInterface(this.parseInterfaceType(iType));
 	}
-	
+
 	/**
 	 * Get an {@link VInterface} for use by a test.
 	 *
@@ -89,7 +90,7 @@ public class Voodoo {
 	public VInterface getInterface(VInterface.Type iType) throws Exception {
 		return new VInterface(this, this.config, iType);
 	}
-	
+
 	/**
 	 * Convert a browser string into {@link IInterface.Type}
 	 *
@@ -108,15 +109,15 @@ public class Voodoo {
 		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
 		return iType;
 	}
-	
-//	public long getPageLoadTimeout() {
-//		return Long.parseLong(props.getString("perf.page_load_timeout"));
-//	}
-	
-//	public String getTime() {
-//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
-//	}
-	
+
+	//	public long getPageLoadTimeout() {
+	//		return Long.parseLong(props.getString("perf.page_load_timeout"));
+	//	}
+
+	//	public String getTime() {
+	//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
+	//	}
+
 	/**
 	 * Load the loggers specified in logging.properties.
 	 *
@@ -128,31 +129,31 @@ public class Voodoo {
 		String currentWorkingPath = System.getProperty("user.dir");
 		File tempLogPropsFile = new File(currentWorkingPath + File.separator + "logging.properties");
 		tempLogPropsFile.createNewFile();
-//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
-//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
+		//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
+		//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
 		OutputStream output = new FileOutputStream(tempLogPropsFile);
 		this.config.store(output, "");
-//		JOptionPane.showInputDialog("pause");
+		//		JOptionPane.showInputDialog("pause");
 		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
 		LogManager.getLogManager().readConfiguration(input);
-//		logger.setLevel(this.getLogLevel());
+		//		logger.setLevel(this.getLogLevel());
 		tempLogPropsFile.delete();
 		return logger;
 	}
-	
-//	private Level getLogLevel() {
-//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
-//		switch(logLevel) {
-//		case "SEVERE": return Level.SEVERE;
-//		case "WARNING": return Level.WARNING;
-//		case "INFO": return Level.INFO;
-//		case "FINE": return Level.FINE;
-//		case "FINER": return Level.FINER;
-//		case "FINEST": return Level.FINEST;
-//		default:
-//			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
-//			return Level.INFO;
-//		}
-//	}
+
+	//	private Level getLogLevel() {
+	//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
+	//		switch(logLevel) {
+	//		case "SEVERE": return Level.SEVERE;
+	//		case "WARNING": return Level.WARNING;
+	//		case "INFO": return Level.INFO;
+	//		case "FINE": return Level.FINE;
+	//		case "FINER": return Level.FINER;
+	//		case "FINEST": return Level.FINEST;
+	//		default:
+	//			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
+	//			return Level.INFO;
+	//		}
+	//	}
 }
