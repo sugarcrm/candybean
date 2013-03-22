@@ -24,7 +24,7 @@ import com.sugarcrm.voodoo.automation.control.VSelect;
 
 import static org.junit.Assert.assertEquals;
 
-public class VSelectTest {
+public class VSelectSystemTest {
 	protected static Voodoo voodoo;
 	protected static VInterface iface;
 	
