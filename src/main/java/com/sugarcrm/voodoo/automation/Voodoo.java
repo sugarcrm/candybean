@@ -66,9 +66,9 @@ public class Voodoo {
 	
 
 	/**
-	 * Get an {@link VInterface} for use by a test.
+	 * Get an {@link VInterfaceSystemTest} for use by a test.
 	 *
-	 * @return a new {@link VInterface}
+	 * @return a new {@link VInterfaceSystemTest}
 	 * @throws Exception if the browser specified in voodoo.properties
 	 *							cannot be run or if WebDriver cannot be started
 	 */
@@ -78,10 +78,10 @@ public class Voodoo {
 	}
 	
 	/**
-	 * Get an {@link VInterface} for use by a test.
+	 * Get an {@link VInterfaceSystemTest} for use by a test.
 	 *
 	 * @param iType  type of web browser to load
-	 * @return a new {@link VInterface}
+	 * @return a new {@link VInterfaceSystemTest}
 	 * @throws Exception if the browser specified cannot be run or if
 	 *							WebDriver cannot be started
 	 */

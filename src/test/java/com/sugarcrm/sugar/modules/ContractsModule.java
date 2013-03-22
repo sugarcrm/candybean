@@ -21,9 +21,9 @@ public class ContractsModule {
 		sugar.i.getControl(Strategy.ID, "name").sendString(contract.name);
 		sugar.i.getSelect(Strategy.ID, "status").select(contract.status);
 		sugar.i.getControl(Strategy.ID, "btn_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, contract.account.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();

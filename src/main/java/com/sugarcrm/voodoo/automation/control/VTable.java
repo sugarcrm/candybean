@@ -1,6 +1,5 @@
 package com.sugarcrm.voodoo.automation.control;
 
-
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -9,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-
 
 /**
  * @author cwarmbold
