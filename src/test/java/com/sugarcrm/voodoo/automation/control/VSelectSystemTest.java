@@ -50,15 +50,11 @@ public class VSelectSystemTest {
 		// Checking checkbox select 
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
-		iface.pause(2000);
-		
 		VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"));
 		select.select(true);
-        iface.pause(5000);  // pause for manual inspection
+//        iface.pause(5000);  // pause for manual inspection
 		select.select(false);
-        iface.pause(5000); 
-		select.select(true);
-        iface.pause(2000);  
+        select.select(true);
         
         // Exception should throw for non-checkbox element
         //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
@@ -81,11 +77,11 @@ public class VSelectSystemTest {
 	
 	@Test
 	public void selectTest() throws Exception {
-		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "birthday_month"));
 		String option = "Sep";
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
 		iface.go(facebookCreateAccountUrl);
+		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "birthday_month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		dropDownList.select(option);
 		// 3. Verify that 'Sep' was actually selected
@@ -98,10 +94,10 @@ public class VSelectSystemTest {
 	public void getSelectedTest() throws Exception {
 		String actual;
 		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
-		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "birthday_month"));
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
 		iface.go(facebookCreateAccountUrl);
+		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "birthday_month"));
 		// 2. Get the current option from the drop-down list
 		actual = dropDownList.getSelected();
 		// 3. Verify that actual value is the expected value
