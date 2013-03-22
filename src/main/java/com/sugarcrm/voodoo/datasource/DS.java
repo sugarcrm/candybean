@@ -8,8 +8,7 @@ import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
 import com.sugarcrm.voodoo.datasource.DataSource;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 import com.sugarcrm.voodoo.datasource.FieldSetList;
-import com.sugarcrm.voodoo.configuration.Configuration;
-import com.sugarcrm.voodoo.configuration.TransientProperties;
+import com.sugarcrm.voodoo.configuration.ConfigurationContainer;
 
 public class DS {
 	public enum DataType { CSV, XML };
@@ -18,7 +17,7 @@ public class DS {
 	DataAdapter dataAdapter;
 	String propKey;
 	String propValue;
-	TransientProperties config = null;
+	ConfigurationContainer config;
 	
 	public DS(String testName) {
 		this.testName = testName;
@@ -27,11 +26,11 @@ public class DS {
 	public void init(DataType dataType, String propKey, String propValue) {
 		this.propKey = propKey; 
 		this.propValue = propValue; 
-		Configuration myConfig = new Configuration();
-		myConfig.setProperty(propKey, propValue);
+		config = new ConfigurationContainer(testName);
+		config.setProperty(propKey, propValue);
 		
         DataAdapterType type = getDataType(dataType);
-		adapterFactory = new DataAdapterFactory(myConfig);
+		adapterFactory = new DataAdapterFactory(config);
 		dataAdapter = adapterFactory.createDataAdapter(type);
 	}
 	
@@ -71,7 +70,7 @@ public class DS {
 	}
 	
 	public void cleanup() {
-		config.cleanup();
+		config.deleteConfiguration();
 	}
 	
 	private DataAdapterType getDataType(DataType dataType) {
