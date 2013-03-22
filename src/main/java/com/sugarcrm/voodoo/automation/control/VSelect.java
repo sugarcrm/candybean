@@ -61,18 +61,30 @@ public class VSelect extends VControl {
 	}
 
 	/**
-	 * Toggle the state of a CHECKBOX element.
+	 * Returns the boolean value of the control's selection state.
+	 * 
+	 * @return	boolean true if the control is selected
+	 * @throws Exception
+	 */
+	public boolean isSelected() throws Exception {
+		super.voodoo.log.info("Selenium: returns true if control: " + this.toString() + " is selected");
+		return super.we.isSelected();
+	}
+
+	/**
+	 * Toggle the state of a CHECKBOX or RADIO element.
 	 *
-	 * <p>N.b. This method operates on CHECKBOX elements rather than
+	 * <p>N.b. This method operates on CHECKBOX or RADIO elements rather than
 	 * SELECT elements.</p>
 	 *
-	 * @param isSelected	 desired state of checkbox
-	 * @throws Exception if element is not found or if element is not a checkbox
+	 * @param isSelected	desired state of checkbox or radio
+	 * @throws Exception 	if element is not found or if element is not a checkbox or radio
 	 */
 	public void select(boolean isSelected) throws Exception {
 		voodoo.log.info("Selenium: setting select: " + this.toString() + " to value: " + isSelected);
-		if (!super.we.getAttribute("type").equals("checkbox"))
-			throw new Exception("Selenium: web element is not a checkbox.");
+		String type = super.we.getAttribute("type");
+		if (!type.equals("checkbox") || !type.equals("radio"))
+			throw new Exception("Selenium: web element is not a checkbox or radio.");
 		if (super.we.isSelected() != isSelected)
 			super.we.click();
 	}

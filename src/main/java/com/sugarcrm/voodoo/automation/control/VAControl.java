@@ -1,18 +1,18 @@
 package com.sugarcrm.voodoo.automation.control;
 
-import com.sugarcrm.voodoo.automation.VInterface;
-import com.sugarcrm.voodoo.automation.Voodoo;
-
+//import com.sugarcrm.voodoo.automation.VInterface;
+//import com.sugarcrm.voodoo.automation.Voodoo;
+//
 public class VAControl {//implements IAControl {
-	
-	protected final Voodoo voodoo;
-	protected final VInterface iface;
-
-	public VAControl(Voodoo voodoo, VInterface iface) throws Exception {
-		this.voodoo = voodoo;
-		this.iface = iface;
-	}
-	
+//	
+//	protected final Voodoo voodoo;
+//	protected final VInterface iface;
+//
+//	public VAControl(Voodoo voodoo, VInterface iface) throws Exception {
+//		this.voodoo = voodoo;
+//		this.iface = iface;
+//	}
+//	
 //	@Override
 //	public String getCurrentActivity() throws Exception {
 //		msg("Performing getCurrentyActivity");
@@ -58,5 +58,4 @@ public class VAControl {//implements IAControl {
 	private void msg(String msg) { 
 		System.out.println("[VoodooAndroid Test]: " + msg);
 	}
-	
 }
