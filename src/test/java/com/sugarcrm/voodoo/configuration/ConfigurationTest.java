@@ -80,9 +80,9 @@ public class ConfigurationTest {
 		String properties3 = "fruit1=apple; fruit2=pear; fruitlist=apple, pear, banana, orange, cherry";
 		
 		// Set properties
-		config1.setPropertiesArrayList(properties1);
-		config1.setPropertiesArray(properties2);
-		config2.setPropertiesString(properties3, ";");
+		config1.setProperties(properties1);
+		config1.setProperties(properties2);
+		config2.setProperties(properties3, ";");
 		
 		Assert.assertEquals("Values not equal, assertion failed!", "A", config1.getProperty("char1", "wrongvalue"));
 		Assert.assertEquals("Values not equal, assertion failed!", "B", config1.getProperty("char2", "wrongvalue"));
