@@ -17,7 +17,7 @@ public class VControl {
 	protected final Voodoo voodoo;
 	protected final VInterface iface;
 	protected final VHook hook;
-	protected final WebElement we;
+	public final WebElement we;
 	
 	public VControl(Voodoo voodoo, VInterface iface, Strategy strategy, String hook) throws Exception {
 		this(voodoo, iface, new VHook(strategy, hook));

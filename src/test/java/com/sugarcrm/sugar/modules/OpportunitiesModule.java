@@ -20,9 +20,9 @@ public class OpportunitiesModule {
 		sugar.i.getControl(Strategy.ID, "account_name_label").hover();
 		sugar.i.getControl(Strategy.ID, "name").sendString(opportunity.name);
 		sugar.i.getControl(Strategy.ID, "btn_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, opportunity.account.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "date_closed").sendString(opportunity.closeDate);
 		sugar.i.getControl(Strategy.ID, "amount").sendString(opportunity.amount);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
@@ -44,9 +44,9 @@ public class OpportunitiesModule {
 		sugar.i.getControl(Strategy.ID, "edit_button").click();
 		sugar.i.getControl(Strategy.ID, "name").sendString(newOpportunity.name);
 		sugar.i.getControl(Strategy.ID, "btn_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, newOpportunity.account.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "date_closed").sendString(newOpportunity.closeDate);
 		sugar.i.getControl(Strategy.ID, "amount").sendString(newOpportunity.amount);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();

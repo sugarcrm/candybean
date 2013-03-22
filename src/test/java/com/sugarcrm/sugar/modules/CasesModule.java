@@ -23,9 +23,9 @@ public class CasesModule {
 		sugar.i.getControl(Strategy.ID, "account_name_label").hover();
 		sugar.i.getControl(Strategy.ID, "name").sendString(caseRecord.subject);
 		sugar.i.getControl(Strategy.ID, "btn_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, caseRecord.account.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();
