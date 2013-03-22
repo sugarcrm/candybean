@@ -138,7 +138,7 @@ public class Configuration extends Properties {
 	 * Takes the value and split them according to the given
 	 * delimiter and return a String[]. 
 	 * (Example, "FRUITS = apple pear banana)
-	 * delimiter: " " 
+	 * delimiter: " "
 	 * and returns String[]: apple pear banana
 	 * 
 	 * @param key
@@ -170,7 +170,7 @@ public class Configuration extends Properties {
 	 * 
 	 * @param listOfProperties
 	 */
-	public void setPropertiesArrayList(ArrayList<String> listOfProperties) {
+	public void setProperties(ArrayList<String> listOfProperties) {
 		for (String property : listOfProperties) {
 			String[] keyValueHolder = property.split("=");
 			String key = keyValueHolder[0].trim();
@@ -179,7 +179,7 @@ public class Configuration extends Properties {
 		}
 	}
 
-	public void setPropertiesArray(String[] listOfProperties) {
+	public void setProperties(String[] listOfProperties) {
 		for (String property : listOfProperties) {
 			String[] keyValueHolder = property.split("=");
 			String key = keyValueHolder[0].trim();
@@ -198,7 +198,7 @@ public class Configuration extends Properties {
 	 * @param listOfProperties
 	 * @param delimiter
 	 */
-	public void setPropertiesString(String listOfProperties, String delimiter) {
+	public void setProperties(String listOfProperties, String delimiter) {
 		for (String property : listOfProperties.split(delimiter)) {
 			String[] keyValueHolder = property.split("=");
 			String key = keyValueHolder[0].trim();
