@@ -3,6 +3,7 @@ package com.sugarcrm.voodoo.automation;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -10,8 +11,10 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -56,7 +59,7 @@ public class VInterface {
 		else {
 			this.wd = this.getWebDriver(iType);
 //			this.vac = null;
-			this.start();
+//			this.start();
 		}
 	}
 	
@@ -147,6 +150,74 @@ public class VInterface {
 	}
 
 	/**
+	 * Returns true if the interface visibly contains the 
+	 * given string
+	 * 
+	 * @param s					The target string searched 
+	 * for in the interface		
+	 * @param caseSensitive		Whether or not the search
+	 * is case sensitive		
+	 * @return		Returns true if the interface visibly 
+	 * contains the given string
+	 * @throws Exception
+	 */
+	public boolean contains(String s, boolean caseSensitive) throws Exception {
+		voodoo.log.info("Searching if the interface contains the following string: " + s);
+		if (!caseSensitive) s = s.toLowerCase();
+		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
+		for (WebElement we : wes) {
+			String text = we.getText();
+			if (!caseSensitive) text = text.toLowerCase();
+//			System.out.println("text: " + text);
+			if (text.contains(s)) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Switches focus to default content.
+	 * 
+	 * @throws Exception
+	 */
+	public void focusDefault() throws Exception {
+		voodoo.log.info("Focusing to default content.");
+		this.wd.switchTo().defaultContent();
+	}
+	
+	/**
+	 * Switches focus to the IFrame identified by the given zero-based index
+	 * 
+	 * @param index		the serial, zero-based index of the iframe to focus
+	 * @throws Exception
+	 */
+	public void focusFrame(int index) throws Exception {
+		voodoo.log.info("Focusing to frame by index: " + index);
+		this.wd.switchTo().frame(index);
+	}
+	
+	/**
+	 * Switches focus to the IFrame identified by the given name or ID string
+	 * 
+	 * @param nameOrId	the name or ID identifying the targeted IFrame
+	 * @throws Exception
+	 */
+	public void focusFrame(String nameOrId) throws Exception {
+		voodoo.log.info("Focusing to frame by name or ID: " + nameOrId);
+		this.wd.switchTo().frame(nameOrId);
+	}
+	
+	/**
+	 * Switches focus to the IFrame identified by the given {@link VControl}
+	 * 
+	 * @param control		The VControl representing a focus-targeted IFrame
+	 * @throws Exception
+	 */
+	public void focusFrame(VControl control) throws Exception {
+		voodoo.log.info("Focusing to frame by control: " + control.toString());
+		this.wd.switchTo().frame(control.we);
+	}
+	
+	/**
 	 * Focus a browser window by its index.
 	 *
 	 * <p>The order of browser windows is somewhat arbitrary and not
@@ -156,7 +227,7 @@ public class VInterface {
 	 * @param index  the window index
 	 * @throws Exception	 if the specified window cannot be found
 	 */
-	public void focusByIndex(int index) throws Exception {
+	public void focusWindow(int index) throws Exception {
 		voodoo.log.info("Focusing window by index: " + index);
 		Set<String> Handles = this.wd.getWindowHandles();
 		while (Handles.iterator().hasNext()) {
@@ -171,43 +242,21 @@ public class VInterface {
 	}
 
 	/**
-	 * Focus a browser window by its window title.
+	 * Focus a browser window by its window title or URL.
 	 *
-	 * <p>If more than one window has the same title, the first
+	 * <p>If more than one window has the same title or URL, the first
 	 * encountered is the one that is focused.</p>
 	 *
-	 * @param title  the exact window title to be matched
-	 * @throws Exception	  if the specified window cannot be found
+	 * @param titleOrUrl  	the exact window title or URL to be matched
+	 * @throws Exception	if the specified window cannot be found
 	 */
-	public void focusByTitle(String title) throws Exception {
-		voodoo.log.info("Focusing window by title: " + title);
+	public void focusWindow(String titleOrUrl) throws Exception {
+		voodoo.log.info("Focusing window by title or URL: " + titleOrUrl);
 		Set<String> handles = this.wd.getWindowHandles();
 		while (handles.iterator().hasNext()) {
 			String windowHandle = handles.iterator().next();
 			WebDriver window = this.wd.switchTo().window(windowHandle);
-			if (window.getTitle().equals(title)) {
-				break;
-			}
-			handles.remove(windowHandle);
-		}
-	}
-
-	/**
-	 * Focus a browser window by its URL.
-	 *
-	 * <p>If more than one window has the same URL, the first
-	 * encountered is the one that is focused.</p>
-	 *
-	 * @param url	the URL to be matched
-	 * @throws Exception	  if the specified window cannot be found
-	 */
-	public void focusByUrl(String url) throws Exception {
-		voodoo.log.info("Focusing window by url: " + url);
-		Set<String> handles = this.wd.getWindowHandles();
-		while (handles.iterator().hasNext()) {
-			String windowHandle = handles.iterator().next();
-			WebDriver window = this.wd.switchTo().window(windowHandle);
-			if (window.getCurrentUrl().equals(url)) {
+			if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
 				break;
 			}
 			handles.remove(windowHandle);
@@ -221,8 +270,7 @@ public class VInterface {
 	 */
 	public void maximize() {
 		voodoo.log.info("Maximizing window");
-		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit()
-				.getScreenSize();
+//		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.wd.manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
