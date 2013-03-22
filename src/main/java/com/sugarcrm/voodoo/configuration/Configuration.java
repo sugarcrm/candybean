@@ -16,7 +16,9 @@ public class Configuration extends Properties {
 	private static final long serialVersionUID = 1L;
 	public OptionalLogger log;
 
-	public Configuration() {}
+	public Configuration() {
+		this.log = new OptionalLogger();
+	}
 
 	public Configuration(Logger log) {
 		this.log = new OptionalLogger(log);
@@ -114,7 +116,7 @@ public class Configuration extends Properties {
 	 * @return
 	 */
 	public String getPathProperty(String key, String defaultValue) {
-		String pathValue = getCascadingPropertyValue(this, key, defaultValue);
+		String pathValue = getCascadingPropertyValue(this, defaultValue, key);
 		return Utils.adjustPath(pathValue);
 	}
 
@@ -145,7 +147,11 @@ public class Configuration extends Properties {
 	 */
 	public String[] getPropertiesArray(String key, String delimiter) {
 		String values = getProperty(key);
-		return values.split(delimiter);
+		String[] result = values.split(delimiter);
+		for (int i = 0; i < result.length; i++) {
+			result[i] = result[i].trim();
+		}
+		return result;
 	}
 
 	public ArrayList<String> getPropertiesArrayList(String key, String delimiter) {
@@ -153,7 +159,7 @@ public class Configuration extends Properties {
 		String[] arrayOfValues = values.split(delimiter);
 		ArrayList<String> result = new ArrayList<String>();
 		for (String value : arrayOfValues) {
-			result.add(value);
+			result.add(value.trim());
 		}
 		return result;
 	}
@@ -182,6 +188,16 @@ public class Configuration extends Properties {
 		}
 	}
 
+	/**
+	 * NOTE: If one of the properties has multiple values (ex. fruits=apple, pear, banana),
+	 *       make sure the delimiter used to separate properties is not the same delimiter
+	 *       used to separate values (ex. fruit1=apple; fruit2=pear; fruits=apple, pear, banana)
+	 *       
+	 * @author ylin
+	 * 
+	 * @param listOfProperties
+	 * @param delimiter
+	 */
 	public void setPropertiesString(String listOfProperties, String delimiter) {
 		for (String property : listOfProperties.split(delimiter)) {
 			String[] keyValueHolder = property.split("=");

@@ -24,7 +24,6 @@ import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 import com.sugarcrm.voodoo.configuration.Configuration;
-import com.sugarcrm.voodoo.utilities.Utils;
 
 public class VInterface {
 
@@ -312,9 +311,11 @@ public class VInterface {
 		case CHROME:
 			String workingDir = System.getProperty("user.dir");
 			ChromeOptions chromeOptions = new ChromeOptions();
-			String chromeDriverLogPath = this.config.getProperty("browser.chrome_driver_log_path", workingDir + "/log/chromedriver.log");
+			String chromeDriverLogPath = this.config.getProperty("browser.chrome_driver_log_path");
+			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-			String chromeDriverPath = this.config.getPathProperty("browser.chrome_driver_path", workingDir + "/etc/chromedriver-mac");
+			String chromeDriverPath = this.config.getPathProperty("browser.chrome_driver_path");
+			System.out.println("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			voodoo.log.info("Instantiating Chrome with:\n    log path:"
