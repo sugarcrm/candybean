@@ -168,7 +168,7 @@ public class VInterface {
 		for (WebElement we : wes) {
 			String text = we.getText();
 			if (!caseSensitive) text = text.toLowerCase();
-			System.out.println("text: " + text);
+//			System.out.println("text: " + text);
 			if (text.contains(s)) return true;
 		}
 		return false;
