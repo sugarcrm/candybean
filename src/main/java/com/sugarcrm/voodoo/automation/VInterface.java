@@ -151,7 +151,7 @@ public class VInterface {
 
 	/**
 	 * Returns true if the interface visibly contains the 
-	 * given string
+	 * given string in any non-visible=false element.
 	 * 
 	 * @param s					The target string searched 
 	 * for in the interface		
