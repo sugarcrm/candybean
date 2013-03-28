@@ -25,13 +25,13 @@ public class OptionalLogger {
 		if (log != null)
 			log.info(msg);
 		else
-			System.out.println(msg);
+			System.out.print(msg);
 	}
 	
 	public void severe(String msg) {
 		if (log != null)
 			log.severe(msg);
 		else
-			System.out.println(msg);
+			System.err.print(msg);
 	}
 }

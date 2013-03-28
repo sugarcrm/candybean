@@ -48,7 +48,7 @@ public class Voodoo {
 	private Voodoo(Configuration config) throws Exception {
 		this.config = config;
 		this.log = this.getLogger();
-		this.config.log = new OptionalLogger(this.log);
+		this.config.setLogger(new OptionalLogger(this.log));
 		debug = Boolean.parseBoolean(this.config.getProperty("debug", "false"));
 	}
 

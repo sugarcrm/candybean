@@ -1,5 +1,6 @@
 package com.sugarcrm.voodoo.datasource;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.sugarcrm.voodoo.datasource.DataAdapter;
@@ -8,7 +9,7 @@ import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
 import com.sugarcrm.voodoo.datasource.DataSource;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 import com.sugarcrm.voodoo.datasource.FieldSetList;
-import com.sugarcrm.voodoo.configuration.ConfigurationContainer;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 public class DS {
 	public enum DataType { CSV, XML };
@@ -17,7 +18,7 @@ public class DS {
 	DataAdapter dataAdapter;
 	String propKey;
 	String propValue;
-	ConfigurationContainer config;
+	Configuration config;
 	
 	public DS(String testName) {
 		this.testName = testName;
@@ -26,7 +27,8 @@ public class DS {
 	public void init(DataType dataType, String propKey, String propValue) {
 		this.propKey = propKey; 
 		this.propValue = propValue; 
-		config = new ConfigurationContainer(testName);
+		config = new Configuration();
+		config.createFile(System.getProperty("user.home") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		config.setProperty(propKey, propValue);
 		
         DataAdapterType type = getDataType(dataType);
@@ -70,7 +72,7 @@ public class DS {
 	}
 	
 	public void cleanup() {
-		config.deleteConfiguration();
+		config.deleteFile();
 	}
 	
 	private DataAdapterType getDataType(DataType dataType) {
