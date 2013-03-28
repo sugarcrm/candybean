@@ -4,7 +4,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +43,7 @@ public class VInterface {
 	 * Instantiate VInterface
 	 *
 	 * @param voodoo  {@link Voodoo} object
-	 * @param props   {@link Properties} for this test run
+	 * @param config   {@link Configuration} for this test run
 	 * @param iType   {@link IInterface.Type} of web browser to run
 	 * @throws Exception
 	 */
@@ -357,7 +356,6 @@ public class VInterface {
 			wd = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
-			String workingDir = System.getProperty("user.dir");
 			ChromeOptions chromeOptions = new ChromeOptions();
 			String chromeDriverLogPath = this.config.getProperty("browser.chrome_driver_log_path");
 			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
