@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +18,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -96,6 +99,17 @@ public class VInterfaceSystemTest {
 //		this.iface.dismissDialog();
 	}
 
+	@Test
+	public void containsTest() throws Exception {
+		iface.go("https://code.google.com/");
+		boolean actCaseSensPos = iface.contains("Google Developers", true); //true
+		boolean actCaseSensNeg = iface.contains("google developers", true); //false
+		boolean actNeg = iface.contains("goggle devs", false); //false
+		Assert.assertEquals("Expecting: " + true + ", actual: " + actCaseSensPos, true, actCaseSensPos);
+		Assert.assertEquals("Expecting: " + false + ", actual: " + actCaseSensNeg, false, actCaseSensNeg);
+		Assert.assertEquals("Expecting: " + false + ", actual: " + actNeg, false, actNeg);
+	}
+	
 	@Ignore
 	@Test
 	public void focusDefaultTest() throws Exception {

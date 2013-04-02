@@ -3,6 +3,7 @@ package com.sugarcrm.voodoo.automation;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -10,8 +11,10 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -146,6 +149,31 @@ public class VInterface {
 		alert.dismiss();
 	}
 
+	/**
+	 * Returns true if the interface visibly contains the 
+	 * given string in any non-visible=false element.
+	 * 
+	 * @param s					The target string searched 
+	 * for in the interface		
+	 * @param caseSensitive		Whether or not the search
+	 * is case sensitive		
+	 * @return		Returns true if the interface visibly 
+	 * contains the given string
+	 * @throws Exception
+	 */
+	public boolean contains(String s, boolean caseSensitive) throws Exception {
+		voodoo.log.info("Searching if the interface contains the following string: " + s);
+		if (!caseSensitive) s = s.toLowerCase();
+		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
+		for (WebElement we : wes) {
+			String text = we.getText();
+			if (!caseSensitive) text = text.toLowerCase();
+//			System.out.println("text: " + text);
+			if (text.contains(s)) return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Switches focus to default content.
 	 * 
