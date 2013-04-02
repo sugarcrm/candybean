@@ -1,6 +1,6 @@
 <?php
 
-require ('UpdateDB_LangsAndModules.php');
+require ('updateDB_LangsAndModules.php');
 
 $db = $argv[1];
 $en_folder = $argv[2]; // dir containing English php files, should be set to a Sugar installation
