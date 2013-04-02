@@ -18,10 +18,10 @@ public class KnowledgeBaseModule {
 		sugar.i.go(sugarURL + "/index.php?module=KBDocuments&action=EditView");
 		sugar.i.getControl(Strategy.ID, "kbdocument_name").sendString(article.title);
 		sugar.i.getControl(Strategy.ID, "body_html_code").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.ID, "htmlSource").sendString(article.body);		
 		sugar.i.getControl(Strategy.ID, "insert").click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "btn_save").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();
@@ -42,10 +42,10 @@ public class KnowledgeBaseModule {
 		sugar.i.getControl(Strategy.ID, "edit_button").click();
 		sugar.i.getControl(Strategy.ID, "kbdocument_name").sendString(newArticle.title);
 		sugar.i.getControl(Strategy.ID, "body_html_code").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.ID, "htmlSource").sendString(newArticle.body);		
 		sugar.i.getControl(Strategy.ID, "insert").click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "btn_save").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();

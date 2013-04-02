@@ -13,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Vector;
 
 /**
  * <p>Program to run the Voodoo2 code examples.</p>
