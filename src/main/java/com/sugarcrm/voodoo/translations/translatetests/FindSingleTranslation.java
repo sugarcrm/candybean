@@ -1,21 +1,18 @@
-package com.sugarcrm.voodoo.translations.translate_tests;
+package com.sugarcrm.voodoo.translations.translatetests;
 
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class TranslateSingleString {
+public class FindSingleTranslation {
 	private static Connection CONNECTION;
 	private static ArrayList<String> MODULES;
-	private static ArrayList<String> ENTRIES;
 
 	public static void main(String args[]) {
 		try {
 			CONNECTION = connectToDB();
-			System.out.println("Successfully connected to database");
+			System.out.println("Successfully connected to database [add db_name parameter]");
 			MODULES = getDBTables();
-			Translate(MODULES, args[0], args[1]);
+			Translate(MODULES, "Show More", "ja_JP");
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -26,7 +23,7 @@ public class TranslateSingleString {
 
 	private static Connection connectToDB() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://10.8.31.10/Translations_6_7?useUnicode=true&characterEncoding=utf-8", "translator", "Sugar123!");
+		return DriverManager.getConnection("jdbc:mysql://localhost/Translations_6_7?useUnicode=true&characterEncoding=utf-8", "root", "root");
 	}
 
 	private static ArrayList<String> getDBTables() throws SQLException {
@@ -42,19 +39,13 @@ public class TranslateSingleString {
 	}
 
 	private static void Translate(ArrayList<String> modules, String en_string, String lang) throws SQLException {
-		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs = null;
-		ResultSet rs2 = null;
 
 		for (String module : modules) {
 			rs = execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
-			rs2 = execQuery("SHOW COLUMNS FROM " + module + " WHERE FIELD='" + lang + "'");
-			if (rs2.next()) {
-				while (rs.next()) {
-					String label = rs.getString("Label");
-					String translated = rs.getString(lang);
-					System.out.println("Module: " + module + ", Label: " + label + "\n\ten_us: " + en_string + "\n\t" + lang + ": " + translated);
-				}
+			while (rs.next()) {
+				String translated = rs.getString(lang);
+				System.out.println("module: " + module + ", en_us:" + en_string + ", " + lang + ": " + translated);
 			}
 		}
 	}

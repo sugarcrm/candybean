@@ -1,13 +1,12 @@
 package com.sugarcrm.voodoo.automation;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sugarcrm.voodoo.automation.Voodoo;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 
 public class VoodooUnitTest {
@@ -15,10 +14,10 @@ public class VoodooUnitTest {
 	@Ignore
 	@Test
 	public void testVoodooLog() throws Exception {
-		Properties props = new Properties();
+		Configuration config = new Configuration();
 		File testPropsFile = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "test.properties");
-		props.load(new FileInputStream(testPropsFile));
-		Voodoo voodoo = Voodoo.getInstance(props);
+		config.load(testPropsFile);
+		Voodoo voodoo = Voodoo.getInstance(config);
 		voodoo.log.info("TEST VOODOO LOG");
 	}
 }
