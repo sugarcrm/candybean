@@ -1,23 +1,21 @@
 package com.sugarcrm.sugar;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
-import java.util.Properties;
 
 import com.sugarcrm.sugar.modules.UsersModule.UserRecord;
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.utilities.Utils;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 public class Sugar {
 	
 	public Voodoo v;
 	public VInterface i;
 	public UserRecord admin;	
-	public Properties props;
+	public Configuration config;
 	public Modules modules;
 	
 	private HashMap<String, VHook> hooksMap;
@@ -29,24 +27,24 @@ public class Sugar {
 	private static String voodooPropsPath;
 	
 	public Sugar() throws Exception {
-		Properties voodooProps = new Properties();
+		Configuration voodooConfig = new Configuration();
 		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
 		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
 		voodooPropsPath = relPropsPath + File.separator + voodooPropsFilename;
-		voodooProps.load(new 	FileInputStream(voodooPropsPath));
-    	props = new Properties();
-    	props.load(new FileInputStream(new File(sugarPropsPath)));
-		Properties sugarHooksProps = new Properties();
-		sugarHooksProps.load(new FileInputStream(new File(sugarHooksPath)));
-		v = Voodoo.getInstance(voodooProps);
+		voodooConfig.load(voodooPropsPath);
+    	config = new Configuration();
+    	config.load(sugarPropsPath);
+		Configuration sugarHooksConfig = new Configuration();
+		sugarHooksConfig.load(sugarHooksPath);
+		v = Voodoo.getInstance(voodooConfig);
 		i = v.getInterface();
-		hooksMap = VHook.getHooks(sugarHooksProps);
+		hooksMap = VHook.getHooks(sugarHooksConfig);
 		modules = new Modules(this);
 
-		String adminUsername = Utils.getCascadingPropertyValue(props, "admin", "sugar.username");
-		String adminPassword1 = Utils.getCascadingPropertyValue(props, "asdf", "sugar.password1");
-		String adminPassword2 = Utils.getCascadingPropertyValue(props, "asdf", "sugar.password2");
-		String adminName = Utils.getCascadingPropertyValue(props, "Administrator", "sugar.name");
+		String adminUsername = config.getProperty("sugar.username", "admin");
+		String adminPassword1 = config.getProperty("sugar.password1", "asdf");
+		String adminPassword2 = config.getProperty("sugar.password2", "asdf");
+		String adminName = config.getProperty("sugar.name", "Administrator");
 		admin = new UserRecord(adminUsername, adminPassword1, adminPassword2, adminName);
 	}
 
@@ -55,7 +53,7 @@ public class Sugar {
 	}
 	
 	public void login(String username, String password) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = config.getProperty("env.base_url", "http://localhost/ent670/");
 		i.go(sugarURL);
 		i.getControl(Strategy.ID, "user_name").sendString(username);
 		i.getControl(Strategy.ID, "user_password").sendString(password);
@@ -63,7 +61,7 @@ public class Sugar {
 	}
 	
 	public void logout() throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = config.getProperty("env.base_url", "http://localhost/ent670/");
 		i.go(sugarURL + "/index.php?module=Users&action=Logout");
 	}
 }

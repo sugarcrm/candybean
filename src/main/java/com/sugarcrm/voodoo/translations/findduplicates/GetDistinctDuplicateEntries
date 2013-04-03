@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat ~/AffectedSodaTests.txt | grep "<link text=" | grep -v "<!--" | sort -u > ~/DistinctDuplicateEntries.txt

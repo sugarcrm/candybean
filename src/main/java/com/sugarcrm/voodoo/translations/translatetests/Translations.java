@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.translate_tests;
+package com.sugarcrm.voodoo.translations.translatetests;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
