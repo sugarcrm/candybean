@@ -6,9 +6,9 @@ import java.util.Properties;
 import com.sugarcrm.voodoo.datasource.DataAdapter;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
-import com.sugarcrm.voodoo.datasource.DataSource;
+//import com.sugarcrm.voodoo.datasource.DataSource_bak;
 import com.sugarcrm.voodoo.datasource.FieldSet;
-import com.sugarcrm.voodoo.datasource.FieldSetList;
+import com.sugarcrm.voodoo.datasource.DataSource;
 import com.sugarcrm.voodoo.configuration.TransientProperties;
 
 public class DS {
@@ -84,11 +84,11 @@ public class DS {
 	}
 
 	private static void printDataSourceSingle(DataSource ds) {
-		FieldSetList fieldSetList = ds.getData();
 		System.out
 				.println("main(): printDataSourceSingle(): dataSource filenameNoExt = "
 						+ ds.getFilename());
-		printDataSourceFieldSet(fieldSetList);
+		//printDataSourceFieldSet(fieldSetList);
+		printDataSourceFieldSet(ds);
 	}
 	
 	private static void printDataSource(
@@ -97,17 +97,16 @@ public class DS {
 			System.out
 					.println("main(): printDataSourceData(): dataSource filenameNoExt = "
 							+ filenameNoExt);
-			FieldSetList fieldSetList = dataSourceHashMap.get(filenameNoExt)
-					.getData();
-			printDataSourceFieldSet(fieldSetList);
+			DataSource ds = dataSourceHashMap.get(filenameNoExt);
+			printDataSourceFieldSet(ds);
 		}
 	}
 
-	private static void printDataSourceFieldSet(FieldSetList fieldSetList) {
+	private static void printDataSourceFieldSet(DataSource ds) {
 		System.out
 				.println("main(): printDataSourceFieldSet(): fsList.size() = "
-						+ fieldSetList.size());
-		for (FieldSet fs : fieldSetList) {
+						+ ds.size());
+		for (FieldSet fs : ds) {
 			for (String key : fs.keySet()) {
 				System.out.println(key + " : " + fs.get(key));
 			}

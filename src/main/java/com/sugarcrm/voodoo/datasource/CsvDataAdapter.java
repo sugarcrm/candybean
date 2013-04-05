@@ -75,29 +75,14 @@ public class CsvDataAdapter extends DataAdapter {
 		String currDir = System.getProperty("user.dir");
 
 		String csvBaseDir = Utils.getCascadingPropertyValue(props,
-				//"/home/testData", "datasource.csv.basedir");
 				"/home/testData", property);
-		//System.out
-		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
-		//				+ csvBaseDir);
-
-		// String fileFullPath = grimoireDir + File.separator + csvDirPath;
 		String fileFullPath = currDir + File.separator + csvBaseDir;
-		//System.out
-		//		.println("CsvDataAdapter.csv: getDataBaseDirFromProp(): fileFullPath = "
-		//				+ fileFullPath);
 
 		return fileFullPath; // it seems returning just filePath still works
 	}
 
 	private static File getDataFullPathCanonical(String dataPath) {
-		//System.out.println("CsvDataAdapter.java: getCsvFileList(): testData = "
-		//		+ dataPath);
 		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.properties, DataAdapter.dataBasePath);
-		//System.out
-		//		.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
-		//				+ dataBaseDir);
-
 		String dataFullPath = dataBaseDir + File.separator + dataPath;
 
 		File dataFile = new File(dataFullPath);
@@ -113,17 +98,6 @@ public class CsvDataAdapter extends DataAdapter {
 		return dataFileCanonical;
 	}
 
-	private static void printDataFilePath(File dataFileCanonical) {
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
-						+ dataFileCanonical.getPath());
-		String dataFilename = dataFileCanonical.getName();
-		String dataParent = dataFileCanonical.getParent();
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
-						+ dataFilename + "  dataParent = " + dataParent);
-	}
-
 	/**
 	 * convertIt converts the input list of File objects into a list of
 	 * DataSource
@@ -137,17 +111,27 @@ public class CsvDataAdapter extends DataAdapter {
 		HashMap<String, DataSource> dataSourceHashMap = new HashMap<String, DataSource>();
 
 		for (File f : csvFileList) {
-			// System.out.println(f.toString());
 			String absPath = f.getAbsolutePath();
-			// System.out.println(absPath);
-			CSV csv = new CSV(absPath); // CSV parses CSV file. It inherits from
-										// DataSource
+			
+			// CSV parses CSV file. It inherits from DataSource
+			CSV csv = new CSV(absPath); 
 
 			String filenameNoExt = f.getName().replace(".csv", "");
 			dataSourceHashMap.put(filenameNoExt, csv);
 		}
 
 		return dataSourceHashMap;
+	}
+
+	private static void printDataFilePath(File dataFileCanonical) {
+		System.out
+				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
+						+ dataFileCanonical.getPath());
+		String dataFilename = dataFileCanonical.getName();
+		String dataParent = dataFileCanonical.getParent();
+		System.out
+				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
+						+ dataFilename + "  dataParent = " + dataParent);
 	}
 
 	private static void printCsvFileList(List<File> csvFileList) {
@@ -164,13 +148,13 @@ public class CsvDataAdapter extends DataAdapter {
 
 	private static void printCsvList(List<CSV> csvList) {
 		for (CSV csv : csvList) {
-			FieldSetList csvData = csv.getData();
-			System.out.println(csvData.toString());
-			printCSVData(csvData);
+			System.out.println(csv.toString());
+			//printCSVData(csvData);
+			printCSVData(csv);
 		}
 	}
 
-	private static void printCSVData(FieldSetList csvData) {
+	private static void printCSVData(DataSource csvData) {
 		System.out.println("printCSVData(): fsList.size() = " + csvData.size());
 		for (FieldSet fs : csvData) {
 			System.out.println(fs.toString());
