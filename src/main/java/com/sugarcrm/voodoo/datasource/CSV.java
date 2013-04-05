@@ -7,16 +7,14 @@ import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVParser;
 
 /**
- * CSV class parses an input csv file. It inherits from DataSource which acts as
- * a public interface.
+ * CSV class parses an input csv file. 
  * 
  * @author Trampus
  * @author Jon duSaint
  */
 
 public class CSV extends DataSource {
-	// private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;
 	private ArrayList<String> keys = null;
 	private CSVParser parser = null;
 
@@ -31,7 +29,7 @@ public class CSV extends DataSource {
 
 		try {
 			this.keys = new ArrayList<String>();
-			data = new FieldSetList();
+			data = new DataSource();
 
 			fs = new FileInputStream(csvfile);
 			br = new BufferedReader(new InputStreamReader(fs));
@@ -99,8 +97,6 @@ public class CSV extends DataSource {
 				}
 			}
 
-			// lines = line.split(",");
-			// lines = this.processLine(line);
 			lines = this.parser.parseLine(line);
 			for (int i = 0; i <= lines.length - 1; i++) {
 				this.keys.add(lines[i]);

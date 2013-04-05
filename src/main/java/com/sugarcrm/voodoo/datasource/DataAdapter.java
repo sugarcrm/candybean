@@ -31,7 +31,6 @@ public abstract class DataAdapter {
 	public abstract HashMap<String, DataSource> getData(String testData, DataAdapter.Selection select);
 
 	protected static File[] getAllFilesBasedOnPattern(String fileFullDirPath,
-	//protected File[] getAllFilesBasedOnPattern(String fileFullDirPath,
 			String testData, String ext) {
 		File dir = new File(fileFullDirPath);
 		//File[] files = dir.listFiles();
