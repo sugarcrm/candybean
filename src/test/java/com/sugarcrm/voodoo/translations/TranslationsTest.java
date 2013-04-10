@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import junit.framework.Assert;
-import com.sugarcrm.voodoo.translations.Translations;
+import com.sugarcrm.voodoo.translations.translatetests.*;
 import org.junit.Test;
 
 public class TranslationsTest {
@@ -130,7 +130,8 @@ public class TranslationsTest {
 		// Perform translations on the the above File
 		System.out.println("[Translation Test]: Translation will now begin!");
 		//Translations.Translate(propNamePath);
-		Translations.Translate("/home/suga/Workspace/Voodoo2/src/test/resources/translate.properties");
+		String transPropsPath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "translations.properties";
+		Translations.Translate(transPropsPath);
 		System.out.println("[Translation Test]: Translation Finished!");
 
 		/*

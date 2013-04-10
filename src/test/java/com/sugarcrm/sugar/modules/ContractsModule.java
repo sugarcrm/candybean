@@ -3,7 +3,6 @@ package com.sugarcrm.sugar.modules;
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.sugar.modules.AccountsModule.AccountRecord;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.utilities.Utils;
 
 /**
  * @author Conrad Warmbold
@@ -16,21 +15,21 @@ public class ContractsModule {
 	public ContractsModule(Sugar sugar) { this.sugar = sugar; }
 	
 	public void createContract(ContractRecord contract) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Contracts&action=EditView");
 		sugar.i.getControl(Strategy.ID, "name").sendString(contract.name);
 		sugar.i.getSelect(Strategy.ID, "status").select(contract.status);
 		sugar.i.getControl(Strategy.ID, "btn_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, contract.account.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();
 	}
 	
 	public void deleteAllContracts() throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Contracts&action=ListView");
 		sugar.i.getControl(Strategy.ID, "massall_top").click();
 		sugar.i.getControl(Strategy.ID, "delete_listview_top").click();
@@ -49,7 +48,7 @@ public class ContractsModule {
 	}
 	
 	public void searchContracts(String search) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Contracts&action=ListView");
 		sugar.i.getControl(Strategy.ID, "name_basic").sendString(search);
 		sugar.i.getControl(Strategy.ID, "search_form_submit").click();

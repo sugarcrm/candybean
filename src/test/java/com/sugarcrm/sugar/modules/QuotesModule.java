@@ -22,9 +22,9 @@ public class QuotesModule {
 		sugar.i.getControl(Strategy.ID, "name").sendString(quote.subject);
 		sugar.i.getControl(Strategy.ID, "date_quote_expected_closed").sendString(quote.closeDate);
 		sugar.i.getControl(Strategy.ID, "btn_billing_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, quote.billingAccount.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();
@@ -46,9 +46,9 @@ public class QuotesModule {
 		sugar.i.getControl(Strategy.ID, "name").sendString(newQuote.subject);
 		sugar.i.getControl(Strategy.ID, "date_quote_expected_closed").sendString(newQuote.closeDate);
 		sugar.i.getControl(Strategy.ID, "btn_billing_account_name").click();
-		sugar.i.focusByIndex(1);
+		sugar.i.focusWindow(1);
 		sugar.i.getControl(Strategy.PLINK, newQuote.billingAccount.name).click();
-		sugar.i.focusByIndex(0);
+		sugar.i.focusWindow(0);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
 //		sugar.i.getControl(Strategy.ID, "edit_button").halt(4);
 //		sugar.i.getControl(Strategy.ID, "moduleTab_AllHome").click();
