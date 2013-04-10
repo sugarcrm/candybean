@@ -1,38 +1,37 @@
 package com.sugarcrm.voodoo.datasource;
 
+import java.io.File;
 import java.util.HashMap;
-import java.util.Properties;
 
 import com.sugarcrm.voodoo.datasource.DataAdapter;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
-//import com.sugarcrm.voodoo.datasource.DataSource_bak;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 import com.sugarcrm.voodoo.datasource.DataSource;
-import com.sugarcrm.voodoo.configuration.TransientProperties;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 public class DS {
 	public enum DataType { CSV, XML };
 	String testName;
 	DataAdapterFactory adapterFactory;
 	DataAdapter dataAdapter;
-	String propName;
+	String propKey;
 	String propValue;
-	TransientProperties config = null;
+	Configuration config;
 	
 	public DS(String testName) {
 		this.testName = testName;
 	}
 	
-	public void init(DataType dataType, String propName, String propValue) {
-		this.propName = propName; 
+	public void init(DataType dataType, String propKey, String propValue) {
+		this.propKey = propKey; 
 		this.propValue = propValue; 
-		config = new TransientProperties(testName);
-		config.setProperties(this.propName, this.propValue);
-		Properties myProps = config.getProperties();
+		config = new Configuration();
+		config.createFile(System.getProperty("user.home") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
+		config.setProperty(propKey, propValue);
 		
         DataAdapterType type = getDataType(dataType);
-		adapterFactory = new DataAdapterFactory(myProps);
+		adapterFactory = new DataAdapterFactory(config);
 		dataAdapter = adapterFactory.createDataAdapter(type);
 	}
 	
@@ -45,7 +44,7 @@ public class DS {
 	public DataSource getDataSource(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
 		HashMap<String, DataSource> dataSourceHashMap = dataAdapter
-				.setDataBasePath(propName).getData(dataSet,
+				.setDataBasePath(propKey).getData(dataSet,
 						DataAdapter.Selection.SINGLE);
 		DataSource ds = dataSourceHashMap.get(dataSet);
 		//printDataSourceSingle(ds);
@@ -65,14 +64,14 @@ public class DS {
 	public HashMap<String, DataSource> getDataSources(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
 		HashMap<String, DataSource> dataSourceHashMap = dataAdapter
-				.setDataBasePath(propName).getData(dataSet);
+				.setDataBasePath(propKey).getData(dataSet);
 		//printDataSource(dataSourceHashMap);
 		
 		return dataSourceHashMap;
 	}
 	
 	public void cleanup() {
-		config.cleanup();
+		config.deleteFile();
 	}
 	
 	private DataAdapterType getDataType(DataType dataType) {

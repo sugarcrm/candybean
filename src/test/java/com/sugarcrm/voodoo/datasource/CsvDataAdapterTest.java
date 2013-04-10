@@ -2,12 +2,9 @@ package com.sugarcrm.voodoo.datasource;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Properties;
-
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -17,7 +14,6 @@ import com.sugarcrm.voodoo.configuration.Configuration;
 import com.sugarcrm.voodoo.datasource.DataAdapter;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
-import com.sugarcrm.voodoo.datasource.DataSource_bak;
 import com.sugarcrm.voodoo.datasource.DataSource;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 
@@ -26,7 +22,7 @@ import com.sugarcrm.voodoo.datasource.FieldSet;
  *
  */
 public class CsvDataAdapterTest {
-	private static MyConfiguration myConfig;
+	private static MyConfiguration myConfiguration;
 	private static String testDataDir = "testData";
 
 	@Test
@@ -59,11 +55,11 @@ public class CsvDataAdapterTest {
 		// System.out.println("main(): content2 = " + content);
 		createFile(dataDir, filename, content);
 
-		myConfig = new MyConfiguration();
-		Properties myProps = myConfig.createConfigFile();
+		myConfiguration = new MyConfiguration();
+		Configuration myConfig = myConfiguration.createConfigFile();
 
 		// adapterFactory = new DataAdapterFactory(sugarProps);
-		adapterFactory = new DataAdapterFactory(myProps);
+		adapterFactory = new DataAdapterFactory(myConfig);
 		dataAdapter = adapterFactory.createDataAdapter(DataAdapterType.CSV);
 
 		//HashMap<String, DataSource_bak>
@@ -219,7 +215,7 @@ public class CsvDataAdapterTest {
 		
 		// Delete properties file created
 		System.out.println("");
-		myConfig.deleteConfigFile();
+		myConfiguration.deleteConfigFile();
 		
 		// Delete data directory
 		try {
@@ -233,20 +229,20 @@ public class CsvDataAdapterTest {
 	private static class MyConfiguration {
 		String configFilePath = System.getProperty("user.dir") + File.separator
 				+ "myPropFile.properties";
-		Configuration prop = null;
+		Configuration config = null;
 
 		@Test
-		public Properties createConfigFile() {
+		public Configuration createConfigFile() {
 			// Creating Configuration Object
-			prop = new Configuration();
+			config = new Configuration();
 
 			// Defining configuration properties keys/values
-			prop.setProperty("datasource.csv.baseDir", "testData");
-			prop.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
+			config.setProperty("datasource.csv.baseDir", "testData");
+			config.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
 
 			// Store Configuration
 			try {
-				prop.store(configFilePath, null);
+				config.store(configFilePath, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -257,12 +253,12 @@ public class CsvDataAdapterTest {
 					propFile.exists());
 
 			try {
-				prop.load(configFilePath);
+				config.load(configFilePath);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			return prop;
+			return config;
 		}
 
 		@Test

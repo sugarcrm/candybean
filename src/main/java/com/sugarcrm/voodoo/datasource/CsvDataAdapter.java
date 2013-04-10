@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
-
-import com.sugarcrm.voodoo.utilities.Utils;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 /**
  * CsvDataAdapter is used by client to convert csv files into a list of
@@ -17,8 +15,8 @@ import com.sugarcrm.voodoo.utilities.Utils;
  */
 public class CsvDataAdapter extends DataAdapter {
 
-	public CsvDataAdapter(Properties grimoireProps) {
-		super(grimoireProps);
+	public CsvDataAdapter(Configuration grimoireConfig) {
+		super(grimoireConfig);
 	}
 
 	/**
@@ -70,19 +68,34 @@ public class CsvDataAdapter extends DataAdapter {
 		return fileList;
 	}
 
-	private static String getDataBaseDirFromProp(Properties props, String property) {
+	private static String getDataBaseDirFromProp(Configuration config, String property) {
 
 		String currDir = System.getProperty("user.dir");
 
-		String csvBaseDir = Utils.getCascadingPropertyValue(props,
-				"/home/testData", property);
+		//String csvBaseDir = Utils.getCascadingPropertyValue(props,
+		//		"/home/testData", property);
+
+		String csvBaseDir = config.getProperty(property, "/home/testData");
+				//"datasource.csv.basedir", "/home/testData");
+		//System.out
+		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
+		//				+ csvBaseDir);
+
+		// String fileFullPath = grimoireDir + File.separator + csvDirPath;
 		String fileFullPath = currDir + File.separator + csvBaseDir;
 
 		return fileFullPath; // it seems returning just filePath still works
 	}
 
 	private static File getDataFullPathCanonical(String dataPath) {
-		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.properties, DataAdapter.dataBasePath);
+		//String dataBaseDir = getDataBaseDirFromProp(DataAdapter.properties, DataAdapter.dataBasePath);
+		//System.out.println("CsvDataAdapter.java: getCsvFileList(): testData = "
+		//		+ dataPath);
+		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.configuration, DataAdapter.dataBasePath);
+		//System.out
+		//		.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
+		//				+ dataBaseDir);
+
 		String dataFullPath = dataBaseDir + File.separator + dataPath;
 
 		File dataFile = new File(dataFullPath);

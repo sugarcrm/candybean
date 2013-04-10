@@ -1,12 +1,8 @@
 package com.sugarcrm.voodoo.results;
 
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Scanner;
-
 
 /**
  * @author Conrad Warmbold

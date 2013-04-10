@@ -2,7 +2,6 @@ package com.sugarcrm.sugar.modules;
 
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.utilities.Utils;
 
 /**
  * @author Conrad Warmbold
@@ -15,7 +14,7 @@ public class BugTrackerModule {
 	public BugTrackerModule(Sugar sugar) { this.sugar = sugar; }
 	
 	public void reportBug(BugRecord bug) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Bugs&action=EditView");
 		sugar.i.getControl(Strategy.ID, "name").sendString(bug.subject);
 		sugar.i.getControl(Strategy.ID, "SAVE_HEADER").click();
@@ -23,7 +22,7 @@ public class BugTrackerModule {
 	}
 	
 	public void deleteAllBugs() throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Bugs&action=ListView");
 		sugar.i.getControl(Strategy.ID, "massall_top").click();
 		sugar.i.getControl(Strategy.ID, "delete_listview_top").click();
@@ -42,7 +41,7 @@ public class BugTrackerModule {
 	}
 	
 	public void searchBugTracker(String search) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Bugs&action=ListView");
 		sugar.i.getControl(Strategy.ID, "name_basic").sendString(search);
 		sugar.i.getControl(Strategy.ID, "search_form_submit").click();
