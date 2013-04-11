@@ -15,8 +15,8 @@ import com.sugarcrm.voodoo.configuration.Configuration;
  */
 public class CsvDataAdapter extends DataAdapter {
 
-	public CsvDataAdapter(Configuration grimoireConfig) {
-		super(grimoireConfig);
+	public CsvDataAdapter(Configuration config) {
+		super(config);
 	}
 
 	/**
@@ -72,25 +72,17 @@ public class CsvDataAdapter extends DataAdapter {
 
 		String currDir = System.getProperty("user.dir");
 
-		//String csvBaseDir = Utils.getCascadingPropertyValue(props,
-		//		"/home/testData", property);
-
 		String csvBaseDir = config.getProperty(property, "/home/testData");
-				//"datasource.csv.basedir", "/home/testData");
 		//System.out
 		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
 		//				+ csvBaseDir);
 
-		// String fileFullPath = grimoireDir + File.separator + csvDirPath;
 		String fileFullPath = currDir + File.separator + csvBaseDir;
 
 		return fileFullPath; // it seems returning just filePath still works
 	}
 
 	private static File getDataFullPathCanonical(String dataPath) {
-		//String dataBaseDir = getDataBaseDirFromProp(DataAdapter.properties, DataAdapter.dataBasePath);
-		//System.out.println("CsvDataAdapter.java: getCsvFileList(): testData = "
-		//		+ dataPath);
 		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.configuration, DataAdapter.dataBasePath);
 		//System.out
 		//		.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
@@ -128,9 +120,10 @@ public class CsvDataAdapter extends DataAdapter {
 			
 			// CSV parses CSV file. It inherits from DataSource
 			CSV csv = new CSV(absPath); 
-
+			DataSource ds = csv.getDataSource();
+			
 			String filenameNoExt = f.getName().replace(".csv", "");
-			dataSourceHashMap.put(filenameNoExt, csv);
+			dataSourceHashMap.put(filenameNoExt, ds);
 		}
 
 		return dataSourceHashMap;

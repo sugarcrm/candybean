@@ -27,8 +27,8 @@ public class DS {
 		this.propKey = propKey; 
 		this.propValue = propValue; 
 		config = new Configuration();
-		config.createFile(System.getProperty("user.home") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		config.setProperty(propKey, propValue);
+		config.createFile(System.getProperty("user.dir") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		
         DataAdapterType type = getDataType(dataType);
 		adapterFactory = new DataAdapterFactory(config);
