@@ -1,0 +1,2507 @@
+commit 74e6b1c3be99f26be7567c0eca9d98a09c19d176
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 18:18:16 2013 -0700
+
+    Revert "Revert "Revert "Revert "Incomplete commit, only for syncing Jenkins.""""
+    
+    This reverts commit ddf63d6ca7e114fcb2ddf3d90b45e44473beaf3f.
+
+commit ddf63d6ca7e114fcb2ddf3d90b45e44473beaf3f
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 18:17:59 2013 -0700
+
+    Revert "Revert "Revert "Incomplete commit, only for syncing Jenkins."""
+    
+    This reverts commit e818765d59600dcf84db275c0aded39304559313.
+
+commit e818765d59600dcf84db275c0aded39304559313
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 18:17:51 2013 -0700
+
+    Revert "Revert "Incomplete commit, only for syncing Jenkins.""
+    
+    This reverts commit e07508316d28f3e20461eaaf22b6b0825004cecf.
+
+commit e07508316d28f3e20461eaaf22b6b0825004cecf
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 18:17:36 2013 -0700
+
+    Revert "Incomplete commit, only for syncing Jenkins."
+    
+    This reverts commit bc6cedc03683295d9fb3952c21171d43a9c2c966.
+    
+    Conflicts:
+    
+    	src/main/java/com/sugarcrm/voodoo/translations/updatedatabase/updateDB.php
+
+commit d57d89c5047d4cad84638c63e0da2ddac8b72042
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 16:52:05 2013 -0700
+
+    Incomplete commit, only for syncing Jenkins.
+
+commit bc6cedc03683295d9fb3952c21171d43a9c2c966
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 16:49:21 2013 -0700
+
+    Incomplete commit, only for syncing Jenkins.
+
+commit a1c4d770dc6bb05dfbaaa9cd58b14ecdc9a070ca
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 16:46:39 2013 -0700
+
+    Incomplete commit, only for syncing Jenkins.
+
+commit 3a63d4c4044aa04d26fa39015812db3c6d31bc58
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Apr 5 15:54:47 2013 -0700
+
+    Incomplete commit, only for syncing to Jenkins.
+
+commit 41b8c9d10586e22b91d22ab3d33ebebcc2724e67
+Merge: cd7a985 3c9a72a
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Mar 22 10:23:36 2013 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit 3c9a72a150941398aaf9be7bc3c25e5c9c82997c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Mar 22 18:49:08 2013 -0700
+
+    VOOD-306: page asserts
+
+commit 9dde0116537afcaae3dc3f63ba0a6ed2d2107124
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Mar 22 18:46:04 2013 -0700
+
+    VOOD-306: page asserts
+
+commit aad6340e9d407b0215dd910da8c9242fa2865001
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Mar 22 13:44:44 2013 -0700
+
+    fixed more system tests
+
+commit d21fbbf90e9955764b7be7ab39bb42c0c003a948
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Mar 21 18:46:24 2013 -0700
+
+    fixing system test failures
+
+commit 6239cf5e1d2220e60b3ea2067420f1e249bf0a2f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Mar 21 18:07:01 2013 -0700
+
+    VOOD-304: interaction with iframe elements
+
+commit cd7a9852ed88073a2cf1fdd8c7261de5c48f1366
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Mar 21 13:03:16 2013 -0700
+
+    Removed old files. Fixed syntax errors. (last commit did not add all changed files)
+
+commit a7aa793cfba184497b0cec2bb9eff7a3a1897e3a
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Mar 21 13:00:51 2013 -0700
+
+    Removed old files. Fixed syntax errors.
+
+commit 2ae29bd64c7aea26ae61d21c69bec88796cf04f5
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Mar 21 12:35:14 2013 -0700
+
+    Fixed TranslateSingleString.java
+
+commit 3cc60b2bdb2830f1530f32dd297c29b587cd7ea0
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Tue Mar 19 11:54:13 2013 -0700
+
+    No real change.
+
+commit 728821a7f89979800323a66170e7f025ee1a69c2
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Tue Mar 19 11:53:48 2013 -0700
+
+    No real change.
+
+commit a5d69c1dae13a520e3ca400bfe44ec64b89686cd
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 19 11:49:22 2013 -0700
+
+    Added OpenTestFiles.java
+
+commit f81a0cdc67c9f5170b9ae81397f41fd824328484
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 19 11:11:17 2013 -0700
+
+    Added openWebPage(URI or URL) to Utils.java
+
+commit aaa179e39c73790cddd8dec8590cb28d3b128763
+Merge: 9f28d7b b6c354a
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 19 11:00:45 2013 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit 9f28d7bbded2e25c453bd115033698cd02d841ff
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Mar 18 18:37:57 2013 -0700
+
+    Fixed bugs in FindLocationsOfAPattern.java
+
+commit 3b66aa5e5b2b805419e281e8deb31d417b5badb0
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Mar 18 17:42:34 2013 -0700
+
+    Added FindLocationsOfAPattern
+
+commit 2eb237fc9436b73e9af84e9ad94fa4804e63ab82
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Mar 18 14:23:40 2013 -0700
+
+    Added new scripts for fixing affected Soda tests (function not fully implemented).
+
+commit b6c354a57e2536fee9e556c17d216ebe812153ba
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 19:13:38 2013 -0700
+
+    added dynamic path to translationstest
+
+commit 246594079df1793d8245b542609543181260d952
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 18:30:42 2013 -0700
+
+    case changes; NITs
+
+commit 34bb6dd28d3d75cdfbd823a4b11af99861bff555
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 18:23:09 2013 -0700
+
+    updating other props references
+
+commit 4003646e8c4f6b1fde7d464c6584c1ad8e813f28
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 18:08:06 2013 -0700
+
+    updating other props references
+
+commit 2a5d6ebeaf6af0ff3d19c9594ccd2b98ef4aeacd
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 18:01:01 2013 -0700
+
+    adding separate props files with system var: voodoo_prop_filename
+
+commit db0d4c8e6fbea1662d39662038751c0b48297a04
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 17:35:13 2013 -0700
+
+    split properties files; added system property logic for now
+
+commit d65f8a53b45ef07e3ce372ad6c6f6cf56c037f99
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 17:20:29 2013 -0700
+
+    removing properties for local/CI consideration
+
+commit 56d773fc05f976f5b675961b51461a314b635ac4
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 17:12:09 2013 -0700
+
+    ignoring props (local from CI)
+
+commit bcd878370aa76e1bdd51e01dd72351c2f45b211e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 17:08:06 2013 -0700
+
+    updating chrome binary for CI AMI platform
+
+commit 24b79db27392d4aacb56642c5b7febeb95d39fae
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 16:37:14 2013 -0700
+
+    fixed test translations path
+
+commit 816b224fb7445e52b1575ad9e4afada4e3ec8ba2
+Merge: 60ae517 744e39f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 13 16:20:26 2013 -0700
+
+    Merge pull request #74 from Raydians/master
+    
+    Jason's massive bulk of stuff for translations
+
+commit 40958313a16c72519cede48b598da8f1de3153e9
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Mar 13 00:23:26 2013 -0700
+
+    Removed old files.
+
+commit e7e546c2847374abeb94d0602c8029df19f56c58
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Wed Mar 13 00:17:32 2013 -0700
+
+    Fixed package naming and added public variable to findAffectedSodaTests.
+
+commit 9cd9913e36e038561e6a663fb5da9821ad5a05aa
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 12 11:05:02 2013 -0700
+
+    Fixed file names.
+
+commit f038239a725c442891d0f2b858cb09b764470650
+Merge: 961364d ce40645
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 12 11:03:12 2013 -0700
+
+    Merge branch 'master' of github.com:Raydians/Voodoo2
+
+commit ce40645079e8ce09159f6004b394ca641360cd90
+Merge: ca62c94 744e39f
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Tue Mar 12 11:02:40 2013 -0700
+
+    Merge branch 'master' of github.com:Raydians/Voodoo2
+
+commit ca62c94a889cc397b34fd7b57ab0d2fa115f0eb4
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Tue Mar 12 11:02:04 2013 -0700
+
+    Added documentation to findduplicates.
+
+commit 961364d923ef5d86689fe0024292ec3a3fd66833
+Merge: 3ac4d27 24b79db
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 12 09:09:20 2013 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit 3ac4d274ea5322359c324545518047905bd29bbe
+Merge: 744e39f 60ae517
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 12 04:31:03 2013 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit 744e39fca2f558f72356a1d6304f53d3881e7c4b
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Tue Mar 12 04:29:29 2013 -0700
+
+    Added mysql functionality to Utils.java
+
+commit 99d06e3864da0e1d0e631b6e8e70576befd21eb1
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Mar 11 17:48:37 2013 -0700
+
+    Debugging.
+
+commit 63a5e77259d704047b7250875310e53071220b91
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Mar 11 17:46:47 2013 -0700
+
+    Debugging.
+
+commit ed2bef1231e06cebcb7e4882590ea496d2e48d44
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Mar 11 17:45:14 2013 -0700
+
+    Debugging.
+
+commit 6385d1c045198df26bb10afb8eb7d3a661a53946
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Mar 11 17:42:47 2013 -0700
+
+    Debugging.
+
+commit 29381ab7c462dcb422496ffec1db744781f90b69
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Mar 11 17:35:56 2013 -0700
+
+    Debugging.
+
+commit 60ae51790e114e34a78933b4bfbaaf319116f2fa
+Merge: b6b32b5 6f660ab
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Mar 11 14:29:16 2013 -0700
+
+    Merge pull request #73 from hans-sugarcrm/master
+    
+    DataSource update
+
+commit b6b32b5d9493b3eca6be9fbc9cdc1db551ecbabc
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Mar 8 16:39:53 2013 -0800
+
+    adding placeholder log
+
+commit 943b7ae7d8f0a864f57d3e4b3f74d4a9fc28717f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Mar 8 16:36:58 2013 -0800
+
+    adding log file
+
+commit 3f4d0fde3c2cb0b139c709c700c638a69eb265c1
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 11:39:41 2013 -0800
+
+    Debugging.
+
+commit e23054a689859b2dfdd28d385e44b1b1e74a3fbe
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Mar 8 07:40:24 2013 -0800
+
+    Added AffectedSodaTests.java
+
+commit d138fcafc45a4e2bba6aa2cf27206f59705a299a
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 07:39:21 2013 -0800
+
+    Fixed documentation in BypassModuleBuilder.
+
+commit 3044c9645476dd9a4660f6cbc120326bf6690c35
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 04:47:52 2013 -0800
+
+    Minor change.
+
+commit 8155cf902a2e01f0cc27c052d4d9121e95d9faae
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 04:46:45 2013 -0800
+
+    Minor change.
+
+commit 464aa2132780e085b8636888465b533e5f0db8e5
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Mar 8 04:42:52 2013 -0800
+
+    Minor change.
+
+commit 413fc670c2c63fd113efbfcbcb860bf24636e9a7
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Mar 8 04:16:47 2013 -0800
+
+    Removed old files.
+
+commit 3d3326dc74430c97da6b1c300aa458553fc18d07
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 04:13:36 2013 -0800
+
+    Incomplete work.
+
+commit 270ea79745c7cce2147e11594c5865cf8c73dbbc
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 03:46:19 2013 -0800
+
+    Removed obsolete files.
+
+commit 0670f2d627fb7ddb00febc723a6e9059d54b0129
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Fri Mar 8 03:44:34 2013 -0800
+
+    Using mysql methods from Utils.java, updated Utils.java with mysql methods.
+
+commit a95408b66460048dbc1fd487a479797bb86fa5ff
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Fri Mar 8 00:16:20 2013 -0800
+
+    Debugging.
+
+commit 254a63359a5f8f07ea5c5ede23a651023782c6bf
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Mar 7 23:31:28 2013 -0800
+
+    Removed finalizers in Translations.java
+
+commit 5889a63fad3f977d4604aafccb979a0ef3699a71
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Mar 7 23:25:06 2013 -0800
+
+    Reorganized file locations.
+
+commit 64953795720694b14d103e307d6e244b80455ac9
+Merge: 98933c0 af35f22
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Mar 7 03:14:01 2013 -0800
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit 98933c0c9e061f7b6cdc8e06a4f954d97517c39f
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Mar 6 21:59:45 2013 -0800
+
+    Stable state, all functions working properly.
+
+commit af35f22f9d0e5d2b21d73859a66e2d33da6d44f7
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Mar 6 18:56:36 2013 -0800
+
+    VOOD-272: Add dialog functionality
+
+commit a6e8a476ab5d81032e8112f964f86525a85e0aa7
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Mar 6 18:03:40 2013 -0800
+
+    Working version of Translations.java
+
+commit 603c87500bb132346a5067e91d8cd446ad314d25
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Wed Mar 6 12:27:17 2013 -0800
+
+    Fixing Translations.java
+
+commit da094c05982725dd3aaffbb4c3780c6cf5e07a7f
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Mar 4 23:10:57 2013 -0800
+
+    Fixing Translations.java
+
+commit 6f660ab723757e49e73573cea5b4e9b01303ebc2
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Mar 4 21:35:33 2013 -0800
+
+    src/main/java/com/sugarcrm/voodoo/datasource/DS.java
+      - Wrapper for DataSource to hide DataAdaptorFactory, DataAdaptor calls.
+      - Also call TransientProperties to ease the creation of properties that specify the path of the csv data files.
+    src/main/java/com/sugarcrm/voodoo/configuration/TransientProperties.java
+      - A class that creates a properties file at runtime.
+    src/main/java/com/sugarcrm/voodoo/datasource/CsvDataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataSource.java
+    src/main/java/com/sugarcrm/voodoo/datasource/FieldSet.java
+      - Minor refinements and removing print statements.
+
+commit 0181c2d4747fbe611e99ecf84a57e32317cfd8a5
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Sun Mar 3 17:17:35 2013 -0800
+
+    fixed control system test
+
+commit c832e6f047c9abb82e7675704ac2a896c71d33df
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Sun Mar 3 00:15:43 2013 -0800
+
+    Added FindDuplicateEntries to translate_tests.
+
+commit 8b9384a11782cf178e484d3d95edc69053c34365
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Sat Mar 2 11:14:21 2013 -0800
+
+    Updated Translations.java, fixed bugs.
+
+commit d660fec75ca2d6663da90b5f0ecb6fe350e0e28a
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Mar 1 14:11:14 2013 -0800
+
+    typo in android package; control overhaul for VOOD-253
+
+commit ab7c80cfc4a680f893485e9a0861f80815406015
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Feb 28 02:43:12 2013 -0800
+
+    Added database parameters to UpdateDatabaseSuite.
+
+commit ab625f23d0635a88aab2e912730cf1d9f691acb8
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Feb 28 00:37:10 2013 -0800
+
+    Debugging Translations.java
+
+commit 4961a9de27d50f28965e7dffd18a02ecf20f4980
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Feb 28 00:30:19 2013 -0800
+
+    No real change.
+
+commit 65dd8762b1f4dab149bd2ceb832b17d7d1717184
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 23:58:57 2013 -0800
+
+    No real change.
+
+commit f84acb040b31ad443388f432fbf237e188d3a65d
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 23:18:06 2013 -0800
+
+    No real change.
+
+commit 995a9dfbf5b3cac1378ec9740671c2382b815651
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 23:06:26 2013 -0800
+
+    Added TranslateTestSuite.
+
+commit 8765e460d8c6b9daebcb36a3c0da07cda60b3df7
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 22:59:05 2013 -0800
+
+    Minor syntax change.
+
+commit 6ad2a02996b286d0977a5cf0bfebc16ebc0049bf
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 22:09:45 2013 -0800
+
+    Changed file names in scripts.
+
+commit 177a4ce852b9a4c1caf55f4f01b1db3e43672b31
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 21:24:35 2013 -0800
+
+    Removed old files.
+
+commit af036cac41501a1445d44cc09e40ae9df183b5a0
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Wed Feb 27 21:22:08 2013 -0800
+
+    Updated names and folders in translations. Moved Translations tool from AutoUtils/Translations to here.
+
+commit 52354a66659278541919b3025119df542d4ef70f
+Merge: 4962f69 4ccf7c5
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Feb 26 15:16:43 2013 -0800
+
+    Merge pull request #72 from cradbold/master
+    
+    Search strategies; removed IInterface
+
+commit 4ccf7c599c8879afdf7618936c71be466eb68fec
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Feb 25 18:48:35 2013 -0800
+
+    removed unnecessary IInterface to save maintenance
+
+commit 241b46084a4d8961959bf9ed16ee90b922ae1e15
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Feb 25 18:04:34 2013 -0800
+
+    Added search strategies and system test stubs for VControl
+
+commit 6df3b7091a06ba4521ad32d651adfb340a309805
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Feb 25 15:49:07 2013 -0800
+
+    Create login_translate.xml fully working
+
+commit 26f153216cc91dba907fc50476fb34fcfaf20a8a
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Feb 25 15:34:51 2013 -0800
+
+    Minor change
+
+commit 295fc64c90168af1f3c58113e32de2d0ae1fd48d
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Feb 25 15:27:06 2013 -0800
+
+    Minor change
+
+commit a4897b8887d1fc22a0ffab93526531058cc62e0e
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Mon Feb 25 15:24:55 2013 -0800
+
+    Updated Translations.java: using language parameter in writing login_translate.xml
+
+commit 0a59be5571a50b8198f26fc377f87d41d8f560ca
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Feb 25 15:11:35 2013 -0800
+
+    Fixed indentation in Translations.java
+
+commit 8611cf7e3e5b4134984916cb3c6109724bf9c821
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Feb 25 15:03:17 2013 -0800
+
+    Updated Translations.java: added feature to create login_translate.xml in SodaIceBox/soda/tests
+
+commit bb5f21e529cefec9b11f024881ae7a20b1f44a21
+Merge: cc242e4 1d04ef8
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Feb 25 14:42:49 2013 -0800
+
+    Merge branch 'master' of github.com:Raydians/Voodoo2
+    
+    Conflicts:
+    	src/main/java/com/sugarcrm/voodoo/translations/Translations.java
+
+commit 1d04ef8b1878c6b8c56327e8c712c0ff469e4b4e
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Feb 21 23:12:28 2013 -0800
+
+    Updated Translations.java: fixed bug in last push
+
+commit 3b0dee56d27ddd885fdae3646b048c32042c1e09
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Feb 21 22:57:57 2013 -0800
+
+    Updated Translations.java: preserve original file names
+
+commit 0de89ba6d62cd9906631c38b6abadfb036816919
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Feb 21 20:14:55 2013 -0800
+
+    Updated Translations.java
+
+commit cc242e4903bb1788e0f33beb8bf584badc2fa07f
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Feb 21 11:30:33 2013 -0800
+
+    No real change.
+
+commit 4962f69e03a8818a8b80acb401019d67ad20541c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Feb 20 14:44:40 2013 -0800
+
+    fixed merge; fixed android delivery temp until VOOD-284
+
+commit 768fafdb4b29066673890acff7b634e0642d2d10
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Feb 20 14:42:09 2013 -0800
+
+    fixed merge; fixed android delivery temp until VOOD-284
+
+commit 1cd469ef141c09a6739ed26f387d212bbc277f8b
+Merge: 9d0a153 a122287
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Feb 20 14:38:48 2013 -0800
+
+    merged conflicts
+
+commit 9d0a153f99a02f856e6ebede62f65ac7191ac98c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Feb 20 14:35:06 2013 -0800
+
+    moved sugar test libs from grimoire
+
+commit a122287536560dd675f1ed1dd4e7b1e48bab3afd
+Merge: af484a8 37f5ca5
+Author: Mazen Louis <mlouis@sugarcrm.com>
+Date:   Wed Feb 20 14:17:28 2013 -0800
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit af484a8d3eb1a72f7047c280d3dbb561ab388c55
+Author: Mazen Louis <mlouis@sugarcrm.com>
+Date:   Wed Feb 20 14:16:49 2013 -0800
+
+    Changed selenium call to find element use the call that returns multiple elements so that the cached list of elements in selenium is updated and therefore no longer stale. findElement -> findElements
+
+commit 37f5ca5f630896003ff027478f658817b4a4fb1f
+Merge: 59213ca 8538e2f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Feb 20 14:12:05 2013 -0800
+
+    Merge pull request #71 from hans-sugarcrm/master
+    
+    Update webservice supporting Sugar REST
+
+commit 59213caeb79a445f6d6b1fbec6db69d0522a0872
+Merge: 4464d6e 3f1e8ba
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Feb 20 14:10:52 2013 -0800
+
+    Merge pull request #70 from Raydians/master
+    
+    Updated Wilson's script to work with Jenkins
+
+commit 3f1e8ba0548c7a0abcd3cb4ebe7a57a1f5dec60e
+Merge: 984b30e 53e06e0
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Feb 14 00:17:04 2013 -0800
+
+    Merged remote branches
+
+commit 984b30e52102db4b5232d628deff463c26d3f925
+Merge: 096cb6f 4464d6e
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Wed Feb 13 19:29:21 2013 -0800
+
+    Using ours
+
+commit 7574925c23213f90183dd73247be655683bb26ab
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Feb 4 19:09:43 2013 -0800
+
+    removed hack tests; minor improvements
+
+commit 8538e2fb3d1bb4ab88a831c3963f04d5fac8416d
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Fri Feb 1 22:33:46 2013 -0800
+
+    src/main/java/com/sugarcrm/voodoo/webservices/WS.java
+      - added postRequest() using MultipartEntity. This works for Sugar REST.
+
+commit 096cb6fb23cd644407a8375a5a4f1e5b95687797
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Jan 31 15:49:30 2013 -0800
+
+    Changed english to English (another line).
+
+commit 36b4b61f2bd6d07fca2bb27ff0439d66cc24b50f
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Jan 31 15:48:07 2013 -0800
+
+    Changed english to English.
+
+commit 4bc8b2860eeb1f4d60d52503e98e9e0c57b47eee
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Feb 4 16:19:20 2013 -0800
+
+    No change.
+
+commit a06b4ad53f86962542cffba0b3e16d607e375682
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Feb 4 16:13:24 2013 -0800
+
+    No change.
+
+commit 98793bbad4a94027f11ec7002f0a04c159489f50
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Mon Feb 4 15:06:00 2013 -0800
+
+    Changed TranslationsTest.java to test for errors
+
+commit 70bc696fae0d043adee7ba0e0e5a12065d344c33
+Author: jason92lin@gmail.com <jason92lin@gmail.com>
+Date:   Thu Jan 31 17:11:45 2013 -0800
+
+    Fixed UTF-8 character encoding. UTF-8 characters no longer show up as '?'s.
+
+commit 48c2356e736b79934b3dc6ee5bdc6567a525c1e7
+Author: Jason Lin <jason92lin@gmail.com>
+Date:   Thu Jan 31 11:21:56 2013 -0800
+
+    Working script for translating SodaIceBox tests.
+
+commit feec4ddacf13b6fcc819141fe0b51fbf2fc5f30c
+Merge: 109f9c0 4464d6e
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Thu Jan 31 00:18:15 2013 -0800
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+
+commit 4464d6e111b4a3c899fe45ae02815519f8c38eca
+Merge: 36ed098 ac79237
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Jan 30 15:59:08 2013 -0800
+
+    Merge pull request #69 from jdusaint/chromedriver
+    
+    Add linux32 version of chromedriver
+
+commit ac79237532d200abc44d06560077d2d0c27edda4
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Mon Jan 21 17:02:27 2013 -0900
+
+    Add linux32 version of chromedriver
+    
+    This change adds the 32 bit version of chromedriver to the lib for those who
+    run a 32 bit system.
+    
+    Testing done:
+    
+    mvn install -Pexamples wiht automation.interface=chrome and
+    browser.chrome_river_path=./lib/chromedriver-linux32
+
+commit 36ed098ae4180580b65bed4e9f6299698b848000
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Jan 15 18:45:54 2013 -0800
+
+    feature -> component
+
+commit 794421b7da51fcf862ead3784450528f12f6356b
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Jan 15 18:42:17 2013 -0800
+
+    removed .metadata files
+
+commit d8d7cc103d67fd0f400bc1f2e3bd02ea9480bbe5
+Merge: 054fc5e 8994255
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Jan 15 18:38:33 2013 -0800
+
+    Merge pull request #63 from wli-sugarcrm/master
+    
+    Re-added Translation to support .XML format; Merging & edited for another push (faster).  changes needed are isolated
+
+commit 054fc5ed1a8bf414fedd6e099020d5bfb3db3a03
+Merge: 890c5a7 46e436c
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Jan 14 10:44:20 2013 -0800
+
+    Merge pull request #68 from cradbold/master
+    
+    enhancements via grimoire sugar lib dev
+
+commit 46e436cd9049723642155698c1b8bc97b23eda20
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Jan 14 04:00:20 2013 -0800
+
+    fixing sugartest & template to include first/last
+
+commit 7bd5e9776b0f3c6e7e05939eb661c56daf4f0fa7
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Jan 14 02:19:38 2013 -0800
+
+    modifications from Crud grimoire dev
+
+commit 890c5a76f921620a5473ceb8a485c559cff31b66
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Jan 10 15:49:02 2013 -0800
+
+    fixed broken build for email test
+
+commit 611cc26a2f65684de9994431c6722f25d458c122
+Merge: f9c674d 62e78df
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Jan 8 18:35:53 2013 -0800
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit f9c674d3467903506ff61f713eea5daa4cdd59bf
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Jan 7 17:51:03 2013 -0800
+
+    breaking build on purpose to test emails
+
+commit 62e78df1c318d435c3da4383d57d7c0998c924d6
+Merge: c67a4e9 e4482f6
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Jan 7 17:32:14 2013 -0800
+
+    Merge pull request #67 from jdusaint/examples
+    
+    Initial example class with framework; examples added -- most other modifications are comments
+
+commit c67a4e9c8bf9559b566ae984a25dd73a7105bf7b
+Merge: de9a7e6 da6ba79
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Jan 7 17:26:16 2013 -0800
+
+    Merge pull request #66 from jdusaint/master
+    
+    Not sure if this'll stick around -- IInterface may not live for much longer -- but great content.
+
+commit da6ba791cdf6d66a9074cee3efc3d3eafede008d
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Fri Jan 4 18:23:24 2013 -0900
+
+    Create javadocs for Voodoo
+    
+    This change adds javadocs to the Voodoo class.
+    
+    Testing done:
+    
+    mvn javadoc:javadoc, looked at docs.
+
+commit 1093743a5c927945e5cbbcf239e6802a5c80ead9
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Fri Jan 4 12:27:18 2013 -0900
+
+    Add javadocs to VSelect.
+    
+    This change documents VSelect.
+    
+    Testing done:
+    
+    mvn javadoc:javadoc, looked at output
+
+commit e4482f6899d3b5b96d9ba89f0dd6eedf4467e52d
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Fri Jan 4 10:32:07 2013 -0900
+
+    Add an example that uses VControl for interaction
+    
+    In this change, an example class is added that performs a google search and
+    logs the text of the first hit, demonstrating using VControl for finding
+    and interacting with elements.
+    
+    Testing done:
+    
+    Ran Search test and viewed javadocs.
+
+commit 5d45d98351d9fa20eee621d4b844eac25933f7f2
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Jan 4 02:49:44 2013 -0800
+
+    nits; minor improvements, corrections from global search/replace
+
+commit 341b75b19a43389562dc95d302bd06c7c4ac16f2
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Thu Jan 3 12:34:40 2013 -0900
+
+    Tabify IControl
+    
+    Forgot (again) to convert spaces to tabs.  Ugh.
+
+commit c22abca1a6978dd565a8cef584c94584b2f2c361
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Thu Jan 3 12:31:50 2013 -0900
+
+    Add javadocs to IControl
+    
+    Piggybacking with this change are some fixes for javadoc warnings in VControl
+    and IInterface.
+    
+    Testing done:
+    
+    mvn javadoc:javadoc, viewed in browser
+
+commit 2cb663379bcaafa3b2169cb18cd8ad1af86246cd
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Wed Jan 2 18:19:48 2013 -0900
+
+    Initial example class with framework
+    
+    This change contains an initial code example that demonstrates basic browser
+    and test functionality.  Along with this are the changes needed for this
+    test.
+    
+    Testing done:
+    
+    Ran with maven using:
+    
+    mvn install -Pexamples
+
+commit 9a599d9e6249de5070efcb7fec099505ce7872c9
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Wed Jan 2 15:02:44 2013 -0900
+
+    Tabify previous change
+    
+    Remembered after committing that actual tabs are used. M-x tabify to the rescue.
+
+commit 2ec332b2b70a84e4696283434cf5a5688573f920
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Wed Jan 2 14:59:14 2013 -0900
+
+    Add javadocs to IInterface
+    
+    This change documents interface used by VDD2 tests.
+    
+    Testing done:
+    
+    mvn javadoc:javadoc, read javadocs.
+
+commit de9a7e69f47229d2ae2e11b0c7db7337a99ea193
+Merge: ff0f0d4 68e600f
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Wed Jan 2 00:28:46 2013 -0800
+
+    Merge pull request #65 from jdusaint/master
+    
+    Create Example code framework
+
+commit 109f9c047ac562fdcae1c9c168f88ea0275277e9
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Wed Jan 2 00:04:46 2013 -0800
+
+    deleted:    ClassNameGetter.java
+      - no longer needed. Replaced by class CL in VTestRunner.java
+
+commit f88235a45ae937b35e8da21d77cd30d26754b236
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Wed Jan 2 00:02:52 2013 -0800
+
+    deleted:    FilesFinder.java
+      - replaced by ClassFilesFinder.java
+
+commit aeb89385c2253e8106c8eb8350b6d8455fc20a59
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Tue Jan 1 23:58:41 2013 -0800
+
+    src/main/java/com/sugarcrm/voodoo/runner/ClassFilesFinder.java
+      - renamed from FilesFinder.java
+    src/main/java/com/sugarcrm/voodoo/runner/VTestRunner.java
+
+commit 68e600f5f8ae793658167eda49b7425a27554503
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Fri Dec 28 16:23:04 2012 -0900
+
+    Allow running examples from voodoo.jar
+    
+    This change modifies RunExamples' class loader to also accept binary class
+    names for example classes.  The upshot is that example classes that are part
+    of voodoo.jar (which they all will be) can be run by specifying their
+    binary name.
+    
+    For example, both of these will work the same (assuming they're run from the
+    Voodoo2 directory):
+    
+    java -cp target/voodoo2-1.0-SNAPSHOT.jar target/classes/com/sugarcrm/voodoo/examples/Basic.class
+    
+    java -cp target/voodoo2-1.0-SNAPSHOT.jar com.sugarcrm.voodoo.examples.Basic
+    
+    Testing done:
+    
+    Ran the above two commands.  The Basic example ran both times.  Also ran with
+    bogus class names/files and got the expected error.
+
+commit 61bfe1fc841b422024820f86d01bbad806c93e98
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Fri Dec 28 15:39:03 2012 -0900
+
+    Add classpath to voodoo.jar and libs to deploy dir
+    
+    This change makes it possible to run code out of the Voodoo jar file without
+    having to specify the classpath of every single lib that selenium depends on.
+    Of course, the jar file still isn't entirely portable - it needs to have a
+    lib directory with the dependencies next to it - but this is entirely
+    acceptable for now.
+    
+    Testing done:
+    
+    Ran RunExamples against an example that uses Voodoo.  It finally worked - a
+    browser window opened and then immediately closed, as expected.
+
+commit 5554d9a60f25e4280dccb30ea95265a22e747fe6
+Author: Jon duSaint <jdusaint@sugarcrm.com>
+Date:   Fri Dec 28 09:03:20 2012 -0900
+
+    Create the framework for the example code
+    
+    This change creates the execution framework for the VDD2 example code and
+    provides a simple example.
+    
+    VDD2 example classes have a void method with no parameters that is annotated
+    with @Example.  When the path to the class file is passed to RunExamples, it
+    finds that method and executes it.
+    
+    Testing done:
+    
+    Ran RunExamples against a class with an @Example method.  The current example
+    class, Basic, will not run correctly due to a runtime linking error.  This is
+    caused because the classpath in the voodoo jar file is not set and because the
+    dependent libs (selenium et al) are not otherwise on the classpath.  A fix
+    for that is forthcoming.
+
+commit 7847d01ae562d20f3dade0883f6e5d76f72f7639
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Tue Dec 25 23:54:48 2012 -0800
+
+    src/main/java/com/sugarcrm/voodoo/runner/ClassNameGetter.java
+    src/main/java/com/sugarcrm/voodoo/runner/FilesFinder.java
+    src/main/java/com/sugarcrm/voodoo/runner/VTestRunner.java
+      - new files. Support a command line test runner
+
+commit 8994255e993a22d856abebbefd4b3fa1ed552f34
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 21 15:56:56 2012 -0800
+
+    Updated README regarding translations
+
+commit 00557850b6d09999cd110f21fff2f8510ee7a66a
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 21 15:55:19 2012 -0800
+
+    Updated README
+
+commit 2e4f6beccac63eef4f8629bceed7be28c6563e74
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 21 15:48:22 2012 -0800
+
+    Re-added Voodoo(1) xml support (still supports multiple tests translation)
+
+commit 53e06e0846e4e946e0bbeeb5604abc97a5eaf8be
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 21 14:37:47 2012 -0800
+
+    Updated README file and added some print statements
+
+commit e4b0849b286a936c28193e04dc866f2954f19603
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 21 11:33:36 2012 -0800
+
+    RobotiumRC Implementation
+
+commit ff0f0d40c4c9b688a943d7f85a43fb1e61a0de9e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Dec 21 01:29:16 2012 -0800
+
+    surefire plugin fix -> x.x.3
+
+commit 69ca54b6a82650e975811516c936d063f76e3dca
+Merge: 4eb0414 433bd5c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Dec 20 13:41:27 2012 -0800
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit 4eb0414b003b670c83b01618cc52ac93ac47d213
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Dec 20 13:41:15 2012 -0800
+
+    NIT
+
+commit 433bd5cae5be910af0360cbdd0c1115a1034e421
+Merge: fd154a6 ad23706
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Dec 20 11:22:11 2012 -0800
+
+    Merge pull request #62 from wli-sugarcrm/master
+    
+    Re-added CLI support for Translations
+
+commit fd154a6b3fa8ad1f307033202b7d6f26618c3765
+Merge: 06a68d6 11d76e5
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Thu Dec 20 10:02:44 2012 -0800
+
+    Merge pull request #61 from cradbold/master
+    
+    initial web services component
+
+commit ad2370634e69250ccb584e8133e42d569c276de4
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Dec 19 16:56:48 2012 -0800
+
+    Re-added CLI support
+
+commit 0bedb40081078264855414a26d379d3a16a68b0a
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Dec 19 16:42:42 2012 -0800
+
+    Added translations sample tests for CLI usage
+
+commit 41742202d3088e3a9fc913e7fa7ddbbb808db353
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Dec 19 16:41:33 2012 -0800
+
+    Fixed Accounts_005.java class name to match
+
+commit 11d76e55163b9cb74b17e9487921aabe23483794
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Dec 18 21:52:50 2012 -0800
+
+    web services first pass
+
+commit 8043b399c8ce2fb8c4697db429c46d0a7aec8845
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Dec 18 21:47:10 2012 -0800
+
+    web services first pass
+
+commit 06a68d6d243964816366ef3bf0538bb41466e56c
+Merge: 96958ef 208fc7e
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Dec 18 09:56:47 2012 -0800
+
+    Merge pull request #60 from cradbold/master
+    
+    Table object introduction with POM update
+
+commit d4b497809f8dbf8f0484e1617a5b372d733483f1
+Merge: 208fc7e 96958ef
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 15:36:55 2012 -0800
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit 96958efb139c178f4d4b3ea9ce9e48f1643fde7d
+Merge: ee7f849 2691a10
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 15:36:15 2012 -0800
+
+    Merge pull request #58 from wli-sugarcrm/master
+    
+    Updated VoodooTag project with master updates and Re-factored Translations Implementation
+
+commit ee7f849ed094abefff728369d2b153cd326e0cc8
+Merge: 5d7ae54 0472f44
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:52:32 2012 -0800
+
+    Merge pull request #57 from genosis/master
+    
+    Add vdd2 test case Activities_0459
+
+commit 5d7ae544842e05fdef00282b1e3e26e9c64287e5
+Merge: 1fd2a13 7deacf2
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:51:54 2012 -0800
+
+    Merge pull request #56 from cfoxsugar/master
+    
+    Case_1273
+
+commit 1fd2a133701ed08afb625ff8af97a958b8873501
+Merge: 9d24de5 535e93f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:51:20 2012 -0800
+
+    Merge pull request #55 from franklin-sugar/master
+    
+    Add a new test case Accounts_0005.java
+
+commit 9d24de5708ee22f932d8024b6a7f7ecd0b3c4040
+Merge: dcb1d29 e87371f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:50:47 2012 -0800
+
+    Merge pull request #54 from chant2345/master
+    
+    PDF_14356.xml
+
+commit dcb1d29430686f65ea93ad41585435c53e9c8113
+Merge: 42f5bca c2c4cfc
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:48:58 2012 -0800
+
+    Merge pull request #53 from jqc/master
+    
+    add a test
+
+commit 42f5bca2952e72cc8168fac9f469a0c18d2690a9
+Merge: a2aabab e712934
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:48:29 2012 -0800
+
+    Merge pull request #52 from swapnar/master
+    
+    Employees_9975.xml
+
+commit a2aabab6b7add2f7da4e7f34423b44b4d8012334
+Merge: 1b1329f 462c84e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:47:46 2012 -0800
+
+    Merge pull request #51 from anisevich/master
+    
+    Implemented Studio_10150 in voodoo2
+
+commit 1b1329f758951521d30c3e901de8f1625bc17873
+Merge: ef4e361 0525edd
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:46:53 2012 -0800
+
+    Merge pull request #50 from rzhou/master
+    
+    Add Campaigns 839 in the direct way, and some hooks.
+
+commit ef4e361dee333e068dc410d026752e242bb174d2
+Merge: dc67d6d 6734641
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:44:24 2012 -0800
+
+    Merge pull request #59 from hans-sugarcrm/master
+    
+    Update DataAdapter and DataSource
+
+commit 208fc7e73a42dbf21bfdb2443d8db0664435a995
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 17 14:14:44 2012 -0800
+
+    VOOD-240: Introduce table object
+
+commit 6734641c7783fcca3dceea705339a332a6ad7d02
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Dec 17 00:25:20 2012 -0800
+
+    src/main/java/com/sugarcrm/voodoo/datasource/CSV.java
+    src/main/java/com/sugarcrm/voodoo/datasource/CsvDataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataAdapterFactory.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataSource.java
+    src/main/java/com/sugarcrm/voodoo/datasource/FieldSet.java
+    src/test/java/com/sugarcrm/voodoo/datasource/CsvDataAdapterTest.java
+      - getData() now returns HashMap<String, DataSource> where String gives the name of the DataSource.
+      - support returning DataSource for a single file instead of for all files satisfying the file pattern.
+         - This is done by specifying "DataAdapter.Selection.SINGLE" in getData(). The default is "DataAdapter.Selection.ALL";
+      - requires client to specify the "data base directory" before making getData() calls. This gives client more control and flexibility.
+      - Example usage is given in CsvDataAdapterTest.java
+
+commit 2691a107d1b80ad6edbcd95fb47e4a9dfbb1c902
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 14 12:02:35 2012 -0800
+
+    Updated the README for Translations
+
+commit b6625f6f8c6d8c1a8d83b94e3931ea8aa03483a8
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 14 11:52:56 2012 -0800
+
+    Clean-up Translations
+
+commit bf7444e58c7e2ed5f438d12bffaf5b5d0896e0c0
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Dec 14 10:28:03 2012 -0800
+
+    Added Tag Implementation - Platform Check JUnit Test Support
+
+commit 0472f44b6ad064a601bd0b5daa51618c0cea0635
+Author: genosis <genosis@yahoo.com>
+Date:   Wed Dec 5 16:12:42 2012 -0800
+
+    new vdd2 test for Activities_0459
+
+commit 7deacf2ced285ef8e22b8b611ab07f2050486ad9
+Author: Chinghua Fox <cfox@sugarcrm.com>
+Date:   Tue Dec 4 23:04:58 2012 -0800
+
+    add new case in Cases module
+
+commit 535e93fe53f476921a045d536b10e4441b6405ac
+Author: Franklin Liu <franklin@sugarcrm.com>
+Date:   Tue Dec 4 20:03:03 2012 -0800
+
+    Add a new test case: Accounts_0005.java
+
+commit e87371fbd9a397756bba532c968e2768959ee3cb
+Author: Chan Tran <ctran@sugarcrm.com>
+Date:   Tue Dec 4 20:01:54 2012 -0800
+
+    Uploading PDF_14356 Project
+
+commit c2c4cfc915e2b01dafe3f61d56831f678a7c2015
+Author: JQC Chen <chenj@sugar.com>
+Date:   Tue Dec 4 19:58:56 2012 -0800
+
+    new case
+
+commit e712934dedf61b833a6d4e34fdaf95a67bb7b886
+Author: Swapna Rayirathil <srayirathil@sugarcrm.com>
+Date:   Tue Dec 4 19:51:08 2012 -0800
+
+    added new test
+
+commit 462c84ee3fa9e9b941bfe785edddc3d68828bea4
+Author: Alex Nisevich <anisevich@sugarcrm.com>
+Date:   Tue Dec 4 19:17:59 2012 -0800
+
+    Studio_10150
+
+commit dc67d6d5f566f75c6d6040bc0351e87353549c02
+Author: egan <egan@sugarcrm.com>
+Date:   Tue Dec 4 19:13:57 2012 -0800
+
+    add case contacts_1460.java
+
+commit 0525edd49383416021341c29835458fdb76095fa
+Author: Ran Zhou <rzhou@sugarcrm.com>
+Date:   Tue Dec 4 18:55:12 2012 -0800
+
+    Add campaigns 839, and hooks to support it
+
+commit 698f13f29a4ad28c4eca8709c0d4742902f18e5c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Dec 4 14:04:04 2012 -0800
+
+    hackathon prep
+
+commit 4d415eca1ae7f4f5f38809457c5758aae6c829e5
+Merge: 270525d 1fa19aa
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Dec 4 10:20:45 2012 -0800
+
+    Merge pull request #49 from cradbold/selenium
+    
+    Selenium commitment changes
+
+commit 1fa19aa6ddfd72c4ff7d0e17a643ce289b4d6746
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 3 15:08:40 2012 -0800
+
+    updated pom per new components
+
+commit b14fd7b88b5f1c9760b77fdf8ccacf7f34d81849
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Dec 3 14:34:11 2012 -0800
+
+    Committing to Selenium (but leaving from for abstraction layer later); changing arch accordingly
+
+commit 270525d4de593cfcdac2eca386e0d3e287bfd912
+Merge: 109ece3 afe51e1
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Nov 30 06:53:27 2012 -0800
+
+    Merge pull request #46 from sugarcrm/Configuration
+    
+    Initial check-in; reviewed; contains: configuration feature implementation
+
+commit afe51e1ad38a7b05a80106a649175106e1f84ae3
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Thu Nov 29 16:06:57 2012 -0800
+
+    Configuration Feature Implementation
+
+commit 109ece3d7bf204b4dff98a3b03f35ef326788f71
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Nov 28 14:50:15 2012 -0800
+
+    Modifying test package names to match java convention
+
+commit cb0739dadd8cad75516c9561d949bbc097f95800
+Merge: 853835f 0d7dbb7
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Nov 28 14:20:41 2012 -0800
+
+    Merge pull request #43 from hans-sugarcrm/master
+    
+    DataAdapter and DataSource
+
+commit 853835fe9a586ee0f7dd8b11a57c8c2c6e796d5b
+Merge: 3f98195 dbb6226
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Wed Nov 28 13:46:48 2012 -0800
+
+    Merge pull request #45 from cradbold/master
+    
+    VOOD-142 and general edits, NIT hunting...
+
+commit dbb6226e63e2f6b3317da94040ca72b2507aa117
+Merge: 6c0e8fb 3f98195
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Nov 28 12:34:47 2012 -0800
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit 6c0e8fb8e9d82428f4ef87e5cb6e3079ccd467cd
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Nov 28 12:34:25 2012 -0800
+
+    VOOD-142 and general edits: proposed improvements and NIT hunting
+
+commit 3f9819544a0160d52dafb0082941859f931c3911
+Merge: 9ac360c adbb90c
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Nov 27 12:19:07 2012 -0800
+
+    Merge pull request #44 from cradbold/master
+
+commit adbb90c8adbf3d0811e599bc1daf086b0c17ceff
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Nov 27 01:41:04 2012 -0800
+
+    Initial results object; stubbed processing/formats; needs consensus
+
+commit f1639cc07b7eac6754aaaca750226bf47e57702e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Nov 27 01:13:28 2012 -0800
+
+    First pass forecasts tests; blocked by dev
+
+commit 0d7dbb7248ac9219566a7461c7f564cb4a658a0c
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Nov 26 23:52:36 2012 -0800
+
+    deleted:    Placeholder.java
+      - no longer needed
+
+commit a7b82b17c2311193699ac20b9887e4f3c27bb75f
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Nov 26 23:47:08 2012 -0800
+
+    src/main/java/com/sugarcrm/voodoo/datasource/CSV.java
+    src/main/java/com/sugarcrm/voodoo/datasource/CsvDataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataAdapterFactory.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataSource.java
+    src/main/java/com/sugarcrm/voodoo/datasource/FieldSet.java
+    src/main/java/com/sugarcrm/voodoo/datasource/FieldSetList.java
+    src/test/java/com/sugarcrm/automation/system/CsvDataAdapterTest.java
+      - added doc headings to classes and some methods
+
+commit 53227e5d698c33acade9ccec015a9f3323529cb6
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Nov 26 21:06:11 2012 -0800
+
+    CsvDataAdapterTest.java
+      - test for CsvDataAdapter
+
+commit b5b5aba97a75b781961e6091fdea92fd569e19ea
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Nov 26 18:49:49 2012 -0800
+
+    src/main/java/com/sugarcrm/voodoo/datasource/CSV.java
+    src/main/java/com/sugarcrm/voodoo/datasource/CsvDataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataAdapter.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataAdapterFactory.java
+    src/main/java/com/sugarcrm/voodoo/datasource/DataSource.java
+    src/main/java/com/sugarcrm/voodoo/datasource/FieldSet.java
+    src/main/java/com/sugarcrm/voodoo/datasource/FieldSetList.java
+      - these new files for CSV data. Still need to commit the test file where the directory is messed up.
+
+commit 287ce7b1598d9aaebe35633d3f5cbdc22b684252
+Merge: 831a9a7 9ac360c
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Nov 26 18:02:34 2012 -0800
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+    Sync local directory before commit and push.
+
+commit 9ac360c28d2b57531f122dfcd27e36465e359913
+Merge: d7bf59d 7d7590e
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Mon Nov 26 16:07:16 2012 -0800
+
+    Merge pull request #42 from cradbold/master
+    
+    VOOD-154: finalize portal
+
+commit 7d7590e4de83b7862519493b0bca2485471e0930
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Nov 26 14:15:40 2012 -0800
+
+    completed VOOD-154; final portal test
+
+commit 9441e0e7c35812e7d2dcc24926e12226797668d8
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Nov 26 11:41:26 2012 -0800
+
+    Portal test revision
+
+commit 03cd2ba960308830e03fee9593fe9e99d0dd93f1
+Merge: c14f58e d7bf59d
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Nov 21 03:00:57 2012 -0800
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit c14f58e7e6aa2f29f5811ddc938bde824c1d7086
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Nov 21 03:00:36 2012 -0800
+
+    replaced generic placeholder.java with results stub
+
+commit d7bf59d1a78ddf6a49c47a3fbc6239c3b3806fcc
+Merge: 485ef2c a3f44cb
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Nov 20 13:44:55 2012 -0800
+
+    Merge pull request #40 from cradbold/master
+    
+    Organizational edit; alphabetized interface functions
+
+commit a3f44cb9aa5c030c7344482f21e40236472e18a0
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Nov 20 02:02:32 2012 -0800
+
+    Added placeholder test object with assert stubs
+
+commit 6861bdf50ea543eaa00e059078f17408dfa2cdf8
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Nov 20 00:49:55 2012 -0800
+
+    reorg'd tests; created profiles for both test levels & components
+
+commit afb6ed65544e889f22842bd23cf5bb6610fb6438
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Nov 20 00:49:27 2012 -0800
+
+    reorg'd tests; created profiles for both test levels & components
+
+commit f5122b6eb3fec75a7d28d17f9ad0569279060116
+Merge: cccccd2 485ef2c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Nov 19 21:00:36 2012 -0800
+
+    fixed merge
+
+commit cccccd29af24464026981a6e2f0b0c1cd535005e
+Merge: d46e85c 382c227
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Nov 19 19:54:45 2012 -0800
+
+    stale commit; bad process on my part :(
+
+commit 485ef2cd207645e835d13536d517b11974c4737b
+Merge: 382c227 d46e85c
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Thu Nov 15 10:58:45 2012 -0800
+
+    Merge branch 'master' of https://github.com/cradbold/Voodoo2 into cradbold-master
+    
+    Conflicts:
+    	src/main/java/com/sugarcrm/voodoo/automation/IAutomation.java
+    	src/main/java/com/sugarcrm/voodoo/automation/framework/Selenium.java
+    	src/main/java/com/sugarcrm/voodoo/translations/Translations.java
+    	src/test/java/com/sugarcrm/translations/test/TranslationsTest.java
+    	src/test/java/com/sugarcrm/unit/voodoo/TestUtils.java
+
+commit d46e85ca5adeeea2fdd06a92b6dfb891c7e2fbb8
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Nov 15 08:38:12 2012 -0800
+
+    general NITs/improvements, warning fixes
+
+commit 382c227fc905f3cd553969be79d4f7cd87300e1d
+Merge: 65e19c6 8177a1b
+Author: Mazen Louis <mlouis@sugarcrm.com>
+Date:   Wed Nov 14 15:24:17 2012 -0800
+
+    Merge pull request #37 from wli-sugarcrm/master
+    
+    Minor Fixes: Improved path robustness support and edited Translations project
+
+commit 8177a1b888af771ce4d2ef32a324fe47dfe88813
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Nov 14 14:03:27 2012 -0800
+
+    Added doubleClick() support and unit test
+
+commit 99cda9e822b4d744306915969577e708652abced
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Nov 14 11:04:14 2012 -0800
+
+    Improved adjustPath and did some minor changes to Translations
+
+commit 831a9a7626858116808cb8396aaf820eaef25437
+Merge: 6b36a28 65e19c6
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Sun Nov 11 11:38:07 2012 -0800
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+    Sync local repo with upstream master.
+
+commit 6b36a28b4a3a6f91e64bdd6788062097bb4fd95c
+Merge: b329a04 cdf71ce
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Sun Nov 11 11:35:32 2012 -0800
+
+    Merge branch 'master' of github.com:hans-sugarcrm/Voodoo2
+    Sync up local repo. It's a good while since last sync.
+
+commit 65e19c6a3b9727451ef67bedd880b1514f3f2c82
+Merge: be39492 d58ba88
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Nov 8 00:16:30 2012 -0800
+
+    Merge pull request #35 from cradbold/master
+    
+    Architecture changes to facilitate widget objectification and general simplification; will have lib impact
+
+commit d58ba88698f45c147075f8edae3b52e73621c9d6
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Nov 6 02:56:55 2012 -0800
+
+    Changes to architecture to facilitate widget objectification and simplify organization; will have lib impact
+
+commit be39492742658bfef9b84afa6edb06c940442d0d
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Nov 5 14:15:48 2012 -0800
+
+    organization NIT mods
+
+commit 47eb46a7936b3165e4fcc6c4360f97847cc768d7
+Merge: 4fe2521 d6a9272
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Nov 5 13:58:54 2012 -0800
+
+    Merge pull request #34 from wli-sugarcrm/master
+    
+    The only thing I could see here was a NIT.  In Java, be sure to use the camelBack notation, not CamelCase ;)  By precedence, only Class names are capitalized.
+
+commit d6a927240ed6eee04a5d9cfb3440a1a5f5e251a2
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Nov 2 19:41:21 2012 -0700
+
+    Added translations project onto Voodoo2
+
+commit 4fe2521bcd4fd97dc3afff548779738634c529ff
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Nov 1 01:48:55 2012 -0700
+
+    Reorganized Voodoo2; added component placeholders and Placeholder to each package so git would see it
+
+commit a3f8478e9b4394a8bd1089cf65d73fe9fe424027
+Merge: bdb622f cdf71ce
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Sun Oct 28 15:59:00 2012 -0700
+
+    Merge pull request #33 from hans-sugarcrm/master
+    
+    DragNDrop functional test; perfect!  Now we have our platform test to expand tag/testrunner funcitonality
+
+commit cdf71ce5fbafb88eeb225b9d98d0fc34189ef5f1
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Fri Oct 26 17:14:32 2012 -0700
+
+    DragNDrop.java
+      - recommit this file. Not sure why earlier commit didn't get pushed to remote fork.
+
+commit 33dbd6903d634b9f2a241d453159ffd66b52a4af
+Merge: 8a1700a bdb622f
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Fri Oct 26 17:08:40 2012 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+    Sync with local repo before a push.
+
+commit 8a1700aa5c7e541e0e485de8cbd5524bce3fcbeb
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Fri Oct 26 17:05:51 2012 -0700
+
+    DragNDrop.java
+      - functional test for drag and drop
+
+commit bdb622f6d8a5f6bc3512c24384ae7fa283ebd52f
+Merge: 88657ec 82002f3
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Oct 26 15:13:29 2012 -0700
+
+    Merge pull request #32 from hans-sugarcrm/master
+    
+    Checkbox select() and getAttributeValue()
+
+commit 82002f34f014e22fce5923a3a837853b9675c7a4
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Thu Oct 25 23:21:12 2012 -0700
+
+    Added checkbox select(), and getAttributeValue().
+    
+    src/main/java/com/sugarcrm/voodoo/IAutomation.java
+    src/main/java/com/sugarcrm/voodoo/Voodoo.java
+    src/main/java/com/sugarcrm/voodoo/automation/IControl.java
+    src/main/java/com/sugarcrm/voodoo/automation/IFramework.java
+    src/main/java/com/sugarcrm/voodoo/automation/Selenium.java
+    src/main/java/com/sugarcrm/voodoo/automation/VControl.java
+
+commit b5cf1dc31fec1ce6843534af3f8f635bc0c9701b
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Thu Oct 25 23:17:35 2012 -0700
+
+    src/test/java/com/sugarcrm/system/voodoo/tests/CheckboxSelectGetAttribute.java
+      - functional test
+
+commit 88657ecbb0abd3613fc8fd23967ab7b11e1171da
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 24 16:28:42 2012 -0700
+
+    -aCreated placeholder for dragndrop sys test & forecasts sugar test
+
+commit 7b51488cb5eba69820a6fb94643978b41dee0e34
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 24 14:46:35 2012 -0700
+
+    interface changes (stressing short); introduced 4 profiles: default, unit, system, sugar
+
+commit ba1bd0ad6cd7214f77fe63cc4150975880f17fe4
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Oct 23 14:06:08 2012 -0700
+
+    restored deleted method
+
+commit 58758b38ec409a5bbd30b384fb6614d2672bdf96
+Merge: e413be9 a06e54c
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Oct 23 13:53:49 2012 -0700
+
+    Merge pull request #31 from wli-sugarcrm/master
+    
+    select and getSelected features added for drop-down list support, functional/system tests added, and  IAutomation-Voodoo IControl-VControl  implementation added
+
+commit a06e54cf7dca8a3309ccc975ca8885c84f0793cd
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Oct 19 15:47:07 2012 -0700
+
+     'select' and 'getSelected' for drop-down box added, and function/system test added
+
+commit e413be92c361b3bce8553edea268e17288ff3e97
+Merge: 11a3a6e d1fb00a
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Thu Oct 18 09:28:49 2012 -0700
+
+    Merge pull request #30 from cradbold/master
+    
+    Portal, supporting lib work, supporting core work with enhancements
+
+commit 11a3a6e938dc23d8e8a2f76694024174e5eacbe1
+Merge: 878f66e 611fc5d
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 17 18:10:06 2012 -0700
+
+    Merge pull request #29 from wli-sugarcrm/master
+    
+    We're still missing a I/VControl function -- wait(attribute, value) -- but I'll create a story for it next sprint
+
+commit d1fb00af84e16b5309fb4fb9695008a104216d86
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 17 18:05:12 2012 -0700
+
+    completed portal dev; added partial-link
+
+commit 611fc5d3529bca2a01900f17879df9ff3f6d3937
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Oct 17 17:24:38 2012 -0700
+
+    Updated IControl and VControl. Also renamed wait to explicitWait due to some Exception error
+
+commit 92c00fb121d69baa29620954cb78de51dfd3e58e
+Merge: af56abd 878f66e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 17 16:57:36 2012 -0700
+
+    merging conflicts (interface order/new functionality, non-overlapping)
+
+commit af56abd9dfaf11a6b0a3d68ff5de9efa6e137484
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 17 16:54:29 2012 -0700
+
+    portal dev and gen improvements
+
+commit c5eb4dee8e5e7a9acdede4e1ba4c3e2c215092a3
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 17 16:46:38 2012 -0700
+
+    portal dev and gen improvements
+
+commit 878f66eb3fe7ef984cbb33bf8d86d5fa05da110d
+Merge: cf99dc9 478d04f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 17 15:44:31 2012 -0700
+
+    Merge pull request #28 from wli-sugarcrm/master
+    
+    Let's merge this w/o test since it's needed now
+
+commit 478d04f70364442080bd97b39887e9ecaa4f26b0
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Oct 17 13:39:24 2012 -0700
+
+    Support for explicit wait (code enhanced)
+
+commit 53d1bf0d2f9e431871f0b91793c64da51dc7b303
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Oct 12 11:41:46 2012 -0700
+
+    Added explicit wait support
+
+commit a96c610d428973a80183d07589e21ac064c6fbfb
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Oct 11 14:28:15 2012 -0700
+
+    Portal test dev
+
+commit cf99dc98a4618ebf075a9fd7be9032bf513e268d
+Merge: a6a201d a715d90
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Oct 11 14:05:45 2012 -0700
+
+    Merge pull request #26 from wli-sugarcrm/master
+    
+    Added: focusByIndex(int index), focusByTitle(String title), focusByUrl(String url), and closeWindow()
+
+commit a715d900a2acee96db79b1983172e24675401617
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Thu Oct 11 13:35:29 2012 -0700
+
+    Added the follow support: focusByIndex, focusByTitle, focusByUrl and closeWindow
+
+commit a6a201d13b212759bb5c26fdd2361dcb0fc7c1e8
+Merge: 674b921 25931df
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Mon Oct 8 15:23:28 2012 -0700
+
+    Merge pull request #23 from cradbold/master
+    
+    portal test dev AND merged, organized IAutomation, IControl changes
+
+commit 25931df5a6143b0f1fb02559c7e0beab4c0c2208
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Oct 8 12:46:46 2012 -0700
+
+    redundant argument fix - NIT
+
+commit 86f01035b8b48498f2c1f87e3c69b817ccdf8378
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Oct 8 12:40:34 2012 -0700
+
+    alphabatizing api functions
+
+commit bca073cfe00bf34d9859db9f32cb3fdf98c88f64
+Merge: 07e521b 674b921
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Oct 8 12:37:06 2012 -0700
+
+    merged addition of drag and drop
+
+commit 07e521b28f804bb952f717d4c7058ccbc1cbb9db
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Oct 8 12:34:22 2012 -0700
+
+    Added missing scroll to IControl and impl
+
+commit 674b921c9ba23d215c0bfa848cd2ce72c705577b
+Merge: 0a63a17 092bbd4
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Oct 8 04:01:06 2012 -0700
+
+    Merge pull request #22 from hans-sugarcrm/master
+    
+    Added drag and drop function via IAutomation; There's sooo much here because it's been a while since there was a master merge, but it looks like the 'Added dragAndDrop functions' commit is the latest and greatest -- looks great.  And reminds me I need to revisit IControl and VControl :/
+
+commit 092bbd40c4227f2096bc28c46b678bf77c2e1a52
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Sat Oct 6 22:45:17 2012 -0700
+
+    Added dragAndDrop functions.
+    
+    src/main/java/com/sugarcrm/voodoo/IAutomation.java
+    src/main/java/com/sugarcrm/voodoo/Voodoo.java
+    src/main/java/com/sugarcrm/voodoo/automation/IControl.java
+    src/main/java/com/sugarcrm/voodoo/automation/IFramework.java
+    src/main/java/com/sugarcrm/voodoo/automation/Selenium.java
+    src/main/java/com/sugarcrm/voodoo/automation/VControl.java
+
+commit 39649044cdd4a253145dc2e032dd2eb5cbaf9bc6
+Merge: ba998a1 0a63a17
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Sat Oct 6 20:18:10 2012 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+    
+    Conflicts:
+    	pom.xml
+    	src/main/java/com/sugarcrm/voodoo/Voodoo.java
+    Overwrote the conflicting files with those from the sugarcrm repository.
+    
+    	modified:   ../../../../../../.gitignore
+    	modified:   ../../../../../../pom.xml
+    	new file:   IAutomation.java
+    	modified:   Utils.java
+    	modified:   Voodoo.java
+    	new file:   automation/IControl.java
+    	new file:   automation/IFramework.java
+    	renamed:    automation/SeleniumAutomation.java -> automation/Selenium.java
+    	deleted:    automation/VAutomation.java
+    	modified:   automation/VControl.java
+    	new file:   automation/VHook.java
+    	deleted:    ../../../../resources/logback.xml
+    	new file:   ../../../../../test/java/com/sugarcrm/sugar/Sugar.java
+    	new file:   ../../../../../test/java/com/sugarcrm/sugar/SugarTest.java
+    	new file:   ../../../../../test/java/com/sugarcrm/sugar/admin/Administration.java
+    	new file:   ../../../../../test/java/com/sugarcrm/sugar/portal/Portal_14177.java
+    	new file:   ../../../../../test/java/com/sugarcrm/unit/voodoo/TestUtils.java
+    	new file:   ../../../../../test/java/com/sugarcrm/unit/voodoo/TestVoodoo.java
+    	renamed:    ../../../../../test/java/com/sugarcrm/voodoo/automation/TestSeleniumAutomation.java -> ../../../../../test/java/com/sugarcrm/unit/voodoo/automation/TestSelenium.java
+    	deleted:    ../../../../../test/java/com/sugarcrm/voodoo/TestUtils.java
+    	deleted:    ../../../../../test/java/com/sugarcrm/voodoo/TestVoodoo.java
+    	new file:   ../../../../../test/resources/sugar.hooks
+    	new file:   ../../../../../test/resources/sugar.properties
+    	new file:   ../../../../../test/resources/voodoo.properties
+
+commit 9e331a56616ac24dfa45f301080ee13134f7f8cf
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Oct 5 17:44:05 2012 -0700
+
+    portal test dev with lib req
+
+commit 0a63a172b3e04c4b0d02fdfa087ffccdb27865dd
+Merge: 40fd4f7 6fc318f
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Fri Oct 5 11:15:26 2012 -0700
+
+    Merge pull request #21 from cradbold/master
+    
+    Lots o' stuff in here to support portal test; introducing VHook and tools/files to support it
+
+commit 6fc318fd8511977fd3a719ec63d72981e6e48da3
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Oct 4 22:54:41 2012 -0700
+
+    changing from close->quit for complete browser shutdown
+
+commit 105dfd4cc0223a7f3481020930454ff3b01be0b4
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Oct 4 19:41:49 2012 -0700
+
+    portal enable first pass complete; added scrolling
+
+commit 437bb409d36dfb4f2c91cf48d395df3a12559ddb
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 3 20:35:58 2012 -0700
+
+    Portal_14177 dev; introduced VHook; fixed NITs; added hook map; adding unit tests
+
+commit d764372fd13da6edfeca2f982205ccaf93b11188
+Merge: a1ea9eb 40fd4f7
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 3 20:34:29 2012 -0700
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit a1ea9eb84956ea91d3a83103637ee6d7e90dcc32
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 3 20:34:19 2012 -0700
+
+    Portal_14177 dev; introduced VHook; fixed NITs; added hook map; adding unit tests
+
+commit 40fd4f7616a31cfdb70b920b41c4d068aedb7942
+Merge: 9de7146 3b8bb52
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Wed Oct 3 09:15:18 2012 -0700
+
+    Merge pull request #19 from cradbold/master
+    
+    Prep-work for Portal test
+
+commit 3b8bb5278ad0e57ebe61de59d0942eb87a5490e9
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 3 00:44:53 2012 -0700
+
+    prep for Portal test; voodoo2-side testing
+
+commit 9de71469f3fdb8d70cbc2cff1593fc393fadd4d4
+Merge: aa960b7 b202158
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Oct 3 00:17:55 2012 -0700
+
+    Merge pull request #18 from wli-sugarcrm/master
+    
+    added rightClick featured
+
+commit b20215872d1dca23d3be264a5f73bc660915fb66
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Fri Sep 28 16:59:51 2012 -0700
+
+    added rightClick featured
+
+commit aa960b7dc30362220cdeb593929ebb182967404d
+Merge: dba71d2 cdea458
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Thu Sep 27 16:13:07 2012 -0700
+
+    Merge pull request #17 from cradbold/master
+    
+    refinements; hacks to support iterative testing; removed old files; improved chromedriver
+
+commit cdea458cbf116b31b78ab67c1f1cba7ca417a5c9
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Sep 27 00:30:42 2012 -0700
+
+    explored voodoo unit test; improvements to logging; improvements to browser init
+
+commit 58f7b9f6ddfb0141434294293ae2239f13888e72
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 26 18:04:06 2012 -0700
+
+    Updated chromedriver with customized log path
+
+commit 5f7abd2a0fa6f1974abbfaabd6d0f4ba4fc7ee7b
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 26 17:12:30 2012 -0700
+
+    removed log from voodoo2 (grimoire now); modified .gitignore
+
+commit cbf2223a13e3dd71353b00691331be88d3b1a2a4
+Merge: 2dc0ee2 dba71d2
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 26 16:52:35 2012 -0700
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit 2dc0ee24cdc9f91fbc8bd953f80bc93a9dee3bbe
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 26 16:52:27 2012 -0700
+
+    making WE public for test workaround (iterative :)
+
+commit dba71d274edab2aa18480ad354c0d7916ff7c378
+Merge: 2714192 7c581f5
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 26 13:28:20 2012 -0700
+
+    Merge pull request #16 from wli-sugarcrm/master
+    
+    Moved Voodoo2 chromedriver libs to Grimoire and added path generation for Default Chromedriver Path
+
+commit 7c581f55d7f9481f784c28bca2b6d4b5bf99aca5
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Sep 26 10:04:02 2012 -0700
+
+    Moved Voodoo2 chromedriver libs to Grimoire and added path generation for Default Chromedriver Path
+
+commit 7db3b1bafdf20869c285ed71bed2535c1140b3ee
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Sep 26 10:02:29 2012 -0700
+
+    Moved Voodoo2 chromedriver libs to Grimoire and added path generation for Default Chromedriver Path
+
+commit 27141924dea43770d86c71df458d40217869d302
+Merge: a6607c4 e982c13
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 25 22:09:47 2012 -0700
+
+    Merge pull request #15 from wli-sugarcrm/master
+    
+    Utils - helper function:  improve '/'/'\' issue.
+
+commit e982c136a177baaee178c7dd8a8b5263d70fae3b
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Tue Sep 25 21:09:01 2012 -0700
+
+    Utils helper function added to support diffent path types
+
+commit a6607c4c13b25aade478fbac3a9663fd3f758d5b
+Merge: 9a32617 46081b0
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Sep 25 16:49:34 2012 -0700
+
+    Merge pull request #14 from cradbold/master
+    
+    Simplified unit test; no longer making assumption on mvn dir structure
+
+commit 46081b09953265e0864c406b169c8523a6b0ca72
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 25 15:50:37 2012 -0700
+
+    added simpler explicit file creation to unit test via Mazen review
+
+commit 9a3261731848acadae68bc39df91c7f5d61a6d1d
+Merge: cf708a6 d6bab5f
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Sep 25 15:25:46 2012 -0700
+
+    Merge pull request #13 from cradbold/master
+    
+    Explicit file creation needed (store doesn't do it alone)
+
+commit d6bab5f4e16d32c0ca52a4a4c4b9153aabcf4d73
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 25 15:19:46 2012 -0700
+
+    removed obsolete POM entries; added explicit file creation to unit test via Mazen review
+
+commit cf708a68a1b546551573444b9def16802472a113
+Merge: f89f8f9 49ca57c
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Sep 24 10:10:54 2012 -0700
+
+    Merge pull request #12 from cradbold/master
+    
+    Fix from code review
+
+commit 49ca57c27e1328457c3db443330fe8225d50993a
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Sep 24 10:00:17 2012 -0700
+
+    Fixing utils unit tests from code review
+
+commit f89f8f92e189eb67d4b70e4619132570ce7a6b5a
+Merge: c989429 9e3f3ee
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Fri Sep 21 22:13:49 2012 -0700
+
+    Merge pull request #11 from cradbold/master
+    
+    Unit tests; VOOD-129
+    
+    Reviewed Ok.
+
+commit 9e3f3ee86247d3a81c9c331dcff48aeca8f78d0f
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Sep 21 19:00:33 2012 -0700
+
+    Forgot to comment out system.outs
+
+commit b93014d56a94c79364ca375b83a68edfc1fd0284
+Merge: a520c07 c989429
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Sep 21 18:52:44 2012 -0700
+
+    Merge branch 'master' of https://github.com/sugarcrm/Voodoo2
+
+commit a520c07abe4e3bbfc6ddbf35f3ccb0178097e4b7
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Sep 21 18:52:13 2012 -0700
+
+    finished TestUtils unit tests
+
+commit c989429ac9357dda68a394000e896da98524e233
+Merge: 08cf869 4271943
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Fri Sep 21 16:51:55 2012 -0700
+
+    Merge pull request #10 from cradbold/master
+    
+    Properties switch; interface switch; working on unit tests (temp)
+    
+    Ok, reviewed code. Noticed corresponding "properties" changes for Grimoire.
+
+commit 427194351884e4c818cadcf2578cae1e1d8db01a
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Sep 21 15:39:02 2012 -0700
+
+    switched to propertiies now that we have consistent paths; switched to interfaces; working on unit tests
+
+commit 630a864705f2ab97a62b1cdb35f0faf0503b8ef5
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Fri Sep 21 13:27:31 2012 -0700
+
+    Renamed Selenium test to match; updating tests
+
+commit 08cf869d8407b8d8077e589f3c4cd47052dc551f
+Merge: 3e325a1 349b5ff
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Thu Sep 20 22:03:36 2012 -0700
+
+    Merge pull request #8 from cradbold/master
+    
+    VOOD-107; separated internal/external automation interfaces; added IControl interface and removed obsolete logging config file
+    
+    Had verified code ran by pulling the changes to my local directory.
+
+commit 349b5ff1bb977b21fcec71048b7badfa0d0c4094
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Sep 20 19:02:54 2012 -0700
+
+    now removing temp file and hopefully empty log dir will persist
+
+commit 423adf5fd7ceb6e006b46819be21be7763b00df3
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Sep 20 19:01:57 2012 -0700
+
+    Adding temp file in log so log dir gets checked-in
+
+commit b97e459b56fac53af10da536bc08759f4d7c6e5e
+Merge: 64da78f 3e325a1
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Sep 20 18:54:43 2012 -0700
+
+    resolving merge conflict (NIT)
+
+commit b329a04dcd830ff8bd812fe66d3cacf4cb4ffdca
+Merge: ba998a1 3e325a1
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Wed Sep 19 22:44:48 2012 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+    
+    To sync up the local directory with the upstream.
+    This local directory was newly cloned from git@github.com:hans-sugarcrm/Voodoo2.git
+
+commit 3e325a1ccd3a7afa7e71fc7e4e96dd6cc6a200b6
+Merge: 87cb262 7004e58
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 19 12:33:51 2012 -0700
+
+    Merge pull request #9 from wli-sugarcrm/master
+    
+    Rollback configuration modification for chromedriver path
+
+commit 7004e58b98effe4ffbbaa151d1d31ccc16415e03
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Wed Sep 19 10:36:58 2012 -0700
+
+    Rollback configuration modification
+
+commit 64da78fb4fa30546b96a5987b54fc4ee24687c6e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 18 19:33:08 2012 -0700
+
+    removing obsolete logback.xml config from sl4j
+
+commit 87c023176194878300e2fcc5f83423223305a72e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 18 19:23:16 2012 -0700
+
+    VOOD-107; separated internal/external automation interfaces; added IControl interface
+
+commit ba998a19418f3f751e2cf71152704f9a925c57dc
+Merge: 3b5689d 87cb262
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Tue Sep 18 00:13:51 2012 -0700
+
+    Merge branch 'master' of github.com:sugarcrm/Voodoo2
+    
+    Conflicts:
+    	src/main/java/com/sugarcrm/voodoo/Voodoo.java
+    
+    	modified:   ../../../../../../pom.xml
+    	deleted:    Automation.java
+    	modified:   Utils.java
+    	modified:   Voodoo.java
+    	deleted:    autofw/SeleniumAutoFW.java
+    	deleted:    autofw/VAutoFW.java
+    	new file:   automation/SeleniumAutomation.java
+    	new file:   automation/VAutomation.java
+    	renamed:    autofw/VControl.java -> automation/VControl.java
+    	deleted:    ../../../../resources/voodoo.properties
+    	new file:   ../../../../../test/java/com/sugarcrm/voodoo/TestUtils.java
+    	new file:   ../../../../../test/java/com/sugarcrm/voodoo/TestVoodoo.java
+    	new file:   ../../../../../test/java/com/sugarcrm/voodoo/automation/TestSeleniumAutomation.java
+
+commit 87cb262bf62ac12435e7539995ed7029aaab21d5
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Thu Sep 13 09:56:59 2012 -0700
+
+    added: create log file when not present and auto adjust chromedriver path among different users
+
+commit 712a60240abbcf31f6e645f46743d7012baaf1a1
+Merge: d7f9a2e 1a7ea07
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Sep 11 14:05:51 2012 -0700
+
+    Merge pull request #7 from cradbold/master
+    
+    another merge with resolutions; added first pass unit test stubs, made to pass;
+
+commit 1a7ea072a06fcf4f20f4862d65d65c8dde4a79ff
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 11 13:55:07 2012 -0700
+
+    another merge; unit test stubs in/corrected/passing
+
+commit d7f9a2ec7f2ba8fe66e1a73b150c12fa787ada57
+Merge: 45f87a9 d886a60
+Author: wli-sugarcrm <wli@sugarcrm.com>
+Date:   Tue Sep 11 13:37:41 2012 -0700
+
+    Merge pull request #5 from cradbold/master
+    
+    checking in core->accounts_0001 work; filed bug to revert logging
+
+commit d886a609919158610d610131f02be01c2e1f4669
+Merge: 7c6bbaa 45f87a9
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 11 13:32:05 2012 -0700
+
+    merging -a
+
+commit 7c6bbaa308542c0d1562d3cf5a4ba3889f0f962e
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 11 13:29:07 2012 -0700
+
+    Adding unit testing stubs; stabilizing to resolve manual merge
+
+commit 45f87a95674cf2ebb29e3d91e955111128e53d9b
+Author: wli-sugarcrm.com <wli@sugarcrm.com>
+Date:   Tue Sep 11 11:47:02 2012 -0700
+
+    added comments for javadoc
+
+commit 1a43832f87378a4939526b3e4c7e6364f0d6f84a
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Sep 10 12:21:32 2012 -0700
+
+    Resolved VOOD-67 and VOOD-68; tested
+
+commit 3b5689da270f92e436783dc384f21be908d65b6f
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Sep 10 10:52:07 2012 -0700
+
+    pom.xml - Removed slf4j/logback dependencies
+    Voodoo.java - Reverting to using java.util.logger (instead of slf4j/logback).
+                  Added a couple of test messages to check out the output format.
+    loggingVoodoo.properties - The logging config file specifying the "root" settings
+                               that other loggers inherit.
+
+commit 61e58f3d2d48c26a0f525f3dc75fad2c2bf3f48a
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Sat Sep 8 19:24:18 2012 -0700
+
+    organized tests; added reports_7734(?) placeholders; fixed browser config; added cascading property carryover
+
+commit cfc2e79d86e665bc867abc66a8c9e6e5bfda6b51
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Thu Sep 6 20:53:42 2012 -0700
+
+    VOOD-77; VOOD-86 help; modified Accounts_0001 to use core; archived non-critical file; filed VOOD-98 to cover temp logging reversion
+
+commit 4fe93fee10591260f9cc24334a214757cf5de6ec
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 5 15:28:57 2012 -0700
+
+    package rename for better syntax
+
+commit d6a070b574027ad43dc8d2d16fea9544ad3a6409
+Merge: b5b35e3 faf5293
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 5 15:28:34 2012 -0700
+
+    package rename for better syntax
+
+commit b5b35e3be5775510b755096d3b09c39ed362725b
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Sep 5 15:21:35 2012 -0700
+
+    Cleaning up; better syntax; consolidating utils
+
+commit faf529347de214e9c6dd7bd2da44314b56252b07
+Merge: 8221d64 4d34604
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Sep 4 13:08:25 2012 -0700
+
+    Merge pull request #4 from hans-sugarcrm/master
+    
+    Logging using slf4j/logback
+
+commit 4d34604a4ca79f0b7a948bb1fba97053598a36c1
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Sep 3 23:55:13 2012 -0700
+
+    pom.xml: added slf4j/logback packages.
+    Voodoo.java: added two slf4j/logback log msgs. Comment out line related to java.util.logger.
+    logback.xml: config file for slf4j/logback.
+
+commit 8221d64421550692f9094f3bd9eff83adfd98799
+Merge: 7e700ac 494ec6a
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Sun Sep 2 22:50:31 2012 -0700
+
+    Merge pull request #3 from cradbold/master
+    
+    VOOD-50: element abstraction layer first pass; needs review and refinement over time
+
+commit 494ec6ac89c9881b4899c9aa63fbc0c60f807e60
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Sat Sep 1 21:32:58 2012 -0700
+
+    VOOD-50 element abstraction first pass
+
+commit 7e700aced6b1239a6fe8859c5becf36adc315248
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Wed Aug 29 14:12:28 2012 -0700
+
+    Update .gitignore
+
+commit 39bf062b9c6a224ab20a71e23daf306a8837e7d1
+Merge: deba160 d768f23
+Author: Soon Han <hans@sugarcrm.com>
+Date:   Mon Aug 27 20:33:59 2012 -0700
+
+    Merge pull request #2 from cradbold/master
+    
+    common resources object VOOD-49; cleaned up legacy code and impacted structure.
+     - looks good, reviewed by Soon
+
+commit d768f231a2997865e824af82b64bfbc9a43103e3
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Aug 27 17:06:24 2012 -0700
+
+    organized voodoo shared resources object; cleaned archive; cleaned legacy code; setup first pass template structure; updated accounts_0001 test
+
+commit deba160e4f5fb0335e5e924349ce3675c98aefda
+Merge: 80fd140 dbeff53
+Author: rsennewald <ray.sennewald@gmail.com>
+Date:   Tue Aug 21 15:49:27 2012 -0700
+
+    Merge pull request #1 from cradbold/master
+    
+    Initial check-in for Voodoo2
+
+commit dbeff539da985e3a42a490e478e2a9fc905e69d8
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Aug 14 18:38:17 2012 -0700
+
+    initial cross-team check-in with all notes/nonessential moved to archive
+
+commit 994727ebdb9fd1b6a35ee467bc4b30b48e3d692d
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Aug 7 19:37:12 2012 -0700
+
+    reorg; fixed mvn project dependency issue
+
+commit e37e73b30caa910c7ac8d7e1a3636ac1e238b865
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Tue Aug 7 19:36:23 2012 -0700
+
+    reorg & git logistics
+
+commit 17e4c7342a137325d92eaf3743f13f37a1e137ad
+Author: Conrad Warmbold <cwarmbold@sugarcrm.com>
+Date:   Mon Aug 6 19:44:29 2012 -0700
+
+    exploratory/iterative development
+
+commit 80fd140f6f970cfb54c588b4164ed1fedc397861
+Author: Ran Zhou <rzhou@sugarcrm.com>
+Date:   Mon Jul 23 14:57:38 2012 -0700
+
+    Initial commit
