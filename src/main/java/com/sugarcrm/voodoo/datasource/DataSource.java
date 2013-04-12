@@ -1,21 +1,19 @@
 package com.sugarcrm.voodoo.datasource;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
- *  DataSource is a minimal class that provides a uniform type seen by a client.   
+ * DataSource models a file containing a list of records. 
+ * A record is mapped to a FieldSet.
  *
  */
-public class DataSource {
-	
-	protected FieldSetList data = null;
+public class DataSource extends ArrayList<FieldSet> {
+	private static final long serialVersionUID = 1L;
+	protected DataSource data = null;
 	protected String filename = "";
 
 	public DataSource() {
-	}
-	
-	public FieldSetList getData() {
-		return this.data;
+		super();
 	}
 	
 	public String getFilename() {
