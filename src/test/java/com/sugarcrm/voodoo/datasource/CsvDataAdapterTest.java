@@ -15,7 +15,6 @@ import com.sugarcrm.voodoo.datasource.DataAdapter;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
 import com.sugarcrm.voodoo.datasource.DataSource;
-import com.sugarcrm.voodoo.datasource.FieldSetList;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 
 /**
@@ -63,10 +62,12 @@ public class CsvDataAdapterTest {
 		adapterFactory = new DataAdapterFactory(myConfig);
 		dataAdapter = adapterFactory.createDataAdapter(DataAdapterType.CSV);
 
+		//HashMap<String, DataSource_bak>
 		HashMap<String, DataSource>
 		dataSourceHashMap = dataAdapter.setDataBasePath(
 				"datasource.csv.baseDir").getData("csvs/Companies_0001",
 				DataAdapter.Selection.SINGLE);
+		//DataSource_bak ds = dataSourceHashMap.get("Companies_0001");
 		DataSource ds = dataSourceHashMap.get("Companies_0001");
 		printDataSourceSingle(ds);
 		printDataSource(dataSourceHashMap);
@@ -171,31 +172,39 @@ public class CsvDataAdapterTest {
 				+ currentDir);
 	}
 
+	//private static void printDataSourceSingle(DataSource_bak ds) {
 	private static void printDataSourceSingle(DataSource ds) {
-		FieldSetList fieldSetList = ds.getData();
+		//DataSource fieldSetList = ds.getData();
 		System.out
 				.println("main(): printDataSourceSingle(): dataSource filenameNoExt = "
 						+ ds.getFilename());
-		printDataSourceFieldSet(fieldSetList);
+		//printDataSourceFieldSet(fieldSetList);
+		printDataSourceFieldSet(ds);
 	}
 
 	private static void printDataSource(
+			//HashMap<String, DataSource_bak> dataSourceHashMap) {
 			HashMap<String, DataSource> dataSourceHashMap) {
 		for (String filenameNoExt : dataSourceHashMap.keySet()) {
 			System.out
 					.println("main(): printDataSourceData(): dataSource filenameNoExt = "
 							+ filenameNoExt);
-			FieldSetList fieldSetList = dataSourceHashMap.get(filenameNoExt)
-					.getData();
-			printDataSourceFieldSet(fieldSetList);
+			//DataSource fieldSetList = dataSourceHashMap.get(filenameNoExt)
+			//		.getData();
+			DataSource ds = dataSourceHashMap.get(filenameNoExt);
+			//printDataSourceFieldSet(fieldSetList);
+			printDataSourceFieldSet(ds);
 		}
 	}
 
-	private static void printDataSourceFieldSet(FieldSetList fieldSetList) {
+	//private static void printDataSourceFieldSet(DataSource fieldSetList) {
+	private static void printDataSourceFieldSet(DataSource ds) {
 		System.out
 				.println("main(): printDataSourceFieldSet(): fsList.size() = "
-						+ fieldSetList.size());
-		for (FieldSet fs : fieldSetList) {
+						//+ fieldSetList.size());
+						+ ds.size());
+		//for (FieldSet fs : fieldSetList) {
+		for (FieldSet fs : ds) {
 			for (String key : fs.keySet()) {
 				System.out.println(key + " : " + fs.get(key));
 			}
