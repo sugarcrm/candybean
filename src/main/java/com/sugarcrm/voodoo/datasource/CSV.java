@@ -54,16 +54,12 @@ public class CSV extends DataSource {
 			while ((line = br.readLine()) != null) {
 				line = line.replaceAll("\\n", "");
 				
-				System.out.println("line = " + line); // sthan
-				
 				if (line.isEmpty()) {
 					continue;
 				}
 
 				linedata = this.parser.parseLine(line);
 				
-				System.out.println("linedata = " + linedata);  // sthan
-
 				int linelen = linedata.length - 1;
 				FieldSet tmphash = new FieldSet();
 				for (int i = 0; i <= this.keys.size() - 1; i++) {
