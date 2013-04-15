@@ -34,16 +34,13 @@ public class CsvDataAdapterTest {
 
 		String dataDir = testDataDir + File.separator + "csvs";
 		dataDir = createDataDir(dataDir);
-		// System.out.println("main(): " + dataDir + " created");
 
 		String filename = "Companies_0001.csv";
 		String content = getContent1();
-		// System.out.println("main(): content1 = " + content);
 		createFile(dataDir, filename, content);
 
 		filename = "Companies_0001_note.csv";
 		content = getContent1A();
-		// System.out.println("main(): content1A = " + contentA);
 		createFile(dataDir, filename, content);
 
 		dataDir = testDataDir + File.separator + "csvs" + File.separator
@@ -52,22 +49,18 @@ public class CsvDataAdapterTest {
 
 		filename = "Companies_0001_2.csv";
 		content = getContent2();
-		// System.out.println("main(): content2 = " + content);
 		createFile(dataDir, filename, content);
 
 		myConfiguration = new MyConfiguration();
 		Configuration myConfig = myConfiguration.createConfigFile();
 
-		// adapterFactory = new DataAdapterFactory(sugarProps);
 		adapterFactory = new DataAdapterFactory(myConfig);
 		dataAdapter = adapterFactory.createDataAdapter(DataAdapterType.CSV);
 
-		//HashMap<String, DataSource_bak>
 		HashMap<String, DataSource>
 		dataSourceHashMap = dataAdapter.setDataBasePath(
 				"datasource.csv.baseDir").getData("csvs/Companies_0001",
 				DataAdapter.Selection.SINGLE);
-		//DataSource_bak ds = dataSourceHashMap.get("Companies_0001");
 		DataSource ds = dataSourceHashMap.get("Companies_0001");
 		printDataSourceSingle(ds);
 		printDataSource(dataSourceHashMap);
@@ -161,49 +154,39 @@ public class CsvDataAdapterTest {
 	private static void printCurrentDir() {
 		try {
 			String current = new java.io.File(".").getCanonicalPath();
-			System.out.println("main(): Current dir using getCanonicalPath():"
+			System.out.println("CsvDataAdapterTest: Current dir using getCanonicalPath():"
 					+ current);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		String currentDir = System.getProperty("user.dir");
-		System.out.println("main(): Current dir using System.getProperty:"
+		System.out.println("CsvDataAdapterTest: Current dir using System.getProperty:"
 				+ currentDir);
 	}
 
-	//private static void printDataSourceSingle(DataSource_bak ds) {
 	private static void printDataSourceSingle(DataSource ds) {
-		//DataSource fieldSetList = ds.getData();
 		System.out
-				.println("main(): printDataSourceSingle(): dataSource filenameNoExt = "
+				.println("CsvDataAdapterTest: printDataSourceSingle(): dataSource filenameNoExt = "
 						+ ds.getFilename());
-		//printDataSourceFieldSet(fieldSetList);
 		printDataSourceFieldSet(ds);
 	}
 
 	private static void printDataSource(
-			//HashMap<String, DataSource_bak> dataSourceHashMap) {
 			HashMap<String, DataSource> dataSourceHashMap) {
 		for (String filenameNoExt : dataSourceHashMap.keySet()) {
 			System.out
-					.println("main(): printDataSourceData(): dataSource filenameNoExt = "
+					.println("CsvDataAdapterTest: printDataSourceData(): dataSource filenameNoExt = "
 							+ filenameNoExt);
-			//DataSource fieldSetList = dataSourceHashMap.get(filenameNoExt)
-			//		.getData();
 			DataSource ds = dataSourceHashMap.get(filenameNoExt);
-			//printDataSourceFieldSet(fieldSetList);
 			printDataSourceFieldSet(ds);
 		}
 	}
 
-	//private static void printDataSourceFieldSet(DataSource fieldSetList) {
 	private static void printDataSourceFieldSet(DataSource ds) {
 		System.out
-				.println("main(): printDataSourceFieldSet(): fsList.size() = "
-						//+ fieldSetList.size());
+				.println("CsvDataAdapterTest: printDataSourceFieldSet(): fsList.size() = "
 						+ ds.size());
-		//for (FieldSet fs : fieldSetList) {
 		for (FieldSet fs : ds) {
 			for (String key : fs.keySet()) {
 				System.out.println(key + " : " + fs.get(key));

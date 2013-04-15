@@ -33,7 +33,6 @@ public abstract class DataAdapter {
 	protected static File[] getAllFilesBasedOnPattern(String fileFullDirPath,
 			String testData, String ext) {
 		File dir = new File(fileFullDirPath);
-		//File[] files = dir.listFiles();
 		File[] files;
 
 		String pattern = testData + "." + ext + "|" + testData + "_[^_]+" + "."
