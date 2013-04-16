@@ -84,7 +84,7 @@ public class DS {
 
 	private static void printDataSourceSingle(DataSource ds) {
 		System.out
-				.println("main(): printDataSourceSingle(): dataSource filenameNoExt = "
+				.println("DS: printDataSourceSingle(): dataSource filenameNoExt = "
 						+ ds.getFilename());
 		//printDataSourceFieldSet(fieldSetList);
 		printDataSourceFieldSet(ds);
@@ -94,7 +94,7 @@ public class DS {
 			HashMap<String, DataSource> dataSourceHashMap) {
 		for (String filenameNoExt : dataSourceHashMap.keySet()) {
 			System.out
-					.println("main(): printDataSourceData(): dataSource filenameNoExt = "
+					.println("DS: printDataSourceData(): dataSource filenameNoExt = "
 							+ filenameNoExt);
 			DataSource ds = dataSourceHashMap.get(filenameNoExt);
 			printDataSourceFieldSet(ds);
@@ -103,7 +103,7 @@ public class DS {
 
 	private static void printDataSourceFieldSet(DataSource ds) {
 		System.out
-				.println("main(): printDataSourceFieldSet(): fsList.size() = "
+				.println("DS: printDataSourceFieldSet(): fsList.size() = "
 						+ ds.size());
 		for (FieldSet fs : ds) {
 			for (String key : fs.keySet()) {

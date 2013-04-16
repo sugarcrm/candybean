@@ -20,7 +20,6 @@ public class DataAdapterFactory {
 		if (adapterType == DataAdapterType.CSV) {
 			return new CsvDataAdapter(config);   
 		} else if (adapterType == DataAdapterType.XML) {
-			//return new CsvDataAdapter(props);  
 			return null;
 		}
 		else {
