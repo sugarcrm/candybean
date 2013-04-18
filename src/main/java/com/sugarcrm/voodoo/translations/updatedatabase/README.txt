@@ -16,6 +16,6 @@ then
   git clone git@github.com:sugarcrm/Voodoo2.git
 fi
 
-cd ~/git_repos/Voodoo2/src/main/java/com/sugarcrm/voodoo/translations/update_database; git pull
+cd ~/git_repos/Voodoo2/src/main/java/com/sugarcrm/voodoo/translations/updatedatabase; git pull
 
 ./UpdateDatabaseSuite $WORKSPACE $WORKSPACE/translations 6_7 Translations_6_7

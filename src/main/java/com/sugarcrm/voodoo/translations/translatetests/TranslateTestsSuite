@@ -7,7 +7,7 @@
 # 1 - properties file, 6 - arguments for properties file
 # arglist: $output $language $db_name $db_server $db_user $db_pass
 
-if [ $# != 1 -a $# != 6 ]
+if ([ $# != 1 -a $# != 6 ] || [ $1 = "-h" -o $1 = "-help" -o $1 = "--help" ])
 then
 	echo "Usage: $0 1 or 6 arguments please"
 	exit
@@ -34,9 +34,9 @@ do
 
 		mkdir -p $output_subfolder
 		cd ~/git_repos/Voodoo2/src/main/java
-		javac -d . com/sugarcrm/voodoo/translations/translate_tests/Translations.java
+		javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations.java
 
-		java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translate_tests/Translations ~/git_repos/Voodoo2/src/test/resources/Translations.properties
+		java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/git_repos/Voodoo2/src/test/resources/Translations.properties
 	fi
 	printf "\n"
 done

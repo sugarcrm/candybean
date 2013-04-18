@@ -1,20 +1,22 @@
-package com.sugarcrm.voodoo.translations.translate_tests;
+package com.sugarcrm.voodoo.translations.translatetests;
 
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class FindSingleTranslation {
-	private static Connection CONNECTION;
-	private static ArrayList<String> MODULES;
+	private static Connection connection;
+	private static ArrayList<String> modules;
+	private static String dbServer = "10.8.31.10";
+	private static String dbName = "Translations_6_7_latest";
 
 	public static void main(String args[]) {
 		try {
-			CONNECTION = connectToDB();
-			System.out.println("Successfully connected to database [add db_name parameter]");
-			MODULES = getDBTables();
-			Translate(MODULES, "Show More", "ja_JP");
+			String english = args[0];
+			String language = args[1];
+			System.out.println("Translating '" + english + "' to " + language + " using " + dbServer + "/" + dbName + ".\n");
+			connection = connectToDB();
+			modules = getDBTables();
+			Translate(modules, english, language);
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -25,11 +27,11 @@ public class FindSingleTranslation {
 
 	private static Connection connectToDB() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://localhost/Translations_6_7?useUnicode=true&characterEncoding=utf-8", "root", "root");
+		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", "translator", "Sugar123!");
 	}
 
 	private static ArrayList<String> getDBTables() throws SQLException {
-		DatabaseMetaData dbmd = CONNECTION.getMetaData();
+		DatabaseMetaData dbmd = connection.getMetaData();
 		ArrayList<String> tables = new ArrayList<String>();
 		String[] types = { "TABLE" };
 		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
@@ -41,19 +43,16 @@ public class FindSingleTranslation {
 	}
 
 	private static void Translate(ArrayList<String> modules, String en_string, String lang) throws SQLException {
+		PreparedStatement statement = null; 
 		ResultSet rs = null;
 
 		for (String module : modules) {
-			rs = execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
+			statement = connection.prepareStatement("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
+			rs = statement.executeQuery();
 			while (rs.next()) {
 				String translated = rs.getString(lang);
-				System.out.println("module: " + module + ", en_us:" + en_string + ", " + lang + ": " + translated);
+				System.out.println(module + ": " + translated);
 			}
 		}
-	}
-
-	private static ResultSet execQuery(String query) throws SQLException {
-		PreparedStatement ps = CONNECTION.prepareStatement(query);
-		return ps.executeQuery();
 	}
 }
