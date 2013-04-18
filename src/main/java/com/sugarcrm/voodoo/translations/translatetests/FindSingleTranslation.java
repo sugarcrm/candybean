@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class FindSingleTranslation {
-	private static Connection CONNECTION;
-	private static ArrayList<String> MODULES;
+	private static Connection connection;
+	private static ArrayList<String> modules;
 	private static String dbServer = "10.8.31.10";
 	private static String dbName = "Translations_6_7_latest";
 
@@ -14,9 +14,9 @@ public class FindSingleTranslation {
 			String english = args[0];
 			String language = args[1];
 			System.out.println("Translating '" + english + "' to " + language + " using " + dbServer + "/" + dbName + ".\n");
-			CONNECTION = connectToDB();
-			MODULES = getDBTables();
-			Translate(MODULES, english, language);
+			connection = connectToDB();
+			modules = getDBTables();
+			Translate(modules, english, language);
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -31,7 +31,7 @@ public class FindSingleTranslation {
 	}
 
 	private static ArrayList<String> getDBTables() throws SQLException {
-		DatabaseMetaData dbmd = CONNECTION.getMetaData();
+		DatabaseMetaData dbmd = connection.getMetaData();
 		ArrayList<String> tables = new ArrayList<String>();
 		String[] types = { "TABLE" };
 		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
@@ -43,19 +43,16 @@ public class FindSingleTranslation {
 	}
 
 	private static void Translate(ArrayList<String> modules, String en_string, String lang) throws SQLException {
+		PreparedStatement statement = null; 
 		ResultSet rs = null;
 
 		for (String module : modules) {
-			rs = execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
+			statement = connection.prepareStatement("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
+			rs = statement.executeQuery();
 			while (rs.next()) {
 				String translated = rs.getString(lang);
 				System.out.println(module + ": " + translated);
 			}
 		}
-	}
-
-	private static ResultSet execQuery(String query) throws SQLException {
-		PreparedStatement ps = CONNECTION.prepareStatement(query);
-		return ps.executeQuery();
 	}
 }
