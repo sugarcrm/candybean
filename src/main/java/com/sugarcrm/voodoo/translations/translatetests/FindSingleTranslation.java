@@ -1,20 +1,22 @@
 package com.sugarcrm.voodoo.translations.translatetests;
 
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class FindSingleTranslation {
 	private static Connection CONNECTION;
 	private static ArrayList<String> MODULES;
+	private static String dbServer = "10.8.31.10";
+	private static String dbName = "Translations_6_7_latest";
 
 	public static void main(String args[]) {
 		try {
+			String english = args[0];
+			String language = args[1];
+			System.out.println("Translating '" + english + "' to " + language + " using " + dbServer + "/" + dbName + ".\n");
 			CONNECTION = connectToDB();
-			System.out.println("Successfully connected to database [add db_name parameter]");
 			MODULES = getDBTables();
-			Translate(MODULES, "Show More", "ja_JP");
+			Translate(MODULES, english, language);
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -25,7 +27,7 @@ public class FindSingleTranslation {
 
 	private static Connection connectToDB() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://localhost/Translations_6_7?useUnicode=true&characterEncoding=utf-8", "root", "root");
+		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", "translator", "Sugar123!");
 	}
 
 	private static ArrayList<String> getDBTables() throws SQLException {
@@ -47,7 +49,7 @@ public class FindSingleTranslation {
 			rs = execQuery("SELECT * FROM " + module + " WHERE en_us='" + en_string + "'");
 			while (rs.next()) {
 				String translated = rs.getString(lang);
-				System.out.println("module: " + module + ", en_us:" + en_string + ", " + lang + ": " + translated);
+				System.out.println(module + ": " + translated);
 			}
 		}
 	}

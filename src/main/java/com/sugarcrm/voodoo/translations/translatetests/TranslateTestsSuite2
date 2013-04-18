@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Author: Jason Lin (ylin)
+# Purpose: 
+# Output:
+# Input: 1 or 6
+# 1 - properties file, 6 - arguments for properties file
+# arglist: $output $language $db_name $db_server $db_user $db_pass
+
+if [[ $# = 1 ]]
+then
+	if [[ $1 = *.properties ]]
+	then
+		cd ~/Workspace/Voodoo2/src/main/java
+		javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations2.java
+
+		java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations2 ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
+	else
+		echo "Usage: $0 1 or 6 arguments
+1 argument: properties file
+6 arguments: dbServer, dbName, dbPass, language, testPath, outputPath"
+		exit
+	fi
+
+else if [[ $# != 6 ]]
+then
+	echo "Usage: $0 1 or 6 arguments
+1 argument: properties file
+6 arguments: dbServer, dbName, dbPass, language, testPath, outputPath"
+	exit
+
+else
+	dbServer=$1; dbName=$2; dbUser=$3; dbPass=$4; language=$5; testPath=$6; outputPath=$7
+
+	mkdir -p $output;
+	echo "translations.database_server=$dbServer
+translations.database_name=$dbName
+translations.database_user=$dbUser
+translations.database_pass=$dbPass
+translations.language=$language
+translations.test_path=$testPath
+translations.output_path=$outputPath" > ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
+
+	cd ~/Workspace/Voodoo2/src/main/java
+	javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations2.java
+
+	java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations2 ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
+
+	fi
+fi
