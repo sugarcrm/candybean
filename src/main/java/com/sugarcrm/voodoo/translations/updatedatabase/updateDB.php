@@ -137,7 +137,6 @@ function update_key($link, $key, $module, $index)
 {
 	$update_key = "INSERT IGNORE INTO `" . $module . "` (`ID`, `Label`) VALUES (" . $index . ", '" . mysqli_real_escape_string($link, $key) . "')";
 	mysqli_query($link, $update_key) or die (mysqli_error($link));
-	//echo "update_key query: $update_key.\n";
 }
 
 /*
@@ -153,7 +152,6 @@ function update_value($link, $value, $key, $module, $language)
 {
 	$update_value = "UPDATE `" . $module . "` SET `" . $language . "` = '" . mysqli_real_escape_string($link, $value) . "' WHERE Label = '" . mysqli_real_escape_string($link, $key) . "'";
     	mysqli_query($link, $update_value) or die (mysqli_error($link));
-	//echo "update_value query: $update_value.\n";
 }
 
 ?>
