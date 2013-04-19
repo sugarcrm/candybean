@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd ~/git_repos/Voodoo2/src/main/java
-javac -d . com/sugarcrm/voodoo/translations/find_duplicates/FindDuplicateEntries.java
-java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/find_duplicates/FindDuplicateEntries
