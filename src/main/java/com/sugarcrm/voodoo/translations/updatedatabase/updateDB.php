@@ -1,6 +1,6 @@
 <?php
 
-require ('UpdateDB_LangsAndModules.php');
+require ('updateDB_LangsAndModules.php');
 
 $db = $argv[1];
 $en_folder = $argv[2]; // dir containing English php files, should be set to a Sugar installation
@@ -137,7 +137,6 @@ function update_key($link, $key, $module, $index)
 {
 	$update_key = "INSERT IGNORE INTO `" . $module . "` (`ID`, `Label`) VALUES (" . $index . ", '" . mysqli_real_escape_string($link, $key) . "')";
 	mysqli_query($link, $update_key) or die (mysqli_error($link));
-	//echo "update_key query: $update_key.\n";
 }
 
 /*
@@ -153,7 +152,6 @@ function update_value($link, $value, $key, $module, $language)
 {
 	$update_value = "UPDATE `" . $module . "` SET `" . $language . "` = '" . mysqli_real_escape_string($link, $value) . "' WHERE Label = '" . mysqli_real_escape_string($link, $key) . "'";
     	mysqli_query($link, $update_value) or die (mysqli_error($link));
-	//echo "update_value query: $update_value.\n";
 }
 
 ?>
