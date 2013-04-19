@@ -1,8 +1,15 @@
 package com.sugarcrm.voodoo.utilities;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -20,7 +27,7 @@ import java.util.regex.Matcher;
  *
  */
 public class Utils {
-	
+
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
 	 * 
@@ -36,8 +43,8 @@ public class Utils {
 			System.out.println(line);
 			line = reader.readLine();
 		}
-    }
-	
+	}
+
 	/**
 	 * Given a string, this function returns the suffix of that string matching the given length.
 	 * 
@@ -68,7 +75,16 @@ public class Utils {
 		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
 		return tempPath;
 	}
-	
+
+	public static void closeStream(Closeable s) {
+		try {
+			if (s != null)
+				s.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Executes a query written as a String and return the ResultSet containing the results of the query.
 	 * @param query
@@ -147,13 +163,13 @@ public class Utils {
 		public final X x; 
 		public final Y y; 
 		public final Z z;
-		
+
 		public Triplet(X x, Y y, Z z) { 
 			this.x = x; 
 			this.y = y;
 			this.z = z;
 		} 
-		
+
 		@Override
 		public String toString() {
 			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
