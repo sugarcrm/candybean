@@ -17,7 +17,8 @@ public class VControl {
 	protected final Voodoo voodoo;
 	protected final VInterface iface;
 	protected final VHook hook;
-	public final WebElement we;
+	protected int index;
+	public WebElement we;
 	
 	public VControl(Voodoo voodoo, VInterface iface, Strategy strategy, String hook) throws Exception {
 		this(voodoo, iface, new VHook(strategy, hook));
@@ -36,6 +37,7 @@ public class VControl {
 		this.iface = iface;
 		this.we = iface.wd.findElements(this.getBy(hook)).get(index);
 		this.hook = hook;
+		this.index = index;
 	}
 	
 	private VControl(Voodoo voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
@@ -200,6 +202,9 @@ public class VControl {
 	public void sendString(String input) throws Exception {
 		voodoo.log.info("Selenium: sending string: " + input + " to control: " + this.toString());
 		this.we.clear();
+		
+		// Re-find the element to avoid the stale element problem.
+		this.we = iface.wd.findElements(this.getBy(hook)).get(index);
 		this.we.sendKeys(input);
 	}
 
