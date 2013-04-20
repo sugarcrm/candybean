@@ -12,7 +12,7 @@
     <p>If the number of English instances is 0, translation does not exist.</p>
     <p>If the number of English instances exceeds 1, translation may be ambiguous (2+ unique mappings).*</p>
     <p><small>	*Porting an existing feature to PHP that informs the user if the translation is in fact ambiguous.</small></p>
-    <form action="php_action_page2.php" method="post">
+    <form action="validator_results.php" method="post">
       Validate: <input type="text" name="english" /><br />
       Language: <select name="language">
 	<option value="en_us">English (US)</option>
