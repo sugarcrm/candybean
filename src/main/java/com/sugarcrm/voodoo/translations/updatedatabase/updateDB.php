@@ -113,10 +113,13 @@ function array_to_db_recursive($link, $module, $array_data, $language, $prev_key
 		}
 		$new_value = str_replace("'", "", $values[$array_index]);
 		
+		// current value is not an array, write current key and current value to DB
 		if (!is_array($values[$array_index])) {
 			update_key($link, $new_key, $module, $db_index);
 			update_value($link, $new_value, $new_key, $module, $language);
-		} else {
+		}
+		// current value is an array, recursively process key-value pairs inside current value 
+		else {
 			array_to_db_recursive($link, $module, $values[$array_index], $language, $new_key, $db_index);
 		}
 

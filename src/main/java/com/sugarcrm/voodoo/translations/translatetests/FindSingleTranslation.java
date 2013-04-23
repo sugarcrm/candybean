@@ -11,13 +11,13 @@ public class FindSingleTranslation {
 
 	public static void main(String args[]) {
 		try {
-			String english = args[0];
-			String language = args[1];
+			String english = "in the result set.";
+			String language = "en_us";
 			System.out.println("Translating '" + english + "' to " + language + " using " + dbServer + "/" + dbName + ".\n");
 			connection = connectToDB();
 			modules = getDBTables();
 			Translate(modules, english, language);
-
+			System.out.println("Finished.");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
