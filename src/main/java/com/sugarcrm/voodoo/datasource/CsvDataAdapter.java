@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
-
-import com.sugarcrm.voodoo.utilities.Utils;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 /**
  * CsvDataAdapter is used by client to convert csv files into a list of
@@ -17,8 +15,8 @@ import com.sugarcrm.voodoo.utilities.Utils;
  */
 public class CsvDataAdapter extends DataAdapter {
 
-	public CsvDataAdapter(Properties grimoireProps) {
-		super(grimoireProps);
+	public CsvDataAdapter(Configuration config) {
+		super(config);
 	}
 
 	/**
@@ -70,30 +68,22 @@ public class CsvDataAdapter extends DataAdapter {
 		return fileList;
 	}
 
-	private static String getDataBaseDirFromProp(Properties props, String property) {
+	private static String getDataBaseDirFromProp(Configuration config, String property) {
 
 		String currDir = System.getProperty("user.dir");
 
-		String csvBaseDir = Utils.getCascadingPropertyValue(props,
-				//"/home/testData", "datasource.csv.basedir");
-				"/home/testData", property);
+		String csvBaseDir = config.getProperty(property, "/home/testData");
 		//System.out
 		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
 		//				+ csvBaseDir);
 
-		// String fileFullPath = grimoireDir + File.separator + csvDirPath;
 		String fileFullPath = currDir + File.separator + csvBaseDir;
-		//System.out
-		//		.println("CsvDataAdapter.csv: getDataBaseDirFromProp(): fileFullPath = "
-		//				+ fileFullPath);
 
 		return fileFullPath; // it seems returning just filePath still works
 	}
 
 	private static File getDataFullPathCanonical(String dataPath) {
-		//System.out.println("CsvDataAdapter.java: getCsvFileList(): testData = "
-		//		+ dataPath);
-		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.properties, DataAdapter.dataBasePath);
+		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.configuration, DataAdapter.dataBasePath);
 		//System.out
 		//		.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
 		//				+ dataBaseDir);
@@ -113,17 +103,6 @@ public class CsvDataAdapter extends DataAdapter {
 		return dataFileCanonical;
 	}
 
-	private static void printDataFilePath(File dataFileCanonical) {
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
-						+ dataFileCanonical.getPath());
-		String dataFilename = dataFileCanonical.getName();
-		String dataParent = dataFileCanonical.getParent();
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
-						+ dataFilename + "  dataParent = " + dataParent);
-	}
-
 	/**
 	 * convertIt converts the input list of File objects into a list of
 	 * DataSource
@@ -137,17 +116,28 @@ public class CsvDataAdapter extends DataAdapter {
 		HashMap<String, DataSource> dataSourceHashMap = new HashMap<String, DataSource>();
 
 		for (File f : csvFileList) {
-			// System.out.println(f.toString());
 			String absPath = f.getAbsolutePath();
-			// System.out.println(absPath);
-			CSV csv = new CSV(absPath); // CSV parses CSV file. It inherits from
-										// DataSource
-
+			
+			// CSV parses CSV file. It inherits from DataSource
+			CSV csv = new CSV(absPath); 
+			DataSource ds = csv.getDataSource();
+			
 			String filenameNoExt = f.getName().replace(".csv", "");
-			dataSourceHashMap.put(filenameNoExt, csv);
+			dataSourceHashMap.put(filenameNoExt, ds);
 		}
 
 		return dataSourceHashMap;
+	}
+
+	private static void printDataFilePath(File dataFileCanonical) {
+		System.out
+				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
+						+ dataFileCanonical.getPath());
+		String dataFilename = dataFileCanonical.getName();
+		String dataParent = dataFileCanonical.getParent();
+		System.out
+				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
+						+ dataFilename + "  dataParent = " + dataParent);
 	}
 
 	private static void printCsvFileList(List<File> csvFileList) {
@@ -164,13 +154,13 @@ public class CsvDataAdapter extends DataAdapter {
 
 	private static void printCsvList(List<CSV> csvList) {
 		for (CSV csv : csvList) {
-			FieldSetList csvData = csv.getData();
-			System.out.println(csvData.toString());
-			printCSVData(csvData);
+			System.out.println(csv.toString());
+			//printCSVData(csvData);
+			printCSVData(csv);
 		}
 	}
 
-	private static void printCSVData(FieldSetList csvData) {
+	private static void printCSVData(DataSource csvData) {
 		System.out.println("printCSVData(): fsList.size() = " + csvData.size());
 		for (FieldSet fs : csvData) {
 			System.out.println(fs.toString());

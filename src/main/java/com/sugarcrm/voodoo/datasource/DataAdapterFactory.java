@@ -1,7 +1,5 @@
 package com.sugarcrm.voodoo.datasource;
 
-import java.util.Properties;
-
 import com.sugarcrm.voodoo.configuration.Configuration;
 
 
@@ -11,18 +9,17 @@ import com.sugarcrm.voodoo.configuration.Configuration;
  */
 public class DataAdapterFactory {
 	public enum DataAdapterType { CSV, XML };
-	protected Properties props;
+	protected Configuration config;
 
-	public DataAdapterFactory(Properties props) {
-		this.props = props; 
+	public DataAdapterFactory(Configuration config) {
+		this.config = config; 
 	}
 	
 	public DataAdapter createDataAdapter(DataAdapterType adapterType) {
 		
 		if (adapterType == DataAdapterType.CSV) {
-			return new CsvDataAdapter(props);   
+			return new CsvDataAdapter(config);   
 		} else if (adapterType == DataAdapterType.XML) {
-			//return new CsvDataAdapter(props);  
 			return null;
 		}
 		else {

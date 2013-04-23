@@ -2,12 +2,9 @@ package com.sugarcrm.voodoo.datasource;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Properties;
-
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -18,7 +15,6 @@ import com.sugarcrm.voodoo.datasource.DataAdapter;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
 import com.sugarcrm.voodoo.datasource.DataSource;
-import com.sugarcrm.voodoo.datasource.FieldSetList;
 import com.sugarcrm.voodoo.datasource.FieldSet;
 
 /**
@@ -26,7 +22,7 @@ import com.sugarcrm.voodoo.datasource.FieldSet;
  *
  */
 public class CsvDataAdapterTest {
-	private static MyConfiguration myConfig;
+	private static MyConfiguration myConfiguration;
 	private static String testDataDir = "testData";
 
 	@Test
@@ -38,16 +34,13 @@ public class CsvDataAdapterTest {
 
 		String dataDir = testDataDir + File.separator + "csvs";
 		dataDir = createDataDir(dataDir);
-		// System.out.println("main(): " + dataDir + " created");
 
 		String filename = "Companies_0001.csv";
 		String content = getContent1();
-		// System.out.println("main(): content1 = " + content);
 		createFile(dataDir, filename, content);
 
 		filename = "Companies_0001_note.csv";
 		content = getContent1A();
-		// System.out.println("main(): content1A = " + contentA);
 		createFile(dataDir, filename, content);
 
 		dataDir = testDataDir + File.separator + "csvs" + File.separator
@@ -56,14 +49,12 @@ public class CsvDataAdapterTest {
 
 		filename = "Companies_0001_2.csv";
 		content = getContent2();
-		// System.out.println("main(): content2 = " + content);
 		createFile(dataDir, filename, content);
 
-		myConfig = new MyConfiguration();
-		Properties myProps = myConfig.createConfigFile();
+		myConfiguration = new MyConfiguration();
+		Configuration myConfig = myConfiguration.createConfigFile();
 
-		// adapterFactory = new DataAdapterFactory(sugarProps);
-		adapterFactory = new DataAdapterFactory(myProps);
+		adapterFactory = new DataAdapterFactory(myConfig);
 		dataAdapter = adapterFactory.createDataAdapter(DataAdapterType.CSV);
 
 		HashMap<String, DataSource>
@@ -163,42 +154,40 @@ public class CsvDataAdapterTest {
 	private static void printCurrentDir() {
 		try {
 			String current = new java.io.File(".").getCanonicalPath();
-			System.out.println("main(): Current dir using getCanonicalPath():"
+			System.out.println("CsvDataAdapterTest: Current dir using getCanonicalPath():"
 					+ current);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		String currentDir = System.getProperty("user.dir");
-		System.out.println("main(): Current dir using System.getProperty:"
+		System.out.println("CsvDataAdapterTest: Current dir using System.getProperty:"
 				+ currentDir);
 	}
 
 	private static void printDataSourceSingle(DataSource ds) {
-		FieldSetList fieldSetList = ds.getData();
 		System.out
-				.println("main(): printDataSourceSingle(): dataSource filenameNoExt = "
+				.println("CsvDataAdapterTest: printDataSourceSingle(): dataSource filenameNoExt = "
 						+ ds.getFilename());
-		printDataSourceFieldSet(fieldSetList);
+		printDataSourceFieldSet(ds);
 	}
 
 	private static void printDataSource(
 			HashMap<String, DataSource> dataSourceHashMap) {
 		for (String filenameNoExt : dataSourceHashMap.keySet()) {
 			System.out
-					.println("main(): printDataSourceData(): dataSource filenameNoExt = "
+					.println("CsvDataAdapterTest: printDataSourceData(): dataSource filenameNoExt = "
 							+ filenameNoExt);
-			FieldSetList fieldSetList = dataSourceHashMap.get(filenameNoExt)
-					.getData();
-			printDataSourceFieldSet(fieldSetList);
+			DataSource ds = dataSourceHashMap.get(filenameNoExt);
+			printDataSourceFieldSet(ds);
 		}
 	}
 
-	private static void printDataSourceFieldSet(FieldSetList fieldSetList) {
+	private static void printDataSourceFieldSet(DataSource ds) {
 		System.out
-				.println("main(): printDataSourceFieldSet(): fsList.size() = "
-						+ fieldSetList.size());
-		for (FieldSet fs : fieldSetList) {
+				.println("CsvDataAdapterTest: printDataSourceFieldSet(): fsList.size() = "
+						+ ds.size());
+		for (FieldSet fs : ds) {
 			for (String key : fs.keySet()) {
 				System.out.println(key + " : " + fs.get(key));
 			}
@@ -209,7 +198,7 @@ public class CsvDataAdapterTest {
 		
 		// Delete properties file created
 		System.out.println("");
-		myConfig.deleteConfigFile();
+		myConfiguration.deleteConfigFile();
 		
 		// Delete data directory
 		try {
@@ -223,20 +212,20 @@ public class CsvDataAdapterTest {
 	private static class MyConfiguration {
 		String configFilePath = System.getProperty("user.dir") + File.separator
 				+ "myPropFile.properties";
-		Configuration prop = null;
+		Configuration config = null;
 
 		@Test
-		public Properties createConfigFile() {
+		public Configuration createConfigFile() {
 			// Creating Configuration Object
-			prop = new Configuration();
+			config = new Configuration();
 
 			// Defining configuration properties keys/values
-			prop.setProperty("datasource.csv.baseDir", "testData");
-			prop.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
+			config.setProperty("datasource.csv.baseDir", "testData");
+			config.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
 
 			// Store Configuration
 			try {
-				prop.store(configFilePath, null);
+				config.store(configFilePath, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -247,12 +236,12 @@ public class CsvDataAdapterTest {
 					propFile.exists());
 
 			try {
-				prop.load(configFilePath);
+				config.load(configFilePath);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			return prop;
+			return config;
 		}
 
 		@Test

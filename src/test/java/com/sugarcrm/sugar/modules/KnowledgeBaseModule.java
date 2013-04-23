@@ -2,7 +2,6 @@ package com.sugarcrm.sugar.modules;
 
 import com.sugarcrm.sugar.Sugar;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
-import com.sugarcrm.voodoo.utilities.Utils;
 
 /**
  * @author Conrad Warmbold
@@ -15,7 +14,7 @@ public class KnowledgeBaseModule {
 	public KnowledgeBaseModule(Sugar sugar) { this.sugar = sugar; }
 	
 	public void createArticle(ArticleRecord article) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=KBDocuments&action=EditView");
 		sugar.i.getControl(Strategy.ID, "kbdocument_name").sendString(article.title);
 		sugar.i.getControl(Strategy.ID, "body_html_code").click();
@@ -29,7 +28,7 @@ public class KnowledgeBaseModule {
 	}
 	
 	public void deleteAllArticles() throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=KBDocuments&action=ListView");
 		sugar.i.getControl(Strategy.ID, "massall_top").click();
 		sugar.i.getControl(Strategy.ID, "delete_listview_top").click();
@@ -53,7 +52,7 @@ public class KnowledgeBaseModule {
 	}
 	
 	public void searchArticles(String search) throws Exception {
-		String sugarURL = Utils.getCascadingPropertyValue(sugar.props, "http://localhost/ent670/", "env.base_url");
+		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=KBDocuments&action=ListView");
 		sugar.i.getControl(Strategy.ID, "name_basic").sendString(search);
 		sugar.i.getControl(Strategy.ID, "search_form_submit").click();
