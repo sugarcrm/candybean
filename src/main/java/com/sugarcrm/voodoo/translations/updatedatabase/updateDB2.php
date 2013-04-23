@@ -2,36 +2,36 @@
 
 require ('updateDB_LangsAndModules.php');
 
-$db = $argv[1];
+$db_name = $argv[1];
 $en_folder = $argv[2]; // dir containing English php files, should be set to a Sugar installation
 $for_folder = $argv[3]; // dir containing foreign language php files, should be set to a Sugar installation or sugarcrm/translations repository
-$link = mysqli_connect($argv[4], $argv[5], $argv[6]);
+$mysqli = new mysqli($argv[4], $argv[5], $argv[6]);
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+}
+$mysqli->set_charset("utf8");
 
 echo "\nUsing English files from $en_folder.\n";
 echo "\nUsing foreign language files from $for_folder.\n";
 
-define("sugarEntry", "true");
 
-$create_db = "CREATE DATABASE IF NOT EXISTS $db DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE utf8_general_ci";
-mysqli_query($link, $create_db) or die(mysql_error($link));
+$create_db = "CREATE DATABASE IF NOT EXISTS $db_name";
+mysqli->query($create_db) or die(mysql_error($link));
 
-mysqli_select_db($link, $db);
+mysqli->select_db($db_name);
 
-if (!$link) {
-  die("\nCould not connect: " . mysqli_error($link) . ".\n");
-}
-else echo "\nConnected to database $argv[4] successfully.\n";
+else echo "\nConnected to $argv[4] successfully.\n";
 
-echo "\nUsing database $db.\n";
+echo "\nUsing database $db_name.\n";
 
-$tablename = "allLanguageStrings";
-for ($counter = 0; $counter < sizeof($module); $counter++) {
-  build_table($link, $tablename]);
+$table_name = "all_language_strings";
+for ($i = 0; $i < sizeof($module); $i++) {
+  build_table($link, $table_name]);
   mysqli_set_charset($link, 'utf8');
-  store_by_language($link, $language, $module[$counter], $en_folder, $for_folder);
+  store_by_language($link, $language, $module[$i], $en_folder, $for_folder);
 }
 
-mysqli_close($link);
+mysqli->close();
 
 /*
  * Contructs the module specific table
@@ -40,17 +40,17 @@ mysqli_close($link);
  * inputs:
  * module - the array that contains the key-value pairs of a particular language (from the translation repository)
  */
-function build_table($link, $tablename)
+function build_table($link, $table_name)
 {
-  $drop_table = "DROP TABLE IF EXISTS `" . $tablename . "`";
-  mysqli_query($link, $drop_table) or die(mysqli_error($link));
+  $drop_table = "DROP TABLE IF EXISTS `" . $table_name . "`";
+  mysqli->query($drop_table) or die (mysql->error());
 
-  $add_table = "CREATE TABLE " . $tablename . "(ID INTEGER AUTO_INCREMENT PRIMARY KEY, Label TEXT) ENGINE=MyISAM";
-  mysqli_query($link, $add_table) or die(mysqli_error($link));
+  $add_table = "CREATE TABLE " . $table_name . "(ID INTEGER AUTO_INCREMENT PRIMARY KEY, Module TEXT, Label TEXT)";
+  mysqli->query($add_table) or die (mysql->error());
 
   for ($i = 0; $i < sizeof($language); $i++) {
-    $add_column = "ALTER TABLE " . $tablename . " ADD " . $language . " TEXT";
-	  mysqli_query($link, $add_column) or die (mysqli_error($link));
+    $add_column = "ALTER TABLE " . $table_name . " ADD " . $language . " TEXT";
+	  mysqli->query($add_column) or die (mysqli->error());
   }
 }
 
@@ -68,26 +68,26 @@ function build_table($link, $tablename)
 function store_by_language($link, $language, $module, $en_folder, $for_folder)
 {
 	echo "\n";
-	$en_file =  $en_folder . '/modules/' . $module . '/language/en_us.lang.php';
+	$en_file = "$en_folder/modules/$module/language/en_us.lang.php";
   //echo "\nLoading file into database: " . strstr($en_file, "$module/") . ".\n";
   if (file_exists($en_file)){
-    include_once $en_folder . '/modules/' . $module . '/language/en_us.lang.php';
+    include_once "$en_folder/modules/$module/language/en_us.lang.php";
     array_to_db($link, $module, $mod_strings, "en_us");
     echo 'Loaded file into database: ' . strstr($en_file, "$module/") . ".\n";
 
     for ($i = 0; $i < sizeof($language); $i++) {
-      $for_file = $for_folder . '/modules/' . $module . '/language/' . $language[$i] . '.lang.php';
+      $for_file = "$for_folder/modules/$module/language/" . $language[$i] . ".lang.php";
       //echo "\nLoading file into database: " . strstr($for_file, "$module/") . ".\n";
       if (file_exists($for_file)){
-        include_once $for_folder . '/modules/' . $module . '/language/' . $language[$i] . '.lang.php';
+        include_once "$for_folder/modules/$module/language/" . $language[$i] . "lang.php";
         array_to_db($link, $module, $mod_strings, $language[$i]);
-        echo 'Loaded file into database: ' . strstr($for_file, "$module/") . ".\n";
+        echo "Loaded file into database: " . strstr($for_file, "$module/") . ".\n";
       } else {
-      echo "      The language file: " . $language[$i] . " in the module: " . $module . " does not exist.\n";
+      echo "      The language file: " . $language[$i] . " in the module $module does not exist.\n";
       }
     }
 	} else {
-  	echo "The module " . $module . " could not be added.\n\n";
+  	echo "The module $module could not be added.\n\n";
   	return 0;
 	}
 }
@@ -142,8 +142,9 @@ function array_to_db_recursive($link, $module, $array_data, $language, $prev_key
  */
 function update_key($link, $key, $module, $index)
 {
-	$update_key = "INSERT IGNORE INTO `" . $module . "` (`ID`, `Label`) VALUES (" . $index . ", '" . mysqli_real_escape_string($link, $key) . "')";
-	mysqli_query($link, $update_key) or die (mysqli_error($link));
+  $escaped_key = mysqli->real_escape_string($key);
+	$update_key = "INSERT IGNORE INTO $table_name (Module, Label) VALUES ('$module', '$escaped_key')";
+	mysqli->query($update_key) or die (mysqli->error());
 }
 
 /*
@@ -157,8 +158,10 @@ function update_key($link, $key, $module, $index)
  */
 function update_value($link, $value, $key, $module, $language)
 {
-	$update_value = "UPDATE `" . $module . "` SET `" . $language . "` = '" . mysqli_real_escape_string($link, $value) . "' WHERE Label = '" . mysqli_real_escape_string($link, $key) . "'";
-    	mysqli_query($link, $update_value) or die (mysqli_error($link));
+  $escaped_key = mysqli->real_escape_string($key);
+  $escaped_value = mysqli->real_escape_string($value);
+	$update_value = "UPDATE $table_name SET $language='$escaped_value' WHERE Label = '$escaped_key' AND ";
+  mysqli->query($update_value) or die (mysqli->error());
 }
 
 ?>
