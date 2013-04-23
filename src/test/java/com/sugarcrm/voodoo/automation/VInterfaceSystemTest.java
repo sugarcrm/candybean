@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +32,7 @@ import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
-import com.sugarcrm.voodoo.utilities.Utils;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 public class VInterfaceSystemTest {
 
@@ -50,9 +49,9 @@ public class VInterfaceSystemTest {
 		if (voodooPropsFilename == null)
 			voodooPropsFilename = "voodoo-mac.properties";
 		voodooPropsPath += voodooPropsFilename;
-		Properties voodooProps = new Properties();
-		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
-		voodoo = Voodoo.getInstance(voodooProps);
+		Configuration voodooConfig = new Configuration();
+		voodooConfig.load(voodooPropsPath);
+		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
 		iface.start();
 	}

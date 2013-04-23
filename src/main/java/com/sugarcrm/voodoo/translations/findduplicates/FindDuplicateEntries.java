@@ -33,7 +33,6 @@ public class FindDuplicateEntries {
 			DUP_ENTRIES = getDupEntries(EN_ENTRIES);
 			
 			writeDuplicates(DUP_ENTRIES, OUTPUT_PATH);
-
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}

@@ -3,23 +3,23 @@ package com.sugarcrm.voodoo.datasource;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.HashMap;
-import java.util.Properties;
 
 import org.apache.commons.io.filefilter.RegexFileFilter;
+import com.sugarcrm.voodoo.configuration.Configuration;
 
 /**
- * DataAdapter is an "interface" class a client uses to convert csv, xml, etc.
+ * DataAdapter is an interface class a client uses to convert csv, xml, etc.
  * into a HashMap of DataSource
  * 
  */
 public abstract class DataAdapter {
 	public enum Selection {ALL, SINGLE};
-	static Properties properties;
+	static Configuration configuration;
 	static String dataBasePath;
 	static Selection selection = Selection.ALL;
 
-	public DataAdapter(Properties props) {
-		DataAdapter.properties = props;
+	public DataAdapter(Configuration config) {
+		DataAdapter.configuration = config;
 	}
 
 	public DataAdapter setDataBasePath(String dataBasePath) {
@@ -31,10 +31,8 @@ public abstract class DataAdapter {
 	public abstract HashMap<String, DataSource> getData(String testData, DataAdapter.Selection select);
 
 	protected static File[] getAllFilesBasedOnPattern(String fileFullDirPath,
-	//protected File[] getAllFilesBasedOnPattern(String fileFullDirPath,
 			String testData, String ext) {
 		File dir = new File(fileFullDirPath);
-		//File[] files = dir.listFiles();
 		File[] files;
 
 		String pattern = testData + "." + ext + "|" + testData + "_[^_]+" + "."
