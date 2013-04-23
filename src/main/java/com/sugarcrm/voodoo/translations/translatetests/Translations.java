@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import com.sugarcrm.voodoo.configuration.Configuration;
 import com.sugarcrm.voodoo.utilities.Utils;
 
-public class Translations2 {
+public class Translations {
 	private static String language;
 	private static Connection dbConnection;
 	private static ArrayList<String> tables;
