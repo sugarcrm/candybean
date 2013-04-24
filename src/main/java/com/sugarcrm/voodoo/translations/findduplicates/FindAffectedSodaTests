@@ -1,9 +1,16 @@
 #!/bin/bash
 
+<<<<<<< HEAD
 if [ $# != 7 -o $1 = "-h" -o $1 = "-help" -o $1 = "--help" ]
 then
         echo "Usage: $0 db_server db_name db_user db_pass input_path output_path mode
 Example: ./FindAffectedSodaTests 10.8.31.10 Translations_6_7_latest translator Sugar123! ~/git_repos/SodaIceBox/soda/tests/ ~/AffectedSodaTests.txt write"
+=======
+if [[ $# != 7 || $1 = "-h" || $1 = "-help" || $1 = "--help" ]]
+then
+        echo "Usage: $0 db_server db_name db_user db_pass input_path output_path mode
+Example: ./FindAffectedSodaTests 10.8.31.10 Translations_6_7_latest translator Sugar123! ~/Workspace/SodaIceBox/soda/tests ~/AffectedSodaTests.txt write"
+>>>>>>> master
         exit
 fi
 
@@ -23,6 +30,12 @@ else
         output_path=$6
 fi
 
+<<<<<<< HEAD
 cd ~/git_repos/Voodoo2/src/main/java
 javac -d . com/sugarcrm/voodoo/translations/findduplicates/FindAffectedSodaTests.java
 java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/findduplicates/FindAffectedSodaTests $db_server $db_name $db_user $db_pass $input_path $output_path $mode
+=======
+cd ~/Workspace/Voodoo2/src/main/java
+javac -d . com/sugarcrm/voodoo/translations/findduplicates/FindAffectedSodaTests.java
+java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/findduplicates/FindAffectedSodaTests $db_server $db_name $db_user $db_pass $input_path $output_path $mode
+>>>>>>> master
