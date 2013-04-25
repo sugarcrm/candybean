@@ -19,7 +19,8 @@ then
 	workspace - workspace path of a Jenkins job
 	for_dir - directory path containing foreign language php files (Sugar installation or sugarcrm/translations repository)
 	sugar_version - version of Sugar to be downloaded
-	db_name - name of the database to be updated (or created if necessary)		db_server - database server (centralized server: 10.8.31.10)
+	db_name - name of the database to be updated (or created if necessary)		
+	db_server - database server (centralized server: 10.8.31.10)
 	db_user - database username (centralized server: translator)
 	db_pass - database password (centralized server: Sugar123!)"
 	exit

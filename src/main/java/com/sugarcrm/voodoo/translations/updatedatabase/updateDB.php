@@ -24,10 +24,10 @@ else echo "\nConnected to database $argv[4] successfully.\n";
 
 echo "\nUsing database $db.\n";
 
-for ($counter = 0; $counter < sizeof($module); $counter++) {
-    build_table($link, $module[$counter]);
+for ($counter = 0; $counter < count($module_array); $counter++) {
+    build_table($link, $module_array[$counter]);
     mysqli_set_charset($link, 'utf8');
-    store_by_language($link, $language, $module[$counter], $en_folder, $for_folder);
+    store_by_language($link, $language_array, $module_array[$counter], $en_folder, $for_folder);
 }
 
 mysqli_close($link);
@@ -59,29 +59,29 @@ function build_table($link, $module)
  * jobspace - arg[1], passed into the program by Jenkins build
  *
  */
-function store_by_language($link, $language, $module, $en_folder, $for_folder)
+function store_by_language($link, $language_array, $module, $en_folder, $for_folder)
 {
 	echo "\n";
-	$en_file =  $en_folder . '/modules/' . $module . '/language/en_us.lang.php';
+	$en_file = "$en_folder/modules/$module/language/en_us.lang.php";
     	//echo "\nLoading file into database: " . strstr($en_file, "$module/") . ".\n";
     	if (file_exists($en_file)){
-        	include_once $en_folder . '/modules/' . $module . '/language/en_us.lang.php';
+        	include_once "$en_folder/modules/$module/language/en_us.lang.php";
 		array_to_db($link, $module, $mod_strings, "en_us");
-        	echo 'Loaded file into database: ' . strstr($en_file, "$module/") . ".\n";
+        	echo "Loaded file into database: " . strstr($en_file, "$module/") . ".\n";
 		
-        	for ($i = 0; $i < sizeof($language); $i++) {
-            		$for_file = $for_folder . '/modules/' . $module . '/language/' . $language[$i] . '.lang.php';
+        	for ($i = 0; $i < count($language_array); $i++) {
+            		$for_file = "$for_folder/modules/$module/language/" . $language_array[$i] . ".lang.php";
 	    		//echo "\nLoading file into database: " . strstr($for_file, "$module/") . ".\n";
             		if (file_exists($for_file)){
-                		include_once $for_folder . '/modules/' . $module . '/language/' . $language[$i] . '.lang.php';
-				array_to_db($link, $module, $mod_strings, $language[$i]);
-	        		echo 'Loaded file into database: ' . strstr($for_file, "$module/") . ".\n";
+                		include_once "$for_folder/modules/$module/language/" . $language_array[$i] . ".lang.php";
+				array_to_db($link, $module, $mod_strings, $language_array[$i]);
+	        		echo "Loaded file into database: " . strstr($for_file, "$module/") . ".\n";
                		} else {
-                    		echo "      The language file: " . $language[$i] . " in the module: " . $module . " does not exist.\n";
+                    		echo "      The language file: " . $language_array[$i] . " in the module $module does not exist.\n";
                 	}
 		}
 	} else {
-        	echo "The module " . $module . " could not be added.\n\n";
+        	echo "The module $module could not be added.\n\n";
         	return 0;
 	}
 }
@@ -96,35 +96,32 @@ function store_by_language($link, $language, $module, $en_folder, $for_folder)
  */
 function array_to_db($link, $module, $array_data, $language)
 {
-	$add_column = "ALTER TABLE " . $module . " ADD " . $language . " TEXT";
+	$add_column = "ALTER TABLE $module ADD $language TEXT";
 	mysqli_query($link, $add_column) or die (mysqli_error($link));
-	$db_index = 1;
-	array_to_db_recursive($link, $module, $array_data, $language, "", $db_index);
+	array_to_db_recursive($link, $module, $array_data, $language, "");
 }
 
-function array_to_db_recursive($link, $module, $array_data, $language, $prev_key, &$db_index) {
-	$array_index = 0;
+function array_to_db_recursive($link, $module, $array_data, $language, $prev_key) {
 	foreach ($array_data as $key => $value) {
 		$keys[] = $key;
 		$values[] = $value;
-		$new_key = $keys[$array_index];
+
 		if ($prev_key != "") {
-			$new_key = $prev_key . "_" . $new_key;
+			$new_key = $prev_key . "_" . $key;
+		} else {
+			$new_key = $key;
 		}
-		$new_value = str_replace("'", "", $values[$array_index]);
+		$new_value = str_replace("'", "", $value);
 		
 		// current value is not an array, write current key and current value to DB
-		if (!is_array($values[$array_index])) {
-			update_key($link, $new_key, $module, $db_index);
+		if (!is_array($value)) {
+			update_key($link, $new_key, $module);
 			update_value($link, $new_value, $new_key, $module, $language);
 		}
 		// current value is an array, recursively process key-value pairs inside current value 
 		else {
-			array_to_db_recursive($link, $module, $values[$array_index], $language, $new_key, $db_index);
+			array_to_db_recursive($link, $module, $value, $language, $new_key);
 		}
-
-		$array_index++;
-		$db_index++;
 	}
 }
 
@@ -136,9 +133,9 @@ function array_to_db_recursive($link, $module, $array_data, $language, $prev_key
  * module - the array that contains the key-value pairs of a particular language (from the translation repository)
  * index - used as the ID
  */
-function update_key($link, $key, $module, $index)
+function update_key($link, $key, $module)
 {
-	$update_key = "INSERT IGNORE INTO `" . $module . "` (`ID`, `Label`) VALUES (" . $index . ", '" . mysqli_real_escape_string($link, $key) . "')";
+	$update_key = "INSERT IGNORE INTO `$module` (`Label`) VALUES ('" . mysqli_real_escape_string($link, $key) . "')";
 	mysqli_query($link, $update_key) or die (mysqli_error($link));
 }
 
@@ -153,7 +150,7 @@ function update_key($link, $key, $module, $index)
  */
 function update_value($link, $value, $key, $module, $language)
 {
-	$update_value = "UPDATE `" . $module . "` SET `" . $language . "` = '" . mysqli_real_escape_string($link, $value) . "' WHERE Label = '" . mysqli_real_escape_string($link, $key) . "'";
+	$update_value = "UPDATE `$module` SET `$language` = '" . mysqli_real_escape_string($link, $value) . "' WHERE Label = '" . mysqli_real_escape_string($link, $key) . "'";
     	mysqli_query($link, $update_value) or die (mysqli_error($link));
 }
 
