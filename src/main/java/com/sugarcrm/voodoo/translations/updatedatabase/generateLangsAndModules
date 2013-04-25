@@ -12,7 +12,7 @@ then
 	exit
 fi
 
-outputFile=UpdateDB_LangsAndModules.php
+outputFile=updateDB_LangsAndModules.php
 
 # handle extra / entered at the end of path-to-sugar-installation
 if [[ $1 = */ ]]
@@ -43,13 +43,13 @@ fi
 echo '<?php
 
 // Array used to store all the languages available for translation
-$language = array(' >> $outputFile
+$language_array = array(' >> $outputFile
 
 for file in $dir/modules/Accounts/language/*
 do
 	if [[ $file != *en_us* ]]
 	then
-		echo $'\t'"'`echo $file | cut -d/ -f$((slashCount + 5)) | cut -c 1-5`'," >> $outputFile
+		echo "  '`echo $file | rev | cut -d/ -f1 | rev | cut -c 1-5`'," >> $outputFile
 	fi
 done
 
@@ -61,13 +61,13 @@ echo ');
 
 # find and print a list of modules in path-to-sugar-installation/modules that can be translated (i.e. is a folder and contains a folder named 'language'), also print other text to complete a php file
 echo '// Array used to store all of the modules available for translation
-$module = array(' >> $outputFile
+$module_array = array(' >> $outputFile
 
 for folder in $dir/modules/*
 do
 	if [ -d $folder -a -e $folder/language ]
 	then
-		echo $'\t'"'`echo $folder | cut -d/ -f$((slashCount + 3))`'," >> $outputFile
+		echo "  '`echo $folder | cut -d/ -f$((slashCount + 3))`'," >> $outputFile
 	fi	
 done
 
