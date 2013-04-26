@@ -1,0 +1,9 @@
+translations.Voodoo_repo=/home/suga/Workspace/Voodoo2
+translations.database_server=10.8.31.10
+translations.database_name=Translations_6_7_latest
+translations.database_user=translator
+translations.database_pass=Sugar123!
+
+translations.language=zh_CN
+translations.test_path=/home/suga/Workspace/SodaIceBox/soda/tests/modules
+translations.output_path=/home/suga/TranslatedSodaTests
