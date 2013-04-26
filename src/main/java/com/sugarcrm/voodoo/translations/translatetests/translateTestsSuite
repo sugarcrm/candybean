@@ -7,8 +7,19 @@
 # 1 - properties file, 6 - arguments for properties file
 # arglist: $output $language $db_name $db_server $db_user $db_pass
 
+function usage {
+	echo "Usage: $0 1 or 6 arguments
+1 argument: properties file
+6 arguments: dbServer, dbName, dbPass, language, testPath, outputPath"
+	exit
+}
+
 if [[ $# = 1 ]]
 then
+	if [[ $1 = "-h" || $1 = "-help" || $1 = "--help" ]]
+	then
+		usage	
+	fi
 	if [[ $1 = *.properties ]]
 	then
 		cd ~/Workspace/Voodoo2/src/main/java
@@ -16,19 +27,12 @@ then
 
 		java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations2 ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
 	else
-		echo "Usage: $0 1 or 6 arguments
-1 argument: properties file
-6 arguments: dbServer, dbName, dbPass, language, testPath, outputPath"
-		exit
+		usage
 	fi
 
 else if [[ $# != 6 ]]
 then
-	echo "Usage: $0 1 or 6 arguments
-1 argument: properties file
-6 arguments: dbServer, dbName, dbPass, language, testPath, outputPath"
-	exit
-
+	usage
 else
 	dbServer=$1; dbName=$2; dbUser=$3; dbPass=$4; language=$5; testPath=$6; outputPath=$7
 
