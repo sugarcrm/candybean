@@ -3,18 +3,18 @@
 # Author: Jason Lin (ylin)
 # Purpose: Generate a list of language codes and a list of modules used by updateDB.php.
 # Output: A file named updateDB_LangsAndModules.php in the same directory as this script.
-# Input: Directory path of a Sugar installation, see SugarWiki for more information on installing Sugar.
+# Input: Directory path of a Sugar extraction, see SugarWiki for more information on installing Sugar.
 
 # display error message if number of arguments is not 1
 if [ $# != 1 ]
 then
-	echo "Usage: $0 path-to-sugar-installation"
+	echo "Usage: $0 path-to-sugar-extraction"
 	exit
 fi
 
 outputFile=updateDB_LangsAndModules.php
 
-# handle extra / entered at the end of path-to-sugar-installation
+# handle extra / entered at the end of path-to-sugar-extraction
 if [[ $1 = */ ]]
 then
 	# remove the last char of $1
@@ -27,7 +27,7 @@ fi
 slash=${dir//[^\/]}
 slashCount=${#slash}
 
-# check (very simple) dir is the path to a sugar installation
+# check (very simple) dir is the path to a sugar extraction
 if [ ! -e $dir/modules ]
 then
 	echo "$dir does not contain 'modules' folder, enter a correct path"
@@ -39,7 +39,7 @@ then
 	rm $outputFile
 fi
 
-# find and print a list of language codes in path-to-sugar-installation/modules/Accounts/language, also print other text to complete a php file
+# find and print a list of language codes in path-to-sugar-extraction/modules/Accounts/language, also print other text to complete a php file
 echo '<?php
 
 // Array used to store all the languages available for translation
@@ -59,7 +59,7 @@ sed -i '$s/.$//' $outputFile
 echo ');
 ' >> $outputFile
 
-# find and print a list of modules in path-to-sugar-installation/modules that can be translated (i.e. is a folder and contains a folder named 'language'), also print other text to complete a php file
+# find and print a list of modules in path-to-sugar-extraction/modules that can be translated (i.e. is a folder and contains a folder named 'language'), also print other text to complete a php file
 echo '// Array used to store all of the modules available for translation
 $module_array = array(' >> $outputFile
 
