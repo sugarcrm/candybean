@@ -11,6 +11,10 @@ import java.util.Scanner;
 public class FindSuitableTests {
 
 	/**
+	 * 
+	 * 
+	 * @author Jason Lin (ylin)
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
