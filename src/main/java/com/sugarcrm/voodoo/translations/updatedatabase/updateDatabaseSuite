@@ -5,7 +5,7 @@
 # Output: A database containing tables of language strings that can be used for translations. Each table contains a common label and texts in different languages.
 # Input: workspace for_dir sugar_ver db_name
 #	  workspace - workspace path of a Jenkins job
-#	  for_dir - directory of foreign language php files (Sugar installation or sugarcrm/translations repository)
+#	  for_dir - directory of foreign language php files (Sugar extraction or sugarcrm/translations repository)
 #	  sugar_ver - version of Sugar to be downloaded, for example 6_7 or 6_7_1
 #	  db_name - name of the database to be updated (or created if necessary), for example Translations_6_7
 #	  db_server - database server (centralized server: 10.8.31.10)
@@ -16,7 +16,7 @@ if [ $# != 7 ]
 then
 	echo "Usage: $0 workspace for_dir sugar_version db_name
 	workspace - workspace path of a Jenkins job
-	for_dir - directory of foreign language php files (Sugar installation or sugarcrm/translations repository)
+	for_dir - directory of foreign language php files (Sugar extraction or sugarcrm/translations repository)
 	sugar_version - version of Sugar to be downloaded
 	db_name - name of the database to be updated (or created if necessary)		
 	db_server - database server (centralized server: 10.8.31.10)

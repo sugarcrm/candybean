@@ -5,8 +5,8 @@
 # Output: A database containing tables of language strings that can be used for translations. Each table contains a common label and texts in different languages.
 # Input: $db_name $en_folder $for_folder $db_server $db_user $db_pass
 #   $db_name - name of the database to be updated (or created if necessary), for example Translations_6_7
-#   $en_folder - directory of English php files (Sugar installation)
-#   $for_folder - directory of foreign language php files (Sugar installation or sugarcrm/translations repository)
+#   $en_folder - directory of English php files (Sugar extraction)
+#   $for_folder - directory of foreign language php files (Sugar extraction or sugarcrm/translations repository)
 #	  $db_server - database server (centralized server: 10.8.31.10)
 #	  $db_user - database username (centralized server: translator)
 #	  $db_pass - database password (centralized server: Sugar123!)
@@ -15,8 +15,8 @@
 require ('updateDB_LangsAndModules.php');
 
 $db_name = $argv[1];
-$en_folder = $argv[2]; // dir containing English php files, should be set to a Sugar installation
-$for_folder = $argv[3]; // dir containing foreign language php files, should be set to a Sugar installation or sugarcrm/translations repository
+$en_folder = $argv[2]; // dir containing English php files, should be set to a Sugar extraction
+$for_folder = $argv[3]; // dir containing foreign language php files, should be set to a Sugar extraction or sugarcrm/translations repository
 $link = mysqli_connect($argv[4], $argv[5], $argv[6]);
 mysqli_set_charset($link, "utf8");
 
