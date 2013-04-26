@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.findduplicates;
+package com.sugarcrm.voodoo.translations.findsuitabletests;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +15,6 @@ public class FindSuitableTests {
 	 */
 	public static void main(String[] args) {
 		try {
-			
 			Scanner s1 = new Scanner(new File("/home/suga/AffectedSodaTestsFileNames.txt"));
 			Scanner s2 = new Scanner(new File("/home/suga/ErrorFreeTranslatedTests.txt"));
 			ArrayList<String> a1 = new ArrayList<String>();

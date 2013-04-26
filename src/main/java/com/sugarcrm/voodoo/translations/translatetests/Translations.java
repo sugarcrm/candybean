@@ -32,7 +32,7 @@ public class Translations {
 	private static Matcher match_variable;
 	private static Matcher match_pageNumber;
 	private static Boolean testErrorFree;
-	private static ArrayList<String> goodList = new ArrayList<String>();
+	private static ArrayList<String> errorFreeTests = new ArrayList<String>();
 
 	public static void main(String[] args) {
 		try {
@@ -78,7 +78,7 @@ public class Translations {
 
 			recursivelyTranslateFilesInDirectory(testPath, outputPath);
 			
-			writeGoodList();
+			writeErrorFreeList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class Translations {
 
 			recursivelyTranslateFilesInDirectory(testPath, outputPath);
 
-			writeGoodList();
+			writeErrorFreeList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -218,7 +218,7 @@ public class Translations {
 					output.write(line + "\n");
 				}
 			}
-			if (testErrorFree) addToGoodList(testFile.getAbsolutePath().split("tests/")[1]);
+			if (testErrorFree) addToErrorFreeList(testFile.getAbsolutePath().split("tests/")[1]);
 			Utils.closeStream(scanner);
 			Utils.closeStream(output);
 
@@ -322,17 +322,17 @@ public class Translations {
 		return result;
 	}
 
-	private static void addToGoodList(String testName) {
-		goodList.add(testName);
+	private static void addToErrorFreeList(String testName) {
+		errorFreeTests.add(testName);
 	}
 
-	private static void writeGoodList() {
+	private static void writeErrorFreeList() {
 		try {
 			Writer output = new BufferedWriter(new FileWriter(new File("/home/suga/ErrorFreeTranslatedTests.txt")));
 			
-			Collections.sort(goodList);
-			for (int i = 0; i < goodList.size(); i++) {
-				output.write(goodList.get(i) + "\n");
+			Collections.sort(errorFreeTests);
+			for (int i = 0; i < errorFreeTests.size(); i++) {
+				output.write(errorFreeTests.get(i) + "\n");
 			}
 			
 			output.close();
