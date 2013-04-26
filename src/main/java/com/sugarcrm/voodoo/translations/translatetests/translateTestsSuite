@@ -25,7 +25,7 @@ then
 		cd ~/Workspace/Voodoo2/src/main/java
 		javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations.java
 
-		java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
+		java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/Workspace/Voodoo2/src/main/resources/Translations.properties
 	else
 		usage
 	fi
@@ -43,12 +43,12 @@ translations.database_user=$dbUser
 translations.database_pass=$dbPass
 translations.language=$language
 translations.test_path=$testPath
-translations.output_path=$outputPath" > ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
+translations.output_path=$outputPath" > ~/Workspace/Voodoo2/src/main/resources/Translations.properties
 
 	cd ~/Workspace/Voodoo2/src/main/java
 	javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations.java
 
-	java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/Workspace/Voodoo2/src/main/resources/Translations2.properties
+	java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/Workspace/Voodoo2/src/main/resources/Translations.properties
 
 	fi
 fi
