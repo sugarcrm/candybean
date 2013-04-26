@@ -25,45 +25,56 @@ for ($i = 0; $i < $results->num_rows; $i++) {
 // user clicked "View translations", print all translations of $english in the selected $translate_language
 if ($_POST["translate"]) {
 
+  $found_translation = false;
   // for each module, find and print all translations for $english
   foreach ($modules as $module) {
     $results = $mysqli->query("SELECT $translate_language, Label FROM $module WHERE en_us='$english'");
 
+    if ($results->num_rows >= 1) {
+      $found_translation = true;
+    }
     // print all results
     for ($i = 0; $i < $results->num_rows; $i++) {
       $result = $results->fetch_array();
       echo "$module: " . $result[$translate_language] . "(" . $result['Label'] . ")<br />";
     }
   }
+
+  include_once "language.php";
+  echo "No translation found for $english in " . $language[$translate_language] . "!";
 }
 
 // user clicked "Validate", print valid or invalid; if invalid, print ambiguous translations
 if ($_POST["validate"]) {
-    $valid = true;
+  $valid = true;
 
-    // store all translations for $english in all languages except English
-    include_once("language.php");
-    foreach ($language as $code => $native) {
-      // skip English
-      if ($code != "en_us") {
-        foreach ($modules as $module) {
-          $results = $mysqli->query("SELECT Label, $code FROM $module WHERE en_us='$english'");
-          for ($i = 0; $results && $i < $results->num_rows; $i++) {
-            $result = $results->fetch_array();
-            $label = $result["Label"];
-            $value = $result[$code];
-            if ($label != null && $value != null) {
-              // === used solely as delimiter for string splitting later on
-              $lang_strings[] = "$code===$module===$value===$label";
-            }
+  // store all translations for $english in all languages except English
+  include_once("language.php");
+  foreach ($language as $code => $native) {
+    // skip English
+    if ($code != "en_us") {
+      foreach ($modules as $module) {
+        $results = $mysqli->query("SELECT Label, $code FROM $module WHERE en_us='$english'");
+        for ($i = 0; $results && $i < $results->num_rows; $i++) {
+          $result = $results->fetch_array();
+          $label = $result["Label"];
+          $value = $result[$code];
+          if ($label != null && $value != null) {
+            // === used solely as delimiter for string splitting later on
+            $lang_strings[] = "$code===$module===$value===$label";
           }
-        } // end of for each module
-      }
+        }
+      } // end of for each module
     }
+  } // end of for each language
 
-    // sort by language, then by module, then by value, then by label
-    sort($lang_strings);
+  // sort by language, then by module, then by value, then by label
+  sort($lang_strings);
 
+  if (empty($lang_strings)) {
+    echo "No translation found for $english!";
+  } else {
+    $valid = true;
     for ($i = 0; $i < count($lang_strings); $i++) {
       $splitted = explode("===", $lang_strings[$i]);
       $current_code = $splitted[0];
@@ -75,6 +86,7 @@ if ($_POST["validate"]) {
         $translations_found[] = $lang_strings[0];
       } else if ($last_code == $current_code && !in_array($current_value, $values_found)) {
         // within the same language, found two different translations
+        $valid = false;
         $values_found[] = $current_value;
         $translations_found[] = $lang_strings[$i];
       } else if ($last_code != $current_code) {
@@ -88,7 +100,7 @@ if ($_POST["validate"]) {
             $translation_label = $splitted2[3];
             echo "$translation_module: $translation_value ($translation_label)<br/>";
           }
-          echo "<br/>";
+            echo "<br/>";
         }
         // reset variables for next language
         $last_code = $current_code;
@@ -113,6 +125,11 @@ if ($_POST["validate"]) {
         // do nothing
       }
     } // end of for each language
+
+    if ($valid) {
+      echo "$english is a valid string for translation!";
+    }
+  }
 }
 ?>
     </p>

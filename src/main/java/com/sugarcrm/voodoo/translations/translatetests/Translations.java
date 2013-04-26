@@ -53,7 +53,7 @@ public class Translations {
 	}
 
 	/**
-	 * Perform translations using a Configuraton or Properties file.
+	 * Perform translations using a Configuration or Properties file.
 	 * 
 	 * @author ylin
 	 * 
