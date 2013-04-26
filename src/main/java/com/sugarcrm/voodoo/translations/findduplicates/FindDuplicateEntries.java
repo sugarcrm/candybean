@@ -40,10 +40,12 @@ public class FindDuplicateEntries {
 
 	public static ArrayList<String> getAllENEntries(ArrayList<String> modules, Connection con) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
+		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		
 		for (String module : modules) {
-			rs = Utils.execQuery("SELECT Label, en_us FROM " + module, con);
+			ps = CONNECTION.prepareStatement("SELECT Label, en_us FROM " + module);
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				String label = rs.getString("Label");
 				String value = rs.getString("en_us");
@@ -56,6 +58,7 @@ public class FindDuplicateEntries {
 			}
 		}
 		Collections.sort(result);
+		ps.close();
 		return result;
 	}
 
