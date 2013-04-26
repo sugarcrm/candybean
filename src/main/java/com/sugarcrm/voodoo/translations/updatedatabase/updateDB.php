@@ -18,6 +18,7 @@ $db_name = $argv[1];
 $en_folder = $argv[2]; // dir containing English php files, should be set to a Sugar installation
 $for_folder = $argv[3]; // dir containing foreign language php files, should be set to a Sugar installation or sugarcrm/translations repository
 $link = mysqli_connect($argv[4], $argv[5], $argv[6]);
+mysqli_set_charset($link, "utf8");
 
 echo "\nUsing foreign language files from $for_folder.\n";
 
@@ -37,7 +38,7 @@ echo "\nUsing database $db_name.\n";
 
 for ($counter = 0; $counter < count($module_array); $counter++) {
     build_table($link, $module_array[$counter]);
-    mysqli_set_charset($link, 'utf8');
+    echo "\n";
     store_by_language($link, $language_array, $module_array[$counter], $en_folder, $for_folder);
 }
 
@@ -71,7 +72,6 @@ function build_table($link, $module)
  */
 function store_by_language($link, $language_array, $module, $en_folder, $for_folder)
 {
-	echo "\n";
 	$en_file = "$en_folder/modules/$module/language/en_us.lang.php";
     	//echo "\nLoading file into database: " . strstr($en_file, "$module/") . ".\n";
     	if (file_exists($en_file)){
