@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import junit.framework.Assert;
-
 import com.sugarcrm.voodoo.utilities.OptionalLogger;
 import com.sugarcrm.voodoo.utilities.Utils;
 
@@ -46,7 +44,7 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 */
 	public void createFile() {
 		createFile(Integer.toString(defaultName) + ".properties", true);
@@ -54,7 +52,7 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param absolutePath
 	 */
@@ -65,7 +63,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param log
 	 * @param fileName
@@ -111,9 +109,6 @@ public class Configuration extends Properties {
 				log.info("Created file " + file.getName() + ".\n");
 			else
 				log.severe("Unable to create file " + file.getName() + ".\n");
-
-			// assert file exists
-			Assert.assertTrue(file.getName() + " was not created!", file.exists());
 		}
 
 		// load() has logging built in
@@ -126,14 +121,13 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 */
 	public void deleteFile() {
 		if (!createdFile) {
 			log.severe("No file was created, deleteFile() aborted.");
 		} else {
 			File file = new File(getConfigPath());
-			File dir = file.getParentFile();
 
 			boolean fileDeleted = file.delete();
 
@@ -147,11 +141,6 @@ public class Configuration extends Properties {
 
 			// delete all empty parent folders
 			recursiveFolderDelete(file);
-
-			// assert file does not exist
-			Assert.assertTrue(file.getName() + " was not deleted!", !file.exists());
-			// assert parent directory does not exist
-			Assert.assertTrue(dir.getAbsolutePath() + " was not deleted!", !dir.exists());
 		}
 	}
 
@@ -195,7 +184,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param file
 	 */
@@ -231,7 +220,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param file
 	 * @param comments
@@ -347,7 +336,7 @@ public class Configuration extends Properties {
 	 *       make sure the delimiter used to separate properties is not the same delimiter
 	 *       used to separate values (ex. fruit1=apple; fruit2=pear; fruits=apple, pear, banana)
 	 *       
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param listOfProperties
 	 * @param delimiter

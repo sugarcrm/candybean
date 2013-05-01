@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.findduplicates;
+package com.sugarcrm.voodoo.translations.findsuitabletests;
 
 import java.io.*;
 import java.sql.*;

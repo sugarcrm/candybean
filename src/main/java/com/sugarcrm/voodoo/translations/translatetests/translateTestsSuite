@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Author: Jason Lin (ylin)
+# Purpose: Translate SodaIceBox tests to a different language
+# Output: Modified SodaIceBox tests that can be used to test Sugar in a different language
+# Input: 1 or 8
+# 1 - properties file, 8 - voodooRepo dbServer dbName dbUser dbPass language testPath outputPath
+#	voodooRepo - directory of Voodoo2 repository
+#	dbServer - database server (centralized server: 10.8.31.10)
+#	dbName - database name (ex. Translations_6_7_latest)
+#	dbUser - database username (centralized server: translator)
+#	dbPass - database password (centralized server: Sugar123!)
+#	language - language code for target language (ex. zh_CN)
+#	testPath - directory of SodaIceBox tests (path-to-SodaIceBox/soda/tests/modules)
+#   outputPath - output directory
+#
+# Note: If translateTestsSuite was invoked using 8 parameters, a properties file will be created at src/main/resources/Translations.properties.
+#       The parameters used are stored in the properties file and subsequent calls can pass only the properties file.
+
+function usage {
+	echo "Usage: $0 1 or 8 arguments
+1 argument: properties file
+8 arguments: Voodoo_repo, dbServer, dbName, dbUser, dbPass, language, testPath, outputPath
+	voodooRepo - directory of Voodoo2 repository
+	dbServer - database server (centralized server: 10.8.31.10)
+	dbName - database name (ex. Translations_6_7_latest)
+	dbUser - database username (centralized server: translator)
+	dbPass - database password (centralized server: Sugar123!)
+	language - language code for target language (ex. zh_CN)
+	testPath - directory of SodaIceBox tests (path-to-SodaIceBox/soda/tests/modules)
+   outputPath - output directory"
+	exit
+}
+
+if [[ $# = 1 ]]
+then
+	if [[ $1 = "-h" || $1 = "-help" || $1 = "--help" ]]
+	then
+		usage	
+	fi
+	if [[ $1 = *.properties ]]
+	then
+		properties_file=$1
+		cd $voodooRepo/src/main/java
+		javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations.java
+
+		java -cp $voodooRepo/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations $properties_file
+	else
+		usage
+	fi
+
+else if [[ $# != 8 ]]
+then
+	usage
+else
+	voodooRepo=$1; dbServer=$2; dbName=$3; dbUser=$4; dbPass=$5; language=$6; testPath=$7; outputPath=$8
+
+	mkdir -p $outputPath;
+	echo "translations.Voodoo_repo = $voodooRepo
+translations.database_server = $dbServer
+translations.database_name = $dbName
+translations.database_user = $dbUser
+translations.database_pass = $dbPass
+translations.language = $language
+translations.test_path = $testPath
+translations.output_path = $outputPath" > ~/Workspace/Voodoo2/src/main/resources/Translations.properties
+
+	cd ~/Workspace/Voodoo2/src/main/java
+	javac -d . com/sugarcrm/voodoo/translations/translatetests/Translations.java
+
+	java -cp ~/Workspace/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/Translations ~/Workspace/Voodoo2/src/main/resources/Translations.properties
+
+	fi
+fi
