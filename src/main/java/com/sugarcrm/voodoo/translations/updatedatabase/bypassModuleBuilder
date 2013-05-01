@@ -8,7 +8,7 @@
 #	 for_dir - directory path containing foreign language php files for ModuleBuilder
 #	 en_dir and for_dir can be the same directory
 
-if [ $# != 2 ]
+if [[ $# != 2 || $1 = "-h" || $1 = "-help" || $1 = "--help" ]]
 then
 	echo "Usage: $0 en_dir for_dir
 	en_dir - path to directory that contains en_us.lang.php for ModuleBuilder
