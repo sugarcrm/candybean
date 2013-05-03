@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
  * Utils is simply a container for automation/Java-related helper functions that
  * are relatively non-specific to any particular library/framework.
  * 
- * @author cwarmbold, ylin
+ * @author cwarmbold, wli, Jason Lin (ylin)
  *
  */
 public class Utils {
@@ -76,6 +76,13 @@ public class Utils {
 		return tempPath;
 	}
 
+	/**
+	 * Can be used to close any closeable stream. For example, Scanners and Writers.
+	 * 
+	 * @author Jason Lin (ylin)
+	 * 
+	 * @param s
+	 */
 	public static void closeStream(Closeable s) {
 		try {
 			if (s != null)
@@ -86,18 +93,10 @@ public class Utils {
 	}
 
 	/**
-	 * Executes a query written as a String and return the ResultSet containing the results of the query.
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public static ResultSet execQuery(String query, Connection connection) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement(query);
-		return ps.executeQuery();
-	}
-
-	/**
 	 * Retrieves all tables from the database currently connected to and store them in an ArrayList of Strings.
+	 * 
+	 * @author Jason Lin (ylin)
+	 * 
 	 * @return
 	 * @throws SQLException
 	 */
@@ -115,6 +114,9 @@ public class Utils {
 
 	/**
 	 * Establishes a connection to a database. 
+	 * 
+	 * @author Jason Lin (ylin)
+	 * 
 	 * @param dbServer - database server
 	 * @param dbName - name of the database to use
 	 * @param dbUser - database username
