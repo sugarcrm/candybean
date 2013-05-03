@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.findduplicates;
+package com.sugarcrm.voodoo.translations.findsuitabletests;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sugarcrm.voodoo.translations.findduplicates.FindDuplicateEntries;
+import com.sugarcrm.voodoo.translations.findsuitabletests.FindDuplicateEntries;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 public class FindAffectedSodaTests {
