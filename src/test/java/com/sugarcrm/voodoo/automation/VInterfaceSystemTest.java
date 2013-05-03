@@ -82,7 +82,6 @@ public class VInterfaceSystemTest {
 //		this.iface.dismissDialog();
 	}
 
-	@Ignore
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
@@ -100,7 +99,6 @@ public class VInterfaceSystemTest {
 //		this.iface.focusDefault();
 	}
 
-	@Ignore
 	@Test
 	public void focusFrameTest() throws Exception {
 		String expDefStr = "Your Guide To Web Design";
