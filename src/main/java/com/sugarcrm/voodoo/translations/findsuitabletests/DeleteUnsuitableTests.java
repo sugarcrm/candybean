@@ -1,4 +1,4 @@
-package com.sugarcrm.voodoo.translations.findduplicates;
+package com.sugarcrm.voodoo.translations.findsuitabletests;
 
 import java.io.File;
 import java.util.ArrayList;
