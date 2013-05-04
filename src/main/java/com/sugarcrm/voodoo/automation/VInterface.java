@@ -101,7 +101,6 @@ public class VInterface {
 	 */
 	public void start() throws Exception {
 		this.iType = this.parseInterfaceType(this.config.getProperty("automation.interface", "chrome"));
-		voodoo.log.info("Starting automation interace with type: " + this.iType);
 		this.start(this.iType);
 	}
 
@@ -112,7 +111,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void start(Type iType) throws Exception {
-		voodoo.log.info("Starting automation interface with this type: " + iType);
+		voodoo.log.info("Starting automation interface with type: " + iType);
 //		if (iType == Type.ANDROID) {
 //			this.vac = this.getAndroidControl();
 //			this.wd = null;
@@ -122,7 +121,7 @@ public class VInterface {
 //			this.vac = null;
 //			this.start();
 //		}
-		if (this.wd != null) throw new Exception("Automation interface already started with this type: " + this.iType);
+		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
 		this.iType = iType;
 		this.wd = this.getWebDriver(iType);
 		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
@@ -134,7 +133,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void stop() throws Exception {
-		voodoo.log.info("Stopping automation interface with this type: " + this.iType);
+		voodoo.log.info("Stopping automation interface with type: " + this.iType);
 		this.windows.clear();
 		this.iType = null;
 		this.wd.quit();
@@ -147,7 +146,8 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void restart() throws Exception {
-		voodoo.log.info("Restarting automation interface with this type: " + this.iType);
+		voodoo.log.info("Restarting automation interface with type: " + this.iType);
+		if (this.wd == null) throw new Exception("Automation interface not yet started; cannot restart.");
 		Type type = this.iType;
 		this.stop();
 		this.start(type);
