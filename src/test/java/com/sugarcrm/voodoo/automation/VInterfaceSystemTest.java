@@ -74,6 +74,9 @@ public class VInterfaceSystemTest {
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		Assert.assertEquals(expUrl, actUrl);
+		thrown.expect(Exception.class);
+		thrown.expectMessage("Automation interface already started with this type: " + Type.CHROME);
+		iface.start();
 	}
 
 	@Ignore

@@ -36,8 +36,8 @@ public class VInterface {
 	private final Voodoo voodoo;
 	private final Configuration config;
 
-	public WebDriver wd;
-	private Type iType;
+	public WebDriver wd = null;
+	private Type iType = null;
 //	public final AndroidInterface vac; //vac as in voodoo android control
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 
@@ -100,8 +100,8 @@ public class VInterface {
 	 * @throws Exception		if type is undefined during instantiation
 	 */
 	public void start() throws Exception {
-		voodoo.log.info("Starting automation with type: " + this.iType);
 		this.iType = this.parseInterfaceType(this.config.getProperty("automation.interface", "chrome"));
+		voodoo.log.info("Starting automation interace with type: " + this.iType);
 		this.start(this.iType);
 	}
 
@@ -112,7 +112,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void start(Type iType) throws Exception {
-		voodoo.log.info("Starting automation.");
+		voodoo.log.info("Starting automation interface with this type: " + iType);
 //		if (iType == Type.ANDROID) {
 //			this.vac = this.getAndroidControl();
 //			this.wd = null;
@@ -122,6 +122,7 @@ public class VInterface {
 //			this.vac = null;
 //			this.start();
 //		}
+		if (this.wd != null) throw new Exception("Automation interface already started with this type: " + this.iType);
 		this.iType = iType;
 		this.wd = this.getWebDriver(iType);
 		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
@@ -133,7 +134,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void stop() throws Exception {
-		voodoo.log.info("Stopping automation.");
+		voodoo.log.info("Stopping automation interface with this type: " + this.iType);
 		this.windows.clear();
 		this.iType = null;
 		this.wd.quit();
@@ -146,7 +147,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void restart() throws Exception {
-		voodoo.log.info("Restarting automation.");
+		voodoo.log.info("Restarting automation interface with this type: " + this.iType);
 		Type type = this.iType;
 		this.stop();
 		this.start(type);
