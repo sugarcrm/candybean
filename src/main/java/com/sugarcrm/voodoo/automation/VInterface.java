@@ -33,36 +33,42 @@ public class VInterface {
 
 	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS; }
 
-	public final WebDriver wd;
-	//	public final AndroidInterface vac; //vac as in voodoo android control
-
 	private final Voodoo voodoo;
 	private final Configuration config;
-//	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
+
+	public WebDriver wd;
+	private Type iType;
+//	public final AndroidInterface vac; //vac as in voodoo android control
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 
+	/**
+	 * Instantiate VInterface; Deprecated in favor of the type-less
+	 * constructor (where type is given during start or from config)
+	 *
+	 * @param voodoo  {@link Voodoo} object
+	 * @param config   {@link Configuration} for this test run
+	 * @param iType   {@link IInterface.Type} of interface to run
+	 * @throws Exception
+	 */
+	@Deprecated
+	public VInterface(Voodoo voodoo, Configuration config, Type iType)
+			throws Exception {
+		this.voodoo = voodoo;
+		this.config = config;
+		this.iType = iType;
+	}
+	
 	/**
 	 * Instantiate VInterface
 	 *
 	 * @param voodoo  {@link Voodoo} object
 	 * @param config   {@link Configuration} for this test run
-	 * @param iType   {@link IInterface.Type} of web browser to run
 	 * @throws Exception
 	 */
-	public VInterface(Voodoo voodoo, Configuration config, Type iType)
+	public VInterface(Voodoo voodoo, Configuration config)
 			throws Exception {
 		this.voodoo = voodoo;
 		this.config = config;
-		if (iType == Type.ANDROID) {
-//			this.vac = this.getAndroidControl();
-			this.wd = null;
-		}
-		else {
-			this.wd = this.getWebDriver(iType);
-//			this.vac = null;
-//			this.start();
-		}
-		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
 	}
 
 	/**
@@ -88,21 +94,62 @@ public class VInterface {
 	}
 
 	/**
-	 * Launch and initialize a web browser.
-	 * @throws Exception	 <i>not thrown</i>
+	 * Launch and initialize an interface with type defined
+	 * during instantiation.
+	 * 
+	 * @throws Exception		if type is undefined during instantiation
 	 */
 	public void start() throws Exception {
-		voodoo.log.info("Starting browser.");
+		voodoo.log.info("Starting automation with type: " + this.iType);
+		this.iType = this.parseInterfaceType(this.config.getProperty("automation.interface", "chrome"));
+		this.start(this.iType);
 	}
 
 	/**
-	 * Close the web browser and perform final cleanup.
+	 * Launch and initialize an interface.
+	 * 
+	 * @param iType			The interface type to start automation 
+	 * @throws Exception
+	 */
+	public void start(Type iType) throws Exception {
+		voodoo.log.info("Starting automation.");
+//		if (iType == Type.ANDROID) {
+//			this.vac = this.getAndroidControl();
+//			this.wd = null;
+//		}
+//		else {
+//			this.wd = this.getWebDriver(iType);
+//			this.vac = null;
+//			this.start();
+//		}
+		this.iType = iType;
+		this.wd = this.getWebDriver(iType);
+		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
+	}
+
+	/**
+	 * Close the interface and perform final cleanup.
 	 *
-	 * @throws Exception	  <i>not thrown</i>
+	 * @throws Exception
 	 */
 	public void stop() throws Exception {
 		voodoo.log.info("Stopping automation.");
+		this.windows.clear();
+		this.iType = null;
 		this.wd.quit();
+		this.wd = null;
+	}
+	
+	/**
+	 * Restarts the interface with the current interface type
+	 * 
+	 * @throws Exception
+	 */
+	public void restart() throws Exception {
+		voodoo.log.info("Restarting automation.");
+		Type type = this.iType;
+		this.stop();
+		this.start(type);
 	}
 
 	/**
@@ -386,6 +433,19 @@ public class VInterface {
 	 */
 	public VSelect getSelect(Strategy strategy, String hook) throws Exception {
 		return this.getSelect(new VHook(strategy, hook));
+	}
+	
+	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
+		VInterface.Type iType = null;
+		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
+			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
+				iType = iTypeIter;
+				break;
+			}
+		}
+		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
+		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
+		return iType;
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
