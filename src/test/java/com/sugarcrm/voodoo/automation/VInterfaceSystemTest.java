@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.sugarcrm.voodoo.automation.VInterface.Type;
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.configuration.Configuration;
@@ -37,7 +38,7 @@ public class VInterfaceSystemTest {
 		voodooConfig.load(voodooPropsPath);
 		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
-		iface.start();
+		iface.start(Type.CHROME);
 	}
 	
 	@Ignore
@@ -52,10 +53,27 @@ public class VInterfaceSystemTest {
 //		this.iface.interact("");
 	}
 
-	@Ignore
+//	@Ignore
 	@Test
-	public void stopTest() throws Exception {
-//		this.iface.stop();
+	public void startStopRestartTest() throws Exception {
+		String expUrl = "https://www.google.com/";
+		iface.go(expUrl);
+		String actUrl = iface.getURL();
+		Assert.assertEquals(expUrl, actUrl);
+		iface.stop();
+		iface.start(Type.FIREFOX);
+		iface.go(expUrl);
+		actUrl = iface.getURL();
+		Assert.assertEquals(expUrl, actUrl);
+		iface.restart();
+		iface.go(expUrl);
+		actUrl = iface.getURL();
+		Assert.assertEquals(expUrl, actUrl);
+		iface.stop();
+		iface.start(Type.CHROME);
+		iface.go(expUrl);
+		actUrl = iface.getURL();
+		Assert.assertEquals(expUrl, actUrl);
 	}
 
 	@Ignore
@@ -82,6 +100,7 @@ public class VInterfaceSystemTest {
 //		this.iface.dismissDialog();
 	}
 
+//	@Ignore
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
@@ -99,6 +118,7 @@ public class VInterfaceSystemTest {
 //		this.iface.focusDefault();
 	}
 
+//	@Ignore
 	@Test
 	public void focusFrameTest() throws Exception {
 		String expDefStr = "Your Guide To Web Design";
@@ -127,6 +147,7 @@ public class VInterfaceSystemTest {
 		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
 	}
 
+//	@Ignore
 	@Test
 	public void focusWindowTest() throws Exception {
 		String expWindow0Title = "HTML Examples";
