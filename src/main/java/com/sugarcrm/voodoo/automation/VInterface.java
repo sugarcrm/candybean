@@ -2,9 +2,10 @@ package com.sugarcrm.voodoo.automation;
 
 import java.awt.Toolkit;
 import java.io.File;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
@@ -26,6 +27,7 @@ import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 import com.sugarcrm.voodoo.configuration.Configuration;
+import com.sugarcrm.voodoo.utilities.Utils.Pair;
 
 public class VInterface {
 
@@ -36,8 +38,8 @@ public class VInterface {
 
 	private final Voodoo voodoo;
 	private final Configuration config;
-	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
-	private int windowIndex = 0;
+//	private HashMap<Integer, String> windowHandles = new HashMap<Integer, String>();
+	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 
 	/**
 	 * Instantiate VInterface
@@ -52,7 +54,7 @@ public class VInterface {
 		this.voodoo = voodoo;
 		this.config = config;
 		if (iType == Type.ANDROID) {
-			//			this.vac = this.getAndroidControl();
+//			this.vac = this.getAndroidControl();
 			this.wd = null;
 		}
 		else {
@@ -60,6 +62,7 @@ public class VInterface {
 //			this.vac = null;
 //			this.start();
 		}
+		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
 	}
 
 	/**
@@ -103,16 +106,6 @@ public class VInterface {
 	}
 
 	/**
-	 * Close the current browser window.
-	 *
-	 * @throws Exception	  <i>not thrown</i>
-	 */
-	public void closeWindow() throws Exception {
-		voodoo.log.info("Closing window.");
-		this.wd.close();
-	}
-
-	/**
 	 * Load a URL in the browser window.
 	 *
 	 * @param url	the URL to be loaded by the browser
@@ -121,7 +114,19 @@ public class VInterface {
 	public void go(String url) throws Exception {
 		voodoo.log.info("Going to URL and switching to window: " + url);
 		this.wd.get(url);
-		this.wd.switchTo().window(this.wd.getWindowHandle());
+//		this.wd.switchTo().window(this.wd.getWindowHandle());
+	}
+	
+	/**
+	 * Returns the current URL of the current window
+	 * 
+	 * @return		Returns the current window's URL as a String
+	 * @throws Exception
+	 */
+	public String getURL() throws Exception {
+		String url = this.wd.getCurrentUrl();
+		voodoo.log.info("Getting URL " + url);
+		return url;
 	}
 
 	/**
@@ -217,31 +222,49 @@ public class VInterface {
 	}
 	
 	/**
-	 * Focus a browser window by its index.
+	 * Close the current browser window.
+	 *
+	 * @throws Exception	  <i>not thrown</i>
+	 */
+	public void closeWindow() throws Exception {
+		voodoo.log.info("Closing window with handle: " + windows.peek());
+		this.wd.close();
+		this.windows.pop();
+		voodoo.log.info("Refocusing to previous window with handle: " + windows.peek());
+		this.wd.switchTo().window(windows.peek().y);
+	}
+
+	/**
+	 * Focus a browser window by its index if it is not the current index.
 	 *
 	 * <p>The order of browser windows is somewhat arbitrary and not
 	 * guaranteed, although window creation time ordering seems to be
 	 * the most common.</p>
 	 *
-	 * @param index  the window index
-	 * @throws Exception	 if the specified window cannot be found
+	 * @param index  		the window index
+	 * @throws Exception	if the specified window index is out of range
 	 */
 	public void focusWindow(int index) throws Exception {
-		voodoo.log.info("Focusing window by index: " + index);
-		Set<String> Handles = this.wd.getWindowHandles();
-		while (Handles.iterator().hasNext()) {
-			String windowHandle = Handles.iterator().next();
-			if (!windowHandles.containsValue(windowHandle)) {
-				windowHandles.put(windowIndex, windowHandle);
-				windowIndex++;
+		if (index == windows.peek().x.intValue()) {
+			voodoo.log.warning("No focus was made because the given index matched the current index: " + index);
+		} else if (index < 0) {
+			throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
+		} else {
+			Set<String> windowHandlesSet = this.wd.getWindowHandles();
+			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
+			if (index >= windowHandles.length) {
+				throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
+			} else {
+				this.wd.switchTo().window(windowHandles[index]);
+				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
+				voodoo.log.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
-			Handles.remove(windowHandle);
 		}
-		this.wd.switchTo().window(windowHandles.get(index));
 	}
 
 	/**
-	 * Focus a browser window by its window title or URL.
+	 * Focus a browser window by its window title or URL if it does not
+	 * match the current title or URL.
 	 *
 	 * <p>If more than one window has the same title or URL, the first
 	 * encountered is the one that is focused.</p>
@@ -250,16 +273,45 @@ public class VInterface {
 	 * @throws Exception	if the specified window cannot be found
 	 */
 	public void focusWindow(String titleOrUrl) throws Exception {
-		voodoo.log.info("Focusing window by title or URL: " + titleOrUrl);
-		Set<String> handles = this.wd.getWindowHandles();
-		while (handles.iterator().hasNext()) {
-			String windowHandle = handles.iterator().next();
-			WebDriver window = this.wd.switchTo().window(windowHandle);
-			if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
-				break;
+		String curTitle = this.wd.getTitle();
+		String curUrl = this.wd.getCurrentUrl();
+		if (titleOrUrl.equals(curTitle) || titleOrUrl.equals(curUrl)) {
+			voodoo.log.warning("No focus was made because the given string matched the current title or URL: " + titleOrUrl);
+		} else {
+			Set<String> windowHandlesSet = this.wd.getWindowHandles();
+			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
+			int i = 0;
+			boolean windowFound = false;
+			while (i < windowHandles.length && !windowFound) {
+				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
+				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
+					windows.push(new Pair<Integer, String>(new Integer(i), this.wd.getWindowHandle()));
+					voodoo.log.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
+					windowFound = true;
+				}
+				i++;
 			}
-			handles.remove(windowHandle);
+			if (!windowFound) {
+				this.wd.switchTo().window(windows.peek().y);
+				throw new Exception("The given focus window string matched no title or URL: " + titleOrUrl);
+			}
+		}	
+	}
+	
+	
+	/**
+	 * Returns a string with the contents of the windows data structure.
+	 * 
+	 * @return	A string representation of all focused windows, with 
+	 * chronological index of focus and handle
+	 */
+	public String getWindowsString() {
+		String s = "Reverse stack:\n";
+		Iterator<Pair<Integer, String>> winIter = windows.iterator();
+		while (winIter.hasNext()) {
+			s += winIter.next() + "\n";
 		}
+		return s;
 	}
 
 	/**
@@ -384,8 +436,7 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-
-
+	
 	// ANDROID ROBOTIUM FUNCTIONALITY
 	//	private AndroidInterface getAndroidControl() throws Exception {
 	//		AndroidInterface vac = new AndroidInterface(this.props);
