@@ -166,7 +166,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
-		voodoo.log.info("Searching if the interface contains the following string: " + s);
+		voodoo.log.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
 		if (!caseSensitive) s = s.toLowerCase();
 		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
 		for (WebElement we : wes) {
