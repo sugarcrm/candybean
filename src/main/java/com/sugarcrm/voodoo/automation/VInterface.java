@@ -136,8 +136,10 @@ public class VInterface {
 		voodoo.log.info("Stopping automation interface with type: " + this.iType);
 		this.windows.clear();
 		this.iType = null;
-		this.wd.quit();
-		this.wd = null;
+		if (this.wd != null) {
+			this.wd.quit();
+			this.wd = null;
+		} else voodoo.log.warning("Automation interface already stopped.");
 	}
 	
 	/**
