@@ -244,6 +244,7 @@ public class VInterfaceSystemTest {
 		iface.focusWindow(1);
 //		iface.interact(iface.getWindowsString());
 		iface.stop();
+		iface.start();
 	}
 
 	@Ignore
