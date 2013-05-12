@@ -50,7 +50,7 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 */
 	public void createFile() {
 		createFile(Integer.toString(defaultName) + ".properties", true);
@@ -58,7 +58,7 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param absolutePath
 	 */
@@ -69,7 +69,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param log
 	 * @param fileName
@@ -77,7 +77,8 @@ public class Configuration extends Properties {
 	 */
 	private void createFile(String fileName, Boolean temporary) {
 		if (temporary) {
-			String tempPath = System.getProperty("user.home") + File.separator + "TemporaryConfigurationFiles" + File.separator + fileName;
+			String tempPath = System.getProperty("user.home") + File.separator
+					+ "TemporaryConfigurationFiles" + File.separator + fileName;
 			log.info("Using temporary path " + tempPath + ".\n");
 			setConfigPath(tempPath);
 		} else {
@@ -86,24 +87,29 @@ public class Configuration extends Properties {
 		}
 		File file = new File(getConfigPath());
 		File dir = new File(file.getParent());
-		
+
 		if (!dir.exists()) {
-			log.info("Parent folder does not exist for " + file.getName() + ", creating folder(s).\n");
-			boolean createdDirsStatus = dir.mkdirs(); 
+			log.info("Parent folder does not exist for " + file.getName()
+					+ ", creating folder(s).\n");
+			boolean createdDirsStatus = dir.mkdirs();
+			
 			// check and log directory creation
 			if (createdDirsStatus) {
 				createdDir = true;
 				log.info("Created folder(s) " + file.getParent() + ".\n");
-			} else { 
-				log.severe("Unable to create folder(s) " + file.getParent() + ".\n");
+			} else {
+				log.severe("Unable to create folder(s) " + file.getParent()
+						+ ".\n");
 			}
 		} else {
-			log.info("Parent folder " + dir.getAbsolutePath() + " exists for " + file.getName() + ", did not create folder(s).\n");
+			log.info("Parent folder " + dir.getAbsolutePath() + " exists for "
+					+ file.getName() + ", did not create folder(s).\n");
 		}
 
 		Boolean fileExisted = file.exists();
 		if (fileExisted)
-			log.info(file.getName() + " exists, proceeding to overwrite file.\n");
+			log.info(file.getName()
+					+ " exists, proceeding to overwrite file.\n");
 		// write the Configuration object to the path specified by file
 		try {
 			store(file, null);
@@ -122,7 +128,8 @@ public class Configuration extends Properties {
 				log.severe("Unable to create file " + file.getName() + ".\n");
 
 			// assert file exists
-			Assert.assertTrue(file.getName() + " was not created!", file.exists());
+			Assert.assertTrue(file.getName() + " was not created!",
+					file.exists());
 		}
 
 		// load() has logging built in
@@ -135,7 +142,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 */
 	public void deleteFile() {
 		if (!createdFile) {
@@ -159,8 +166,8 @@ public class Configuration extends Properties {
 						!dir.exists());
 			} else {
 				log.info("deletedFile(): Folder "
-								+ dir.getAbsolutePath()
-								+ " was not deleted, as it was not created in this test session.\n");
+						+ dir.getAbsolutePath()
+						+ " was not deleted, as it was not created in this test session.\n");
 			}
 		}
 	}
@@ -253,7 +260,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param file
 	 */
@@ -289,7 +296,7 @@ public class Configuration extends Properties {
 	/**
 	 * 
 	 * 
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param file
 	 * @param comments
@@ -405,7 +412,7 @@ public class Configuration extends Properties {
 	 *       make sure the delimiter used to separate properties is not the same delimiter
 	 *       used to separate values (ex. fruit1=apple; fruit2=pear; fruits=apple, pear, banana)
 	 *       
-	 * @author ylin
+	 * @author Jason Lin (ylin)
 	 * 
 	 * @param listOfProperties
 	 * @param delimiter

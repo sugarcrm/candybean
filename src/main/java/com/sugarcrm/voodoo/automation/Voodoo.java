@@ -66,48 +66,14 @@ public class Voodoo {
 		return Voodoo.instance;
 	}
 
-
 	/**
-	 * Get an {@link VInterfaceSystemTest} for use by a test.
+	 * Get an {@link VInterface} for use by a test.
 	 *
-	 * @return a new {@link VInterfaceSystemTest}
-	 * @throws Exception if the browser specified in voodoo.properties
-	 *							cannot be run or if WebDriver cannot be started
+	 * @return 				a new {@link VInterface}
+	 * @throws Exception
 	 */
 	public VInterface getInterface() throws Exception {
-		String iType = this.config.getProperty("automation.interface", "chrome");
-		return this.getInterface(this.parseInterfaceType(iType));
-	}
-
-	/**
-	 * Get an {@link VInterfaceSystemTest} for use by a test.
-	 *
-	 * @param iType  type of web browser to load
-	 * @return a new {@link VInterfaceSystemTest}
-	 * @throws Exception if the browser specified cannot be run or if
-	 *							WebDriver cannot be started
-	 */
-	public VInterface getInterface(VInterface.Type iType) throws Exception {
-		return new VInterface(this, this.config, iType);
-	}
-
-	/**
-	 * Convert a browser string into {@link IInterface.Type}
-	 *
-	 * @return browser type or null if the type is unrecognized
-	 * @throws Exception if the browser type is unimplemented
-	 */
-	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
-		VInterface.Type iType = null;
-		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
-			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
-				iType = iTypeIter;
-				break;
-			}
-		}
-		//if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
-		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
-		return iType;
+		return new VInterface(this, this.config);
 	}
 
 	//	public long getPageLoadTimeout() {
