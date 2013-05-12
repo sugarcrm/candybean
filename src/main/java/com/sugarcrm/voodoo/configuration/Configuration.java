@@ -20,6 +20,10 @@ public class Configuration extends Properties {
 	private OptionalLogger log;
 	private String configPath;
 	private Boolean createdFile = false;
+	// static type to track directory and files created by multiple 
+	// instances of Configuration
+	static private Boolean createdDir = false;
+	static private ArrayList<File> filesCreated = new ArrayList<File>(); 
 
 	public OptionalLogger getLogger() {
 		return log;
@@ -82,15 +86,19 @@ public class Configuration extends Properties {
 		}
 		File file = new File(getConfigPath());
 		File dir = new File(file.getParent());
-
+		
 		if (!dir.exists()) {
-			log.info("Parent directory does not exist for " + file.getName() + ", creating folder(s).\n");
-			boolean createdDirs = dir.mkdirs();
+			log.info("Parent folder does not exist for " + file.getName() + ", creating folder(s).\n");
+			boolean createdDirsStatus = dir.mkdirs(); 
 			// check and log directory creation
-			if (createdDirs) {
+			if (createdDirsStatus) {
+				createdDir = true;
 				log.info("Created folder(s) " + file.getParent() + ".\n");
-			} else 
+			} else { 
 				log.severe("Unable to create folder(s) " + file.getParent() + ".\n");
+			}
+		} else {
+			log.info("Parent folder " + dir.getAbsolutePath() + " exists for " + file.getName() + ", did not create folder(s).\n");
 		}
 
 		Boolean fileExisted = file.exists();
@@ -99,6 +107,7 @@ public class Configuration extends Properties {
 		// write the Configuration object to the path specified by file
 		try {
 			store(file, null);
+			filesCreated.add(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -122,7 +131,7 @@ public class Configuration extends Properties {
 		// set createdFile to true, allow deleteFile() to delete file
 		createdFile = true;
 	}
-
+	
 	/**
 	 * 
 	 * 
@@ -130,39 +139,88 @@ public class Configuration extends Properties {
 	 */
 	public void deleteFile() {
 		if (!createdFile) {
-			log.severe("No file was created, deleteFile() aborted.");
+			log.severe("deleteFile(): No file was created, deleteFile() aborted.\n");
 		} else {
 			File file = new File(getConfigPath());
 			File dir = file.getParentFile();
 
-			boolean fileDeleted = file.delete();
-
-			// check delete succeeded and file no longer exists
-			if (fileDeleted && !file.exists()) {
-				getLogger().info("Deleted file " + file.getName() + ".\n");
+			boolean filesDeleted = deleteAllCreatedFiles();
+			if (filesDeleted) {
 				configPath = null;
 				createdFile = false;
-			} else
-				getLogger().info("Unable to delete file " + file.getName() + ".\n");
+			}
 
-			// delete all empty parent folders
-			recursiveFolderDelete(file);
-
-			// assert file does not exist
-			Assert.assertTrue(file.getName() + " was not deleted!", !file.exists());
-			// assert parent directory does not exist
-			Assert.assertTrue(dir.getAbsolutePath() + " was not deleted!", !dir.exists());
+			// Only delete the directory if it's created in this test session
+			if (createdDir) {
+				// delete all empty parent folders
+				recursiveFolderDelete(file);
+				createdDir = false;
+				Assert.assertTrue(dir.getAbsolutePath() + " was not deleted!",
+						!dir.exists());
+			} else {
+				log.info("deletedFile(): Folder "
+								+ dir.getAbsolutePath()
+								+ " was not deleted, as it was not created in this test session.\n");
+			}
 		}
 	}
 
+	/**
+	 * Delete all the property files that're created/overwritten in the 
+	 * test session. These files are kept in a static-typed arrayList.
+	 * 
+	 * @author Soon Han 
+	 * 
+	 * @param None 
+	 * @return true if all the files in the arrayList are successfully deleted.   
+	 *         Otherwise returns false
+	 */
+	private boolean deleteAllCreatedFiles() {
+		boolean deleteStatus = true;
+		for (File f : Configuration.filesCreated) {
+			// file could have been previously deleted by an instance of
+			// Configuration
+			if (!f.exists()) {
+				continue;
+			}
+
+			boolean ok = f.delete();
+			if (ok) {
+				log.info("deleteAllCreatedFiles(): Deleted file "
+						+ f.getAbsolutePath() + ".\n");
+			} else {
+				deleteStatus = false;
+				log.info("deleteAllCreatedFiles(): Unable to delete file "
+						+ f.getAbsolutePath() + ".\n");
+			}
+			Assert.assertTrue(f.getName() + " was not deleted!", !f.exists());
+		}
+
+		return deleteStatus;
+	}
+
+	/**
+	 * Delete the entire config path that was created in the test session. 
+	 * The delete works from the the leaf directory up, and stops at the 
+	 * 1st non-empty directory. 
+	 * Any pre-existing empty directories along the config path are also 
+	 * deleted.
+	 * 
+	 * @param file is the config path to be deleted 
+	 * @return None 
+	 * 
+	 */
 	private void recursiveFolderDelete(File file) {
 		File dir = file.getParentFile();
+		
 		if (dir.list().length == 0) {
 			boolean dirDeleted = dir.delete();
-			if (dirDeleted && !file.exists()) 
-				getLogger().info("Deleted folder " + dir.getAbsolutePath() + ".\n");
+			if (dirDeleted && !file.exists())
+				log.info("recursiveFolderDelete(): Deleted folder "
+						+ dir.getAbsolutePath() + ".\n");
 			else
-				getLogger().info("Unable to delete folder " + dir.getAbsolutePath() + ".\n");
+				log.info("recursiveFolderDelete(): Unable to delete folder "
+						+ dir.getAbsolutePath() + ".\n");
 			recursiveFolderDelete(file.getParentFile());
 		}
 	}
