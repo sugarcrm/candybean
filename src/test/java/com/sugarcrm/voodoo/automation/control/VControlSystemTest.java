@@ -42,17 +42,17 @@ public class VControlSystemTest {
 		iface.start();
 	}
 
-	@Ignore
+//	@Ignore
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
 		String actAltValue = iface.getControl(Strategy.XPATH, "//*[@id=\"topLogo\"]/a[2]/img").getAttribute("alt");
 		String expAltValue = "W3Schools.com";
-		Assert.assertEquals("Expecting: " + expAltValue + ", actual: " + actAltValue, actAltValue, expAltValue);
-		String actHrefValue = iface.getControl(Strategy.CLASS, "topnav").getAttribute("alt");
-		String expHrefValue = "/html/default.asp";
-		Assert.assertEquals("Expecting: " + expHrefValue + ", actual: " + actHrefValue, actHrefValue, expHrefValue);
+		Assert.assertEquals(expAltValue, actAltValue);
+		String actHrefValue = iface.getControl(Strategy.ID, "top").getControl(Strategy.TAG, "a", 1).getAttribute("href");
+		String expHrefValue = "http://www.w3schools.com/";
+		Assert.assertEquals(expHrefValue, actHrefValue);
 	}
 	
 	@Test
@@ -62,18 +62,18 @@ public class VControlSystemTest {
 		iface.go(w3Url);
 		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
 		String actH2 = iface.getControl(Strategy.TAG, "h1").getText().trim();
-		Assert.assertEquals("Expecting: " + expH2+ ", actual H2: " + actH2, actH2, expH2);
+		Assert.assertEquals(expH2, actH2);
 //		String text2 = getText(int index);
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void getTextTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
 		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		String expChapterText = "W3Schools Home";
-		Assert.assertEquals("Expecting: " + expChapterText + ", actual: " + actChapterText, expChapterText, actChapterText);
+		Assert.assertEquals(expChapterText, actChapterText);
 //		String text2 = getText(int index);
 	}
 	
@@ -84,6 +84,18 @@ public class VControlSystemTest {
 //		click(int index);
 	}
 	
+//	@Ignore
+	@Test
+	public void containsTest() throws Exception {
+		iface.go("https://code.google.com/");
+		boolean actCaseSensPos = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
+		boolean actCaseSensNeg = iface.getControl(Strategy.ID, "gc-footer").contains("google developers", true); //false
+		boolean actNeg = iface.getControl(Strategy.ID, "gc-footer").contains("goggle devs", false); //false
+		Assert.assertEquals(true, actCaseSensPos);
+		Assert.assertEquals(false, actCaseSensNeg);
+		Assert.assertEquals(false, actNeg);
+	}
+	
 	@Ignore
 	@Test
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
@@ -91,7 +103,7 @@ public class VControlSystemTest {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
 		//Checkbox control
-		VControl checkboxControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]"));
+		VControl checkboxControl = iface.getControl(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]");
 		// DoubleClick on a Checkbox
 		checkboxControl.scroll();
 		iface.pause(2000);
@@ -118,7 +130,7 @@ public class VControlSystemTest {
    		// Verify draggable has been moved to new location
    		String actItemid = targetControl.getAttribute("itemid");
    		String expItemid = "1";
-        Assert.assertEquals("Expected value for the itemid attribute should match: " + expItemid, expItemid, actItemid);
+        Assert.assertEquals(expItemid, actItemid);
 //		dragNDrop(VControl dropControl, int dragIndex, int dropIndex);
 	}
 	
