@@ -38,6 +38,7 @@ public class VInterfaceSystemTest {
 		voodooConfig.load(voodooPropsPath);
 		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
+		iface.start();
 	}
 	
 	@Ignore
@@ -56,7 +57,6 @@ public class VInterfaceSystemTest {
 	@Test
 	public void startStopRestartTest() throws Exception {
 		String expUrl = "https://www.google.com/";
-		iface.start();
 		iface.go(expUrl);
 		String actUrl = iface.getURL();
 		Assert.assertEquals(expUrl, actUrl);
@@ -75,10 +75,13 @@ public class VInterfaceSystemTest {
 		actUrl = iface.getURL();
 		Assert.assertEquals(expUrl, actUrl);
 		iface.stop();
-		thrown.expect(Exception.class);
-		thrown.expectMessage("Automation interface not yet started; cannot restart.");
-		iface.restart();
-		iface.stop();
+		try {
+			thrown.expect(Exception.class);
+			thrown.expectMessage("Automation interface not yet started; cannot restart.");
+			iface.restart();
+		} finally {
+			iface.start();
+		}
 	}
 
 	@Ignore
@@ -108,7 +111,6 @@ public class VInterfaceSystemTest {
 //	@Ignore
 	@Test
 	public void containsTest() throws Exception {
-		iface.start();
 		iface.go("https://code.google.com/");
 		boolean actCaseSensPos = iface.contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.contains("google developers", true); //false
@@ -116,7 +118,6 @@ public class VInterfaceSystemTest {
 		Assert.assertEquals("Expecting: " + true + ", actual: " + actCaseSensPos, true, actCaseSensPos);
 		Assert.assertEquals("Expecting: " + false + ", actual: " + actCaseSensNeg, false, actCaseSensNeg);
 		Assert.assertEquals("Expecting: " + false + ", actual: " + actNeg, false, actNeg);
-		iface.stop();
 	}
 	
 	@Ignore
@@ -130,7 +131,6 @@ public class VInterfaceSystemTest {
 	public void focusFrameTest() throws Exception {
 		String expDefStr = "Your Guide To Web Design";
 		String expFrmStr = "http://www.littlewebhut.com/images/eightball.gif";
-		iface.start();
 		iface.go("http://www.littlewebhut.com/articles/html_iframe_example/");
 		String actDefStr = iface.getControl(Strategy.TAG, "p").getText();
 		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
@@ -153,7 +153,6 @@ public class VInterfaceSystemTest {
 		iface.focusDefault();
 		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
 		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
-		iface.stop();
 	}
 
 //	@Ignore
@@ -168,7 +167,6 @@ public class VInterfaceSystemTest {
 		String expWindow3Title = "Popup Window - HTML Code Tutorial";
 		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
 		
-		iface.start();
 		iface.go(expWindow0URL);
 		
 		// Check assumptions
@@ -244,7 +242,6 @@ public class VInterfaceSystemTest {
 		thrown.expectMessage("Given focus window index is out of bounds: 1 current size: 1");
 		iface.focusWindow(1);
 //		iface.interact(iface.getWindowsString());
-		iface.stop();
 	}
 
 	@Ignore
@@ -266,5 +263,7 @@ public class VInterfaceSystemTest {
 	}
 
 	@AfterClass
-	public static void last() throws Exception {}
+	public static void last() throws Exception {
+		iface.stop();
+	}
 }

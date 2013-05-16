@@ -39,13 +39,13 @@ public class VControlSystemTest {
 		voodooConfig.load(voodooPropsPath);
 		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
+		iface.start();
 	}
 
 //	@Ignore
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
-		iface.start();
 		iface.go(w3Url);
 		String actAltValue = iface.getControl(Strategy.XPATH, "//*[@id=\"topLogo\"]/a[2]/img").getAttribute("alt");
 		String expAltValue = "W3Schools.com";
@@ -53,33 +53,28 @@ public class VControlSystemTest {
 		String actHrefValue = iface.getControl(Strategy.ID, "top").getControl(Strategy.TAG, "a", 1).getAttribute("href");
 		String expHrefValue = "http://www.w3schools.com/";
 		Assert.assertEquals(expHrefValue, actHrefValue);
-		iface.stop();
 	}
 	
 	@Test
 	public void getControlTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/";
 		String expH2 = "HTML5 Introduction";
-		iface.start();
 		iface.go(w3Url);
 		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
 		String actH2 = iface.getControl(Strategy.TAG, "h1").getText().trim();
 		Assert.assertEquals(expH2, actH2);
 //		String text2 = getText(int index);
-		iface.stop();
 	}
 	
 //	@Ignore
 	@Test
 	public void getTextTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
-		iface.start();
 		iface.go(w3Url);
 		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		String expChapterText = "W3Schools Home";
 		Assert.assertEquals(expChapterText, actChapterText);
 //		String text2 = getText(int index);
-		iface.stop();
 	}
 	
 	@Ignore
@@ -92,7 +87,6 @@ public class VControlSystemTest {
 //	@Ignore
 	@Test
 	public void containsTest() throws Exception {
-		iface.start();
 		iface.go("https://code.google.com/");
 		boolean actCaseSensPos = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.getControl(Strategy.ID, "gc-footer").contains("google developers", true); //false
@@ -100,7 +94,6 @@ public class VControlSystemTest {
 		Assert.assertEquals(true, actCaseSensPos);
 		Assert.assertEquals(false, actCaseSensNeg);
 		Assert.assertEquals(false, actNeg);
-		iface.stop();
 	}
 	
 	@Ignore
@@ -108,7 +101,6 @@ public class VControlSystemTest {
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
 	public void doubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
-		iface.start();
 		iface.go(w3Url);
 		//Checkbox control
 		VControl checkboxControl = iface.getControl(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]");
@@ -122,14 +114,12 @@ public class VControlSystemTest {
 		checkboxControl.doubleClick();
 		iface.pause(2000);
 //		doubleClick(int index);
-		iface.stop();
 	}
 	
 	@Ignore
 	@Test
 	public void dragNDropTest() throws Exception {
 		String w3Url = "http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=6&ved=0CDoQFjAF&url=http%3A%2F%2Ftool-man.org%2Fexamples%2Fsorting.html&ei=nBGLUKi8CcGmigLah4CADg&usg=AFQjCNGL-HryUxMBRKn9gEM0F1xE_NNNyQ";
-		iface.start();
 		iface.go(w3Url);
 		iface.pause(2000);
 		VControl imgControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/ul[2]/li"));
@@ -142,7 +132,6 @@ public class VControlSystemTest {
    		String expItemid = "1";
         Assert.assertEquals(expItemid, actItemid);
 //		dragNDrop(VControl dropControl, int dragIndex, int dropIndex);
-        iface.stop();
 	}
 	
 	@Ignore
@@ -194,5 +183,7 @@ public class VControlSystemTest {
 	}
 	
 	@AfterClass
-	public static void last() throws Exception {}
+	public static void last() throws Exception {
+		iface.stop();
+	}
 }	
