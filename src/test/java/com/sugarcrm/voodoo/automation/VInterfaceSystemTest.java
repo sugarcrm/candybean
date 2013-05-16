@@ -244,7 +244,6 @@ public class VInterfaceSystemTest {
 		iface.focusWindow(1);
 //		iface.interact(iface.getWindowsString());
 		iface.stop();
-		iface.start();
 	}
 
 	@Ignore
@@ -266,7 +265,5 @@ public class VInterfaceSystemTest {
 	}
 
 	@AfterClass
-	public static void last() throws Exception {
-		iface.stop();
-	}
+	public static void last() throws Exception {}
 }
