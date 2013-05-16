@@ -78,6 +78,7 @@ public class VInterfaceSystemTest {
 		thrown.expect(Exception.class);
 		thrown.expectMessage("Automation interface not yet started; cannot restart.");
 		iface.restart();
+		iface.stop();
 	}
 
 	@Ignore

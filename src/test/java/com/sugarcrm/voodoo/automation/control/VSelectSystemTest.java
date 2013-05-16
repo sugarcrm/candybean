@@ -40,7 +40,6 @@ public class VSelectSystemTest {
 		voodooConfig.load(new File(voodooPropsPath));
 		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
-		iface.start();
 	}
 
 	@Test
@@ -48,6 +47,7 @@ public class VSelectSystemTest {
 		
 		// Checking checkbox select 
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+		iface.start();
 		iface.go(w3Url);
 		VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]/input[1]"));
 		Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(), select.isSelected(), false);
@@ -71,6 +71,7 @@ public class VSelectSystemTest {
 //		String actName = control.getAttribute("name");
 //        String expName = "firstname";
 //        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
+		iface.stop();
 	}
 	
 	@Test
@@ -78,6 +79,7 @@ public class VSelectSystemTest {
 		String option = "Sep";
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
+		iface.start();
 		iface.go(facebookCreateAccountUrl);
 		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "birthday_month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
@@ -86,6 +88,7 @@ public class VSelectSystemTest {
 		String actual = dropDownList.getSelected();
 		String expected = option;
 		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
+		iface.stop();
 	}
 	
 	@Test
@@ -94,17 +97,16 @@ public class VSelectSystemTest {
 		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
+		iface.start();
 		iface.go(facebookCreateAccountUrl);
 		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "birthday_month"));
 		// 2. Get the current option from the drop-down list
 		actual = dropDownList.getSelected();
 		// 3. Verify that actual value is the expected value
 		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
-		
+		iface.stop();
 	}
 	
 	@AfterClass
-	public static void last() throws Exception {
-		iface.stop();
-	}
+	public static void last() throws Exception {}
 }	
