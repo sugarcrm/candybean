@@ -160,7 +160,7 @@ public class VInterfaceSystemTest {
 	public void focusWindowTest() throws Exception {
 		String expWindow0Title = "HTML Examples";
 		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
-		String expWindow1Title = "Tryit Editor v1.7";
+		String expWindow1Title = "Tryit Editor v1.8";
 		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro";
 		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial";
 		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
@@ -174,7 +174,7 @@ public class VInterfaceSystemTest {
 		Assert.assertEquals(expWindow0Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 		
-		// Click pops-up window titled "Tryit Editor v1.7"
+		// Click pops-up window titled "Tryit Editor v1.8"
 		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Verify title without switching
@@ -193,7 +193,7 @@ public class VInterfaceSystemTest {
 		Assert.assertEquals(expWindow0Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 		
-		// Click pop-up window titled "Tryit Editor v1.7"
+		// Click pop-up window titled "Tryit Editor v1.8"
 		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Navigate elsewhere and trigger popup window
