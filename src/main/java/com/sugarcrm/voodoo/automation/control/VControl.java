@@ -1,5 +1,7 @@
 package com.sugarcrm.voodoo.automation.control;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -81,6 +83,31 @@ public class VControl {
 	public void click() throws Exception {
 		voodoo.log.info("Selenium: clicking on control: " + this.toString());
 		we.click();
+	}
+	
+	/**
+	 * Returns true if the control visibly contains the 
+	 * given string in any non-visible=false element.
+	 *
+	 * @param s					The target string searched 
+	 * for in the interface		
+	 * @param caseSensitive		Whether or not the search
+	 * is case sensitive		
+	 * @return		Returns true if the interface visibly 
+	 * contains the given string
+	 * @throws Exception
+	 */
+	public boolean contains(String s, boolean caseSensitive) throws Exception {
+		voodoo.log.info("Searching if the control contains the following string: " + s + " with case sensitivity: " + caseSensitive);
+		if (!caseSensitive) s = s.toLowerCase();
+		List<WebElement> wes = this.we.findElements(By.xpath("//*[not(@visible='false')]"));
+		for (WebElement we : wes) {
+			String text = we.getText();
+			if (!caseSensitive) text = text.toLowerCase();
+//			System.out.println("text: " + text);
+			if (text.contains(s)) return true;
+		}
+		return false;
 	}
 
 	/**
