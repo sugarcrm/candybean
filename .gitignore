@@ -3,4 +3,4 @@
 .settings/
 target/
 chromedriver.log
-#log/*.log
+log/*.log
