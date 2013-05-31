@@ -29,7 +29,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +55,11 @@ public class AppiumTest {
     @Before
     public void setUp() throws Exception {
         // set up appium
-        File appDir = new File("/Users/lcao/workspace/appium/sample-code/apps/TestApp/build/Release-iphonesimulator");
-        File app = new File(appDir, "TestApp.app");
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
         capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-        capabilities.setCapability("app", app.getAbsolutePath());
+        capabilities.setCapability("app", "http://appium.s3.amazonaws.com/TestApp6.0.app.zip");
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         values = new ArrayList<Integer>();
     }
