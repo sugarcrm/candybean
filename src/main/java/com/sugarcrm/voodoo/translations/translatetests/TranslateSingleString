@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# != 6 -o $1 = "-h" -o $1 = "-help" -o $1 = "--help" ]
+then
+	echo "Usage: $0 db_server db_name db_user db_pass en_string lang
+	en_string - string to be translated
+	lang - language code (e.g. fr_FR, zh_CN)
+Example: ./FindAffectedSodaTests 10.8.31.10 Translations_6_7_latest translator Sugar123! "Create Report" zh_CN"
+fi
+
+db_server=$1; db_name=$2; db_user=$3; db_pass=$4; en_string=$5; lang=$6
+
+cd ~/git_repos/Voodoo2/src/main/java
+javac -d . com/sugarcrm/voodoo/translations/translatetests/TranslateSingleString.java
+java -cp ~/git_repos/Voodoo2/src/test/resources/sample/mysql-connector-java-5.1.18-bin.jar:. com/sugarcrm/voodoo/translations/translatetests/TranslateSingleString $db_server $db_name $db_user $db_pass $en_string $lang
