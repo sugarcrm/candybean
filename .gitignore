@@ -4,3 +4,5 @@
 target/
 chromedriver.log
 log/*.log
+.idea/
+*.iml
