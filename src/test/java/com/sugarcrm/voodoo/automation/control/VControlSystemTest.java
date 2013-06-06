@@ -1,13 +1,19 @@
 package com.sugarcrm.voodoo.automation.control;
 
 import java.io.File;
+import java.sql.Date;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Rule;
 
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
@@ -25,7 +31,10 @@ import com.sugarcrm.voodoo.configuration.Configuration;
 public class VControlSystemTest {
 	protected static Voodoo voodoo;
 	protected static VInterface iface;
-	
+		
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@BeforeClass
 	public static void first() throws Exception {
 		String curWorkDir = System.getProperty("user.dir");
@@ -55,6 +64,7 @@ public class VControlSystemTest {
 		Assert.assertEquals(expHrefValue, actHrefValue);
 	}
 	
+//	@Ignore
 	@Test
 	public void getControlTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/";
@@ -152,6 +162,25 @@ public class VControlSystemTest {
 //		voodoo.interact("wait for it...");
 		
 //		voodoo.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
+	}
+	
+	@Test
+	public void pauseUntilVisibleTest() throws Exception {
+		long timeout = 10;
+		long startTime = 0;
+		long endTime = 0;
+		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
+		VControl hideControl = iface.getControl(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
+		startTime = System.currentTimeMillis();
+		hideControl.pauseUntilVisible((int)timeout);
+		endTime = System.currentTimeMillis();
+		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < timeout);
+		hideControl.click();
+		startTime = System.currentTimeMillis();
+		thrown.expect(TimeoutException.class);
+		hideControl.pauseUntilVisible((int)timeout);
+		endTime = System.currentTimeMillis();
+		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") >= timeout);
 	}
 	
 	@Ignore

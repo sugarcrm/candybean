@@ -5,7 +5,7 @@ import java.util.Properties;
 
 public class VHook {
 	
-	public static String HOOK_DELIMITER = ":";
+	public final static String HOOK_DELIMITER = ":";
 	
 	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK, CLASS, TAG; }
 	public final Strategy hookStrategy;

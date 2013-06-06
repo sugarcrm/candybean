@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sugarcrm.voodoo.automation.VInterface;
 import com.sugarcrm.voodoo.automation.Voodoo;
@@ -152,17 +154,17 @@ public class VControl {
 	}
 
 	/**
-	 * Explicit wait until this control is displayed or the timeout (s) 
-	 * is reached.
-	 *	 *
-	 * @throws Exception if the element cannot be found before the
-	 *							timeout 
+	 * Explicit wait until this control is visible.
+	 *
+	 * @param timeout		an explicit timeout (must be less than configured implicit timeout to be triggered)
+	 * @throws Exception
 	 */
 //	@Deprecated
-//	public void halt(int timeout) throws Exception {
-//		voodoo.log.info("Selenium: waiting for " + timeout + "ms on visibility of control: " + this.toString());
+	public void pauseUntilVisible(int timeout) throws Exception {
+		voodoo.log.info("Selenium: waiting for " + timeout + "ms on visibility of control: " + this.toString());
+		(new WebDriverWait(this.iface.wd, timeout)).until(ExpectedConditions.visibilityOf(this.we));
 //		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
-//		WebElement we = wait.until(ExpectedConditions.elementToBeClickable(this.getBy(this.hook)));
+//		WebElement we = wait.until(ExpectedConditions.visibilityOf(this.we));
 //		final WebElement we = this.getWebElement(this.getBy(this.hook));		
 //		WebDriverWait wait = new WebDriverWait(this.iface.wd, explicitWait);
 //		wait.until(new Function<WebDriver, Boolean>() {
@@ -170,10 +172,10 @@ public class VControl {
 //				return we.isDisplayed();
 //			}
 //		});
-//	}
+	}
 
 //	@Deprecated
-//	public void halt(String attribute, String value, int timeout) throws Exception {
+//	public void pause(String attribute, String value, int timeout) throws Exception {
 //		voodoo.log.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
 //				+ " to have attribute: " + attribute + " to have value: " + value);
 //		final WebElement we = this.getWebElement(this.getBy(this.hook), 0);
