@@ -100,7 +100,6 @@ public class VSelectSystemTest {
 		actual = dropDownList.getSelected();
 		// 3. Verify that actual value is the expected value
 		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
-		
 	}
 	
 	@AfterClass
