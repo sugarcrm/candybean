@@ -60,7 +60,7 @@ public class AppiumAndroidTest {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-        capabilities.setCapability("app", "/Users/lcao/workspace/appium/sample-code/apps/ApiDemos/bin/ApiDemos-debug.apk");
+        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         values = new ArrayList<Integer>();
     }
