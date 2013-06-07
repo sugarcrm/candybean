@@ -59,7 +59,7 @@ public class AppiumIosTest {
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
         capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-        capabilities.setCapability("app", "http://appium.s3.amazonaws.com/TestApp6.0.app.zip");
+        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         values = new ArrayList<Integer>();
     }
