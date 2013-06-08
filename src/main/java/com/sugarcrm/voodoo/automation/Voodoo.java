@@ -30,7 +30,7 @@ public class Voodoo {
 	 * {@link Properties} object created by loading the voodoo
 	 * properties configuration file.
 	 */
-	private Configuration config;
+	public final Configuration config;
 
 	/**
 	 * The one Voodoo instance.  Created when a Voodoo instance is
