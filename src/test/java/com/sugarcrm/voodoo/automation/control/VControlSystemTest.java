@@ -129,6 +129,7 @@ public class VControlSystemTest {
 	@Ignore
 	@Test
 	public void dragNDropTest() throws Exception {
+		// http://jqueryui.com/resources/demos/droppable/default.html -- suggested from dev mailing list
 		String w3Url = "http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=6&ved=0CDoQFjAF&url=http%3A%2F%2Ftool-man.org%2Fexamples%2Fsorting.html&ei=nBGLUKi8CcGmigLah4CADg&usg=AFQjCNGL-HryUxMBRKn9gEM0F1xE_NNNyQ";
 		iface.go(w3Url);
 		iface.pause(2000);
