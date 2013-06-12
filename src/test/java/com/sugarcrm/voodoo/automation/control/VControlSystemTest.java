@@ -41,7 +41,9 @@ public class VControlSystemTest {
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
 		String voodooPropsPath = relPropsPath + File.separator;
 		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
-		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
+		if (voodooPropsFilename == null) {
+            voodooPropsFilename = "voodoo-mac.properties";
+        }
 		voodooPropsPath += voodooPropsFilename;
 		
 		Configuration voodooConfig = new Configuration();
@@ -86,7 +88,7 @@ public class VControlSystemTest {
 		Assert.assertEquals(expChapterText, actChapterText);
 //		String text2 = getText(int index);
 	}
-	
+
 	@Ignore
 	@Test
 	public void clickTest() throws Exception {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
+import java.net.URL;
 
 import javax.swing.JOptionPane;
 
@@ -22,12 +23,21 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.RemoteTouchScreen;
+import org.openqa.selenium.HasTouchScreen;
+import org.openqa.selenium.TouchScreen;
+import org.openqa.selenium.Capabilities;
+
+
 import com.sugarcrm.voodoo.automation.control.VControl;
 import com.sugarcrm.voodoo.automation.control.VHook;
 import com.sugarcrm.voodoo.automation.control.VHook.Strategy;
 import com.sugarcrm.voodoo.automation.control.VSelect;
 import com.sugarcrm.voodoo.configuration.Configuration;
 import com.sugarcrm.voodoo.utilities.Utils.Pair;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class VInterface {
 
@@ -488,7 +498,22 @@ public class VInterface {
 			throw new Exception("Selenium: ie browser not yet supported.");
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
-		default:
+        case ANDROID:
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
+            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            break;
+        case IOS:
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+            capabilities.setCapability(CapabilityType.VERSION, "6.0");
+            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
+            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            break;
+        default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
 		long implicitWait = Long.parseLong(config.getProperty("perf.implicit_wait"));
@@ -499,7 +524,20 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-	
+
+    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+        private RemoteTouchScreen touch;
+
+        public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
+            super(remoteAddress, desiredCapabilities);
+            touch = new RemoteTouchScreen(getExecuteMethod());
+        }
+
+        public TouchScreen getTouch() {
+            return touch;
+        }
+    }
+
 	// ANDROID ROBOTIUM FUNCTIONALITY
 	//	private AndroidInterface getAndroidControl() throws Exception {
 	//		AndroidInterface vac = new AndroidInterface(this.props);
