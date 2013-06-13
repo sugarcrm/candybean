@@ -1,7 +1,9 @@
 package com.sugarcrm.voodoo.automation.mobile;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.json.simple.JSONObject;
@@ -34,6 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.io.IOUtils;
+
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -45,27 +50,43 @@ import static org.junit.Assert.assertTrue;
  */
 public class AppiumIosTest {
 
-    private WebDriver driver;
+    private static WebDriver driver;
 
-    private List<Integer> values;
+    private static List<Integer> values;
 
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
 
-    @Before
-    public void setUp() throws Exception {
+    private static final String TOKEN = "That URL did not map to a valid JSONWP resource";
+
+    @BeforeClass
+    public static void setUp() throws Exception {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
         capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
-        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
+
+        try {
+            driver = new SwipeableWebDriver(remoteAddress, capabilities);
+        } catch (Exception e) {
+            System.err.println("Appium server offline. Starting...");
+            Runtime rt = Runtime.getRuntime();
+            Process pr = rt.exec("/usr/local/bin/node /usr/local/share/npm/lib/node_modules/appium/app/bin.js");
+
+            Thread.sleep(1000);
+            driver = new SwipeableWebDriver(remoteAddress, capabilities);
+        }
+
+
+
         values = new ArrayList<Integer>();
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterClass
+    public static void tearDown() throws Exception {
         driver.quit();
     }
 
@@ -291,7 +312,7 @@ public class AppiumIosTest {
         assertEquals(text1.getHeight(), text2.getHeight());
     }
 
-    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+    public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 
         public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {

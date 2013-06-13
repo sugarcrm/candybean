@@ -462,8 +462,9 @@ public class VInterface {
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
-		WebDriver wd = null;
-		switch (iType) {
+        DesiredCapabilities capabilities;
+        WebDriver wd = null;
+        switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getProperty("browser.firefox_profile", "default");
 			String ffBinaryPath = this.config.getProperty("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
@@ -499,14 +500,14 @@ public class VInterface {
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
         case ANDROID:
-            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities = new DesiredCapabilities();
             capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
             capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
             wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
             break;
         case IOS:
-            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities = new DesiredCapabilities();
             capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
             capabilities.setCapability(CapabilityType.VERSION, "6.0");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
