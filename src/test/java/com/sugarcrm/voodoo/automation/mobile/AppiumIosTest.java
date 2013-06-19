@@ -39,20 +39,20 @@ import java.util.Random;
 import org.apache.commons.io.IOUtils;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+    import static org.junit.Assert.assertEquals;
+    import static org.junit.Assert.assertTrue;
 
-/**
- * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
- * with the 'TestApp' iPhone project which is included in the Appium source distribution.
- *
- * @author Larry Cao
- */
-public class AppiumIosTest {
+    /**
+     * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
+     * with the 'TestApp' iPhone project which is included in the Appium source distribution.
+     *
+     * @author Larry Cao
+     */
+    public class AppiumIosTest {
 
-    private static WebDriver driver;
+        private static WebDriver driver;
 
-    private static List<Integer> values;
+        private static List<Integer> values;
 
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
