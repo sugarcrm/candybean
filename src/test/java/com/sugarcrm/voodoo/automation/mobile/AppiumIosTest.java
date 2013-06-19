@@ -59,8 +59,8 @@ import org.apache.commons.io.IOUtils;
 
     private static final String TOKEN = "That URL did not map to a valid JSONWP resource";
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
@@ -85,8 +85,8 @@ import org.apache.commons.io.IOUtils;
         values = new ArrayList<Integer>();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         driver.quit();
     }
 
