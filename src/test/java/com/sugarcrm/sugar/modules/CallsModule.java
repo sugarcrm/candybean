@@ -43,7 +43,7 @@ public class CallsModule {
 	}
 	
 	public void searchCalls(String search) throws Exception {
-		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = sugar.config.getValue("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Calls&action=ListView");
 		sugar.i.getControl(Strategy.ID, "name_basic").sendString(search);
 		sugar.i.getControl(Strategy.ID, "search_form_submit").click();

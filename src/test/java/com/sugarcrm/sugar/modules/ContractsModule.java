@@ -15,7 +15,7 @@ public class ContractsModule {
 	public ContractsModule(Sugar sugar) { this.sugar = sugar; }
 	
 	public void createContract(ContractRecord contract) throws Exception {
-		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = sugar.config.getValue("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Contracts&action=EditView");
 		sugar.i.getControl(Strategy.ID, "name").sendString(contract.name);
 		sugar.i.getSelect(Strategy.ID, "status").select(contract.status);
@@ -29,7 +29,7 @@ public class ContractsModule {
 	}
 	
 	public void deleteAllContracts() throws Exception {
-		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = sugar.config.getValue("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Contracts&action=ListView");
 		sugar.i.getControl(Strategy.ID, "massall_top").click();
 		sugar.i.getControl(Strategy.ID, "delete_listview_top").click();
@@ -48,7 +48,7 @@ public class ContractsModule {
 	}
 	
 	public void searchContracts(String search) throws Exception {
-		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = sugar.config.getValue("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Contracts&action=ListView");
 		sugar.i.getControl(Strategy.ID, "name_basic").sendString(search);
 		sugar.i.getControl(Strategy.ID, "search_form_submit").click();

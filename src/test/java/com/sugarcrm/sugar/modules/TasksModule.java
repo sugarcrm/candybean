@@ -24,7 +24,7 @@ public class TasksModule {
 	}
 	
 	public void deleteAllTasks() throws Exception {
-		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = sugar.config.getValue("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Tasks&action=ListView");
 		sugar.i.getControl(Strategy.ID, "massall_top").click();
 		sugar.i.getControl(Strategy.ID, "delete_listview_top").click();
@@ -43,7 +43,7 @@ public class TasksModule {
 	}
 	
 	public void searchTasks(String search) throws Exception {
-		String sugarURL = sugar.config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = sugar.config.getValue("env.base_url", "http://localhost/ent670/");
 		sugar.i.go(sugarURL + "/index.php?module=Tasks&action=ListView");
 		sugar.i.getControl(Strategy.ID, "name_basic").sendString(search);
 		sugar.i.getControl(Strategy.ID, "search_form_submit").click();
