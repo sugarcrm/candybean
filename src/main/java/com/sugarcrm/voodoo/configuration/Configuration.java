@@ -14,8 +14,17 @@ import junit.framework.Assert;
 import com.sugarcrm.voodoo.utilities.OptionalLogger;
 import com.sugarcrm.voodoo.utilities.Utils;
 
+
+/**
+ * Configuration is a class that is used for cascading
+ */
 public class Configuration extends Properties {
-	private static final long serialVersionUID = 1L;
+
+    //================================================================================
+    // Properties
+    //================================================================================
+
+    private static final long serialVersionUID = 1L;
 	private static int defaultName = 0;
 	private OptionalLogger log;
 	private String configPath;
@@ -23,31 +32,182 @@ public class Configuration extends Properties {
 	// static type to track directory and files created by multiple 
 	// instances of Configuration
 	static private Boolean createdDir = false;
-	static private ArrayList<File> filesCreated = new ArrayList<File>(); 
+	static private ArrayList<File> filesCreated = new ArrayList<File>();
 
-	public OptionalLogger getLogger() {
-		return log;
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
 
-	public void setLogger(OptionalLogger log) {
-		this.log = log;
-	}
-
-	public String getConfigPath() {
-		return configPath;
-	}
-
-	public void setConfigPath(String configPath) {
-		this.configPath = configPath;
-	}
-
-	public Configuration() {
+    public Configuration() {
 		this(null);
 	}
 
 	public Configuration(Logger log) {
 		this.setLogger(new OptionalLogger(log));
 	}
+
+    //================================================================================
+    // Accessors
+    //================================================================================
+
+
+    public OptionalLogger getLogger() {
+        return log;
+    }
+
+    public void setLogger(OptionalLogger log) {
+        this.log = log;
+    }
+
+    public String getConfigPath() {
+        return configPath;
+    }
+
+    public void setConfigPath(String configPath) {
+        this.configPath = configPath;
+    }
+
+    /**
+     * This method overrides the extended getProperty(key, defaultValue) method
+     * to support cascading value
+     *
+     * @author wli
+     *
+     * @param path
+     * @return a cascaded value
+     */
+    public String getProperty(String key, String defaultValue) {
+        return getCascadingPropertyValue(this, defaultValue, key);
+    }
+
+
+    /**
+     * This is a newly added method (with defaultValue) to retrieve a path
+     * from the properties file and safely return it after calling Utils.adjustPath
+     *
+     * @author wli
+     *
+     * @param key
+     * @param defaultValue
+     * @return
+     */
+    public String getPathProperty(String key, String defaultValue) {
+        String pathValue = getCascadingPropertyValue(this, defaultValue, key);
+        return Utils.adjustPath(pathValue);
+    }
+
+    /**
+     * This is a newly added method (without defaultValue) to retrieve a path
+     * from the properties file and safely return it after calling Utils.adjustPath
+     *
+     * @author wli
+     *
+     * @param key
+     * @return
+     */
+    public String getPathProperty(String key) {
+        String pathValue = getProperty(key);
+        return Utils.adjustPath(pathValue);
+    }
+
+    /**
+     * Takes the value and split them according to the given
+     * delimiter and return a String[].
+     * (Example, "FRUITS = apple pear banana)
+     * delimiter: " "
+     * and returns String[]: apple pear banana
+     *
+     * @author wli
+     *
+     * @param key
+     * @param delimiter
+     * @return
+     */
+    public String[] getPropertiesArray(String key, String delimiter) {
+        String values = getProperty(key);
+        String[] result = values.split(delimiter);
+        for (int i = 0; i < result.length; i++) {
+            result[i] = result[i].trim();
+        }
+        return result;
+    }
+
+    public ArrayList<String> getPropertiesArrayList(String key, String delimiter) {
+        String values = getProperty(key);
+        String[] arrayOfValues = values.split(delimiter);
+        ArrayList<String> result = new ArrayList<String>();
+        for (String value : arrayOfValues) {
+            result.add(value.trim());
+        }
+        return result;
+    }
+
+    /**
+     * Consume a ArrayList of type String containing properties (ie, "USERNAME=root")
+     * and set all the properties onto a file. Key/value are separated by a equal sign '='
+     *
+     * @author wli
+     *
+     * @param listOfProperties
+     */
+    public void setProperties(ArrayList<String> listOfProperties) {
+        for (String property : listOfProperties) {
+            String[] keyValueHolder = property.split("=");
+            String key = keyValueHolder[0].trim();
+            String value = keyValueHolder[1].trim();
+            setProperty(key, value);
+        }
+    }
+
+    public void setProperties(String[] listOfProperties) {
+        for (String property : listOfProperties) {
+            String[] keyValueHolder = property.split("=");
+            String key = keyValueHolder[0].trim();
+            String value = keyValueHolder[1].trim();
+            setProperty(key, value);
+        }
+    }
+
+    /**
+     * NOTE: If one of the properties has multiple values (ex. fruits=apple, pear, banana),
+     *       make sure the delimiter used to separate properties is not the same delimiter
+     *       used to separate values (ex. fruit1=apple; fruit2=pear; fruits=apple, pear, banana)
+     *
+     * @author Jason Lin (ylin)
+     *
+     * @param listOfProperties
+     * @param delimiter
+     */
+    public void setProperties(String listOfProperties, String delimiter) {
+        for (String property : listOfProperties.split(delimiter)) {
+            String[] keyValueHolder = property.split("=");
+            String key = keyValueHolder[0].trim();
+            String value = keyValueHolder[1].trim();
+            setProperty(key, value);
+        }
+    }
+
+    /**
+     * Given a properties file, a default key-value pair value, and a key, this
+     * function returns:\n a) the default value\n b) or, if exists, the
+     * key-value value in the properties file\n c) or, if exists, the system
+     * property key-value value. This function is used to override configuration
+     * files in cascading fashion.
+     *
+     * @param props
+     * @param defaultValue
+     * @param key
+     * @return
+     */
+    private static String getCascadingPropertyValue(Properties props,
+                                                    String defaultValue, String key) {
+        String value = defaultValue;
+        if (props.containsKey(key))
+            value = props.getProperty(key);
+        if (System.getProperties().containsKey(key))
+            value = System.getProperty(key);
+        return value;
+    }
 
 	/**
 	 * @author Jason Lin (ylin)
@@ -307,145 +467,7 @@ public class Configuration extends Properties {
 		store(new FileOutputStream(file), comments);
 	}
 
-	/**
-	 * This method overrides the extended getProperty(key, defaultValue) method 
-	 * to support cascading value
-	 * 
-	 * @author wli
-	 * 
-	 * @param path
-	 * @return a cascaded value
-	 */
-	public String getProperty(String key, String defaultValue) {
-		return getCascadingPropertyValue(this, defaultValue, key);
-	}
 
-	/**
-	 * This is a newly added method (with defaultValue) to retrieve a path
-	 * from the properties file and safely return it after calling Utils.adjustPath
-	 * 
-	 * @author wli
-	 * 
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public String getPathProperty(String key, String defaultValue) {
-		String pathValue = getCascadingPropertyValue(this, defaultValue, key);
-		return Utils.adjustPath(pathValue);
-	}
 
-	/**
-	 * This is a newly added method (without defaultValue) to retrieve a path 
-	 * from the properties file and safely return it after calling Utils.adjustPath
-	 * 
-	 * @author wli
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public String getPathProperty(String key) {
-		String pathValue = getProperty(key);
-		return Utils.adjustPath(pathValue);
-	}
-
-	/**
-	 * Takes the value and split them according to the given
-	 * delimiter and return a String[]. 
-	 * (Example, "FRUITS = apple pear banana)
-	 * delimiter: " "
-	 * and returns String[]: apple pear banana
-	 * 
-	 * @author wli
-	 * 
-	 * @param key
-	 * @param delimiter
-	 * @return
-	 */
-	public String[] getPropertiesArray(String key, String delimiter) {
-		String values = getProperty(key);
-		String[] result = values.split(delimiter);
-		for (int i = 0; i < result.length; i++) {
-			result[i] = result[i].trim();
-		}
-		return result;
-	}
-
-	public ArrayList<String> getPropertiesArrayList(String key, String delimiter) {
-		String values = getProperty(key);
-		String[] arrayOfValues = values.split(delimiter);
-		ArrayList<String> result = new ArrayList<String>();
-		for (String value : arrayOfValues) {
-			result.add(value.trim());
-		}
-		return result;
-	}
-
-	/**
-	 * Consume a ArrayList of type String containing properties (ie, "USERNAME=root")
-	 * and set all the properties onto a file. Key/value are separated by a equal sign '='
-	 * 
-	 * @author wli
-	 *
-	 * @param listOfProperties
-	 */
-	public void setProperties(ArrayList<String> listOfProperties) {
-		for (String property : listOfProperties) {
-			String[] keyValueHolder = property.split("=");
-			String key = keyValueHolder[0].trim();
-			String value = keyValueHolder[1].trim();
-			setProperty(key, value);
-		}
-	}
-
-	public void setProperties(String[] listOfProperties) {
-		for (String property : listOfProperties) {
-			String[] keyValueHolder = property.split("=");
-			String key = keyValueHolder[0].trim();
-			String value = keyValueHolder[1].trim();
-			setProperty(key, value);
-		}
-	}
-
-	/**
-	 * NOTE: If one of the properties has multiple values (ex. fruits=apple, pear, banana),
-	 *       make sure the delimiter used to separate properties is not the same delimiter
-	 *       used to separate values (ex. fruit1=apple; fruit2=pear; fruits=apple, pear, banana)
-	 *       
-	 * @author Jason Lin (ylin)
-	 * 
-	 * @param listOfProperties
-	 * @param delimiter
-	 */
-	public void setProperties(String listOfProperties, String delimiter) {
-		for (String property : listOfProperties.split(delimiter)) {
-			String[] keyValueHolder = property.split("=");
-			String key = keyValueHolder[0].trim();
-			String value = keyValueHolder[1].trim();
-			setProperty(key, value);
-		}
-	}
-
-	/**
-	 * Given a properties file, a default key-value pair value, and a key, this
-	 * function returns:\n a) the default value\n b) or, if exists, the
-	 * key-value value in the properties file\n c) or, if exists, the system
-	 * property key-value value. This function is used to override configuration
-	 * files in cascading fashion.
-	 * 
-	 * @param props
-	 * @param defaultValue
-	 * @param key
-	 * @return
-	 */
-	private static String getCascadingPropertyValue(Properties props,
-			String defaultValue, String key) {
-		String value = defaultValue;
-		if (props.containsKey(key))
-			value = props.getProperty(key);
-		if (System.getProperties().containsKey(key))
-			value = System.getProperty(key);
-		return value;
-	}
 
 }
