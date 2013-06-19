@@ -11,12 +11,16 @@ import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
-import com.sugarcrm.voodoo.utilities.OptionalLogger;
 import com.sugarcrm.voodoo.utilities.Utils;
 
 
 /**
- * Configuration is a class that is used for cascading
+ * Configuration is an object that represents a set of key-value pairs.
+ *
+ * When requesting a value for a given key, the configuration object will first try to
+ * return the system defined environment variable for the key. If it is not defined,
+ * configuration will return the value defined in the properties file, and finally return
+ * a default value if it not found using the first two methods.
  */
 public class Configuration extends Properties {
 
@@ -24,40 +28,35 @@ public class Configuration extends Properties {
     // Properties
     //================================================================================
 
-    private static final long serialVersionUID = 1L;
-	private static int defaultName = 0;
-	private OptionalLogger log;
+    /* Name for file. Increments every time a file is created. */
+    private static int defaultName = 0;
+
+    /* Tracks whether any Configuration objects have created a directory. */
+    private static Boolean createdDir = false;
+
+    /* A ArrayList of all the files created by Configuration objects. */
+    private static ArrayList<File> filesCreated = new ArrayList<File>();
+
+    /* The .properties file associated with this configuration object. */
+    private Properties properties;
+
+    /* The .properties file associated with this configuration object. */
 	private String configPath;
+
+    /* The .properties file associated with this configuration object. */
 	private Boolean createdFile = false;
-	// static type to track directory and files created by multiple 
-	// instances of Configuration
-	static private Boolean createdDir = false;
-	static private ArrayList<File> filesCreated = new ArrayList<File>();
+
 
     //================================================================================
     // Constructors
     //================================================================================
 
     public Configuration() {
-		this(null);
-	}
-
-	public Configuration(Logger log) {
-		this.setLogger(new OptionalLogger(log));
 	}
 
     //================================================================================
     // Accessors
     //================================================================================
-
-
-    public OptionalLogger getLogger() {
-        return log;
-    }
-
-    public void setLogger(OptionalLogger log) {
-        this.log = log;
-    }
 
     public String getConfigPath() {
         return configPath;
@@ -227,11 +226,8 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @author Jason Lin (ylin)
-	 * 
-	 * @param log
+	 *
 	 * @param fileName
 	 * @param temporary
 	 */
@@ -239,36 +235,36 @@ public class Configuration extends Properties {
 		if (temporary) {
 			String tempPath = System.getProperty("user.home") + File.separator
 					+ "TemporaryConfigurationFiles" + File.separator + fileName;
-			log.info("Using temporary path " + tempPath + ".\n");
+			System.out.print("Using temporary path " + tempPath + ".\n");
 			setConfigPath(tempPath);
 		} else {
-			log.info("Using path " + fileName + ".\n");
+            System.out.print("Using path " + fileName + ".\n");
 			setConfigPath(fileName);
 		}
 		File file = new File(getConfigPath());
 		File dir = new File(file.getParent());
 
 		if (!dir.exists()) {
-			log.info("Parent folder does not exist for " + file.getName()
+            System.out.print("Parent folder does not exist for " + file.getName()
 					+ ", creating folder(s).\n");
 			boolean createdDirsStatus = dir.mkdirs();
 			
 			// check and log directory creation
 			if (createdDirsStatus) {
 				createdDir = true;
-				log.info("Created folder(s) " + file.getParent() + ".\n");
+                System.out.print("Created folder(s) " + file.getParent() + ".\n");
 			} else {
-				log.severe("Unable to create folder(s) " + file.getParent()
+                System.out.print("Unable to create folder(s) " + file.getParent()
 						+ ".\n");
 			}
 		} else {
-			log.info("Parent folder " + dir.getAbsolutePath() + " exists for "
+            System.out.print("Parent folder " + dir.getAbsolutePath() + " exists for "
 					+ file.getName() + ", did not create folder(s).\n");
 		}
 
 		Boolean fileExisted = file.exists();
 		if (fileExisted)
-			log.info(file.getName()
+            System.out.print(file.getName()
 					+ " exists, proceeding to overwrite file.\n");
 		// write the Configuration object to the path specified by file
 		try {
@@ -283,9 +279,9 @@ public class Configuration extends Properties {
 		// check and log whether created file exists
 		if (!fileExisted) {
 			if (file.exists())
-				log.info("Created file " + file.getName() + ".\n");
+                System.out.print("Created file " + file.getName() + ".\n");
 			else
-				log.severe("Unable to create file " + file.getName() + ".\n");
+                System.out.print("Unable to create file " + file.getName() + ".\n");
 
 			// assert file exists
 			Assert.assertTrue(file.getName() + " was not created!",
@@ -306,7 +302,7 @@ public class Configuration extends Properties {
 	 */
 	public void deleteFile() {
 		if (!createdFile) {
-			log.severe("deleteFile(): No file was created, deleteFile() aborted.\n");
+            System.out.print("deleteFile(): No file was created, deleteFile() aborted.\n");
 		} else {
 			File file = new File(getConfigPath());
 			File dir = file.getParentFile();
@@ -325,7 +321,7 @@ public class Configuration extends Properties {
 				Assert.assertTrue(dir.getAbsolutePath() + " was not deleted!",
 						!dir.exists());
 			} else {
-				log.info("deletedFile(): Folder "
+                System.out.print("deletedFile(): Folder "
 						+ dir.getAbsolutePath()
 						+ " was not deleted, as it was not created in this test session.\n");
 			}
@@ -353,11 +349,11 @@ public class Configuration extends Properties {
 
 			boolean ok = f.delete();
 			if (ok) {
-				log.info("deleteAllCreatedFiles(): Deleted file "
+                System.out.print("deleteAllCreatedFiles(): Deleted file "
 						+ f.getAbsolutePath() + ".\n");
 			} else {
 				deleteStatus = false;
-				log.info("deleteAllCreatedFiles(): Unable to delete file "
+                System.out.print("deleteAllCreatedFiles(): Unable to delete file "
 						+ f.getAbsolutePath() + ".\n");
 			}
 			Assert.assertTrue(f.getName() + " was not deleted!", !f.exists());
@@ -383,10 +379,10 @@ public class Configuration extends Properties {
 		if (dir.list().length == 0) {
 			boolean dirDeleted = dir.delete();
 			if (dirDeleted && !file.exists())
-				log.info("recursiveFolderDelete(): Deleted folder "
+                System.out.print("recursiveFolderDelete(): Deleted folder "
 						+ dir.getAbsolutePath() + ".\n");
 			else
-				log.info("recursiveFolderDelete(): Unable to delete folder "
+                System.out.print("recursiveFolderDelete(): Unable to delete folder "
 						+ dir.getAbsolutePath() + ".\n");
 			recursiveFolderDelete(file.getParentFile());
 		}
@@ -409,10 +405,10 @@ public class Configuration extends Properties {
 			load(new FileInputStream(new File(adjustedPath)));
 		} catch (FileNotFoundException e) {
 			// get file name using substring of adjustedPath that starts after the last /
-			getLogger().severe(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.\n");
+            System.out.print(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.\n");
 			e.printStackTrace();
 		} catch (IOException e) {
-			getLogger().severe("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
+            System.out.print("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
 			e.printStackTrace();
 		}
 	}
@@ -428,10 +424,10 @@ public class Configuration extends Properties {
 		try {
 			load(new FileInputStream(file));
 		} catch (FileNotFoundException e) {
-			getLogger().severe(file.getName() + " not found.\n");
+            System.out.print(file.getName() + " not found.\n");
 			e.printStackTrace();
 		} catch (IOException e) {
-			getLogger().severe("Unable to load " + file.getName() + ".\n");
+            System.out.print("Unable to load " + file.getName() + ".\n");
 			e.printStackTrace();
 		}
 	}
