@@ -47,8 +47,7 @@ public class Voodoo {
 	private Voodoo(Configuration config) throws Exception {
 		this.config = config;
 		this.log = this.getLogger();
-		this.config.setLogger(new OptionalLogger(this.log));
-		debug = Boolean.parseBoolean(this.config.getProperty("debug", "false"));
+		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
 	}
 
 	public boolean debug() { return Voodoo.debug; }
@@ -97,7 +96,7 @@ public class Voodoo {
 		//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
 		//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
 		OutputStream output = new FileOutputStream(tempLogPropsFile);
-		this.config.store(output, null);
+//		this.config.store(output, null);
 		//		JOptionPane.showInputDialog("pause");
 		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Voodoo.class.getName());
