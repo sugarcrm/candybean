@@ -8,9 +8,8 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import com.sugarcrm.voodoo.automation.VInterface.Type;
+
 import com.sugarcrm.voodoo.configuration.Configuration;
-import com.sugarcrm.voodoo.utilities.OptionalLogger;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
