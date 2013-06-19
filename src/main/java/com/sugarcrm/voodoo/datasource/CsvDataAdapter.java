@@ -72,7 +72,7 @@ public class CsvDataAdapter extends DataAdapter {
 
 		String currDir = System.getProperty("user.dir");
 
-		String csvBaseDir = config.getProperty(property, "/home/testData");
+		String csvBaseDir = config.getValue(property, "/home/testData");
 		//System.out
 		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
 		//				+ csvBaseDir);

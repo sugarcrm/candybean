@@ -225,7 +225,7 @@ public class CsvDataAdapterTest {
 
 			// Store Configuration
 			try {
-				config.store(configFilePath, null);
+//				config.store(configFilePath, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -236,7 +236,7 @@ public class CsvDataAdapterTest {
 					propFile.exists());
 
 			try {
-				config.load(configFilePath);
+//				config.load(configFilePath);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

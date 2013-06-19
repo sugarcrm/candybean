@@ -33,17 +33,17 @@ public class UtilsUnitTest {
 			voodooConfig.setProperty(propKey, propConfigVal);
 			voodooConfig.setProperty(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
-			voodooConfig.store(new FileOutputStream(propsFile), null);
+//			voodooConfig.store(new FileOutputStream(propsFile), null);
 			//			JOptionPane.showInputDialog("pause");
 
 			// Test
-			String actualDefaultVal = voodooConfig.getProperty("NULL", propDefaultVal);
+			String actualDefaultVal = voodooConfig.getValue("NULL", propDefaultVal);
 			//			System.out.println("actualDefaultVal: " + actualDefaultVal);
 			Assert.assertEquals("Expected default value.", propDefaultVal, actualDefaultVal);
-			String actualConfigVal = voodooConfig.getProperty(propKey, propDefaultVal);
+			String actualConfigVal = voodooConfig.getValue(propKey, propDefaultVal);
 			//			System.out.println("actualConfigVal: " + actualConfigVal);
 			Assert.assertEquals("Expected configuration value.", propConfigVal, actualConfigVal);
-			String actualSysVal = voodooConfig.getProperty(propSysKey, propDefaultVal);
+			String actualSysVal = voodooConfig.getValue(propSysKey, propDefaultVal);
 			//			System.out.println("actualSysVal: " + actualSysVal);
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
