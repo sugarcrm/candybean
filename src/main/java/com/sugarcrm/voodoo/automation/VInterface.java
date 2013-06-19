@@ -100,7 +100,7 @@ public class VInterface {
 	 * @throws Exception		if type is undefined during instantiation
 	 */
 	public void start() throws Exception {
-		this.iType = this.parseInterfaceType(this.config.getProperty("automation.interface", "chrome"));
+		this.iType = this.parseInterfaceType(this.config.getValue("automation.interface", "chrome"));
 		this.start(this.iType);
 	}
 
@@ -455,8 +455,8 @@ public class VInterface {
 		WebDriver wd = null;
 		switch (iType) {
 		case FIREFOX:
-			String profileName = this.config.getProperty("browser.firefox_profile", "default");
-			String ffBinaryPath = this.config.getProperty("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
+			String profileName = this.config.getValue("browser.firefox_profile", "default");
+			String ffBinaryPath = this.config.getValue("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
 			FirefoxProfile ffProfile = (new ProfilesIni())
 					.getProfile(profileName);
 			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
@@ -472,7 +472,7 @@ public class VInterface {
 			break;
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
-			String chromeDriverLogPath = this.config.getProperty("browser.chrome_driver_log_path");
+			String chromeDriverLogPath = this.config.getValue("browser.chrome_driver_log_path");
 			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 			String chromeDriverPath = this.config.getPathProperty("browser.chrome_driver_path");
@@ -491,7 +491,7 @@ public class VInterface {
 		default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-		long implicitWait = Long.parseLong(config.getProperty("perf.implicit_wait"));
+		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));

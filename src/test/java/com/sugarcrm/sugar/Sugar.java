@@ -27,24 +27,21 @@ public class Sugar {
 	private static String voodooPropsPath;
 	
 	public Sugar() throws Exception {
-		Configuration voodooConfig = new Configuration();
 		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
 		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
 		voodooPropsPath = relPropsPath + File.separator + voodooPropsFilename;
-		voodooConfig.load(voodooPropsPath);
-    	config = new Configuration();
-    	config.load(sugarPropsPath);
-		Configuration sugarHooksConfig = new Configuration();
-		sugarHooksConfig.load(sugarHooksPath);
+        Configuration voodooConfig = new Configuration(voodooPropsPath);
+        config = new Configuration(sugarPropsPath);
+		Configuration sugarHooksConfig = new Configuration(sugarHooksPath);
 		v = Voodoo.getInstance(voodooConfig);
 		i = v.getInterface();
-		hooksMap = VHook.getHooks(sugarHooksConfig);
+		hooksMap = VHook.getHooks(sugarHooksConfig.getProperties());
 		modules = new Modules(this);
 
-		String adminUsername = config.getProperty("sugar.username", "admin");
-		String adminPassword1 = config.getProperty("sugar.password1", "asdf");
-		String adminPassword2 = config.getProperty("sugar.password2", "asdf");
-		String adminName = config.getProperty("sugar.name", "Administrator");
+		String adminUsername = config.getValue("sugar.username", "admin");
+		String adminPassword1 = config.getValue("sugar.password1", "asdf");
+		String adminPassword2 = config.getValue("sugar.password2", "asdf");
+		String adminName = config.getValue("sugar.name", "Administrator");
 		admin = new UserRecord(adminUsername, adminPassword1, adminPassword2, adminName);
 	}
 
@@ -53,7 +50,7 @@ public class Sugar {
 	}
 	
 	public void login(String username, String password) throws Exception {
-		String sugarURL = config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = config.getValue("env.base_url", "http://localhost/ent670/");
 		i.go(sugarURL);
 		i.getControl(Strategy.ID, "user_name").sendString(username);
 		i.getControl(Strategy.ID, "user_password").sendString(password);
@@ -61,7 +58,7 @@ public class Sugar {
 	}
 	
 	public void logout() throws Exception {
-		String sugarURL = config.getProperty("env.base_url", "http://localhost/ent670/");
+		String sugarURL = config.getValue("env.base_url", "http://localhost/ent670/");
 		i.go(sugarURL + "/index.php?module=Users&action=Logout");
 	}
 }

@@ -44,8 +44,7 @@ public class VControlSystemTest {
 		if (voodooPropsFilename == null) voodooPropsFilename = "voodoo-mac.properties";
 		voodooPropsPath += voodooPropsFilename;
 		
-		Configuration voodooConfig = new Configuration();
-		voodooConfig.load(voodooPropsPath);
+		Configuration voodooConfig = new Configuration(voodooPropsPath);
 		voodoo = Voodoo.getInstance(voodooConfig);
 		iface = voodoo.getInterface();
 		iface.start();
