@@ -1,9 +1,7 @@
 package com.sugarcrm.voodoo.configuration;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import com.sugarcrm.voodoo.utilities.Utils;
 
@@ -53,13 +51,7 @@ public class Configuration {
     /* Normal constructor. */
     public Configuration(String propertiesPath) {
         properties = new Properties(defaults);
-        InputStream propertiesInputStream = Configuration.class.getResourceAsStream(propertiesPath);
-        try {
-            properties.load(propertiesInputStream);
-            propertiesInputStream.close();
-        } catch (IOException e) {
-            System.err.print("Error loading properties: " + e.getMessage());
-        }
+        load(propertiesPath);
     }
 
     //================================================================================
@@ -118,6 +110,28 @@ public class Configuration {
      */
     public void load(InputStream in) throws IOException {
         properties.load(in);
+    }
+
+    /**
+     * NOTE: This method takes in a path of type String instead of a FileInputStream object
+     * to add path robustness by calling 'Utils.adjustPath' and then the actual load method
+     *
+     * @author wli
+     *
+     * @param filePath
+     */
+    public void load(String filePath) {
+        String adjustedPath = Utils.adjustPath(filePath);
+        try {
+            load(new FileInputStream(new File(adjustedPath)));
+        } catch (FileNotFoundException e) {
+            // get file name using substring of adjustedPath that starts after the last /
+            System.err.println(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.\n");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
+            e.printStackTrace();
+        }
     }
 
     /**
