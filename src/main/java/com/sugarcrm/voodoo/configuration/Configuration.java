@@ -3,6 +3,7 @@ package com.sugarcrm.voodoo.configuration;
 import java.io.IOException;
 import java.util.Properties;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import com.sugarcrm.voodoo.utilities.Utils;
 
@@ -26,13 +27,13 @@ public class Configuration {
     /* Load defaults */
     static {
         defaults = new Properties();
-        InputStream defaultsInputStream = Configuration.class.getResourceAsStream("defaults.properties");
-        try {
-            defaults.load(defaultsInputStream);
-            defaultsInputStream.close();
-        } catch (IOException e) {
-            System.err.print("Error loading defaults: " + e.getMessage());
-        }
+//        InputStream defaultsInputStream = Configuration.class.getResourceAsStream("defaults.properties");
+//        try {
+//            defaults.load(defaultsInputStream);
+//            defaultsInputStream.close();
+//        } catch (IOException e) {
+//            System.err.print("Error loading defaults: " + e.getMessage());
+//        }
     }
 
     /* The .properties file associated with this configuration object. */
@@ -46,6 +47,7 @@ public class Configuration {
      * with the default properties. */
     public Configuration() {
         properties = new Properties(defaults);
+
     }
 
     /* Normal constructor. */
@@ -91,43 +93,6 @@ public class Configuration {
     }
 
     /**
-     * Getter for Properties instance variable.
-     * @return properties object
-     */
-    public Properties getProperties() {
-        return properties;
-    }
-
-    /**
-     * This is a newly added method (with defaultValue) to retrieve a path
-     * from the properties file and safely return it after calling Utils.adjustPath
-     *
-     * @author wli
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public String getPathProperty(String key, String defaultValue) {
-        String pathValue = getValue(key, defaultValue);
-        return Utils.adjustPath(pathValue);
-    }
-
-    /**
-     * This is a newly added method (without defaultValue) to retrieve a path
-     * from the properties file and safely return it after calling Utils.adjustPath
-     *
-     * @author wli
-     *
-     * @param key
-     * @return
-     */
-    public String getPathProperty(String key) {
-        String pathValue = getValue(key);
-        return Utils.adjustPath(pathValue);
-    }
-
-    /**
      * Sets the key value pair in the properties variable.
      *
      * @param key
@@ -136,6 +101,40 @@ public class Configuration {
      */
     public Object setProperty(String key, String value) {
         return properties.setProperty(key, value);
+    }
+
+    /**
+     * Returns a copy of the properties
+     */
+    public Properties getProperties() {
+        return new Properties(properties);
+    }
+
+    /**
+     * Reads a property list (key and element pairs) from the input byte stream. Loading using an InputStream
+     * is faster than with a Reader.
+
+     * @param in
+     */
+    public void load(InputStream in) throws IOException {
+        properties.load(in);
+    }
+
+    /**
+     * Writes the property list from the Properties table to the output stream in a format suitable for loading into
+     * a properties table using the load(InputStream) method.
+     *
+     * @param out
+     */
+    public void store(OutputStream out) throws IOException {
+        properties.store(out, null);
+    }
+
+    /**
+     * Clears the Properties object so that it contains no keys.
+     */
+    public void clear() {
+        properties.clear();
     }
 
 
