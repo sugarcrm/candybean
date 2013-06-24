@@ -1,15 +1,97 @@
 package com.sugarcrm.voodoo.configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import com.sugarcrm.voodoo.configuration.Configuration;
+
 import junit.framework.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ConfigurationUnitTest {
+
+    Configuration config;
+
+
+    @Before
+    public void setUp() {
+        config = new Configuration();
+
+    }
+
+    @Test
+    public void testSystem() {
+        //ensure that the system variable value is returned if it exists
+        System.setProperty("key", "systemValue");
+
+        config.setProperty("key", "propertiesValue");
+
+        Assert.assertEquals("systemValue", config.getValue("key"));
+
+        Assert.assertEquals("systemValue", config.getValue("key", "defaultValue"));
+
+        System.clearProperty("key");
+    }
+
+    @Test
+    public void testProperties() {
+        config.setProperty("key", "propertiesValue");
+
+        Assert.assertTrue(config.getValue("key", "defaultValue").equals("propertiesValue"));
+    }
+
+    @Test
+    public void testDefault() {
+
+        config.setProperty("key", "propertiesValue");
+
+        Assert.assertEquals("defaultValue", config.getValue("defaultKey", "defaultValue"));
+
+    }
+
+    @Test
+    public void testSetProperty() {
+        Assert.assertNull("value for \"key\" should be null", config.getValue("key"));
+
+        config.setProperty("key", "value");
+
+        Assert.assertEquals("value", config.getValue("key"));
+    }
+
+
+    @Test
+    public void testLoadAndStore() {
+        config.setProperty("key1", "value1");
+        config.setProperty("key2", "value2");
+
+        File configFile = new File(System.getProperty("user.dir") + File.separator + "config.properties");
+
+        Assert.assertFalse("config file should not exist yet", configFile.exists());
+
+        try {
+            config.store(new FileOutputStream(configFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertTrue("config file should exist", configFile.exists());
+
+        Configuration loadConfig = new Configuration();
+
+        Assert.assertNull("loadConfig should not contain any keys yet", loadConfig.getValue("key1"));
+
+        try {
+            loadConfig.load(new FileInputStream(configFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Assert.assertEquals("value1", loadConfig.getValue("key1"));
+
+        configFile.delete();
+    }
 //	String filePath1 = System.getProperty("user.dir") + File.separator + "config1.properties";
 //	String filePath2 = System.getProperty("user.dir") + File.separator + "config2.properties";
 //	Configuration config1;
