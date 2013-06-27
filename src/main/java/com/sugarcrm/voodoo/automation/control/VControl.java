@@ -37,11 +37,13 @@ public class VControl {
 	}
 	
 	public VControl(Voodoo voodoo, VInterface iface, VHook hook, int index) throws Exception {
-		this.voodoo = voodoo;
-		this.iface = iface;
-		this.we = iface.wd.findElements(this.getBy(hook)).get(index);
-		this.hook = hook;
-		this.index = index;
+			this.voodoo = voodoo;
+			this.iface = iface;
+			List<WebElement> wes = iface.wd.findElements(this.getBy(hook));
+			if (wes.size() == 0) throw new Exception("Control not found; zero web elements returned.");
+			this.we = wes.get(index);
+			this.hook = hook;
+			this.index = index;
 	}
 	
 	private VControl(Voodoo voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
@@ -198,6 +200,17 @@ public class VControl {
 		voodoo.log.info("Selenium: hovering over control: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.moveToElement(this.we).perform();
+	}
+	
+	/**
+	 * Returns true if and only if the control is displayed
+	 * {@link http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according to Selenium}
+	 *
+	 * @throws Exception
+	 */
+	public boolean isDisplayed() throws Exception {
+		voodoo.log.info("Selenium: determining if control is visible: " + this.toString());
+		return we.isDisplayed();
 	}
 
 	/**
