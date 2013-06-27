@@ -37,11 +37,13 @@ public class VControl {
 	}
 	
 	public VControl(Voodoo voodoo, VInterface iface, VHook hook, int index) throws Exception {
-		this.voodoo = voodoo;
-		this.iface = iface;
-		this.we = iface.wd.findElements(this.getBy(hook)).get(index);
-		this.hook = hook;
-		this.index = index;
+			this.voodoo = voodoo;
+			this.iface = iface;
+			List<WebElement> wes = iface.wd.findElements(this.getBy(hook));
+			if (wes.size() == 0) this.voodoo.log.warning("Selenium: control returned 0 web elements");
+			this.we = wes.get(index);
+			this.hook = hook;
+			this.index = index;
 	}
 	
 	private VControl(Voodoo voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
@@ -196,6 +198,25 @@ public class VControl {
 	 */
 	public void hover() throws Exception {
 		voodoo.log.info("Selenium: hovering over control: " + this.toString());
+		Actions action = new Actions(this.iface.wd);
+		action.moveToElement(this.we).perform();
+	}
+	
+	/**
+	 * Returns true if and only if the control is present and visible
+	 *
+	 * @throws Exception	 if the element cannot be found
+	 */
+	public boolean isVisible() throws Exception {
+		voodoo.log.info("Selenium: determining if control is visible: " + this.toString());
+		we
+		List<WebElement> wes = this.we.findElements(By.xpath("//*[not(@visible='false')]"));
+		for (WebElement we : wes) {
+			String text = we.getText();
+			if (!caseSensitive) text = text.toLowerCase();
+//			System.out.println("text: " + text);
+			if (text.contains(s)) return true;
+		}
 		Actions action = new Actions(this.iface.wd);
 		action.moveToElement(this.we).perform();
 	}
