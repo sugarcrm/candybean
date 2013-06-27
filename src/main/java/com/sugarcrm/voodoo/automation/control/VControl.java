@@ -40,7 +40,7 @@ public class VControl {
 			this.voodoo = voodoo;
 			this.iface = iface;
 			List<WebElement> wes = iface.wd.findElements(this.getBy(hook));
-			if (wes.size() == 0) this.voodoo.log.warning("Selenium: control returned 0 web elements");
+			if (wes.size() == 0) throw new Exception("Control not found; zero web elements returned.");
 			this.we = wes.get(index);
 			this.hook = hook;
 			this.index = index;
@@ -203,22 +203,14 @@ public class VControl {
 	}
 	
 	/**
-	 * Returns true if and only if the control is present and visible
+	 * Returns true if and only if the control is displayed
+	 * {@link http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according to Selenium}
 	 *
-	 * @throws Exception	 if the element cannot be found
+	 * @throws Exception
 	 */
-	public boolean isVisible() throws Exception {
+	public boolean isDisplayed() throws Exception {
 		voodoo.log.info("Selenium: determining if control is visible: " + this.toString());
-		we
-		List<WebElement> wes = this.we.findElements(By.xpath("//*[not(@visible='false')]"));
-		for (WebElement we : wes) {
-			String text = we.getText();
-			if (!caseSensitive) text = text.toLowerCase();
-//			System.out.println("text: " + text);
-			if (text.contains(s)) return true;
-		}
-		Actions action = new Actions(this.iface.wd);
-		action.moveToElement(this.we).perform();
+		return we.isDisplayed();
 	}
 
 	/**
