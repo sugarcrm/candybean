@@ -77,29 +77,29 @@ public class VSelectSystemTest {
 	public void selectTest() throws Exception {
 		String option = "Sep";
 		// 1. navigate to Facebook create account page
-		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
+		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "birthday_month"));
+		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		dropDownList.select(option);
 		// 3. Verify that 'Sep' was actually selected
 		String actual = dropDownList.getSelected();
 		String expected = option;
-		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
+		Assert.assertEquals(expected, actual);
 	}
 	
 	@Test
 	public void getSelectedTest() throws Exception {
 		String actual;
-		String expected = "Month:"; // Assuming that we know that the current/default option is 'Month:'
+		String expected = "Month"; // Assuming that we know that the current/default option is 'Month:'
 		// 1. navigate to Facebook create account page
-		String facebookCreateAccountUrl = "https://www.facebook.com/r.php?locale=en_US&loxv=v1_WITH_RULE";
+		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "birthday_month"));
+		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "month"));
 		// 2. Get the current option from the drop-down list
 		actual = dropDownList.getSelected();
 		// 3. Verify that actual value is the expected value
-		assertEquals("Expected option value does not match actual value ~ expected: " + expected + ", actual: " + actual, expected, actual);
+		Assert.assertEquals(expected, actual);
 	}
 	
 	@AfterClass
