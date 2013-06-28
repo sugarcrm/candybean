@@ -191,6 +191,15 @@ public class VControlSystemTest {
 //		hover(int index);
 	}
 	
+	@Test
+	public void isDisplayedTest() throws Exception {
+		iface.go("http://www.google.com");
+		VControl searchField = iface.getControl(Strategy.ID, "gbqfq");
+		Assert.assertTrue(searchField.isDisplayed());
+		VControl output = iface.getControl(Strategy.NAME, "output");
+		Assert.assertFalse(output.isDisplayed());
+	}
+	
 	@Ignore
 	@Test
 	public void rightClickTest() throws Exception {
