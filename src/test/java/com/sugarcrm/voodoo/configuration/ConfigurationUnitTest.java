@@ -66,7 +66,9 @@ public class ConfigurationUnitTest {
         config.setProperty("key1", "value1");
         config.setProperty("key2", "value2");
 
-        File configFile = new File(System.getProperty("user.dir") + File.separator + "config.properties");
+        String configPath = System.getProperty("user.dir") + File.separator + "config.properties";
+
+        File configFile = new File(configPath);
 
         Assert.assertFalse("config file should not exist yet", configFile.exists());
 
@@ -78,15 +80,9 @@ public class ConfigurationUnitTest {
 
         Assert.assertTrue("config file should exist", configFile.exists());
 
-        Configuration loadConfig = new Configuration();
+        Configuration loadConfig;
 
-        Assert.assertNull("loadConfig should not contain any keys yet", loadConfig.getValue("key1"));
-
-        try {
-            loadConfig.load(new FileInputStream(configFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadConfig = new Configuration(configPath);
 
         Assert.assertEquals("value1", loadConfig.getValue("key1"));
 

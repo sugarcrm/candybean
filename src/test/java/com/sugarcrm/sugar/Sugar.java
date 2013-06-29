@@ -35,7 +35,7 @@ public class Sugar {
 		Configuration sugarHooksConfig = new Configuration(sugarHooksPath);
 		v = Voodoo.getInstance(voodooConfig);
 		i = v.getInterface();
-		hooksMap = VHook.getHooks(sugarHooksConfig.getProperties());
+		hooksMap = VHook.getHooks(sugarHooksConfig.getPropertiesCopy());
 		modules = new Modules(this);
 
 		String adminUsername = config.getValue("sugar.username", "admin");

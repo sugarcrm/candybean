@@ -2,6 +2,7 @@ package com.sugarcrm.voodoo.configuration;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import com.sugarcrm.voodoo.utilities.Utils;
 
@@ -37,6 +38,8 @@ public class Configuration {
     /* The .properties file associated with this configuration object. */
     private Properties properties;
 
+    private Logger logger;
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -44,13 +47,17 @@ public class Configuration {
     /* A Configuration object with no properties file path given. The properties initialized
      * with the default properties. */
     public Configuration() {
-        properties = new Properties(defaults);
+        this.properties = new Properties(defaults);
+        this.logger = Logger.getLogger(Configuration.class.getName());
 
     }
 
     /* Normal constructor. */
     public Configuration(String propertiesPath) {
-        properties = new Properties(defaults);
+
+        this.properties = new Properties(defaults);
+        this.logger = Logger.getLogger(Configuration.class.getName());
+
         load(propertiesPath);
     }
 
@@ -92,14 +99,29 @@ public class Configuration {
      * @return the previously stored value for the key or null if none.
      */
     public Object setProperty(String key, String value) {
+        logger.info("Set key value property: {" + key + ", " + value + "}");
         return properties.setProperty(key, value);
     }
 
     /**
      * Returns a copy of the properties
      */
-    public Properties getProperties() {
+    public Properties getPropertiesCopy() {
         return new Properties(properties);
+    }
+
+    /**
+     * This is a newly added method (without defaultValue) to retrieve a path
+     * from the properties file and safely return it after calling Utils.adjustPath
+     *
+     * @author wli
+     *
+     * @param key
+     * @return adjusted path or null if it does not exist.
+     */
+    public String getPathValue(String key) {
+        String pathValue = getValue(key);
+        return Utils.adjustPath(pathValue);
     }
 
     /**
@@ -108,7 +130,7 @@ public class Configuration {
 
      * @param in
      */
-    public void load(InputStream in) throws IOException {
+    private void load(InputStream in) throws IOException {
         properties.load(in);
     }
 
@@ -120,16 +142,16 @@ public class Configuration {
      *
      * @param filePath
      */
-    public void load(String filePath) {
+    private void load(String filePath) {
         String adjustedPath = Utils.adjustPath(filePath);
         try {
             load(new FileInputStream(new File(adjustedPath)));
         } catch (FileNotFoundException e) {
             // get file name using substring of adjustedPath that starts after the last /
-            System.err.println(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.\n");
+            logger.warning(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.\n");
             e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
+            logger.warning("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
             e.printStackTrace();
         }
     }
@@ -145,13 +167,30 @@ public class Configuration {
     }
 
     /**
+     * Writes the property list from the Properties table to the file path in a format suitable for loading into
+     * a properties table using the load(InputStream) or load(String) method.
+     *
+     * @param filePath
+     */
+    public void store(String filePath) {
+        String adjustedPath = Utils.adjustPath(filePath);
+        File configFile = new File(adjustedPath);
+        try {
+            store(new FileOutputStream(configFile));
+        } catch (IOException e) {
+            logger.warning("Unable to store " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * Clears the Properties object so that it contains no keys.
      */
     public void clear() {
         properties.clear();
+        logger.warning("Clearing properties...");
     }
-
-
 
 }
 
