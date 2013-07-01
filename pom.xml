@@ -10,6 +10,19 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<url>http://www.sugarcrm.com</url>
+	<pluginRepositories>
+	    <pluginRepository>
+			<id>mc-release</id>
+			<name>Local Maven repository of releases</name>
+			<url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -38,6 +51,13 @@
 					</executions>
 				</plugin -->
 				<plugin>
+					<groupId>com.mycila.maven-license-plugin</groupId>
+					<artifactId>maven-license-plugin</artifactId>
+					<configuration>
+						<header>./header.txt</header>
+					</configuration>
+		        </plugin>
+    			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>2.5.1</version>
@@ -269,7 +289,6 @@
 			</build>
 		</profile>
 	</profiles>
-	
 	<reporting>
 		<plugins>
 			<plugin>
