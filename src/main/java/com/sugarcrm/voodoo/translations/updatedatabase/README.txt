@@ -1,3 +1,25 @@
+====
+    Candybean is a next generation automation and testing framework suite.
+    It is a collection of components that foster test automation, execution
+    configuration, data abstraction, results illustration, tag-based execution,
+    top-down and bottom-up batches, mobile variants, test translation across
+    languages, plain-language testing, and web service testing.
+    Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+====
+
 Note the following requires that you have access to sugarcrm/translations and sugarcrm/Voodoo2 repositories and you have SSH set up (for more information on SSH, see help.github.com/articles/generating-ssh-keys).
 
 Create a job on Jenkins named UpdateDatabase > Configure UpdateDatabase > Add build step > Execute shell > Copy and paste the code below:
