@@ -38,6 +38,13 @@
 					</executions>
 				</plugin -->
 				<plugin>
+					<groupId>com.mycila.maven-license-plugin</groupId>
+					<artifactId>maven-license-plugin</artifactId>
+					<configuration>
+						<header>./header.txt</header>
+					</configuration>
+		        </plugin>
+    			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>2.5.1</version>
@@ -269,7 +276,6 @@
 			</build>
 		</profile>
 	</profiles>
-	
 	<reporting>
 		<plugins>
 			<plugin>
