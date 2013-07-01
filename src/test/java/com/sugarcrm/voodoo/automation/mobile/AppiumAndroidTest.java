@@ -59,9 +59,21 @@ public class AppiumAndroidTest {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+
+        capabilities.setCapability(CapabilityType.VERSION, "4.2.2");
+
+        capabilities.setCapability("device", "Android");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+        <<<<<<< HEAD
+        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.apk.zip");
+//        capabilities.setCapability("app", "/Users/lcao/workspace/testapp/out/artifacts/testapp/TestApp.apk");
+        capabilities.setCapability("app-package", "com.example.TestApp");
+        capabilities.setCapability("app-activity", "MyActivity");
+
+        =======
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
-        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        >>>>>>> 654a2da307d7e3d850d0531ee9ef64ed774b8b44
+                driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         values = new ArrayList<Integer>();
     }
 
@@ -72,7 +84,7 @@ public class AppiumAndroidTest {
 
     private void populate() {
         //populate text fields with two random number
-        List<WebElement> elems = driver.findElements(By.tagName("textField"));
+        List<WebElement> elems = driver.findElements(By.tagName("EditText"));
         Random random = new Random();
         for (WebElement elem : elems) {
             int rndNum = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
@@ -86,13 +98,13 @@ public class AppiumAndroidTest {
         // populate text fields with values
         populate();
         // trigger computation by using the button
-        WebElement button = driver.findElement(By.tagName("button"));
+        WebElement button = driver.findElement(By.tagName("Button"));
         button.click();
         // is sum equal ?
-        WebElement texts = driver.findElement(By.tagName("staticText"));
+        WebElement texts = driver.findElement(By.xpath("//TextView[2]"));
         assertEquals(texts.getText(), String.valueOf(values.get(0) + values.get(1)));
     }
-    
+
     @Test
     public void testActive() throws Exception {
         WebElement text = driver.findElement(By.xpath("//textfield[1]"));
@@ -105,11 +117,14 @@ public class AppiumAndroidTest {
     @Test
     public void testBasicAlert() throws Exception {
         driver.findElement(By.xpath("//button[2]")).click();
+//
+//        Alert alert = driver.switchTo().alert();
+//
+//        alert.accept();
+        WebElement acceptButton = driver.findElement(By.xpath("//button[1]"));
 
-        Alert alert = driver.switchTo().alert();
-        //check if title of alert is correct
-        assertEquals(alert.getText(), "Cool title");
-        alert.accept();
+        acceptButton.click();
+
     }
 
     @Test
@@ -126,7 +141,7 @@ public class AppiumAndroidTest {
 
     @Test
     public void testClear() throws Exception {
-        WebElement text = driver.findElement(By.xpath("//textfield[1]"));
+        WebElement text = driver.findElement(By.xpath("//textField[1]"));
         text.sendKeys("12");
         text.clear();
 
@@ -135,7 +150,7 @@ public class AppiumAndroidTest {
 
     @Test
     public void testHideKeyboard() throws Exception {
-        driver.findElement(By.xpath("//textfield[1]")).sendKeys("12");
+        driver.findElement(By.xpath("//textField[1]")).sendKeys("12");
 
         WebElement button = driver.findElement(By.name("Done"));
         assertTrue(button.isDisplayed());
