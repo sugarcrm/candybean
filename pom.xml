@@ -10,19 +10,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<url>http://www.sugarcrm.com</url>
-	<pluginRepositories>
-	    <pluginRepository>
-			<id>mc-release</id>
-			<name>Local Maven repository of releases</name>
-			<url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
 	<build>
 		<pluginManagement>
 			<plugins>
