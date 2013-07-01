@@ -11,11 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.sugarcrm.voodoo.configuration.Configuration;
-import com.sugarcrm.voodoo.datasource.DataAdapter;
-import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
-import com.sugarcrm.voodoo.datasource.DataSource;
-import com.sugarcrm.voodoo.datasource.FieldSet;
 
 /**
  *
@@ -220,8 +216,8 @@ public class CsvDataAdapterTest {
 			config = new Configuration();
 
 			// Defining configuration properties keys/values
-			config.setProperty("datasource.csv.baseDir", "testData");
-			config.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
+			config.setValue("datasource.csv.baseDir", "testData");
+			config.setValue("datasource.csv.subDir", "testData/csvs/subDir");
 
 			// Store Configuration
 			try {

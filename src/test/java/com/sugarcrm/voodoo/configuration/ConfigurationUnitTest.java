@@ -1,7 +1,6 @@
 package com.sugarcrm.voodoo.configuration;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public class ConfigurationUnitTest {
         //ensure that the system variable value is returned if it exists
         System.setProperty("key", "systemValue");
 
-        config.setProperty("key", "propertiesValue");
+        config.setValue("key", "propertiesValue");
 
         Assert.assertEquals("systemValue", config.getValue("key"));
 
@@ -37,7 +36,7 @@ public class ConfigurationUnitTest {
 
     @Test
     public void testProperties() {
-        config.setProperty("key", "propertiesValue");
+        config.setValue("key", "propertiesValue");
 
         Assert.assertTrue(config.getValue("key", "defaultValue").equals("propertiesValue"));
     }
@@ -45,7 +44,7 @@ public class ConfigurationUnitTest {
     @Test
     public void testDefault() {
 
-        config.setProperty("key", "propertiesValue");
+        config.setValue("key", "propertiesValue");
 
         Assert.assertEquals("defaultValue", config.getValue("defaultKey", "defaultValue"));
 
@@ -55,7 +54,7 @@ public class ConfigurationUnitTest {
     public void testSetProperty() {
         Assert.assertNull("value for \"key\" should be null", config.getValue("key"));
 
-        config.setProperty("key", "value");
+        config.setValue("key", "value");
 
         Assert.assertEquals("value", config.getValue("key"));
     }
@@ -63,8 +62,8 @@ public class ConfigurationUnitTest {
 
     @Test
     public void testLoadAndStore() {
-        config.setProperty("key1", "value1");
-        config.setProperty("key2", "value2");
+        config.setValue("key1", "value1");
+        config.setValue("key2", "value2");
 
         String configPath = System.getProperty("user.dir") + File.separator + "config.properties";
 
@@ -107,13 +106,13 @@ public class ConfigurationUnitTest {
 //		config2 = new Configuration();
 //
 //		// Set properties (keys-values pairs)
-//		config1.setProperty("database", "localhost");
-//		config1.setProperty("dbuser", "root");
-//		config1.setProperty("dbpassword", "root");
+//		config1.setValue("database", "localhost");
+//		config1.setValue("dbuser", "root");
+//		config1.setValue("dbpassword", "root");
 //
-//		config2.setProperty("database", "10.8.31.10");
-//		config2.setProperty("dbuser", "translator");
-//		config2.setProperty("dbpassword", "Sugar123!");
+//		config2.setValue("database", "10.8.31.10");
+//		config2.setValue("dbuser", "translator");
+//		config2.setValue("dbpassword", "Sugar123!");
 //
 //		// Store Configuration using store(String filePath, String comments)
 //		try {
