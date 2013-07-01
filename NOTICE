@@ -3,3 +3,8 @@ and made available under the Eclipse Public License v 1.0.
 
 To obtain JUnit, please go to http://junit.org/
 
+Candybean makes use of Connector/J, which is made available under GNU General 
+Public License v 2.0.
+
+To obtain Connector/J, please go to http://dev.mysql.com/downloads/connector/j/
+
