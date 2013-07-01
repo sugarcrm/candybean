@@ -1,13 +1,8 @@
 package com.sugarcrm.voodoo.datasource;
 
-import java.io.File;
 import java.util.HashMap;
 
-import com.sugarcrm.voodoo.datasource.DataAdapter;
-import com.sugarcrm.voodoo.datasource.DataAdapterFactory;
 import com.sugarcrm.voodoo.datasource.DataAdapterFactory.DataAdapterType;
-import com.sugarcrm.voodoo.datasource.FieldSet;
-import com.sugarcrm.voodoo.datasource.DataSource;
 import com.sugarcrm.voodoo.configuration.Configuration;
 
 public class DS {
@@ -27,7 +22,7 @@ public class DS {
 		this.propKey = propKey; 
 		this.propValue = propValue; 
 		config = new Configuration();
-		config.setProperty(propKey, propValue);
+		config.setValue(propKey, propValue);
 //		config.createFile(System.getProperty("user.dir") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		
         DataAdapterType type = getDataType(dataType);

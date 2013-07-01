@@ -1,13 +1,12 @@
 package com.sugarcrm.voodoo.utilities;
 
 import java.io.File;
-import java.io.FileOutputStream;
+
 import org.junit.Assert;
 
 import org.junit.Test;
 
 import com.sugarcrm.voodoo.configuration.Configuration;
-import com.sugarcrm.voodoo.utilities.Utils;
 import com.sugarcrm.voodoo.utilities.Utils.Pair;
 import com.sugarcrm.voodoo.utilities.Utils.Triplet;
 
@@ -30,8 +29,8 @@ public class UtilsUnitTest {
 			File propsFile = new File(propsFilePath);
 			propsFile.createNewFile();
 			Configuration voodooConfig = new Configuration();
-			voodooConfig.setProperty(propKey, propConfigVal);
-			voodooConfig.setProperty(propSysKey, propConfigVal);
+			voodooConfig.setValue(propKey, propConfigVal);
+			voodooConfig.setValue(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
 //			voodooConfig.store(new FileOutputStream(propsFile), null);
 			//			JOptionPane.showInputDialog("pause");

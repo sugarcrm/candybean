@@ -98,7 +98,7 @@ public class Configuration {
      * @param value
      * @return the previously stored value for the key or null if none.
      */
-    public Object setProperty(String key, String value) {
+    public Object setValue(String key, String value) {
         logger.info("Set key value property: {" + key + ", " + value + "}");
         return properties.setProperty(key, value);
     }
