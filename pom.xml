@@ -67,11 +67,47 @@
 				<plugin>
 					<groupId>com.mycila.maven-license-plugin</groupId>
 					<artifactId>maven-license-plugin</artifactId>
+					<version>LATEST</version>
 					<configuration>
 						<header>./header.txt</header>
 					</configuration>
 		        </plugin>
+		        <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-dependency-plugin</artifactId>
+        			<version>2.8</version>
+        		</plugin>
     			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-jar-plugin</artifactId>
+        			<version>2.4</version>
+        		</plugin>
+    			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-clean-plugin</artifactId>
+        			<version>2.5</version>
+        		</plugin>
+    			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-deploy-plugin</artifactId>
+        			<version>2.7</version>
+        		</plugin>
+    			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-install-plugin</artifactId>
+        			<version>2.4</version>
+        		</plugin>
+    			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-resources-plugin</artifactId>
+        			<version>2.6</version>
+        		</plugin>
+        		<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+        			<artifactId>maven-site-plugin</artifactId>
+        			<version>3.3</version>
+        		</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
@@ -88,7 +124,7 @@
 			 	<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
+					<version>LATEST</version>
 					<configuration>
 						<show>private</show>
 						<nohelp>true</nohelp>
@@ -97,10 +133,9 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
                  	<artifactId>maven-project-info-reports-plugin</artifactId>
-                 	<!-- Avoid hanging site generation waiting for 'http://snapshots.maven.codehaus.org/maven2' see http://jira.codehaus.org/browse/MPIR-137-->
+                 	<version>LATEST</version>
                  	<configuration>
                      	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                     	<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                  	</configuration>
              	</plugin>
 			</plugins>
@@ -109,7 +144,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -122,7 +156,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.6</version>
 				<executions>
 				<!--execution>
 				   <id>copy-dependencies</id>
@@ -144,7 +177,7 @@
 	    <dependency>
 		    <groupId>xml-apis</groupId>
 		    <artifactId>xml-apis</artifactId>
-		    <version>2.0.2</version>
+		    <version>LATEST</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -159,8 +192,8 @@
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-surefire-report-plugin</artifactId>
-			<version>2.15</version>
-			<type>maven-plugin</type>
+			<version>LATEST</version>
+			<!-- type>maven-plugin</type -->
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -171,33 +204,49 @@
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
+			<version>LATEST</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.3-beta2</version>
+			<version>LATEST</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
+			<version>LATEST</version>
 	 	</dependency>
 	 	<dependency>
 		     <groupId>org.simpleframework</groupId>
 		     <artifactId>simple-xml</artifactId>
-		     <version>2.7</version>
+		     <version>LATEST</version>
 		</dependency>
 		<dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-            <scope>test</scope>
+            <version>LATEST</version>
+            <!-- scope>test</scope -->
         </dependency>
 	</dependencies>
 	<profiles>
 		<profile>
-			<id>default</id>
+			<id>system</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**//*SystemTest.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>unit</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -209,86 +258,6 @@
 						<configuration>
 							<includes>
 								<include>**/*UnitTest.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-		  <id>system</id>
-		  <build>
-		    <plugins>
-		      <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-surefire-plugin</artifactId>
-		        <configuration>
-		          <includes>
-		            <include>**//*SystemTest.java</include>
-		          </includes>
-		          </configuration>
-		      </plugin>
-		    </plugins>
-		  </build>
-		</profile>
-		<profile>
-		  <id>unit</id>
-		  <build>
-		    <plugins>
-		      <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-surefire-plugin</artifactId>
-		        <configuration>
-		          <includes>
-		            <include>**/*UnitTest.java</include>
-		          </includes>
-		        </configuration>
-		      </plugin>
-		    </plugins>
-		  </build>
-		</profile>
-		<profile>
-		  <id>sugar</id>
-		  <build>
-		    <plugins>
-		      <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-surefire-plugin</artifactId>
-		        <configuration>
-		          <includes>
-		            <include>**/sugar/**/*.java</include>
-		          </includes>
-		        </configuration>
-		      </plugin>
-		    </plugins>
-		  </build>
-		</profile>
-		<profile>
-			<id>automation</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<includes>
-								<include>**/automation/**/*.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>translations</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<includes>
-								<include>**/translations/**/*.java</include>
 							</includes>
 						</configuration>
 					</plugin>
@@ -317,16 +286,8 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.15</version>
+				<version>LATEST</version>
 			</plugin>
-				<!-- plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-				<source>1.7</source>
-				<target>1.7</target>
-				</configuration>
-				</plugin -->
 		</plugins>
 	</reporting>
 </project>
