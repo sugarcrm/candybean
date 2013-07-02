@@ -44,17 +44,6 @@
             <name>Codehaus Snapshots</name>
             <url>http://snapshots.repository.codehaus.org/</url>
         </pluginRepository>
-        <pluginRepository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>codehaus-mojo</id>
-            <name>Codehaus Mojo Plugins</name>
-            <url>http://snapshots.maven.codehaus.org/maven2/</url>
-        </pluginRepository>
     </pluginRepositories>
 	<build>
 		<pluginManagement>
