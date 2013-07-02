@@ -9,7 +9,20 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<url>http://www.sugarcrm.com</url>
+	<url>http://sugarcrm.github.io/candybean/</url>
+	<inceptionYear>2013</inceptionYear>
+  	<organization>
+	    <name>SugarCRM, Inc.</name>
+	    <url>http://www.sugarcrm.com</url>
+  	</organization>
+  	<licenses>
+    <license>
+      	<name/>
+      	<url/>
+      	<distribution/>
+     	 <comments/>
+    </license>
+  	</licenses>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -108,22 +121,22 @@
 	    <dependency>
 		    <groupId>xml-apis</groupId>
 		    <artifactId>xml-apis</artifactId>
-		    <version>1.4.01</version>
+		    <version>2.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.18</version>
+			<version>5.1.25</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-surefire-report-plugin</artifactId>
-			<version>2.5</version>
+			<version>2.15</version>
 			<type>maven-plugin</type>
 		</dependency>
 		<dependency>
@@ -145,12 +158,12 @@
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
-			<version>1.1</version>
+			<version>1.1.1</version>
 	 	</dependency>
 	 	<dependency>
 		     <groupId>org.simpleframework</groupId>
 		     <artifactId>simple-xml</artifactId>
-		     <version>2.6.9</version>
+		     <version>2.7</version>
 		</dependency>
 		<dependency>
             <groupId>commons-lang</groupId>
