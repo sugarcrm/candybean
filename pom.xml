@@ -16,13 +16,46 @@
 	    <url>http://www.sugarcrm.com</url>
   	</organization>
   	<licenses>
-    <license>
-      	<name/>
-      	<url/>
-      	<distribution/>
-     	 <comments/>
-    </license>
+	    <license>
+	      	<name>GNU Affero General Public License Version 3</name>
+	      	<url>http://www.gnu.org/licenses/agpl.html</url>
+	    </license>
   	</licenses>
+  	<pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>maven-snapshots</id>
+            <name>Maven Snapshots</name>
+            <url>http://cvs.apache.org/maven-snapshot-repository</url>
+        </pluginRepository>
+        <pluginRepository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>codehaus-snapshots</id>
+            <name>Codehaus Snapshots</name>
+            <url>http://snapshots.repository.codehaus.org/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>codehaus-mojo</id>
+            <name>Codehaus Mojo Plugins</name>
+            <url>http://snapshots.maven.codehaus.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
 	<build>
 		<pluginManagement>
 			<plugins>
