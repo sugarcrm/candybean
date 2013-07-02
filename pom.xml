@@ -31,18 +31,7 @@
             </snapshots>
             <id>maven-snapshots</id>
             <name>Maven Snapshots</name>
-            <url>http://cvs.apache.org/maven-snapshot-repository</url>
-        </pluginRepository>
-        <pluginRepository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>codehaus-snapshots</id>
-            <name>Codehaus Snapshots</name>
-            <url>http://snapshots.repository.codehaus.org/</url>
+            <url>http://bits.netbeans.org/netbeans/trunk/maven-snapshot/</url>
         </pluginRepository>
     </pluginRepositories>
 	<build>
