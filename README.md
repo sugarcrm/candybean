@@ -2,7 +2,6 @@ Voodoo2
 =======
 
 
-
 ***
 ## Component: Translations 
 ### Background: 
