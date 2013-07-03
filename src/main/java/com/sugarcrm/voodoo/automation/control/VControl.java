@@ -179,13 +179,13 @@ public class VControl {
 	/**
 	 * Explicit wait until this control is visible.
 	 *
-	 * @param timeout		an explicit timeout (must be less than configured implicit timeout to be triggered)
+	 * @param timeout		an explicit timeout in ms (must be less than configured implicit timeout to be triggered)
 	 * @throws Exception
 	 */
 //	@Deprecated
-	public void pauseUntilVisible(int timeout) throws Exception {
-		voodoo.log.info("Selenium: waiting for " + timeout + "ms on visibility of control: " + this.toString());
-		(new WebDriverWait(this.iface.wd, timeout)).until(ExpectedConditions.visibilityOf(this.we));
+	public void pauseUntilVisible(int timeout_ms) throws Exception {
+		voodoo.log.info("Selenium: waiting for " + timeout_ms + "ms on visibility of control: " + this.toString());
+		(new WebDriverWait(this.iface.wd, timeout_ms)).until(ExpectedConditions.visibilityOf(this.we));
 //		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
 //		WebElement we = wait.until(ExpectedConditions.visibilityOf(this.we));
 //		final WebElement we = this.getWebElement(this.getBy(this.hook));		
