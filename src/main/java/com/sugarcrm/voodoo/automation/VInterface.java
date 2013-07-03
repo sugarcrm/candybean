@@ -512,7 +512,7 @@ public class VInterface {
 		default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-		long implicitWait = Long.parseLong(config.getProperty("perf.implicit_wait"));
+		long implicitWait = Long.parseLong(config.getProperty("perf.implicit_wait_seconds"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
