@@ -122,9 +122,13 @@ public class VControlSystemTest {
 		boolean actCaseSensPos = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.getControl(Strategy.ID, "gc-footer").contains("google developers", true); //false
 		boolean actNeg = iface.getControl(Strategy.ID, "gc-footer").contains("goggle devs", false); //false
+		boolean negFalse = iface.getControl(Strategy.ID, "gc-topnav").contains("Google Developers", false); //false
+		boolean negTrue = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", false); //true
 		Assert.assertEquals(true, actCaseSensPos);
 		Assert.assertEquals(false, actCaseSensNeg);
 		Assert.assertEquals(false, actNeg);
+		Assert.assertEquals(false, negFalse);
+		Assert.assertEquals(true, negTrue);
 	}
 	
 	@Ignore

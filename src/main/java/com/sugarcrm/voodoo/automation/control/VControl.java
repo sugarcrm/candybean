@@ -125,7 +125,7 @@ public class VControl {
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
 		voodoo.log.info("Searching if the control contains the following string: " + s + " with case sensitivity: " + caseSensitive);
 		if (!caseSensitive) s = s.toLowerCase();
-		List<WebElement> wes = this.we.findElements(By.xpath("//*[not(@visible='false')]"));
+		List<WebElement> wes = this.we.findElements(By.xpath(".//*[not(@visible='false')]"));
 		for (WebElement we : wes) {
 			String text = we.getText();
 			if (!caseSensitive) text = text.toLowerCase();
@@ -179,13 +179,13 @@ public class VControl {
 	/**
 	 * Explicit wait until this control is visible.
 	 *
-	 * @param timeout		an explicit timeout (must be less than configured implicit timeout to be triggered)
+	 * @param timeout		an explicit timeout in ms (must be less than configured implicit timeout to be triggered)
 	 * @throws Exception
 	 */
 //	@Deprecated
-	public void pauseUntilVisible(int timeout) throws Exception {
-		voodoo.log.info("Selenium: waiting for " + timeout + "ms on visibility of control: " + this.toString());
-		(new WebDriverWait(this.iface.wd, timeout)).until(ExpectedConditions.visibilityOf(this.we));
+	public void pauseUntilVisible(int timeout_ms) throws Exception {
+		voodoo.log.info("Selenium: waiting for " + timeout_ms + "ms on visibility of control: " + this.toString());
+		(new WebDriverWait(this.iface.wd, timeout_ms)).until(ExpectedConditions.visibilityOf(this.we));
 //		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
 //		WebElement we = wait.until(ExpectedConditions.visibilityOf(this.we));
 //		final WebElement we = this.getWebElement(this.getBy(this.hook));		
