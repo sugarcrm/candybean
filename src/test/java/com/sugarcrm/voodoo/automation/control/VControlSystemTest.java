@@ -239,11 +239,16 @@ public class VControlSystemTest {
 //		scroll(int index);
 	}
 
-	@Ignore
+//	@Ignore
 	@Test
 	public void sendStringTest() throws Exception {
-//		sendString(String input);
-//		sendString(String input, int index);
+		String searchString = "sugarcrm";
+		iface.go("http://www.duckduckgo.com/");
+//		iface.interact("pause0");
+		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString(searchString);
+//		iface.interact("pause1");
+		iface.getControl(Strategy.ID, "search_button_homepage").click();
+		Assert.assertTrue(iface.getControl(Strategy.PLINK, "SugarCRM").isDisplayed());
 	}
 	
 	@AfterClass
