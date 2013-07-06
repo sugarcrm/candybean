@@ -61,18 +61,41 @@ public class VInterfaceSystemTest {
 		iface.start();
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
-	public void pauseTest() throws Exception {
-//		this.iface.pause(ms);
+	public void backwardForwardRefreshTest() throws Exception {
+		String url1 = "https://www.google.com/";
+		String url2 = "http://espn.go.com/";
+		String url3 = "http://www.sugarcrm.com/";
+		iface.go(url1);
+		iface.go(url2);
+		iface.go(url3);
+		iface.refresh();
+		assertEquals(url3, iface.getURL());
+		iface.backward();
+		iface.refresh();
+		assertEquals(url2, iface.getURL());
+		iface.backward();
+		iface.refresh();
+		assertEquals(url1, iface.getURL());
+//		iface.interact("backward at 1");
+//		iface.backward();
+		iface.forward();
+		iface.refresh();
+		assertEquals(url2, iface.getURL());
+		iface.forward();
+		iface.refresh();
+		assertEquals(url3, iface.getURL());		
+//		iface.interact("forward at 3");
+//		iface.forward();
 	}
 	
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
 		File screenshotFile = new File(relPropsPath + File.separator + "screenshot.png");
-		String expUrl = "https://www.google.com/";
-		iface.go(expUrl);
+		String url = "https://www.google.com/";
+		iface.go(url);
 		iface.screenshot(screenshotFile);
 		assertTrue(screenshotFile.exists());
 	}

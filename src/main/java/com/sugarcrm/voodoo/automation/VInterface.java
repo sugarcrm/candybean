@@ -181,6 +181,16 @@ public class VInterface {
 	}
 	
 	/**
+	 * Refreshes the interface.  If refresh is undefined, it does nothing.
+	 * 
+	 * @throws Exception
+	 */
+	public void refresh() throws Exception {
+		voodoo.log.info("Refreshing the interface.");
+		this.wd.navigate().refresh();
+	}
+
+	/**
 	 * Restarts the interface with the current interface type
 	 * 
 	 * @throws Exception
@@ -227,6 +237,16 @@ public class VInterface {
 		voodoo.log.info("Accepting dialog.");
 		Alert alert = this.wd.switchTo().alert();
 		alert.accept();
+	}
+	
+	/**
+	 * Navigates the interface backward.  If backward is undefined, it does nothing.
+	 * 
+	 * @throws Exception
+	 */
+	public void backward() throws Exception {
+		voodoo.log.info("Navigating the interface backward.");
+		this.wd.navigate().back();
 	}
 
 	/**
@@ -386,6 +406,15 @@ public class VInterface {
 		}	
 	}
 	
+	/**
+	 * Navigates the interface forward.  If forward is undefined, it does nothing.
+	 * 
+	 * @throws Exception
+	 */
+	public void forward() throws Exception {
+		voodoo.log.info("Navigating the interface forward.");
+		this.wd.navigate().forward();
+	}
 	
 	/**
 	 * Returns a string with the contents of the windows data structure.
