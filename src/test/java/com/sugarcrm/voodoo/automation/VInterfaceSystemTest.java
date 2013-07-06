@@ -21,10 +21,9 @@
  */
 package com.sugarcrm.voodoo.automation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import java.io.File;
-
-import junit.framework.Assert;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -41,15 +40,15 @@ public class VInterfaceSystemTest {
 
 	protected static Voodoo voodoo;
 	protected static VInterface iface;
+	protected static final String curWorkDir = System.getProperty("user.dir");
+	protected static final String relPropsPath = curWorkDir + File.separator + "src"
+			+ File.separator + "test" + File.separator + "resources";
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src"
-				+ File.separator + "test" + File.separator + "resources";
 		String voodooPropsPath = relPropsPath + File.separator;
 		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
 		if (voodooPropsFilename == null)
@@ -67,11 +66,15 @@ public class VInterfaceSystemTest {
 	public void pauseTest() throws Exception {
 //		this.iface.pause(ms);
 	}
-
-	@Ignore
+	
+//	@Ignore
 	@Test
-	public void interactTest() {
-//		this.iface.interact("");
+	public void screenshotTest() throws Exception {
+		File screenshotFile = new File(relPropsPath + File.separator + "screenshot.png");
+		String expUrl = "https://www.google.com/";
+		iface.go(expUrl);
+		iface.screenshot(screenshotFile);
+		assertTrue(screenshotFile.exists());
 	}
 
 //	@Ignore
@@ -80,21 +83,21 @@ public class VInterfaceSystemTest {
 		String expUrl = "https://www.google.com/";
 		iface.go(expUrl);
 		String actUrl = iface.getURL();
-		Assert.assertEquals(expUrl, actUrl);
+		assertEquals(expUrl, actUrl);
 		iface.stop();
 		iface.start(Type.FIREFOX);
 		iface.go(expUrl);
 		actUrl = iface.getURL();
-		Assert.assertEquals(expUrl, actUrl);
+		assertEquals(expUrl, actUrl);
 		iface.restart();
 		iface.go(expUrl);
 		actUrl = iface.getURL();
-		Assert.assertEquals(expUrl, actUrl);
+		assertEquals(expUrl, actUrl);
 		iface.stop();
 		iface.start(Type.CHROME);
 		iface.go(expUrl);
 		actUrl = iface.getURL();
-		Assert.assertEquals(expUrl, actUrl);
+		assertEquals(expUrl, actUrl);
 		iface.stop();
 		try {
 			thrown.expect(Exception.class);
@@ -136,9 +139,9 @@ public class VInterfaceSystemTest {
 		boolean actCaseSensPos = iface.contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.contains("google developers", true); //false
 		boolean actNeg = iface.contains("goggle devs", false); //false
-		Assert.assertEquals("Expecting: " + true + ", actual: " + actCaseSensPos, true, actCaseSensPos);
-		Assert.assertEquals("Expecting: " + false + ", actual: " + actCaseSensNeg, false, actCaseSensNeg);
-		Assert.assertEquals("Expecting: " + false + ", actual: " + actNeg, false, actNeg);
+		assertEquals("Expecting: " + true + ", actual: " + actCaseSensPos, true, actCaseSensPos);
+		assertEquals("Expecting: " + false + ", actual: " + actCaseSensNeg, false, actCaseSensNeg);
+		assertEquals("Expecting: " + false + ", actual: " + actNeg, false, actNeg);
 	}
 	
 	@Ignore
@@ -154,26 +157,26 @@ public class VInterfaceSystemTest {
 		String expFrmStr = "http://www.littlewebhut.com/images/eightball.gif";
 		iface.go("http://www.littlewebhut.com/articles/html_iframe_example/");
 		String actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
 		iface.focusFrame(1);
 //		System.out.println("SOURCE:\n" + iface.wd.getPageSource());
 		String actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		Assert.assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
 		iface.focusDefault();
 		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
 		iface.focusFrame("imgbox");
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		Assert.assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
 		iface.focusDefault();
 		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
 		iface.focusFrame(new VControl(voodoo, iface, Strategy.ID, "imgbox"));
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		Assert.assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
 		iface.focusDefault();
 		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		Assert.assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
 	}
 
 //	@Ignore
@@ -192,7 +195,7 @@ public class VInterfaceSystemTest {
 		
 		// Check assumptions
 		String actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		Assert.assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pops-up window titled "Tryit Editor v1.8"
@@ -200,18 +203,18 @@ public class VInterfaceSystemTest {
 		
 		// Verify title without switching
 		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		Assert.assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, actWindowTitle);
 		
 		// Verify title with switching
 		iface.focusWindow(1);
 		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		Assert.assertEquals(expWindow1Title, actWindowTitle);
+		assertEquals(expWindow1Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window which should auto-focus to previous window; verify title
 		iface.closeWindow();
 		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		Assert.assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pop-up window titled "Tryit Editor v1.8"
@@ -227,31 +230,31 @@ public class VInterfaceSystemTest {
 		// Verify title with (not) switching to current window by index
 		iface.focusWindow(0);
 		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		Assert.assertEquals(expWindow2Title, actWindowTitle);
+		assertEquals(expWindow2Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 				
 		// Verify URL with switching to window by title
 		iface.focusWindow(expWindow1Title);
 		String actWindowURL = iface.getURL();
-		Assert.assertEquals(expWindow1URL, actWindowURL);
+		assertEquals(expWindow1URL, actWindowURL);
 //		iface.interact(iface.getWindowsString());
 		
 		// Verify URL with switching to window by URL
 		iface.focusWindow(expWindow3URL);
 		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		Assert.assertEquals(expWindow3Title, actWindowTitle);
+		assertEquals(expWindow3Title, actWindowTitle);
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window and revert to previous window (1 index); verify URL
 		iface.closeWindow();
 		actWindowURL = iface.getURL();
-		Assert.assertEquals(expWindow1URL, actWindowURL);
+		assertEquals(expWindow1URL, actWindowURL);
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window and revert to previous window (0 index); verify URL
 		iface.closeWindow();
 		actWindowURL = iface.getURL();
-		Assert.assertEquals(expWindow2URL, actWindowURL);
+		assertEquals(expWindow2URL, actWindowURL);
 //		iface.interact(iface.getWindowsString());
 		
 		// Verify error by switching to erroneous window titles & indices
