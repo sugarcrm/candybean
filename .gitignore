@@ -4,5 +4,6 @@
 target/
 chromedriver.log
 log/*.log*
-.idea/
-*.iml
+log/*.log
+src/test/resources/screenshot.png
+

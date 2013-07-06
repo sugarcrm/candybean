@@ -21,6 +21,8 @@
  */
 package com.sugarcrm.voodoo.automation;
 
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.Iterator;
@@ -28,7 +30,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.openqa.selenium.Alert;
@@ -106,12 +110,25 @@ public class VInterface {
 	/**
 	 * Display a modal dialog box to the test user.
 	 *
-	 * @param message	 String to display on the dialog box
-	 * @throws Exception	 if the program is running headless (with no GUI)
+	 * @param message	 	String to display on the dialog box
+	 * @throws Exception	if the program is running headless (with no GUI)
 	 */
 	public void interact(String message) {
 		voodoo.log.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
+	}
+	
+	/**
+	 * Takes a full screenshot and saves it to the given file.
+	 * 
+	 * @param file			The file to which a screenshot is saved
+	 * @throws Exception	
+	 */
+	public void screenshot(File file) throws Exception {
+		this.voodoo.log.info("Taking screenshot; saving to file: " + file.toString());
+		Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+		BufferedImage screenshot = (new Robot()).createScreenCapture(screen);
+		ImageIO.write(screenshot, "png", file);
 	}
 
 	/**
