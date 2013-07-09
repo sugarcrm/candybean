@@ -3,7 +3,6 @@ Candybean
 =======
 
 
-
 ***
 ## Component: Translations 
 ### Background: 
