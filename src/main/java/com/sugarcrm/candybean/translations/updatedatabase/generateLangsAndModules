@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# Candybean is a next generation automation and testing framework suite.
+# It is a collection of components that foster test automation, execution
+# configuration, data abstraction, results illustration, tag-based execution,
+# top-down and bottom-up batches, mobile variants, test translation across
+# languages, plain-language testing, and web service testing.
+# Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Purpose: Generate a list of language codes and a list of modules used by updateDB.php.
+# Output: A file named updateDB_LangsAndModules.php in the same directory as this script.
+# Input: Directory path of a Sugar extraction, see SugarWiki for more information on installing Sugar.
+
+# display error message if number of arguments is not 1
+if [ $# != 1 ]
+then
+	echo "Usage: $0 path-to-sugar-extraction"
+	exit
+fi
+
+outputFile=updateDB_LangsAndModules.php
+
+# handle extra / entered at the end of path-to-sugar-extraction
+if [[ $1 = */ ]]
+then
+	# remove the last char of $1
+	dir=${1%?}
+else
+	dir=$1
+fi
+
+# slashCount is equal to the number of occurrences of / in dir
+slash=${dir//[^\/]}
+slashCount=${#slash}
+
+# check (very simple) dir is the path to a sugar extraction
+if [ ! -e $dir/modules ]
+then
+	echo "$dir does not contain 'modules' folder, enter a correct path"
+fi
+
+# delete outputFile if it exists
+if [ -e $outputFile ]
+then
+	rm $outputFile
+fi
+
+# find and print a list of language codes in path-to-sugar-extraction/modules/Accounts/language, also print other text to complete a php file
+echo '<?php
+
+// Array used to store all the languages available for translation
+$language_array = array(' >> $outputFile
+
+for file in $dir/modules/Accounts/language/*
+do
+	if [[ $file != *en_us* ]]
+	then
+		echo "  '`echo $file | rev | cut -d/ -f1 | rev | cut -c 1-5`'," >> $outputFile
+	fi
+done
+
+# remove the last character from outputFile (extra comma)
+sed -i '$s/.$//' $outputFile
+
+echo ');
+' >> $outputFile
+
+# find and print a list of modules in path-to-sugar-extraction/modules that can be translated (i.e. is a folder and contains a folder named 'language'), also print other text to complete a php file
+echo '// Array used to store all of the modules available for translation
+$module_array = array(' >> $outputFile
+
+for folder in $dir/modules/*
+do
+	if [ -d $folder -a -e $folder/language ]
+	then
+		echo "  '`echo $folder | cut -d/ -f$((slashCount + 3))`'," >> $outputFile
+	fi	
+done
+
+# remove the last character from outputFile (extra comma)
+sed -i '$s/.$//' $outputFile
+
+echo ');
+
+?>' >> $outputFile
