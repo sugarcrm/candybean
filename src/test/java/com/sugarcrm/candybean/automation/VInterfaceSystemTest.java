@@ -217,29 +217,24 @@ public class VInterfaceSystemTest {
 		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
 		
 		iface.go(expWindow0URL);
-		
+	
 		// Check assumptions
-		String actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow0Title, actWindowTitle);
-//		iface.interact(iface.getWindowsString());
+		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Click pops-up window titled "Tryit Editor v1.8"
 		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Verify title without switching
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Verify title with switching
 		iface.focusWindow(1);
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow1Title, actWindowTitle);
+		assertEquals(expWindow1Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window which should auto-focus to previous window; verify title
 		iface.closeWindow();
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pop-up window titled "Tryit Editor v1.8"
@@ -254,8 +249,7 @@ public class VInterfaceSystemTest {
 		
 		// Verify title with (not) switching to current window by index
 		iface.focusWindow(0);
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow2Title, actWindowTitle);
+		assertEquals(expWindow2Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 				
 		// Verify URL with switching to window by title
@@ -266,8 +260,7 @@ public class VInterfaceSystemTest {
 		
 		// Verify URL with switching to window by URL
 		iface.focusWindow(expWindow3URL);
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow3Title, actWindowTitle);
+		assertEquals(expWindow3Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window and revert to previous window (1 index); verify URL
