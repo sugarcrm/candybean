@@ -52,16 +52,6 @@ public class VInterfaceSystemTest {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src"
 				+ File.separator + "test" + File.separator + "resources";
-<<<<<<< HEAD:src/test/java/com/sugarcrm/voodoo/automation/VInterfaceSystemTest.java
-		String voodooPropsPath = relPropsPath + File.separator;
-		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
-		if (voodooPropsFilename == null)
-			voodooPropsFilename = "voodoo-mac.properties";
-		voodooPropsPath += voodooPropsFilename;
-		Configuration voodooConfig = new Configuration(voodooPropsPath);
-		voodoo = Voodoo.getInstance(voodooConfig);
-		iface = voodoo.getInterface();
-=======
 		String candybeanPropsPath = relPropsPath + File.separator;
 		String candybeanPropsFilename = System.getProperty("candybean_prop_filename");
 		if (candybeanPropsFilename == null)
@@ -70,7 +60,6 @@ public class VInterfaceSystemTest {
 		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
->>>>>>> dev:src/test/java/com/sugarcrm/candybean/automation/VInterfaceSystemTest.java
 		iface.start();
 	}
 	
