@@ -1,3 +1,0 @@
-#!/bin/bash
-
-cat ~/AffectedSodaTests.txt | grep ".xml" | sed 's/Inside //g' | sed 's/tests\//\n/g' | grep modules > ~/AffectedSodaTestsFileNames.txt
