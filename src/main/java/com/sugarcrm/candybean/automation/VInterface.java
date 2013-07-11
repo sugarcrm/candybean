@@ -542,11 +542,7 @@ public class VInterface {
 			String chromeDriverLogPath = this.config.getValue("browser.chrome_driver_log_path");
 			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-<<<<<<< HEAD:src/main/java/com/sugarcrm/voodoo/automation/VInterface.java
 			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
-=======
-			String chromeDriverPath = this.config.getValue("browser.chrome_driver_path");
->>>>>>> dev:src/main/java/com/sugarcrm/candybean/automation/VInterface.java
 			System.out.println("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -562,11 +558,7 @@ public class VInterface {
 		default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-<<<<<<< HEAD:src/main/java/com/sugarcrm/voodoo/automation/VInterface.java
-		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait"));
-=======
 		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
->>>>>>> dev:src/main/java/com/sugarcrm/candybean/automation/VInterface.java
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
