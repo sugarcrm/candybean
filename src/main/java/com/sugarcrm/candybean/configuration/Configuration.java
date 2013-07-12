@@ -65,6 +65,16 @@ public class Configuration {
     }
 
     /**
+     * @param propertiesPath
+     * @param logger
+     */
+    public Configuration(String propertiesPath, Logger logger) {
+        properties = new Properties();
+        load(propertiesPath);
+        this.logger = logger;
+    }
+
+    /**
      * This method finds and returns the proper cascading configuration value for a given key.
      *
      * Returns the system value if defined otherwise it looks in the properties and
