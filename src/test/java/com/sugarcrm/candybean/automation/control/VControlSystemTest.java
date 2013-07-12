@@ -58,8 +58,7 @@ public class VControlSystemTest {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
 		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_prop_filename");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean-mac.properties";
+		String candybeanPropsFilename = "candybean.properties";
 		candybeanPropsPath += candybeanPropsFilename;
 		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
 		candybean = Candybean.getInstance(candybeanConfig);
