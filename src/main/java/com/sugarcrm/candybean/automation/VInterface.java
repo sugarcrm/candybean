@@ -524,8 +524,8 @@ public class VInterface {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
 			String ffBinaryPath = this.config.getValue("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
-			FirefoxProfile ffProfile = (new ProfilesIni())
-					.getProfile(profileName);
+			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
+//			ffProfile.setEnableNativeEvents(false);
 			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
 			// if (System.getProperty("headless") != null) {
 			// FirefoxBinary ffBinary = new FirefoxBinary();//new
