@@ -3,6 +3,7 @@
 .settings/
 target/
 chromedriver.log
+log/*.log*
 log/*.log
-.idea/
-*.iml
+src/test/resources/screenshot.png
+
