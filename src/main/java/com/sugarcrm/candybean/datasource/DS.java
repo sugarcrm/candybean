@@ -46,7 +46,7 @@ public class DS {
 		this.propKey = propKey; 
 		this.propValue = propValue; 
 		config = new Configuration();
-		config.setProperty(propKey, propValue);
+		config.setValue(propKey, propValue);
 //		config.createFile(System.getProperty("user.dir") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		
         DataAdapterType type = getDataType(dataType);

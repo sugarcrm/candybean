@@ -48,7 +48,7 @@ public class ConfigurationUnitTest {
     public void testSystem() {
         //ensure that the system variable value is returned if it exists
         System.setProperty("key", "systemValue");
-        config.setProperty("key", "propertiesValue");
+        config.setValue("key", "propertiesValue");
         assertEquals("systemValue", config.getValue("key"));
         assertEquals("systemValue", config.getValue("key", "defaultValue"));
         System.clearProperty("key");
@@ -56,28 +56,28 @@ public class ConfigurationUnitTest {
 
     @Test
     public void testProperties() {
-        config.setProperty("key", "propertiesValue");
+        config.setValue("key", "propertiesValue");
         assertTrue(config.getValue("key", "defaultValue").equals("propertiesValue"));
     }
 
     @Test
     public void testDefault() {
-        config.setProperty("key", "propertiesValue");
+        config.setValue("key", "propertiesValue");
         assertEquals("defaultValue", config.getValue("defaultKey", "defaultValue"));
     }
 
     @Test
     public void testSetProperty() {
         assertNull("value for \"key\" should be null", config.getValue("key"));
-        config.setProperty("key", "value");
+        config.setValue("key", "value");
         assertEquals("value", config.getValue("key"));
     }
 
 
     @Test
     public void testLoadAndStore() {
-        config.setProperty("key1", "value1");
-        config.setProperty("key2", "value2");
+        config.setValue("key1", "value1");
+        config.setValue("key2", "value2");
         File configFile = new File(System.getProperty("user.dir") + File.separator + "config.properties");
         assertFalse("config file should not exist yet", configFile.exists());
         try {
