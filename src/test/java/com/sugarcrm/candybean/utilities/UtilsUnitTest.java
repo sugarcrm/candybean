@@ -50,8 +50,8 @@ public class UtilsUnitTest {
 			File propsFile = new File(propsFilePath);
 			propsFile.createNewFile();
 			Configuration voodooConfig = new Configuration();
-			voodooConfig.setProperty(propKey, propConfigVal);
-			voodooConfig.setProperty(propSysKey, propConfigVal);
+			voodooConfig.setValue(propKey, propConfigVal);
+			voodooConfig.setValue(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
 //			voodooConfig.store(new FileOutputStream(propsFile), null);
 			//			JOptionPane.showInputDialog("pause");
