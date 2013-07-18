@@ -28,6 +28,10 @@ import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * VSelect is a control that allows for interaction with the SELECT element.
  *
@@ -35,7 +39,7 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
  */
 
 public class VSelect extends VControl {
-	
+
 	/**
 	 * Instantiate a VSelect object.
 	 *
@@ -49,7 +53,7 @@ public class VSelect extends VControl {
 						Strategy strategy, String hook) throws Exception {
 		super(voodoo, iface, strategy, hook);
 	}
-	
+
 	/**
 	 * Instantiate a VSelect object.
 	 *
@@ -62,7 +66,7 @@ public class VSelect extends VControl {
 		throws Exception {
 		super(voodoo, iface, hook);
 	}
-	
+
 	/**
 	 * Get the text of the currently selected option.
 	 *
@@ -83,7 +87,7 @@ public class VSelect extends VControl {
 
 	/**
 	 * Returns the boolean value of the control's selection state.
-	 * 
+	 *
 	 * @return	boolean true if the control is selected
 	 * @throws Exception
 	 */
@@ -121,7 +125,112 @@ public class VSelect extends VControl {
 		Select dropDownList = new Select(super.we);
 		dropDownList.selectByVisibleText(value);
 	}
-	
+
+    /**
+     * Select an option by a given index.
+     *
+     * @param index index of option to be selected
+     */
+    public void select(int index) {
+        Select dropDownList = new Select(super.we);
+        List<WebElement> options = dropDownList.getOptions();
+        voodoo.log.info("Selenium: selecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
+        dropDownList.selectByIndex(index);
+    }
+
+
+    /**
+     * Deselect an option by its visible text.
+     *
+     * @param value  text of the option to be deselected
+     */
+    public void deselect(String text) {
+        Select dropDownList = new Select(super.we);
+        voodoo.log.info("Selenium: deselecting value '" + text  +  "' from control: " + this.toString());
+        dropDownList.deselectByVisibleText(text);
+    }
+
+    /**
+     * Deselect an option by a given index.
+     *
+     * @param index index of option to be deselected
+     */
+    public void deselect(int index) {
+        Select dropDownList = new Select(super.we);
+        List<WebElement> options = dropDownList.getOptions();
+        voodoo.log.info("Selenium: deselecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
+        dropDownList.deselectByIndex(index);
+    }
+
+    /**
+     * Deselect an option by a given index.
+     *
+     * @param index index of option to be deselected
+     */
+    public void deselectAll() {
+        voodoo.log.info("Selenium: deselecting all values from control: " + this.toString());
+        Select dropDownList = new Select(super.we);
+        dropDownList.deselectAll();
+    }
+
+
+    public List<WebElement> getAllSelectedOptions() {
+        Select dropDownList = new Select(super.we);
+        return dropDownList.getAllSelectedOptions();
+    }
+
+    public List<WebElement> getOptions() {
+        Select dropDownList = new Select(super.we);
+        return dropDownList.getOptions();
+    }
+
+    public void selectMultiple(ArrayList<String> options) throws Exception {
+        for (String text : options) {
+            select(text);
+        }
+    }
+
+    public void deselectMultiple(ArrayList<String> options) {
+        for (String text : options) {
+            deselect(text);
+        }
+    }
+
+    public boolean hasSelected(String text) {
+        List<WebElement> selected = getAllSelectedOptions();
+        for (WebElement we : selected) {
+            if (we.getText().equals(text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasSelected(ArrayList<String> options) {
+        for (String text : options) {
+            if (!hasSelected(text)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasSelectedExact(ArrayList<String> options) {
+        List<WebElement> selected = getAllSelectedOptions();
+        Iterator<WebElement> i = selected.iterator();
+
+        while (i.hasNext()) {
+            WebElement we = i.next();
+            if (options.remove(we.getText())) {
+                i.remove();
+            } else {
+                return false;
+            }
+        }
+
+        return selected.isEmpty();
+    }
+
 	@Override
 	public String toString() {
 		return "VSelect(" + super.toString() + ")";
