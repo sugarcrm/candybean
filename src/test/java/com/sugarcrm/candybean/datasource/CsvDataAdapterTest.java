@@ -242,8 +242,8 @@ public class CsvDataAdapterTest {
 			config = new Configuration();
 
 			// Defining configuration properties keys/values
-			config.setProperty("datasource.csv.baseDir", "testData");
-			config.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
+			config.setValue("datasource.csv.baseDir", "testData");
+			config.setValue("datasource.csv.subDir", "testData/csvs/subDir");
 
 			// Store Configuration
 			try {
