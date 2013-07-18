@@ -542,7 +542,7 @@ public class VInterface {
 			String chromeDriverLogPath = this.config.getValue("browser.chrome_driver_log_path");
 			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-			String chromeDriverPath = this.config.getValue("browser.chrome_driver_path");
+			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
 			System.out.println("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
