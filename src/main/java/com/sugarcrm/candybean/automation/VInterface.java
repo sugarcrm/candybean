@@ -523,7 +523,7 @@ public class VInterface {
 		switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
-			String ffBinaryPath = this.config.getValue("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
+			String ffBinaryPath = this.config.getPathValue("browser.firefox_binary");
 			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
 //			ffProfile.setEnableNativeEvents(false);
 			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
@@ -539,7 +539,7 @@ public class VInterface {
 			break;
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
-			String chromeDriverLogPath = this.config.getValue("browser.chrome_driver_log_path");
+			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
 			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
