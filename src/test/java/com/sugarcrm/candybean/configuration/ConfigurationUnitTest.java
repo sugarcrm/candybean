@@ -31,7 +31,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import org.junit.Before;

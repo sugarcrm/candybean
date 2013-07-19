@@ -95,9 +95,9 @@ public class UtilsUnitTest {
 		String path3 = "\\\"computer science\"\\";
 		String expected3 = c + "\"computer science\"" + c;
 		String path4 = "cd /computer\\ science\\";
-		String expected4 = "cd /computer\\ science" + c;
+		String expected4 = "cd " + c + "computer\\ science" + c;
 		String path5 = "computer\\ \\ \\ \\ \\ science/";
-		String expected5 = "computer\\ \\ \\ \\ \\ science/";
+		String expected5 = "computer\\ \\ \\ \\ \\ science" + c;
 		Assert.assertEquals(expected1, Utils.adjustPath(path1));
 		Assert.assertEquals(expected2, Utils.adjustPath(path2));
 		Assert.assertEquals(expected3, Utils.adjustPath(path3));
