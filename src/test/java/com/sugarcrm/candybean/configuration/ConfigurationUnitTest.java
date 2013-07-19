@@ -22,14 +22,16 @@
 package com.sugarcrm.candybean.configuration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import org.junit.Before;
@@ -73,29 +75,31 @@ public class ConfigurationUnitTest {
         assertEquals("value", config.getValue("key"));
     }
 
-
+//    @Ignore
     @Test
     public void testLoadAndStore() {
-        config.setValue("key1", "value1");
-        config.setValue("key2", "value2");
-        File configFile = new File(System.getProperty("user.dir") + File.separator + "config.properties");
-        assertFalse("config file should not exist yet at: " + configFile.getAbsolutePath(), configFile.exists());
-        try {
+    	try {
+            config.setValue("key1", "value1");
+	        config.setValue("key2", "value2");
+	        File configFile = new File(System.getProperty("user.dir") + File.separator + "config.properties");
             config.store(new FileOutputStream(configFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assertTrue("config file should exist", configFile.exists());
-        Configuration loadConfig = new Configuration();
-        assertNull("loadConfig should not contain any keys yet", loadConfig.getValue("key1"));
-
-        try {
+            BufferedReader reader = new BufferedReader(new FileReader(configFile));
+            String line = reader.readLine();
+            String content = "";
+            while (line != null) {
+            	content += line;
+            	line = reader.readLine();
+            }
+        	assertTrue(content.contains("value1"));
+            reader.close();
+	        Configuration loadConfig = new Configuration();
+	        assertEquals(0, loadConfig.getPropertiesCopy().keySet().size());
             loadConfig.load(new FileInputStream(configFile));
+	        assertEquals("value1", loadConfig.getValue("key1"));
+	        configFile.delete();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals("value1", loadConfig.getValue("key1"));
-        configFile.delete();
     }
 //	String filePath1 = System.getProperty("user.dir") + File.separator + "config1.properties";
 //	String filePath2 = System.getProperty("user.dir") + File.separator + "config2.properties";

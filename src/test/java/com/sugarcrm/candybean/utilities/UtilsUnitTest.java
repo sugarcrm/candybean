@@ -87,17 +87,17 @@ public class UtilsUnitTest {
 
 	@Test
 	public void testAdjustPath() {
+		String c = File.separator;
 		String path1 = "~/computer\\  science\\Hello\\";
-		String expected1 = "~/computer\\  science/Hello/";
+		String expected1 = "~" + c + "computer\\  science" + c + "Hello" + c;
 		String path2 = "c:\\computer\\\"science\"\\";
-		String expected2 = "c:/computer/\"science\"/";
+		String expected2 = "c:" + c + "computer" + c + "\"science\"" + c;
 		String path3 = "\\\"computer science\"\\";
-		String expected3 = "/\"computer science\"/";
+		String expected3 = c + "\"computer science\"" + c;
 		String path4 = "cd /computer\\ science\\";
-		String expected4 = "cd /computer\\ science/";
+		String expected4 = "cd /computer\\ science" + c;
 		String path5 = "computer\\ \\ \\ \\ \\ science/";
 		String expected5 = "computer\\ \\ \\ \\ \\ science/";
-
 		Assert.assertEquals(expected1, Utils.adjustPath(path1));
 		Assert.assertEquals(expected2, Utils.adjustPath(path2));
 		Assert.assertEquals(expected3, Utils.adjustPath(path3));
