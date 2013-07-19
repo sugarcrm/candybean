@@ -84,7 +84,12 @@ public class Utils {
 	public static String adjustPath(String path){
 		String tempPath = path;
 		// replace all single backslash (not followed by space) with forward slash
-		tempPath = tempPath.replaceAll("\\\\(?! )", "/"); 
+		String comparePath = tempPath;
+		tempPath = tempPath.replaceAll("\\\\(?! )", "/");
+		while (!comparePath.equals(tempPath)) {
+			comparePath = tempPath;
+			tempPath = tempPath.replaceAll("\\\\(?! )", "/");
+		}
 		// replace all one or more consecutive forward slashes with a File Separator
 		tempPath = tempPath.replaceAll("/+", Matcher.quoteReplacement(File.separator));
 		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
