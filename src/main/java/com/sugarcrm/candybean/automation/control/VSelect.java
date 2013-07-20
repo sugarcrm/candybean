@@ -173,29 +173,69 @@ public class VSelect extends VControl {
         dropDownList.deselectAll();
     }
 
-
+    /**
+     * Get a list of all the selected options.
+     *
+     * @return selected options
+     */
     public List<WebElement> getAllSelectedOptions() {
         Select dropDownList = new Select(super.we);
         return dropDownList.getAllSelectedOptions();
     }
 
+    /**
+     * Get a list of all the possible options.
+     *
+     * @return options
+     */
     public List<WebElement> getOptions() {
         Select dropDownList = new Select(super.we);
         return dropDownList.getOptions();
     }
 
+    /**
+     * Selects all the options in the list by adding to the current selection
+     *
+     * @param options
+     * @throws Exception
+     */
     public void selectMultiple(ArrayList<String> options) throws Exception {
         for (String text : options) {
             select(text);
         }
     }
 
+    /**
+     * Selects all the options in the list by deselecting all and then selecting
+     * the list of options passed in.
+     *
+     * @param options
+     * @throws Exception
+     */
+    public void selectExact(ArrayList<String> options) throws Exception {
+        deselectAll();
+        for (String text : options) {
+            select(text);
+        }
+    }
+
+    /**
+     * Deselects all of the options in the list
+     *
+     * @param options
+     */
     public void deselectMultiple(ArrayList<String> options) {
         for (String text : options) {
             deselect(text);
         }
     }
 
+    /**
+     * Determine whether a certain option is selected.
+     *
+     * @param text
+     * @return true if the option with given text is selected
+     */
     public boolean hasSelected(String text) {
         List<WebElement> selected = getAllSelectedOptions();
         for (WebElement we : selected) {
@@ -206,7 +246,13 @@ public class VSelect extends VControl {
         return false;
     }
 
-    public boolean hasSelected(ArrayList<String> options) {
+    /**
+     * Determine whether multiple options are selected
+     *
+     * @param options
+     * @return true if all the options passed in are selected
+     */
+    public boolean hasSelectedMultiple(ArrayList<String> options) {
         for (String text : options) {
             if (!hasSelected(text)) {
                 return false;
@@ -215,6 +261,12 @@ public class VSelect extends VControl {
         return true;
     }
 
+    /**
+     * Determine whether a specific configuration of options is selected
+     *
+     * @param options
+     * @return true if the set of selected options exactly matches the options parameter
+     */
     public boolean hasSelectedExact(ArrayList<String> options) {
         List<WebElement> selected = getAllSelectedOptions();
         Iterator<WebElement> i = selected.iterator();
@@ -229,6 +281,62 @@ public class VSelect extends VControl {
         }
 
         return selected.isEmpty();
+    }
+
+    /**
+     * Determine whether this select object contains a specified option
+     * @param option
+     * @return true if this contains the option
+     */
+    public boolean hasOption(String option) {
+        List<WebElement> options = getOptions();
+        Iterator<WebElement> i = options.iterator();
+
+        while (i.hasNext()) {
+            WebElement we = i.next();
+            if (we.getText().equals(option)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine whether this select object contains a set of options
+     *
+     * @param options
+     * @return true if all of the options are found
+     */
+    public boolean hasOptions(ArrayList<String> options) {
+        for (String option : options) {
+            if (!hasOption(option)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Determine whether this select object contains the exact set of options
+     *
+     * @param optionsExact
+     * @return true if the options in this select match the optionsExact parameter
+     */
+    public boolean hasOptionsExact(ArrayList<String> optionsExact) {
+        List<WebElement> options = getOptions();
+        Iterator<WebElement> i = options.iterator();
+
+        while (i.hasNext()) {
+            WebElement we = i.next();
+            if (optionsExact.remove(we.getText())) {
+                i.remove();
+            } else {
+                return false;
+            }
+        }
+
+        return options.isEmpty();
     }
 
 	@Override
