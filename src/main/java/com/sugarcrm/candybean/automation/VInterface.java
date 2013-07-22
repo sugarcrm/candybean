@@ -519,8 +519,9 @@ public class VInterface {
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
-		WebDriver wd = null;
-		switch (iType) {
+        DesiredCapabilities capabilities;
+        WebDriver wd = null;
+        switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
 			String ffBinaryPath = this.config.getPathValue("browser.firefox_binary");
@@ -555,7 +556,22 @@ public class VInterface {
 			throw new Exception("Selenium: ie browser not yet supported.");
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
-		default:
+        case ANDROID:
+            capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
+            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            break;
+        case IOS:
+            capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+            capabilities.setCapability(CapabilityType.VERSION, "6.0");
+            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
+            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            break;
+        default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
 		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
@@ -566,7 +582,20 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-	
+
+    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+        private RemoteTouchScreen touch;
+
+        public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
+            super(remoteAddress, desiredCapabilities);
+            touch = new RemoteTouchScreen(getExecuteMethod());
+        }
+
+        public TouchScreen getTouch() {
+            return touch;
+        }
+    }
+
 	// ANDROID ROBOTIUM FUNCTIONALITY
 	//	private AndroidInterface getAndroidControl() throws Exception {
 	//		AndroidInterface vac = new AndroidInterface(this.props);
