@@ -102,7 +102,7 @@ public class VControlSystemTest {
 		Assert.assertEquals(expChapterText, actChapterText);
 //		String text2 = getText(int index);
 	}
-	
+
 	@Ignore
 	@Test
 	public void clickTest() throws Exception {
