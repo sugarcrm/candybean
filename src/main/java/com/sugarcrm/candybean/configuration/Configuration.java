@@ -22,9 +22,16 @@
 package com.sugarcrm.candybean.configuration;
 
 import java.io.*;
+import java.util.Enumeration;
+import org.json.simple.JSONObject;
+
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 import com.sugarcrm.candybean.utilities.Utils;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Configuration is an object that represents a set of key-value pairs.
@@ -61,17 +68,32 @@ public class Configuration {
     public Configuration(String propertiesPath) {
         properties = new Properties();
         load(propertiesPath);
-        this.logger = Logger.getLogger(Configuration.class.getName());
-    }
+        String platform = Utils.getCurrentPlatform();
+        Enumeration e = properties.propertyNames();
 
-    /**
-     * @param propertiesPath
-     * @param logger
-     */
-    public Configuration(String propertiesPath, Logger logger) {
-        properties = new Properties();
-        load(propertiesPath);
-        this.logger = logger;
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            String value = properties.getProperty(key);
+
+            JSONParser parser = new JSONParser();
+
+            String newValue;
+
+            try {
+                Object valueObject = parser.parse(value);
+                //get value for current platform key
+                if (valueObject instanceof Map) {
+                    JSONObject valueMap = (JSONObject) valueObject;
+                    newValue = (String) valueMap.get(platform);
+                } else {
+                    newValue = value;
+                }
+            } catch (ParseException pe) {
+                //parsedString is not a smartValue/json object.
+                newValue = value;
+            }
+            properties.setProperty(key, newValue);
+        }
     }
 
     /**

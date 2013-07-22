@@ -149,6 +149,27 @@ public class Utils {
 		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
 	}
 
+    /**
+     * Utility function to get the current operating system.
+     *
+     * @author Larry Cao
+     *
+     * @return string representing the current operating system.
+     */
+    public static String getCurrentPlatform() {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("mac")) {
+            return "mac";
+        } else if (os.contains("nux")) {
+            return "linux";
+        } else if (os.contains("win")) {
+            return "windows";
+        } else {
+            return "unknown";
+        }
+    }
+
 	/**
 	 * Pair is a python-2-tuple lightweight equivalent for convenience.
 	 * 
@@ -197,4 +218,5 @@ public class Utils {
 			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
 		}
 	}
+
 }
