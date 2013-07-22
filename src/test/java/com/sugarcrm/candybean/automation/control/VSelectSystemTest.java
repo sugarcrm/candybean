@@ -50,7 +50,8 @@ public class VSelectSystemTest {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
 		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = "candybean.properties";
+		String candybeanPropsFilename = System.getProperty("candybean_config");
+		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
 		candybeanPropsPath += candybeanPropsFilename;
 		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
 		candybean = Candybean.getInstance(candybeanConfig);
