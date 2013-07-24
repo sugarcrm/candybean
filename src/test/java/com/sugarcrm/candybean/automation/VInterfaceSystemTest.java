@@ -66,8 +66,8 @@ public class VInterfaceSystemTest {
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		String url1 = "https://www.google.com/";
-		String url2 = "http://espn.go.com/";
-		String url3 = "http://www.sugarcrm.com/";
+		String url2 = "http://www.yahoo.com/";
+		String url3 = "http://www.reddit.com/";
 		iface.go(url1);
 		iface.go(url2);
 		iface.go(url3);
@@ -177,30 +177,42 @@ public class VInterfaceSystemTest {
 //	@Ignore
 	@Test
 	public void focusFrameTest() throws Exception {
-		String expDefStr = "Your Guide To Web Design";
+		String expDefStr = "The magic of iframes";
 		String expFrmStr = "http://www.littlewebhut.com/images/eightball.gif";
 		iface.go("http://www.littlewebhut.com/articles/html_iframe_example/");
-		String actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		String actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
+		
+		// switch focus to frame by index
 		iface.focusFrame(1);
 //		System.out.println("SOURCE:\n" + iface.wd.getPageSource());
 		String actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals(expFrmStr, actFrmStr);
+		
+		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
+		
+		// switch focus to frame by name
 		iface.focusFrame("imgbox");
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals(expFrmStr, actFrmStr);
+		
+		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
+		
+		// switch to focus by control
 		iface.focusFrame(new VControl(candybean, iface, Strategy.ID, "imgbox"));
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals(expFrmStr, actFrmStr);
+		
+		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
 	}
 
 //	@Ignore
