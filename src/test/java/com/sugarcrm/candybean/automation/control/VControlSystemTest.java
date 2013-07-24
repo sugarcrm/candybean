@@ -87,7 +87,8 @@ public class VControlSystemTest {
 		String expH2 = "HTML5 Introduction";
 		iface.go(w3Url);
 		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
-		String actH2 = iface.getControl(Strategy.TAG, "h1").getText().trim();
+		VControl h1Control = iface.getControl(Strategy.TAG, "h1");
+		String actH2 = h1Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
 //		String text2 = getText(int index);
 	}
@@ -97,8 +98,8 @@ public class VControlSystemTest {
 	public void getTextTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
-		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		String expChapterText = "W3Schools Home";
+		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		Assert.assertEquals(expChapterText, actChapterText);
 		w3Url = "http://www.echoecho.com/htmlforms12.htm";
 		iface.go(w3Url);
