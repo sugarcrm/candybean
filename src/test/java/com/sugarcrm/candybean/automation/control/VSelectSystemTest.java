@@ -106,6 +106,16 @@ public class VSelectSystemTest {
 		String expected = option;
 		Assert.assertEquals(expected, actual);
 	}
+
+    @Test
+    public void deselectTest() throws Exception {
+
+    }
+
+    @Test
+    public void hasSelected() throws Exception {
+
+    }
 	
 	@Test
 	public void getSelectedTest() throws Exception {
