@@ -99,11 +99,12 @@ public class VControl {
 		voodoo.log.info("Selenium: getting text for control: " + this.toString());
 //		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
 		String type = we.getAttribute("type");
-		if (type.equalsIgnoreCase("button") || type.equalsIgnoreCase("input")) {
-			return we.getAttribute("value");
-		} else {
-			return we.getText();
+		if (type != null) {
+			if (type.equalsIgnoreCase("button") || type.equalsIgnoreCase("input")) {
+				return we.getAttribute("value");
+			}
 		}
+		return we.getText();
 	}
 
 	/**
