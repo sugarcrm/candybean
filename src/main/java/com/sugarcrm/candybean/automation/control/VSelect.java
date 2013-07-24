@@ -138,6 +138,31 @@ public class VSelect extends VControl {
         dropDownList.selectByIndex(index);
     }
 
+    /**
+     * Selects all the options in the list by adding to the current selection
+     *
+     * @param options
+     * @throws Exception
+     */
+    public void select(ArrayList<String> options) throws Exception {
+        for (String text : options) {
+            select(text);
+        }
+    }
+
+    /**
+     * Selects all the options in the list by deselecting all and then selecting
+     * the list of options passed in.
+     *
+     * @param options
+     * @throws Exception
+     */
+    public void selectExact(ArrayList<String> options) throws Exception {
+        deselectAll();
+        for (String text : options) {
+            select(text);
+        }
+    }
 
     /**
      * Deselect an option by its visible text.
@@ -160,6 +185,17 @@ public class VSelect extends VControl {
         List<WebElement> options = dropDownList.getOptions();
         voodoo.log.info("Selenium: deselecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
         dropDownList.deselectByIndex(index);
+    }
+
+    /**
+     * Deselects all of the options in the list
+     *
+     * @param options
+     */
+    public void deselect(ArrayList<String> options) {
+        for (String text : options) {
+            deselect(text);
+        }
     }
 
     /**
@@ -194,43 +230,6 @@ public class VSelect extends VControl {
     }
 
     /**
-     * Selects all the options in the list by adding to the current selection
-     *
-     * @param options
-     * @throws Exception
-     */
-    public void selectMultiple(ArrayList<String> options) throws Exception {
-        for (String text : options) {
-            select(text);
-        }
-    }
-
-    /**
-     * Selects all the options in the list by deselecting all and then selecting
-     * the list of options passed in.
-     *
-     * @param options
-     * @throws Exception
-     */
-    public void selectExact(ArrayList<String> options) throws Exception {
-        deselectAll();
-        for (String text : options) {
-            select(text);
-        }
-    }
-
-    /**
-     * Deselects all of the options in the list
-     *
-     * @param options
-     */
-    public void deselectMultiple(ArrayList<String> options) {
-        for (String text : options) {
-            deselect(text);
-        }
-    }
-
-    /**
      * Determine whether a certain option is selected.
      *
      * @param text
@@ -252,7 +251,7 @@ public class VSelect extends VControl {
      * @param options
      * @return true if all the options passed in are selected
      */
-    public boolean hasSelectedMultiple(ArrayList<String> options) {
+    public boolean hasSelected(ArrayList<String> options) {
         for (String text : options) {
             if (!hasSelected(text)) {
                 return false;
