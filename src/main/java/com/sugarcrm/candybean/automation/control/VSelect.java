@@ -28,17 +28,19 @@ import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
- * VSelect is a control that allows for interaction with the SELECT element.
+ * VSelect is a control that represents and allows for interaction with the SELECT element.
  *
  * @author cwarmbold
  */
 
 public class VSelect extends VControl {
+
+    private Select select;
+
+    private boolean isMultiple;
 
 	/**
 	 * Instantiate a VSelect object.
@@ -47,11 +49,13 @@ public class VSelect extends VControl {
 	 * @param iface	  {@link VInterface} for this run
 	 * @param strategy  {@link Strategy} used to search for element
 	 * @param hook		  value of strategy to search for
-	 * @throws Exception	 <i>not thrown</i>
+	 * @throws Exception	 hook does not grab a SELECT
 	 */
 	public VSelect(Candybean voodoo, VInterface iface,
 						Strategy strategy, String hook) throws Exception {
 		super(voodoo, iface, strategy, hook);
+        select = new Select(super.we);
+        isMultiple = select.isMultiple();
 	}
 
 	/**
@@ -60,59 +64,18 @@ public class VSelect extends VControl {
 	 * @param voodoo	{@link Candybean} object for this run
 	 * @param iface	{@link VInterface} for this run
 	 * @param hook		{@link VHook} used to search for this element
-	 * @throws Exception	 <i>not thrown</i>
+	 * @throws Exception	 hook does not grab a SELECT
 	 */
 	public VSelect(Candybean voodoo, VInterface iface, VHook hook)
 		throws Exception {
 		super(voodoo, iface, hook);
+        select = new Select(super.we);
+        isMultiple = select.isMultiple();
 	}
 
-	/**
-	 * Get the text of the currently selected option.
-	 *
-	 * <p>If this is a multiple select, only the text of the first
-	 * selected option is returned.</p>
-	 *
-	 * @return text of the currently selected option
-	 * @throws Exception (NullPointerException) if no option is
-	 *			  selected or (UnexpectedTagNameException) if the element
-	 *			  found is not a SELECT.
-	 */
-	public String getSelected() throws Exception {
-		super.voodoo.log.info("Selenium: getting selected value from control: " + this.toString());
-		Select dropDownList = new Select(super.we);
-		WebElement selectedOption = dropDownList.getFirstSelectedOption();
-		return selectedOption.getText();
-	}
-
-	/**
-	 * Returns the boolean value of the control's selection state.
-	 *
-	 * @return	boolean true if the control is selected
-	 * @throws Exception
-	 */
-	public boolean isSelected() throws Exception {
-		super.voodoo.log.info("Selenium: returns true if control: " + this.toString() + " is selected");
-		return super.we.isSelected();
-	}
-
-	/**
-	 * Toggle the state of a CHECKBOX or RADIO element.
-	 *
-	 * <p>N.b. This method operates on CHECKBOX or RADIO elements rather than
-	 * SELECT elements.</p>
-	 *
-	 * @param isSelected	desired state of checkbox or radio
-	 * @throws Exception 	if element is not found or if element is not a checkbox or radio
-	 */
-	public void select(boolean isSelected) throws Exception {
-		voodoo.log.info("Selenium: setting select: " + this.toString() + " to value: " + isSelected);
-		String type = super.we.getAttribute("type");
-		if (!type.equals("checkbox") && !type.equals("radio"))
-			throw new Exception("Selenium: web element is not a checkbox or radio.");
-		if (super.we.isSelected() != isSelected)
-			super.we.click();
-	}
+    public boolean isMultiple() {
+        return isMultiple;
+    }
 
 	/**
 	 * Select an option by its visible text.
@@ -120,10 +83,9 @@ public class VSelect extends VControl {
 	 * @param value  text of the option to be selected
 	 * @throws Exception	 if the element is not found
 	 */
-	public void select(String value) throws Exception {
+	public void select(String value) {
 		voodoo.log.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
-		Select dropDownList = new Select(super.we);
-		dropDownList.selectByVisibleText(value);
+		select.selectByVisibleText(value);
 	}
 
     /**
@@ -132,10 +94,9 @@ public class VSelect extends VControl {
      * @param index index of option to be selected
      */
     public void select(int index) {
-        Select dropDownList = new Select(super.we);
-        List<WebElement> options = dropDownList.getOptions();
-        voodoo.log.info("Selenium: selecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
-        dropDownList.selectByIndex(index);
+        List<WebElement> options = select.getOptions();
+        voodoo.log.info("Selenium: selecting value '" + options.get(index).getText() + "' from control: " + this.toString());
+        select.selectByIndex(index);
     }
 
     /**
@@ -144,7 +105,7 @@ public class VSelect extends VControl {
      * @param options
      * @throws Exception
      */
-    public void select(ArrayList<String> options) throws Exception {
+    public void select(List<String> options) {
         for (String text : options) {
             select(text);
         }
@@ -157,10 +118,19 @@ public class VSelect extends VControl {
      * @param options
      * @throws Exception
      */
-    public void selectExact(ArrayList<String> options) throws Exception {
+    public void selectExact(List<String> options) {
         deselectAll();
         for (String text : options) {
             select(text);
+        }
+    }
+
+    /**
+     * Selects all of the elements if the select support multiple selection
+     */
+    public void selectAll() {
+        for (String option : getOptions()) {
+            select(option);
         }
     }
 
@@ -170,9 +140,8 @@ public class VSelect extends VControl {
      * @param value  text of the option to be deselected
      */
     public void deselect(String text) {
-        Select dropDownList = new Select(super.we);
-        voodoo.log.info("Selenium: deselecting value '" + text  +  "' from control: " + this.toString());
-        dropDownList.deselectByVisibleText(text);
+        voodoo.log.info("Selenium: deselecting value '" + text + "' from control: " + this.toString());
+        select.deselectByVisibleText(text);
     }
 
     /**
@@ -181,10 +150,9 @@ public class VSelect extends VControl {
      * @param index index of option to be deselected
      */
     public void deselect(int index) {
-        Select dropDownList = new Select(super.we);
-        List<WebElement> options = dropDownList.getOptions();
+        List<WebElement> options = select.getOptions();
         voodoo.log.info("Selenium: deselecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
-        dropDownList.deselectByIndex(index);
+        select.deselectByIndex(index);
     }
 
     /**
@@ -205,8 +173,18 @@ public class VSelect extends VControl {
      */
     public void deselectAll() {
         voodoo.log.info("Selenium: deselecting all values from control: " + this.toString());
-        Select dropDownList = new Select(super.we);
-        dropDownList.deselectAll();
+        select.deselectAll();
+    }
+
+    /**
+     * Get the text of the first selected option.
+     *
+     * @return text of the first selected option in this select
+     * (or the currently selected option in a normal select)
+     */
+    public String getFirstSelectedOption() {
+
+        return select.getFirstSelectedOption().getText();
     }
 
     /**
@@ -214,9 +192,13 @@ public class VSelect extends VControl {
      *
      * @return selected options
      */
-    public List<WebElement> getAllSelectedOptions() {
-        Select dropDownList = new Select(super.we);
-        return dropDownList.getAllSelectedOptions();
+    public List<String> getAllSelectedOptions() {
+        List<WebElement> elementOptions = select.getAllSelectedOptions();
+        List<String> textOptions = new ArrayList<>();
+        for (WebElement we : elementOptions) {
+            textOptions.add(we.getText());
+        }
+        return textOptions;
     }
 
     /**
@@ -224,9 +206,24 @@ public class VSelect extends VControl {
      *
      * @return options
      */
-    public List<WebElement> getOptions() {
-        Select dropDownList = new Select(super.we);
-        return dropDownList.getOptions();
+    public List<String> getOptions() {
+        List<WebElement> elementOptions = select.getOptions();
+        List<String> textOptions = new ArrayList<>();
+        for (WebElement we : elementOptions) {
+            textOptions.add(we.getText());
+        }
+        return textOptions;
+    }
+
+    /**
+     * Returns the boolean value of whether any options are selected.
+     *
+     * @return	boolean true if any options in the SELECT are selected
+     * @throws Exception
+     */
+    public boolean isSelected() throws Exception {
+        super.voodoo.log.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
+        return getAllSelectedOptions().size() > 0;
     }
 
     /**
@@ -235,14 +232,12 @@ public class VSelect extends VControl {
      * @param text
      * @return true if the option with given text is selected
      */
-    public boolean hasSelected(String text) {
-        List<WebElement> selected = getAllSelectedOptions();
-        for (WebElement we : selected) {
-            if (we.getText().equals(text)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isSelected(String text) {
+        return getAllSelectedOptions().contains(text);
+    }
+
+    public boolean isSelected(int index) {
+        return select.getOptions().get(index).isSelected();
     }
 
     /**
@@ -251,35 +246,20 @@ public class VSelect extends VControl {
      * @param options
      * @return true if all the options passed in are selected
      */
-    public boolean hasSelected(ArrayList<String> options) {
-        for (String text : options) {
-            if (!hasSelected(text)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isSelected(List<String> options) {
+        return getAllSelectedOptions().containsAll(options);
     }
 
     /**
      * Determine whether a specific configuration of options is selected
      *
      * @param options
-     * @return true if the set of selected options exactly matches the options parameter
+     * @return true if the set of selected options exactly matches those in options
      */
-    public boolean hasSelectedExact(ArrayList<String> options) {
-        List<WebElement> selected = getAllSelectedOptions();
-        Iterator<WebElement> i = selected.iterator();
-
-        while (i.hasNext()) {
-            WebElement we = i.next();
-            if (options.remove(we.getText())) {
-                i.remove();
-            } else {
-                return false;
-            }
-        }
-
-        return selected.isEmpty();
+    public boolean isSelectedExact(List<String> exactOptions) {
+        Set<String> selectedOptions = new HashSet<>(getAllSelectedOptions());
+        Set<String> exactOptionsSet = new HashSet<>(exactOptions);
+        return selectedOptions.equals(exactOptionsSet);
     }
 
     /**
@@ -287,33 +267,18 @@ public class VSelect extends VControl {
      * @param option
      * @return true if this contains the option
      */
-    public boolean hasOption(String option) {
-        List<WebElement> options = getOptions();
-        Iterator<WebElement> i = options.iterator();
-
-        while (i.hasNext()) {
-            WebElement we = i.next();
-            if (we.getText().equals(option)) {
-                return true;
-            }
-        }
-
-        return false;
+    public boolean containsOption(String option) {
+        return getOptions().contains(option);
     }
 
     /**
-     * Determine whether this select object contains a set of options
+     * Determine whether this select object contains a list of options
      *
      * @param options
      * @return true if all of the options are found
      */
-    public boolean hasOptions(ArrayList<String> options) {
-        for (String option : options) {
-            if (!hasOption(option)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean containsOption(List<String> options) {
+        return getOptions().containsAll(options);
     }
 
     /**
@@ -322,20 +287,10 @@ public class VSelect extends VControl {
      * @param optionsExact
      * @return true if the options in this select match the optionsExact parameter
      */
-    public boolean hasOptionsExact(ArrayList<String> optionsExact) {
-        List<WebElement> options = getOptions();
-        Iterator<WebElement> i = options.iterator();
-
-        while (i.hasNext()) {
-            WebElement we = i.next();
-            if (optionsExact.remove(we.getText())) {
-                i.remove();
-            } else {
-                return false;
-            }
-        }
-
-        return options.isEmpty();
+    public boolean containsOptionExact(List<String> exactOptions) {
+        Set<String> allOptions = new HashSet<>(getOptions());
+        Set<String> exactOptionsSet = new HashSet<>(exactOptions);
+        return allOptions.equals(exactOptionsSet);
     }
 
 	@Override
