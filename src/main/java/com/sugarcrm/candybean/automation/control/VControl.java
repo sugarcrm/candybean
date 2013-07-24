@@ -90,14 +90,20 @@ public class VControl {
 	}
 
 	/**
-	 * Get the visible text of this element.
+	 * Get the visible text of this control.  If the control is a button, the value is returned.
 	 *
 	 * @return the visible text of this element
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public String getText() throws Exception {
 		voodoo.log.info("Selenium: getting text for control: " + this.toString());
-		return we.getText();
+//		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
+		String type = we.getAttribute("type");
+		if (type.equalsIgnoreCase("button") || type.equalsIgnoreCase("input")) {
+			return we.getAttribute("value");
+		} else {
+			return we.getText();
+		}
 	}
 
 	/**
