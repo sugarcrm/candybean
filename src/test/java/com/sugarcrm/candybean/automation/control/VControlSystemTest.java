@@ -100,8 +100,17 @@ public class VControlSystemTest {
 		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		String expChapterText = "W3Schools Home";
 		Assert.assertEquals(expChapterText, actChapterText);
-//		String text2 = getText(int index);
-	}
+		w3Url = "http://www.echoecho.com/htmlforms12.htm";
+		iface.go(w3Url);
+		actChapterText = iface.getControl(Strategy.NAME, "shorttext").getText(); // input type button
+		expChapterText = "Hit Me!";
+		Assert.assertEquals(expChapterText, actChapterText);
+		w3Url = "http://www.developphp.com/view_lesson.php?v=576";
+		iface.go(w3Url);
+		actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
+		expChapterText = "Generic Button";
+		Assert.assertEquals(expChapterText, actChapterText);
+}
 
 	@Ignore
 	@Test
