@@ -35,28 +35,27 @@ import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 public class VInterfaceSystemTest {
 
+	protected static File relResourcesDir;
 	protected static Candybean candybean;
 	protected static VInterface iface;
-	protected static final String curWorkDir = System.getProperty("user.dir");
-	protected static final String relPropsPath = curWorkDir + File.separator + "src"
-			+ File.separator + "test" + File.separator + "resources";
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src"
-				+ File.separator + "test" + File.separator + "resources";
-		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_config");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
-		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
+				"src" + File.separator +
+				"test" + File.separator + 
+				"resources");
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		System.out.println("candybeanConfigPath: " + candybeanConfigStr);
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
@@ -94,7 +93,7 @@ public class VInterfaceSystemTest {
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
-		File screenshotFile = new File(relPropsPath + File.separator + "screenshot.png");
+		File screenshotFile = new File(relResourcesDir.getCanonicalPath() + "screenshot.png");
 		String url = "https://www.google.com/";
 		iface.go(url);
 		iface.screenshot(screenshotFile);
