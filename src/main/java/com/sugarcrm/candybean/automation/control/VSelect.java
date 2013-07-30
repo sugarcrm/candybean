@@ -53,9 +53,7 @@ public class VSelect extends VControl {
 	 */
 	public VSelect(Candybean voodoo, VInterface iface,
 						Strategy strategy, String hook) throws Exception {
-		super(voodoo, iface, strategy, hook);
-        select = new Select(super.we);
-        isMultiple = select.isMultiple();
+		this(voodoo, iface, new VHook(strategy, hook));
 	}
 
 	/**
@@ -78,10 +76,9 @@ public class VSelect extends VControl {
     }
 
 	/**
-	 * Select an option by its visible text.
-	 *
+	 * Select all options that display text matching the argument.
+     *
 	 * @param value  text of the option to be selected
-	 * @throws Exception	 if the element is not found
 	 */
 	public void select(String value) {
 		voodoo.log.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
@@ -103,23 +100,8 @@ public class VSelect extends VControl {
      * Selects all the options in the list by adding to the current selection
      *
      * @param options
-     * @throws Exception
      */
     public void select(List<String> options) {
-        for (String text : options) {
-            select(text);
-        }
-    }
-
-    /**
-     * Selects all the options in the list by deselecting all and then selecting
-     * the list of options passed in.
-     *
-     * @param options
-     * @throws Exception
-     */
-    public void selectExact(List<String> options) {
-        deselectAll();
         for (String text : options) {
             select(text);
         }
@@ -137,7 +119,7 @@ public class VSelect extends VControl {
     /**
      * Deselect an option by its visible text.
      *
-     * @param value  text of the option to be deselected
+     * @param text  text of the option to be deselected
      */
     public void deselect(String text) {
         voodoo.log.info("Selenium: deselecting value '" + text + "' from control: " + this.toString());
@@ -167,9 +149,8 @@ public class VSelect extends VControl {
     }
 
     /**
-     * Deselect an option by a given index.
+     * Deselect all options.
      *
-     * @param index index of option to be deselected
      */
     public void deselectAll() {
         voodoo.log.info("Selenium: deselecting all values from control: " + this.toString());
@@ -218,10 +199,9 @@ public class VSelect extends VControl {
     /**
      * Returns the boolean value of whether any options are selected.
      *
-     * @return	boolean true if any options in the SELECT are selected
-     * @throws Exception
+     * @return	boolean true if any options in the select element are selected
      */
-    public boolean isSelected() throws Exception {
+    public boolean isSelected() {
         super.voodoo.log.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
         return getAllSelectedOptions().size() > 0;
     }
@@ -236,6 +216,12 @@ public class VSelect extends VControl {
         return getAllSelectedOptions().contains(text);
     }
 
+    /**
+     * Determine whether a certain option is selected at a certain index.
+     *
+     * @param index
+     * @return true if the option at the index is selected
+     */
     public boolean isSelected(int index) {
         return select.getOptions().get(index).isSelected();
     }
@@ -247,50 +233,25 @@ public class VSelect extends VControl {
      * @return true if all the options passed in are selected
      */
     public boolean isSelected(List<String> options) {
-        return getAllSelectedOptions().containsAll(options);
+        return isSelected(options, false);
     }
 
     /**
-     * Determine whether a specific configuration of options is selected
+     * Determine whether a specific configuration of options is selected.
+     * If the exclusive flag is set to true then this method will return false
+     * if the selected options don't exactly match the list of options passed in.
      *
      * @param options
-     * @return true if the set of selected options exactly matches those in options
+     * @return true if the options are selected
      */
-    public boolean isSelectedExact(List<String> exactOptions) {
-        Set<String> selectedOptions = new HashSet<>(getAllSelectedOptions());
-        Set<String> exactOptionsSet = new HashSet<>(exactOptions);
-        return selectedOptions.equals(exactOptionsSet);
-    }
-
-    /**
-     * Determine whether this select object contains a specified option
-     * @param option
-     * @return true if this contains the option
-     */
-    public boolean containsOption(String option) {
-        return getOptions().contains(option);
-    }
-
-    /**
-     * Determine whether this select object contains a list of options
-     *
-     * @param options
-     * @return true if all of the options are found
-     */
-    public boolean containsOption(List<String> options) {
-        return getOptions().containsAll(options);
-    }
-
-    /**
-     * Determine whether this select object contains the exact set of options
-     *
-     * @param optionsExact
-     * @return true if the options in this select match the optionsExact parameter
-     */
-    public boolean containsOptionExact(List<String> exactOptions) {
-        Set<String> allOptions = new HashSet<>(getOptions());
-        Set<String> exactOptionsSet = new HashSet<>(exactOptions);
-        return allOptions.equals(exactOptionsSet);
+    public boolean isSelected(List<String> options, boolean exclusive) {
+        if (exclusive) {
+            Set<String> selectedOptions = new HashSet<>(getAllSelectedOptions());
+            Set<String> exactOptionsSet = new HashSet<>(options);
+            return selectedOptions.equals(exactOptionsSet);
+        } else {
+            return getAllSelectedOptions().containsAll(options);
+        }
     }
 
 	@Override
