@@ -96,7 +96,7 @@ public class VSelectSystemTest {
 
         select.select(options);
 
-        Assert.assertTrue(select.isSelectedExact(options));
+        Assert.assertTrue(select.isSelected(options, true));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class VSelectSystemTest {
 
         select.selectAll();
 
-        Assert.assertTrue(select.isSelectedExact(select.getOptions()));
+        Assert.assertTrue(select.isSelected(select.getOptions(), true));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class VSelectSystemTest {
         select.deselect("Green Pepper");
         select.deselect("Mushrooms");
 
-        Assert.assertTrue(select.isSelectedExact(selected));
+        Assert.assertTrue(select.isSelected(selected, true));
     }
 
     @Test
@@ -168,27 +168,6 @@ public class VSelectSystemTest {
         select.deselectAll();
 
         Assert.assertFalse(select.isSelected());
-    }
-
-    @Test
-    public void containsOptionTest() throws Exception {
-        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
-        iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
-
-        Assert.assertTrue(select.containsOption("Bacon"));
-
-        Assert.assertFalse(select.containsOption("Sausage"));
-
-        ArrayList<String> optionList = new ArrayList<>();
-
-        optionList.add("Anchovies");
-        optionList.add("Mushrooms");
-        optionList.add("Ham");
-        optionList.add("Cheese");
-
-        Assert.assertTrue(select.containsOption(optionList));
-
     }
 	
 	@Test
