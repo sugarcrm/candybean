@@ -39,6 +39,7 @@ import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
 //import com.sugarcrm.candybean.automation.VHook;
@@ -47,6 +48,8 @@ import com.sugarcrm.candybean.configuration.Configuration;
 //import static org.junit.Assert.assertEquals;
 
 public class VControlSystemTest {
+	
+	protected static File relResourcesDir;
 	protected static Candybean candybean;
 	protected static VInterface iface;
 		
@@ -55,13 +58,13 @@ public class VControlSystemTest {
 
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_config");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
-		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
+				"src" + File.separator +
+				"test" + File.separator + 
+				"resources" + File.separator);
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();

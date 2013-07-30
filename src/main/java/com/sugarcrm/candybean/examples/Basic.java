@@ -28,9 +28,13 @@
 
 package com.sugarcrm.candybean.examples;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Basic example class.
@@ -73,10 +77,11 @@ public class Basic {
 
 	/**
 	 * Run the basic example code.
+	 * @throws Exception 
 	 */
 
 	@Example
-	public void runExample()  {
+	public void runExample() throws Exception  {
 		Configuration c;
 		Candybean v = null;
 		VInterface i = null;
@@ -91,8 +96,14 @@ public class Basic {
 		 * getting the path to this.  Hard-coded paths are fragile
 		 * and almost certainly wrong.
 		 */
-		c = new Configuration("/home/jon/w/VDD2/Voodoo2/src/test/resources/voodoo.properties");
-
+		File relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
+				"src" + File.separator +
+				"test" + File.separator + 
+				"resources" + File.separator);
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + "candybean.config";
+		c = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		
 		try {
 			v = Candybean.getInstance(c);
 		} catch (Exception e) {
