@@ -89,6 +89,11 @@ public class VControl {
 		else return value;
 	}
 
+	public String getSource() throws Exception {
+		voodoo.log.info("Selenium: getting source for control: " + this.toString());
+		return (String)((JavascriptExecutor)iface.wd).executeScript("return arguments[0].innerHTML;", this.we);
+	}
+
 	/**
 	 * Get the visible text of this control.  If the control is a button, the value is returned.
 	 *
@@ -190,10 +195,10 @@ public class VControl {
 	 * @param timeout		an explicit timeout in ms (must be less than configured implicit timeout to be triggered)
 	 * @throws Exception
 	 */
-//	@Deprecated
-	public void pauseUntilVisible(int timeout_ms) throws Exception {
+	public VControl pauseUntilVisible(int timeout_ms) throws Exception {
 		voodoo.log.info("Selenium: waiting for " + timeout_ms + "ms on visibility of control: " + this.toString());
 		(new WebDriverWait(this.iface.wd, timeout_ms)).until(ExpectedConditions.visibilityOf(this.we));
+		return this;
 //		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
 //		WebElement we = wait.until(ExpectedConditions.visibilityOf(this.we));
 //		final WebElement we = this.getWebElement(this.getBy(this.hook));		

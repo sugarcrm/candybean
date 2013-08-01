@@ -93,7 +93,7 @@ public class VInterfaceSystemTest {
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
-		File screenshotFile = new File(relResourcesDir.getCanonicalPath() + "screenshot.png");
+		File screenshotFile = new File(relResourcesDir.getCanonicalPath() + File.separator + "screenshot.png");
 		String url = "https://www.google.com/";
 		iface.go(url);
 		iface.screenshot(screenshotFile);
