@@ -247,6 +247,36 @@ public class VControlSystemTest {
 //		scroll(int index);
 	}
 
+//    @Test
+//    public void checkBoxSelectTest() throws Exception {
+//
+//        // Checking checkbox select
+//        String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+//        iface.go(w3Url);
+//        VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
+//        Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(0), select.isSelected(0), false);
+//        select.select("I have a bike");
+//        Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
+//
+//        // Exception should throw for non-checkbox element
+//        //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
+//        //candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
+//
+//        // Checking getAttributeValue()
+////		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+////		String actText = control.getAttribute("type");
+////        String expText = "text";
+////        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
+////
+////		String actSize = control.getAttribute("size");
+////        String expSize = "20";
+////        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
+////
+////		String actName = control.getAttribute("name");
+////        String expName = "firstname";
+////        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
+//    }
+
 //	@Ignore
 	@Test
 	public void sendStringTest() throws Exception {
