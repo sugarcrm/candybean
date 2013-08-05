@@ -142,7 +142,11 @@ public class Configuration {
         } catch (IOException e) {
             logger.warning("Unable to load " + file.getCanonicalPath() + ".\n");
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            logger.warning("File path is null.\n");
+            e.printStackTrace();
         }
+
     }
 
     private void load(InputStream in) throws IOException {
@@ -184,7 +188,6 @@ public class Configuration {
             logger.warning("Unable to store " + file.getCanonicalPath() + ".\n");
             e.printStackTrace();
         }
-
     }
 
     /**
