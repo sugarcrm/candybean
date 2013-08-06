@@ -65,35 +65,9 @@ public class Configuration {
     /**
      * @param propertiesPath
      */
-    public Configuration(String propertiesPath) {
+    public Configuration(File configFile) throws Exception {
         properties = new Properties();
-        load(propertiesPath);
-        String platform = Utils.getCurrentPlatform();
-        Enumeration e = properties.propertyNames();
-
-        while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
-            String value = properties.getProperty(key);
-
-            JSONParser parser = new JSONParser();
-
-            String newValue;
-
-            try {
-                Object valueObject = parser.parse(value);
-                //get value for current platform key
-                if (valueObject instanceof Map) {
-                    JSONObject valueMap = (JSONObject) valueObject;
-                    newValue = (String) valueMap.get(platform);
-                } else {
-                    newValue = value;
-                }
-            } catch (ParseException pe) {
-                //parsedString is not a smartValue/json object.
-                newValue = value;
-            }
-            properties.setProperty(key, newValue);
-        }
+        this.load(configFile);
     }
 
     /**
@@ -145,45 +119,59 @@ public class Configuration {
      * This is a newly added method (without defaultValue) to retrieve a path
      * from the properties file and safely return it after calling Utils.adjustPath
      *
-     * @author wli
-     *
      * @param key
      * @return adjusted path or null if it does not exist.
+     * @throws Exception 
      */
-    public String getPathValue(String key) {
+    public String getPathValue(String key) throws Exception {
         String pathValue = getValue(key);
         return Utils.adjustPath(pathValue);
     }
 
-    /**
-     * Reads a property list (key and element pairs) from the input byte stream. Loading using an InputStream
-     * is faster than with a Reader.
-     *
-     * @param in
-     */
-    public void load(InputStream in) throws IOException {
-        properties.load(in);
-    }
-
-    /**
-     * NOTE: This method takes in a path of type String instead of a FileInputStream object
-     * to add path robustness by calling 'Utils.adjustPath' and then the actual load method
-     *
-     * @author wli
-     *
-     * @param filePath
-     */
-    private void load(String filePath) {
-        String adjustedPath = Utils.adjustPath(filePath);
-        try {
-            load(new FileInputStream(new File(adjustedPath)));
+    public void load(File file) throws Exception {
+    	try {
+        	if (file == null) {
+        		throw new FileNotFoundException("Given file is null.");
+        	} else {
+        		this.load(new FileInputStream(file));
+        	}
         } catch (FileNotFoundException e) {
             // get file name using substring of adjustedPath that starts after the last /
-            logger.warning(adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + " not found.\n");
+            logger.warning(file.getCanonicalPath() + " not found.\n");
             e.printStackTrace();
         } catch (IOException e) {
-            logger.warning("Unable to load " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
+            logger.warning("Unable to load " + file.getCanonicalPath() + ".\n");
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            logger.warning("File path is null.\n");
+            e.printStackTrace();
+        }
+
+    }
+
+    private void load(InputStream in) throws IOException {
+        this.properties.load(in);
+        String platform = Utils.getCurrentPlatform();
+        Enumeration<?> e = properties.propertyNames();
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            String value = properties.getProperty(key);
+            JSONParser parser = new JSONParser();
+            String newValue;
+            try {
+                Object valueObject = parser.parse(value);
+                //get value for current platform key
+                if (valueObject instanceof Map) {
+                    JSONObject valueMap = (JSONObject) valueObject;
+                    newValue = (String) valueMap.get(platform);
+                } else {
+                    newValue = value;
+                }
+            } catch (ParseException pe) {
+                //parsedString is not a smartValue/json object.
+                newValue = value;
+            }
+            properties.setProperty(key, newValue);
         }
     }
 
@@ -193,16 +181,13 @@ public class Configuration {
      *
      * @param filePath
      */
-    public void store(String filePath) {
-        String adjustedPath = Utils.adjustPath(filePath);
-        File configFile = new File(adjustedPath);
+    public void store(File file) throws Exception {
         try {
-            store(new FileOutputStream(configFile));
+            store(new FileOutputStream(file));
         } catch (IOException e) {
-            logger.warning("Unable to store " + adjustedPath.substring(adjustedPath.lastIndexOf('/') + 1) + ".\n");
+            logger.warning("Unable to store " + file.getCanonicalPath() + ".\n");
             e.printStackTrace();
         }
-
     }
 
     /**
