@@ -39,6 +39,7 @@ import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
 //import com.sugarcrm.candybean.automation.VHook;
@@ -47,6 +48,8 @@ import com.sugarcrm.candybean.configuration.Configuration;
 //import static org.junit.Assert.assertEquals;
 
 public class VControlSystemTest {
+	
+	protected static File relResourcesDir;
 	protected static Candybean candybean;
 	protected static VInterface iface;
 		
@@ -55,13 +58,13 @@ public class VControlSystemTest {
 
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_config");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
-		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
+				"src" + File.separator +
+				"test" + File.separator + 
+				"resources" + File.separator);
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
@@ -243,6 +246,36 @@ public class VControlSystemTest {
 //		scroll();
 //		scroll(int index);
 	}
+
+//    @Test
+//    public void checkBoxSelectTest() throws Exception {
+//
+//        // Checking checkbox select
+//        String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+//        iface.go(w3Url);
+//        VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
+//        Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(0), select.isSelected(0), false);
+//        select.select("I have a bike");
+//        Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
+//
+//        // Exception should throw for non-checkbox element
+//        //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
+//        //candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
+//
+//        // Checking getAttributeValue()
+////		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+////		String actText = control.getAttribute("type");
+////        String expText = "text";
+////        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
+////
+////		String actSize = control.getAttribute("size");
+////        String expSize = "20";
+////        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
+////
+////		String actName = control.getAttribute("name");
+////        String expName = "firstname";
+////        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
+//    }
 
 //	@Ignore
 	@Test

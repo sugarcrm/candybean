@@ -38,12 +38,13 @@ public class VHookUnitTest {
 	@Test
 	public void testGetHooks() {
 		try {
-			String currentWorkingPath = System.getProperty("user.dir") + File.separator;
-			String hooksFilePath = currentWorkingPath + "testutils.hooks";
-//			System.out.println("Hooks file path: " + hooksFilePath);
-
+			File relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
+					"src" + File.separator +
+					"test" + File.separator + 
+					"resources" + File.separator);
 			// Resource setup
-			File hooksFile = new File(hooksFilePath);
+			File hooksFile = new File(relResourcesDir + File.separator + "testutils.hooks");
+//			System.out.println("Hooks file path: " + hooksFile.getCanonicalPath());
 			hooksFile.createNewFile();
 			Properties hooksProps = new Properties();
 			String hook1Name = "hook1name";

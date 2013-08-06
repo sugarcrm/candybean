@@ -76,7 +76,7 @@ public class ConfigurationUnitTest {
 
 //    @Ignore
     @Test
-    public void testLoadAndStore() {
+    public void testLoadAndStore() throws Exception {
     	try {
             config.setValue("key1", "value1");
 	        config.setValue("key2", "value2");
@@ -93,7 +93,7 @@ public class ConfigurationUnitTest {
             reader.close();
 	        Configuration loadConfig = new Configuration();
 	        assertEquals(0, loadConfig.getPropertiesCopy().keySet().size());
-            loadConfig.load(new FileInputStream(configFile));
+            loadConfig.load(configFile);
 	        assertEquals("value1", loadConfig.getValue("key1"));
 	        configFile.delete();
         } catch (IOException e) {
