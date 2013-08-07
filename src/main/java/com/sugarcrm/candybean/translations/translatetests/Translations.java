@@ -81,21 +81,20 @@ public class Translations {
 	 * @param configPath
 	 */
 	private static void Translate(String configPath) {
-		Configuration config = new Configuration();
+		Configuration config = new Configuration(configPath);
 		try {
-			config.load(configPath);
 
-			String dbServer = config
-					.getProperty("translations.database_server");
-			String dbName = config.getProperty("translations.database_name");
-			String dbUser = config.getProperty("translations.database_user");
-			String dbPass = config.getProperty("translations.database_pass");
+
+			String dbServer = config.getValue("translations.database_server");
+			String dbName = config.getValue("translations.database_name");
+			String dbUser = config.getValue("translations.database_user");
+			String dbPass = config.getValue("translations.database_pass");
 			dbConnection = Utils.getDBConnection(dbServer, dbName, dbUser,
 					dbPass);
 
-			language = config.getProperty("translations.language");
-			String testPath = config.getProperty("translations.test_path");
-			String outputPath = config.getProperty("translations.output_path");
+			language = config.getValue("translations.language");
+			String testPath = config.getValue("translations.test_path");
+			String outputPath = config.getValue("translations.output_path");
 
 			recursivelyTranslateFilesInDirectory(testPath, outputPath);
 			

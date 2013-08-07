@@ -29,15 +29,13 @@ import org.junit.Test;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
 
-
 public class CandybeanUnitTest {
 
 	@Ignore
 	@Test
 	public void testVoodooLog() throws Exception {
-		Configuration config = new Configuration();
-		File testPropsFile = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "test.properties");
-		config.load(testPropsFile);
+		String testPropsFilePath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "test.properties";
+		Configuration config = new Configuration(testPropsFilePath);
 		Candybean voodoo = Candybean.getInstance(config);
 		voodoo.log.info("TEST VOODOO LOG");
 	}

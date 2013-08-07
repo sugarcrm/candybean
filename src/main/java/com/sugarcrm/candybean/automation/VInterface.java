@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.io.File;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,10 @@ import javax.swing.JOptionPane;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.HasTouchScreen;
+import org.openqa.selenium.TouchScreen;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -46,6 +50,10 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteTouchScreen;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
@@ -138,7 +146,7 @@ public class VInterface {
 	 * @throws Exception		if type is undefined during instantiation
 	 */
 	public void start() throws Exception {
-		this.iType = this.parseInterfaceType(this.config.getProperty("automation.interface", "chrome"));
+		this.iType = this.parseInterfaceType(this.config.getValue("automation.interface", "chrome"));
 		this.start(this.iType);
 	}
 
@@ -519,13 +527,14 @@ public class VInterface {
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
-		WebDriver wd = null;
-		switch (iType) {
+        DesiredCapabilities capabilities;
+        WebDriver wd = null;
+        switch (iType) {
 		case FIREFOX:
-			String profileName = this.config.getProperty("browser.firefox_profile", "default");
-			String ffBinaryPath = this.config.getProperty("browser.firefox_binary", "/Applications/Firefox.app/Contents/MacOS/firefox");
-			FirefoxProfile ffProfile = (new ProfilesIni())
-					.getProfile(profileName);
+			String profileName = this.config.getValue("browser.firefox_profile", "default");
+			String ffBinaryPath = this.config.getPathValue("browser.firefox_binary");
+			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
+//			ffProfile.setEnableNativeEvents(false);
 			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
 			// if (System.getProperty("headless") != null) {
 			// FirefoxBinary ffBinary = new FirefoxBinary();//new
@@ -539,10 +548,10 @@ public class VInterface {
 			break;
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
-			String chromeDriverLogPath = this.config.getProperty("browser.chrome_driver_log_path");
+			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
 			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-			String chromeDriverPath = this.config.getPathProperty("browser.chrome_driver_path");
+			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
 			System.out.println("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -555,10 +564,25 @@ public class VInterface {
 			throw new Exception("Selenium: ie browser not yet supported.");
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
-		default:
+        case ANDROID:
+            capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
+            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            break;
+        case IOS:
+            capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+            capabilities.setCapability(CapabilityType.VERSION, "6.0");
+            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
+            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            break;
+        default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
-		long implicitWait = Long.parseLong(config.getProperty("perf.implicit_wait_seconds"));
+		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
@@ -566,7 +590,20 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-	
+
+    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+        private RemoteTouchScreen touch;
+
+        public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
+            super(remoteAddress, desiredCapabilities);
+            touch = new RemoteTouchScreen(getExecuteMethod());
+        }
+
+        public TouchScreen getTouch() {
+            return touch;
+        }
+    }
+
 	// ANDROID ROBOTIUM FUNCTIONALITY
 	//	private AndroidInterface getAndroidControl() throws Exception {
 	//		AndroidInterface vac = new AndroidInterface(this.props);

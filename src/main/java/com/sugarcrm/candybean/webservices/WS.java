@@ -57,7 +57,7 @@ public class WS {
 		String value = null;
 		switch (type) {
 			case JSON:
-				JSONObject jsonObj = (JSONObject)JSONValue.parse(body);
+//				JSONObject jsonObj = (JSONObject)JSONValue.parse(body);
 				//TODO
 				break;
 			case XML:

@@ -21,13 +21,13 @@
  */
 package com.sugarcrm.candybean.android;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+//import static org.junit.Assert.assertTrue;
+//
+//import org.junit.After;
+//import org.junit.AfterClass;
+//import org.junit.Before;
+//import org.junit.BeforeClass;
+//import org.junit.Test;
 
 public class CalculatorTest_0001 extends AndroidSugarTest {
 

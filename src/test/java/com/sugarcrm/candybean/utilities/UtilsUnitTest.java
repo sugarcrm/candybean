@@ -22,7 +22,6 @@
 package com.sugarcrm.candybean.utilities;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import org.junit.Assert;
 
 import org.junit.Test;
@@ -51,20 +50,20 @@ public class UtilsUnitTest {
 			File propsFile = new File(propsFilePath);
 			propsFile.createNewFile();
 			Configuration voodooConfig = new Configuration();
-			voodooConfig.setProperty(propKey, propConfigVal);
-			voodooConfig.setProperty(propSysKey, propConfigVal);
+			voodooConfig.setValue(propKey, propConfigVal);
+			voodooConfig.setValue(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
-			voodooConfig.store(new FileOutputStream(propsFile), null);
+//			voodooConfig.store(new FileOutputStream(propsFile), null);
 			//			JOptionPane.showInputDialog("pause");
 
 			// Test
-			String actualDefaultVal = voodooConfig.getProperty("NULL", propDefaultVal);
+			String actualDefaultVal = voodooConfig.getValue("NULL", propDefaultVal);
 			//			System.out.println("actualDefaultVal: " + actualDefaultVal);
 			Assert.assertEquals("Expected default value.", propDefaultVal, actualDefaultVal);
-			String actualConfigVal = voodooConfig.getProperty(propKey, propDefaultVal);
+			String actualConfigVal = voodooConfig.getValue(propKey, propDefaultVal);
 			//			System.out.println("actualConfigVal: " + actualConfigVal);
 			Assert.assertEquals("Expected configuration value.", propConfigVal, actualConfigVal);
-			String actualSysVal = voodooConfig.getProperty(propSysKey, propDefaultVal);
+			String actualSysVal = voodooConfig.getValue(propSysKey, propDefaultVal);
 			//			System.out.println("actualSysVal: " + actualSysVal);
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
@@ -88,17 +87,17 @@ public class UtilsUnitTest {
 
 	@Test
 	public void testAdjustPath() {
+		String c = File.separator;
 		String path1 = "~/computer\\  science\\Hello\\";
-		String expected1 = "~/computer\\  science/Hello/";
+		String expected1 = "~" + c + "computer\\  science" + c + "Hello" + c;
 		String path2 = "c:\\computer\\\"science\"\\";
-		String expected2 = "c:/computer/\"science\"/";
+		String expected2 = "c:" + c + "computer" + c + "\"science\"" + c;
 		String path3 = "\\\"computer science\"\\";
-		String expected3 = "/\"computer science\"/";
+		String expected3 = c + "\"computer science\"" + c;
 		String path4 = "cd /computer\\ science\\";
-		String expected4 = "cd /computer\\ science/";
+		String expected4 = "cd " + c + "computer\\ science" + c;
 		String path5 = "computer\\ \\ \\ \\ \\ science/";
-		String expected5 = "computer\\ \\ \\ \\ \\ science/";
-
+		String expected5 = "computer\\ \\ \\ \\ \\ science" + c;
 		Assert.assertEquals(expected1, Utils.adjustPath(path1));
 		Assert.assertEquals(expected2, Utils.adjustPath(path2));
 		Assert.assertEquals(expected3, Utils.adjustPath(path3));

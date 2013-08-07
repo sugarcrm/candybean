@@ -49,13 +49,14 @@ public class VInterfaceSystemTest {
 
 	@BeforeClass
 	public static void first() throws Exception {
+		String curWorkDir = System.getProperty("user.dir");
+		String relPropsPath = curWorkDir + File.separator + "src"
+				+ File.separator + "test" + File.separator + "resources";
 		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_prop_filename");
-		if (candybeanPropsFilename == null)
-			candybeanPropsFilename = "candybean-mac.properties";
+		String candybeanPropsFilename = System.getProperty("candybean_config");
+		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
 		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration();
-		candybeanConfig.load(candybeanPropsPath);
+		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
@@ -65,8 +66,8 @@ public class VInterfaceSystemTest {
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		String url1 = "https://www.google.com/";
-		String url2 = "http://espn.go.com/";
-		String url3 = "http://www.sugarcrm.com/";
+		String url2 = "http://www.yahoo.com/";
+		String url3 = "http://www.reddit.com/";
 		iface.go(url1);
 		iface.go(url2);
 		iface.go(url3);
@@ -176,30 +177,42 @@ public class VInterfaceSystemTest {
 //	@Ignore
 	@Test
 	public void focusFrameTest() throws Exception {
-		String expDefStr = "Your Guide To Web Design";
+		String expDefStr = "The magic of iframes";
 		String expFrmStr = "http://www.littlewebhut.com/images/eightball.gif";
 		iface.go("http://www.littlewebhut.com/articles/html_iframe_example/");
-		String actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		String actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
+		
+		// switch focus to frame by index
 		iface.focusFrame(1);
 //		System.out.println("SOURCE:\n" + iface.wd.getPageSource());
 		String actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals(expFrmStr, actFrmStr);
+		
+		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
+		
+		// switch focus to frame by name
 		iface.focusFrame("imgbox");
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals(expFrmStr, actFrmStr);
+		
+		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
+		
+		// switch to focus by control
 		iface.focusFrame(new VControl(candybean, iface, Strategy.ID, "imgbox"));
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
-		assertEquals("Expecting: " + expFrmStr + ", actual: " + actFrmStr, expFrmStr, actFrmStr);
+		assertEquals(expFrmStr, actFrmStr);
+		
+		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "p").getText();
-		assertEquals("Expecting: " + expDefStr + ", actual: " + actDefStr, expDefStr, actDefStr);
+		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		assertEquals(expDefStr, actDefStr);
 	}
 
 //	@Ignore
@@ -215,29 +228,24 @@ public class VInterfaceSystemTest {
 		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
 		
 		iface.go(expWindow0URL);
-		
+	
 		// Check assumptions
-		String actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow0Title, actWindowTitle);
-//		iface.interact(iface.getWindowsString());
+		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Click pops-up window titled "Tryit Editor v1.8"
 		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Verify title without switching
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Verify title with switching
 		iface.focusWindow(1);
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow1Title, actWindowTitle);
+		assertEquals(expWindow1Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window which should auto-focus to previous window; verify title
 		iface.closeWindow();
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow0Title, actWindowTitle);
+		assertEquals(expWindow0Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pop-up window titled "Tryit Editor v1.8"
@@ -252,8 +260,7 @@ public class VInterfaceSystemTest {
 		
 		// Verify title with (not) switching to current window by index
 		iface.focusWindow(0);
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow2Title, actWindowTitle);
+		assertEquals(expWindow2Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 				
 		// Verify URL with switching to window by title
@@ -264,8 +271,7 @@ public class VInterfaceSystemTest {
 		
 		// Verify URL with switching to window by URL
 		iface.focusWindow(expWindow3URL);
-		actWindowTitle = iface.getControl(Strategy.TAG, "title").getText();
-		assertEquals(expWindow3Title, actWindowTitle);
+		assertEquals(expWindow3Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window and revert to previous window (1 index); verify URL

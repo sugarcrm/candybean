@@ -83,8 +83,7 @@ public class Basic {
 
 		log("*** Example of basic VDD2 usage ***");
 
-		c = new Configuration();
-		/*
+        /*
 		 * This path should be replaced by the correct path to the
 		 * properties file.
 		 *
@@ -92,7 +91,7 @@ public class Basic {
 		 * getting the path to this.  Hard-coded paths are fragile
 		 * and almost certainly wrong.
 		 */
-		c.load("/home/jon/w/VDD2/Voodoo2/src/test/resources/voodoo.properties");
+		c = new Configuration("/home/jon/w/VDD2/Voodoo2/src/test/resources/voodoo.properties");
 
 		try {
 			v = Candybean.getInstance(c);

@@ -22,7 +22,6 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.io.File;
-import java.sql.Date;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -33,8 +32,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
@@ -43,14 +40,14 @@ import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
 
-//import com.sugarcrm.voodoo.IAutomation.Strategy;
-//import com.sugarcrm.voodoo.automation.VHook;
-//import com.sugarcrm.voodoo.IAutomation;
-//import com.sugarcrm.voodoo.Voodoo;
+//import com.sugarcrm.candybean.IAutomation.Strategy;
+//import com.sugarcrm.candybean.automation.VHook;
+//import com.sugarcrm.candybean.IAutomation;
+//import com.sugarcrm.candybean.Candybean;
 //import static org.junit.Assert.assertEquals;
 
 public class VControlSystemTest {
-	protected static Candybean voodoo;
+	protected static Candybean candybean;
 	protected static VInterface iface;
 		
 	@Rule
@@ -60,15 +57,13 @@ public class VControlSystemTest {
 	public static void first() throws Exception {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String voodooPropsPath = relPropsPath + File.separator;
-		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
-		if (voodooPropsFilename == null) voodooPropsFilename = "candybean-mac.properties";
-		voodooPropsPath += voodooPropsFilename;
-		
-		Configuration voodooConfig = new Configuration();
-		voodooConfig.load(voodooPropsPath);
-		voodoo = Candybean.getInstance(voodooConfig);
-		iface = voodoo.getInterface();
+		String candybeanPropsPath = relPropsPath + File.separator;
+		String candybeanPropsFilename = System.getProperty("candybean_config");
+		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
+		candybeanPropsPath += candybeanPropsFilename;
+		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		candybean = Candybean.getInstance(candybeanConfig);
+		iface = candybean.getInterface();
 		iface.start();
 	}
 
@@ -92,7 +87,8 @@ public class VControlSystemTest {
 		String expH2 = "HTML5 Introduction";
 		iface.go(w3Url);
 		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
-		String actH2 = iface.getControl(Strategy.TAG, "h1").getText().trim();
+		VControl h1Control = iface.getControl(Strategy.TAG, "h1");
+		String actH2 = h1Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
 //		String text2 = getText(int index);
 	}
@@ -102,12 +98,21 @@ public class VControlSystemTest {
 	public void getTextTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
-		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		String expChapterText = "W3Schools Home";
+		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
 		Assert.assertEquals(expChapterText, actChapterText);
-//		String text2 = getText(int index);
-	}
-	
+		w3Url = "http://www.echoecho.com/htmlforms12.htm";
+		iface.go(w3Url);
+		actChapterText = iface.getControl(Strategy.NAME, "shorttext").getText(); // input type button
+		expChapterText = "Hit Me!";
+		Assert.assertEquals(expChapterText, actChapterText);
+		w3Url = "http://www.developphp.com/view_lesson.php?v=576";
+		iface.go(w3Url);
+		actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
+		expChapterText = "Generic Button";
+		Assert.assertEquals(expChapterText, actChapterText);
+}
+
 	@Ignore
 	@Test
 	public void clickTest() throws Exception {
@@ -173,9 +178,9 @@ public class VControlSystemTest {
 	@Ignore
 	@Test
 	public void dragNDropTest2() throws Exception {
-//		voodoo.go("http://www.w3schools.com/html/html5_draganddrop.asp");
-//		voodoo.halt(new VHook(Strategy.ID, "drag1"));
-//		voodoo.dragNDrop(new VHook(Strategy.ID, "drag1"), new VHook(Strategy.ID, "div2"));
+//		candybean.go("http://www.w3schools.com/html/html5_draganddrop.asp");
+//		candybean.halt(new VHook(Strategy.ID, "drag1"));
+//		candybean.dragNDrop(new VHook(Strategy.ID, "drag1"), new VHook(Strategy.ID, "div2"));
 		
 //		WebDriver driver = new ChromeDriver();
 //		driver.get("http://www.w3schools.com/html/html5_draganddrop.asp");
@@ -183,11 +188,11 @@ public class VControlSystemTest {
 //			       .moveToElement(driver.findElement(By.id("div2")))
 //			       .release(driver.findElement(By.id("drag1")))
 //			       .build();
-//		voodoo.interact("wait for it...");
+//		candybean.interact("wait for it...");
 //		dragAndDrop.perform();
-//		voodoo.interact("wait for it...");
+//		candybean.interact("wait for it...");
 		
-//		voodoo.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
+//		candybean.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
 	}
 	
 	@Test

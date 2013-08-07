@@ -21,10 +21,8 @@
  */
 package com.sugarcrm.candybean.results;
 
-
-import java.util.Date;
-import java.util.HashSet;
-
+//import java.util.Date;
+//import java.util.HashSet;
 
 /**
  * @author Conrad Warmbold
@@ -34,18 +32,18 @@ import java.util.HashSet;
  */
 public class Result {
 	
-	public static enum Type { PASS, FAIL, ERROR, NOTE; }
-	
-	private String line;
-	private Date timeStamp;
-	private Result.Type type;
-	private String className;
-	private String testName;
-	private String failMessage;
-	private HashSet<String> tags;
+//	public static enum Type { PASS, FAIL, ERROR, NOTE; }
+//	
+//	private String line;
+//	private Date timeStamp;
+//	private Result.Type type;
+//	private String className;
+//	private String testName;
+//	private String failMessage;
+//	private HashSet<String> tags;
 
 	public Result(String line) { 
-		this.line = line;
+//		this.line = line;
 		// split line and store each; check for optional tokens
 	}
 }

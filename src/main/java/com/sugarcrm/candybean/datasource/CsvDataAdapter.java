@@ -94,7 +94,7 @@ public class CsvDataAdapter extends DataAdapter {
 
 		String currDir = System.getProperty("user.dir");
 
-		String csvBaseDir = config.getProperty(property, "/home/testData");
+		String csvBaseDir = config.getValue(property, "/home/testData");
 		//System.out
 		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
 		//				+ csvBaseDir);
@@ -151,41 +151,41 @@ public class CsvDataAdapter extends DataAdapter {
 		return dataSourceHashMap;
 	}
 
-	private static void printDataFilePath(File dataFileCanonical) {
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
-						+ dataFileCanonical.getPath());
-		String dataFilename = dataFileCanonical.getName();
-		String dataParent = dataFileCanonical.getParent();
-		System.out
-				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
-						+ dataFilename + "  dataParent = " + dataParent);
-	}
-
-	private static void printCsvFileList(List<File> csvFileList) {
-		try {
-			for (File f : csvFileList) {
-				System.out
-						.println("CsvDataAdapter.java: printCsvFileList(): file = "
-								+ f.getCanonicalPath());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void printCsvList(List<CSV> csvList) {
-		for (CSV csv : csvList) {
-			System.out.println(csv.toString());
-			//printCSVData(csvData);
-			printCSVData(csv);
-		}
-	}
-
-	private static void printCSVData(DataSource csvData) {
-		System.out.println("printCSVData(): fsList.size() = " + csvData.size());
-		for (FieldSet fs : csvData) {
-			System.out.println(fs.toString());
-		}
-	}
+//	private static void printDataFilePath(File dataFileCanonical) {
+//		System.out
+//				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
+//						+ dataFileCanonical.getPath());
+//		String dataFilename = dataFileCanonical.getName();
+//		String dataParent = dataFileCanonical.getParent();
+//		System.out
+//				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
+//						+ dataFilename + "  dataParent = " + dataParent);
+//	}
+//
+//	private static void printCsvFileList(List<File> csvFileList) {
+//		try {
+//			for (File f : csvFileList) {
+//				System.out
+//						.println("CsvDataAdapter.java: printCsvFileList(): file = "
+//								+ f.getCanonicalPath());
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	private static void printCsvList(List<CSV> csvList) {
+//		for (CSV csv : csvList) {
+//			System.out.println(csv.toString());
+//			//printCSVData(csvData);
+//			printCSVData(csv);
+//		}
+//	}
+//
+//	private static void printCSVData(DataSource csvData) {
+//		System.out.println("printCSVData(): fsList.size() = " + csvData.size());
+//		for (FieldSet fs : csvData) {
+//			System.out.println(fs.toString());
+//		}
+//	}
 }
