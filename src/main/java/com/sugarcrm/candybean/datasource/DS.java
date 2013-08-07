@@ -21,14 +21,12 @@
  */
 package com.sugarcrm.candybean.datasource;
 
-import java.io.File;
 import java.util.HashMap;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.datasource.DataAdapter;
 import com.sugarcrm.candybean.datasource.DataAdapterFactory;
 import com.sugarcrm.candybean.datasource.DataSource;
-import com.sugarcrm.candybean.datasource.FieldSet;
 import com.sugarcrm.candybean.datasource.DataAdapterFactory.DataAdapterType;
 
 public class DS {
@@ -48,8 +46,8 @@ public class DS {
 		this.propKey = propKey; 
 		this.propValue = propValue; 
 		config = new Configuration();
-		config.setProperty(propKey, propValue);
-		config.createFile(System.getProperty("user.dir") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
+		config.setValue(propKey, propValue);
+//		config.createFile(System.getProperty("user.dir") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		
         DataAdapterType type = getDataType(dataType);
 		adapterFactory = new DataAdapterFactory(config);
@@ -92,7 +90,7 @@ public class DS {
 	}
 	
 	public void cleanup() {
-		config.deleteFile();
+//		config.deleteFile();
 	}
 	
 	private DataAdapterType getDataType(DataType dataType) {
@@ -103,33 +101,33 @@ public class DS {
 		}
 	}
 
-	private static void printDataSourceSingle(DataSource ds) {
-		System.out
-				.println("DS: printDataSourceSingle(): dataSource filenameNoExt = "
-						+ ds.getFilename());
-		//printDataSourceFieldSet(fieldSetList);
-		printDataSourceFieldSet(ds);
-	}
-	
-	private static void printDataSource(
-			HashMap<String, DataSource> dataSourceHashMap) {
-		for (String filenameNoExt : dataSourceHashMap.keySet()) {
-			System.out
-					.println("DS: printDataSourceData(): dataSource filenameNoExt = "
-							+ filenameNoExt);
-			DataSource ds = dataSourceHashMap.get(filenameNoExt);
-			printDataSourceFieldSet(ds);
-		}
-	}
-
-	private static void printDataSourceFieldSet(DataSource ds) {
-		System.out
-				.println("DS: printDataSourceFieldSet(): fsList.size() = "
-						+ ds.size());
-		for (FieldSet fs : ds) {
-			for (String key : fs.keySet()) {
-				System.out.println(key + " : " + fs.get(key));
-			}
-		}
-	}
+//	private static void printDataSourceSingle(DataSource ds) {
+//		System.out
+//				.println("DS: printDataSourceSingle(): dataSource filenameNoExt = "
+//						+ ds.getFilename());
+//		//printDataSourceFieldSet(fieldSetList);
+//		printDataSourceFieldSet(ds);
+//	}
+//	
+//	private static void printDataSource(
+//			HashMap<String, DataSource> dataSourceHashMap) {
+//		for (String filenameNoExt : dataSourceHashMap.keySet()) {
+//			System.out
+//					.println("DS: printDataSourceData(): dataSource filenameNoExt = "
+//							+ filenameNoExt);
+//			DataSource ds = dataSourceHashMap.get(filenameNoExt);
+//			printDataSourceFieldSet(ds);
+//		}
+//	}
+//
+//	private static void printDataSourceFieldSet(DataSource ds) {
+//		System.out
+//				.println("DS: printDataSourceFieldSet(): fsList.size() = "
+//						+ ds.size());
+//		for (FieldSet fs : ds) {
+//			for (String key : fs.keySet()) {
+//				System.out.println(key + " : " + fs.get(key));
+//			}
+//		}
+//	}
 }

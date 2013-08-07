@@ -90,13 +90,20 @@ public class VControl {
 	}
 
 	/**
-	 * Get the visible text of this element.
+	 * Get the visible text of this control.  If the control is a button, the value is returned.
 	 *
 	 * @return the visible text of this element
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public String getText() throws Exception {
 		voodoo.log.info("Selenium: getting text for control: " + this.toString());
+//		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
+		String type = we.getAttribute("type");
+		if (type != null) {
+			if (type.equalsIgnoreCase("button") || type.equalsIgnoreCase("input")) {
+				return we.getAttribute("value");
+			}
+		}
 		return we.getText();
 	}
 
@@ -123,9 +130,10 @@ public class VControl {
 	 * @throws Exception
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
-		voodoo.log.info("Searching if the control contains the following string: " + s + " with case sensitivity: " + caseSensitive);
+		voodoo.log.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
 		if (!caseSensitive) s = s.toLowerCase();
 		List<WebElement> wes = this.we.findElements(By.xpath(".//*[not(@visible='false')]"));
+		wes.add(this.we);
 		for (WebElement we : wes) {
 			String text = we.getText();
 			if (!caseSensitive) text = text.toLowerCase();

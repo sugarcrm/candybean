@@ -31,36 +31,31 @@ import org.junit.Test;
 
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
 
-//import com.sugarcrm.voodoo.IAutomation.Strategy;
-//import com.sugarcrm.voodoo.automation.VHook;
-//import com.sugarcrm.voodoo.IAutomation;
-//import com.sugarcrm.voodoo.Voodoo;
-
-import static org.junit.Assert.assertEquals;
+//import com.sugarcrm.candybean.IAutomation.Strategy;
+//import com.sugarcrm.candybean.automation.VHook;
+//import com.sugarcrm.candybean.IAutomation;
+//import com.sugarcrm.candybean.Voodoo;
 
 public class VSelectSystemTest {
-	protected static Candybean voodoo;
+	protected static Candybean candybean;
 	protected static VInterface iface;
 	
 	@BeforeClass
 	public static void first() throws Exception {
 		String curWorkDir = System.getProperty("user.dir");
 		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String voodooPropsPath = relPropsPath + File.separator;
-		String voodooPropsFilename = System.getProperty("voodoo_prop_filename");
-		if (voodooPropsFilename == null) voodooPropsFilename = "candybean-mac.properties";
-		voodooPropsPath += voodooPropsFilename;
-		
-		Configuration voodooConfig = new Configuration();
-		voodooConfig.load(new File(voodooPropsPath));
-		voodoo = Candybean.getInstance(voodooConfig);
-		iface = voodoo.getInterface();
+		String candybeanPropsPath = relPropsPath + File.separator;
+		String candybeanPropsFilename = System.getProperty("candybean_config");
+		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
+		candybeanPropsPath += candybeanPropsFilename;
+		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		candybean = Candybean.getInstance(candybeanConfig);
+		iface = candybean.getInterface();
 		iface.start();
 	}
 
@@ -77,7 +72,7 @@ public class VSelectSystemTest {
 		
         // Exception should throw for non-checkbox element
         //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
-		//voodoo.select(nonCheckboxHook, true);  // yes, verified exception was thrown
+		//candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
         
         // Checking getAttributeValue()
 //		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
@@ -100,7 +95,7 @@ public class VSelectSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect dropDownList = new VSelect(voodoo, iface, new VHook(Strategy.ID, "month"));
+		VSelect dropDownList = new VSelect(candybean, iface, new VHook(Strategy.ID, "month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		dropDownList.select(option);
 		// 3. Verify that 'Sep' was actually selected

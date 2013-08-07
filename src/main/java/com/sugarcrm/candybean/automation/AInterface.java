@@ -21,16 +21,16 @@
  */
 package com.sugarcrm.candybean.automation;
 
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.TimeoutException;
+//import java.util.List;
+//import java.util.Properties;
+//import java.util.concurrent.TimeoutException;
 
 //import org.safs.android.auto.lib.DUtilities;
 //import org.safs.sockets.RemoteException;
 //import org.safs.sockets.ShutdownInvocationException;
 //
 //import com.jayway.android.robotium.remotecontrol.solo.Solo;
-import com.sugarcrm.candybean.utilities.Utils;
+//import com.sugarcrm.candybean.utilities.Utils;
 
 // For more functionality Visit the remoteControl.solo.SoloTest
 public class AInterface{

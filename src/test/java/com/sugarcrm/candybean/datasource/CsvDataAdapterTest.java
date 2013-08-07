@@ -21,12 +21,13 @@
  */
 package com.sugarcrm.candybean.datasource;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -241,23 +242,23 @@ public class CsvDataAdapterTest {
 			config = new Configuration();
 
 			// Defining configuration properties keys/values
-			config.setProperty("datasource.csv.baseDir", "testData");
-			config.setProperty("datasource.csv.subDir", "testData/csvs/subDir");
+			config.setValue("datasource.csv.baseDir", "testData");
+			config.setValue("datasource.csv.subDir", "testData/csvs/subDir");
 
 			// Store Configuration
 			try {
-				config.store(configFilePath, null);
+//				config.store(configFilePath, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			// Checking that the created file exists
 			File propFile = new File(configFilePath);
-			Assert.assertTrue("The property files created does not exist!",
+			assertTrue("The property files created does not exist!",
 					propFile.exists());
 
 			try {
-				config.load(configFilePath);
+//				config.load(configFilePath);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -270,7 +271,7 @@ public class CsvDataAdapterTest {
 			// Deleting the File created
 			File propFile = new File(configFilePath);
 			boolean Ok = propFile.delete();
-			Assert.assertTrue("File did not get deleted!", !propFile.exists());
+			assertTrue("File did not get deleted!", !propFile.exists());
 			
 			if (Ok) {
 				System.out.println("Deleted " + propFile.getName());

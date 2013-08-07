@@ -21,20 +21,14 @@
  */
 package com.sugarcrm.candybean.utilities;
 
-import java.awt.Desktop;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -90,7 +84,12 @@ public class Utils {
 	public static String adjustPath(String path){
 		String tempPath = path;
 		// replace all single backslash (not followed by space) with forward slash
-		tempPath = tempPath.replaceAll("\\\\(?! )", "/"); 
+		String comparePath = tempPath;
+		tempPath = tempPath.replaceAll("\\\\(?! )", "/");
+		while (!comparePath.equals(tempPath)) {
+			comparePath = tempPath;
+			tempPath = tempPath.replaceAll("\\\\(?! )", "/");
+		}
 		// replace all one or more consecutive forward slashes with a File Separator
 		tempPath = tempPath.replaceAll("/+", Matcher.quoteReplacement(File.separator));
 		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
@@ -150,6 +149,27 @@ public class Utils {
 		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
 	}
 
+    /**
+     * Utility function to get the current operating system.
+     *
+     * @author Larry Cao
+     *
+     * @return string representing the current operating system.
+     */
+    public static String getCurrentPlatform() {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("mac")) {
+            return "mac";
+        } else if (os.contains("nux")) {
+            return "linux";
+        } else if (os.contains("win")) {
+            return "windows";
+        } else {
+            return "unknown";
+        }
+    }
+
 	/**
 	 * Pair is a python-2-tuple lightweight equivalent for convenience.
 	 * 
@@ -198,4 +218,5 @@ public class Utils {
 			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
 		}
 	}
+
 }

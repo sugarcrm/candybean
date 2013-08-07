@@ -21,11 +21,11 @@
  */
 package com.sugarcrm.candybean.android;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import com.sugarcrm.candybean.automation.Candybean;
+//import java.io.File;
+//import java.io.FileInputStream;
+//import java.util.Properties;
+//
+//import com.sugarcrm.candybean.automation.Candybean;
 
 public abstract class AndroidSugarTest {
 

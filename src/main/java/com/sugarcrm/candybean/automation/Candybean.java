@@ -23,16 +23,12 @@ package com.sugarcrm.candybean.automation;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.OptionalLogger;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -70,8 +66,7 @@ public class Candybean {
 	private Candybean(Configuration config) throws Exception {
 		this.config = config;
 		this.log = this.getLogger();
-		this.config.setLogger(new OptionalLogger(this.log));
-		debug = Boolean.parseBoolean(this.config.getProperty("debug", "false"));
+		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
 	}
 
 	public boolean debug() { return Candybean.debug; }
@@ -119,8 +114,8 @@ public class Candybean {
 		tempLogPropsFile.createNewFile();
 		//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
 		//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
-		OutputStream output = new FileOutputStream(tempLogPropsFile);
-		this.config.store(output, null);
+//		OutputStream output = new FileOutputStream(tempLogPropsFile);
+//		this.config.store(output, null);
 		//		JOptionPane.showInputDialog("pause");
 		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Candybean.class.getName());

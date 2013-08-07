@@ -75,8 +75,8 @@ public class VAControl {//implements IAControl {
 //		msg("Performing searchText: " + text);
 //		return this.iface.vac.solo.searchText(text);
 //	}
-	
-	private void msg(String msg) { 
-		System.out.println("[VoodooAndroid Test]: " + msg);
-	}
+//	
+//	private void msg(String msg) { 
+//		System.out.println("[VoodooAndroid Test]: " + msg);
+//	}
 }

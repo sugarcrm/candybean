@@ -3,6 +3,7 @@
 .settings/
 target/
 chromedriver.log
+libpeerconnection.log
 log/*.log*
 log/*.log
 src/test/resources/screenshot.png
