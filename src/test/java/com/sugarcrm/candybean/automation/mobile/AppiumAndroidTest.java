@@ -66,7 +66,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Larry Cao
  */
-public class AppiumAndroidTest {
+public class  AppiumAndroidTest {
 
     private WebDriver driver;
 
@@ -89,8 +89,9 @@ public class AppiumAndroidTest {
         capabilities.setCapability("app-package", "com.example.TestApp");
         capabilities.setCapability("app-activity", "MyActivity");
 
+
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-        values = new ArrayList<Integer>();
+        values = new ArrayList<>();
     }
 
     @After

@@ -82,7 +82,7 @@ public class AppiumTest {
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "http://appium.s3.amazonaws.com/TestApp6.0.app.zip");
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-        values = new ArrayList<Integer>();
+        values = new ArrayList<>();
     }
 
     @After
