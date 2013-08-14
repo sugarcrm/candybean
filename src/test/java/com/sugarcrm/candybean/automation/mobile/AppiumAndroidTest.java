@@ -86,7 +86,6 @@ public class AppiumAndroidTest {
         capabilities.setCapability("device", "Android");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.apk.zip");
-//        capabilities.setCapability("app", "/Users/lcao/workspace/testapp/out/artifacts/testapp/TestApp.apk");
         capabilities.setCapability("app-package", "com.example.TestApp");
         capabilities.setCapability("app-activity", "MyActivity");
 
