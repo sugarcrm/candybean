@@ -41,6 +41,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.HasTouchScreen;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TouchScreen;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -236,18 +237,6 @@ public class VInterface {
 	}
 
 	/**
-	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
-	 * as a &quot;javascript dialog&quot;).
-	 *
-	 * @throws Exception	 if no dialog box is present
-	 */
-	public void acceptDialog() throws Exception {
-		candybean.log.info("Accepting dialog.");
-		Alert alert = this.wd.switchTo().alert();
-		alert.accept();
-	}
-	
-	/**
 	 * Navigates the interface backward.  If backward is undefined, it does nothing.
 	 * 
 	 * @throws Exception
@@ -255,18 +244,6 @@ public class VInterface {
 	public void backward() throws Exception {
 		candybean.log.info("Navigating the interface backward.");
 		this.wd.navigate().back();
-	}
-
-	/**
-	 * Dismisses a modal dialog box (usually referred to
-	 * as a &quot;javascript dialog&quot;).
-	 *
-	 * @throws Exception	 if no dialog box is present
-	 */
-	public void dismissDialog() throws Exception {
-		candybean.log.info("Dismissing dialog.");
-		Alert alert = this.wd.switchTo().alert();
-		alert.dismiss();
 	}
 
 	/**
@@ -438,7 +415,7 @@ public class VInterface {
 		}
 		return s;
 	}
-
+	
 	/**
 	 * Maximize the browser window.
 	 *
@@ -590,7 +567,50 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
+	
+	/**
+	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
+	 * as a &quot;javascript dialog&quot;).
+	 *
+	 * @throws Exception	 if no dialog box is present
+	 */
+	public void acceptDialog() throws Exception {
+		candybean.log.info("Accepting dialog.");
+		this.wd.switchTo().alert().accept();
+		this.wd.switchTo().defaultContent();
+	}
+	
+	/**
+	 * Dismisses a modal dialog box (usually referred to
+	 * as a &quot;javascript dialog&quot;).
+	 *
+	 * @throws Exception	 if no dialog box is present
+	 */
+	public void dismissDialog() throws Exception {
+		candybean.log.info("Dismissing dialog.");
+		this.wd.switchTo().alert().dismiss();
+		this.wd.switchTo().defaultContent();
+	}
 
+	/**
+	 * Returns true if a modal dialog can be switched to 
+	 * and switched back from; otherwise, returns false.
+	 * 
+	 * @return 	Boolean true only if a modal dialog can 
+	 * be switched to, then switched back from.
+	 */
+	public boolean isDialogVisible() {
+		try { 
+			this.wd.switchTo().alert(); 
+			this.wd.switchTo().defaultContent();
+			candybean.log.info("Dialog present?: true.");
+			return true;
+		} catch(NoAlertPresentException nape) {
+			candybean.log.info("Dialog present?: false.");
+			return false;
+		} 
+	}
+	
     public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 
