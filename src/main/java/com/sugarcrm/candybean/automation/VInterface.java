@@ -581,7 +581,7 @@ public class VInterface {
 //		try {
 			candybean.log.info("Accepting dialog.");
 			this.wd.switchTo().alert().accept();
-			this.wd.switchTo().defaultContent();
+//			this.wd.switchTo().defaultContent();
 //		} catch(UnhandledAlertException uae) {
 //			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
 //		}
@@ -597,7 +597,7 @@ public class VInterface {
 //		try {
 			candybean.log.info("Dismissing dialog.");
 			this.wd.switchTo().alert().dismiss();
-			this.wd.switchTo().defaultContent();
+//			this.wd.switchTo().defaultContent();
 //		} catch(UnhandledAlertException uae) {
 //			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
 //		}
