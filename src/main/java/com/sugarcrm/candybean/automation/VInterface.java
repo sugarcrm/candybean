@@ -578,13 +578,13 @@ public class VInterface {
 	 * @throws Exception	 if no dialog box is present
 	 */
 	public void acceptDialog() throws Exception {
-		try {
+//		try {
 			candybean.log.info("Accepting dialog.");
 			this.wd.switchTo().alert().accept();
 			this.wd.switchTo().defaultContent();
-		} catch(UnhandledAlertException uae) {
-			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
-		}
+//		} catch(UnhandledAlertException uae) {
+//			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
+//		}
 	}
 	
 	/**
@@ -594,13 +594,13 @@ public class VInterface {
 	 * @throws Exception	 if no dialog box is present
 	 */
 	public void dismissDialog() throws Exception {
-		try {
+//		try {
 			candybean.log.info("Dismissing dialog.");
 			this.wd.switchTo().alert().dismiss();
 			this.wd.switchTo().defaultContent();
-		} catch(UnhandledAlertException uae) {
-			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
-		}
+//		} catch(UnhandledAlertException uae) {
+//			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
+//		}
 	}
 
 	/**
@@ -616,12 +616,12 @@ public class VInterface {
 			this.wd.switchTo().defaultContent();
 			candybean.log.info("Dialog present?: true.");
 			return true;
+		} catch(UnhandledAlertException uae) {
+			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.");
+			return true;
 		} catch(NoAlertPresentException nape) {
 			candybean.log.info("Dialog present?: false.");
 			return false;
-		} catch(UnhandledAlertException uae) {
-			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
-			return true;
 		}
 	}
 	
