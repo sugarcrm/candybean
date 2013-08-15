@@ -43,6 +43,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.HasTouchScreen;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TouchScreen;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -504,15 +506,16 @@ public class VInterface {
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
-        DesiredCapabilities capabilities;
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+//        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
         WebDriver wd = null;
         switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
-			String ffBinaryPath = this.config.getPathValue("browser.firefox_binary");
+			File ffBinaryPath = new File(this.config.getPathValue("browser.firefox_binary"));
 			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
 //			ffProfile.setEnableNativeEvents(false);
-			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
+			FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
 			// if (System.getProperty("headless") != null) {
 			// FirefoxBinary ffBinary = new FirefoxBinary();//new
 			// File("//home//conrad//Applications//firefox-10//firefox"));
@@ -575,9 +578,13 @@ public class VInterface {
 	 * @throws Exception	 if no dialog box is present
 	 */
 	public void acceptDialog() throws Exception {
-		candybean.log.info("Accepting dialog.");
-		this.wd.switchTo().alert().accept();
-		this.wd.switchTo().defaultContent();
+		try {
+			candybean.log.info("Accepting dialog.");
+			this.wd.switchTo().alert().accept();
+			this.wd.switchTo().defaultContent();
+		} catch(UnhandledAlertException uae) {
+			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
+		}
 	}
 	
 	/**
@@ -587,9 +594,13 @@ public class VInterface {
 	 * @throws Exception	 if no dialog box is present
 	 */
 	public void dismissDialog() throws Exception {
-		candybean.log.info("Dismissing dialog.");
-		this.wd.switchTo().alert().dismiss();
-		this.wd.switchTo().defaultContent();
+		try {
+			candybean.log.info("Dismissing dialog.");
+			this.wd.switchTo().alert().dismiss();
+			this.wd.switchTo().defaultContent();
+		} catch(UnhandledAlertException uae) {
+			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
+		}
 	}
 
 	/**
@@ -608,7 +619,10 @@ public class VInterface {
 		} catch(NoAlertPresentException nape) {
 			candybean.log.info("Dialog present?: false.");
 			return false;
-		} 
+		} catch(UnhandledAlertException uae) {
+			System.out.println("alert text: " + this.wd.switchTo().alert().getText());
+			return true;
+		}
 	}
 	
     public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
