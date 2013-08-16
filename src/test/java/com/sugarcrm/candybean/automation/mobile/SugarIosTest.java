@@ -51,6 +51,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -100,7 +101,11 @@ public class SugarIosTest {
         WebElement username = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
         assertTrue(username.isDisplayed());
 
-//        driver.getWindowHandles();
+        Set<String> handles = driver.getWindowHandles();
+
+        for (String s : handles) {
+            System.out.println(s);
+        }
 
         if (username.getText().equals("")) {
             username.sendKeys("admin");
@@ -115,13 +120,13 @@ public class SugarIosTest {
 
         password.click();
 
-        password.sendKeys("password");
+        password.sendKeys("asdf");
 
         WebElement login = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
 
         login.click();
 
-        Thread.sleep(10000);
+        Thread.sleep(1000000);
     }
 
     public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
