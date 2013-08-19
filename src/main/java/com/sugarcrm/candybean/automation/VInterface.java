@@ -43,7 +43,6 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.TouchScreen;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
