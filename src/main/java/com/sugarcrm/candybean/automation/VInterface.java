@@ -492,6 +492,16 @@ public class VInterface {
 		return this.getSelect(new VHook(strategy, hook));
 	}
 	
+	
+	/**
+	 * Returns the predefined type of interface instantiated.
+	 * 
+	 * @return	The type of interface
+	 */
+	public Type getType() {
+		return this.iType;
+	}
+	
 	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
 		VInterface.Type iType = null;
 		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
@@ -613,11 +623,11 @@ public class VInterface {
 	public boolean isDialogVisible() {
 		try { 
 			this.wd.switchTo().alert(); 
-			this.wd.switchTo().defaultContent();
+//			this.wd.switchTo().defaultContent();
 			candybean.log.info("Dialog present?: true.");
 			return true;
 		} catch(UnhandledAlertException uae) {
-			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.");
+			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored dialog...");
 			return true;
 		} catch(NoAlertPresentException nape) {
 			candybean.log.info("Dialog present?: false.");
