@@ -145,16 +145,25 @@ public class VInterfaceSystemTest {
 	@Test
 	public void presentAcceptDismissDialogTest() throws Exception {
 		iface.go("http://www.mediacollege.com/internet/javascript/basic/alert.html");
+		
+		// dialog not yet visible
+		assertFalse(iface.isDialogVisible());
+		
+		// clicking; alert should be visible and window inactive
 		iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
 		assertTrue(iface.isDialogVisible());
+		
+		// accepting alert dialog; should be gone
 		iface.acceptDialog();
 		assertFalse(iface.isDialogVisible());
 		
-		// Dismiss not available for all dialogs?
-//		iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
-//		assertTrue(iface.isDialogVisible());
-//		iface.dismissDialog();
-//		assertFalse(iface.isDialogVisible());
+		// Dismiss not available in Chrome
+		if (!iface.getType().equals(Type.CHROME)) {
+			iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+			assertTrue(iface.isDialogVisible());
+			iface.dismissDialog();
+			assertFalse(iface.isDialogVisible());
+		}
 	}
 
 //	@Ignore
