@@ -21,9 +21,7 @@
  */
 package com.sugarcrm.candybean.automation.mobile;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
@@ -53,15 +51,20 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.control.VHook;
+import com.sugarcrm.candybean.automation.control.VSelect;
+import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
+
 /**
- * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
- * with the 'TestApp' iPhone project which is included in the Appium source distribution.
+ * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
+ * with the Sugar Mobile iOS app.
  *
  * @author Larry Cao
  */
@@ -74,8 +77,6 @@ public class SugarIosTest {
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
 
-    private static final String TOKEN = "That URL did not map to a valid JSONWP resource";
-
     @Before
     public void setUp() throws Exception {
         // set up appium
@@ -84,7 +85,7 @@ public class SugarIosTest {
         capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/SugarCRM.app.zip");
-        URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
+        URL remoteAddress = new URL("http://74.85.23.221:4723/wd/hub");
         driver = new SwipeableWebDriver(remoteAddress, capabilities);
 
 
@@ -107,12 +108,11 @@ public class SugarIosTest {
             System.out.println(s);
         }
 
-        if (username.getText().equals("")) {
-            username.sendKeys("admin");
+        if (!username.getText().equals("")) {
+            username.clear();
         }
+        username.sendKeys("admin");
 
-
-        assertEquals(username.getText(), "admin");
 
         WebElement password = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
 
