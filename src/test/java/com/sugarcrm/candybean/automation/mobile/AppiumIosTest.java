@@ -21,11 +21,7 @@
  */
 package com.sugarcrm.candybean.automation.mobile;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -57,28 +53,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.io.IOUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.control.VHook;
+import com.sugarcrm.candybean.automation.control.VSelect;
+import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
-    import static org.junit.Assert.assertEquals;
-    import static org.junit.Assert.assertTrue;
+/**
+ * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an appium server deployed
+ * with the 'TestApp' iPhone project which is included in the Appium source distribution.
+ *
+ * @author Larry Cao
+ */
+public class AppiumIosTest {
 
-    /**
-     * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
-     * with the 'TestApp' iPhone project which is included in the Appium source distribution.
-     *
-     * @author Larry Cao
-     */
-    public class AppiumIosTest {
+    private static WebDriver driver;
 
-        private static WebDriver driver;
-
-        private static List<Integer> values;
+    private static List<Integer> values;
 
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
-
-    private static final String TOKEN = "That URL did not map to a valid JSONWP resource";
 
     @Before
     public void setUp() throws Exception {
@@ -103,7 +102,7 @@ import org.apache.commons.io.IOUtils;
 
 
 
-        values = new ArrayList<Integer>();
+        values = new ArrayList<>();
     }
 
     @After

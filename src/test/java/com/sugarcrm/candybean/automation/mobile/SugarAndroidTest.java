@@ -21,9 +21,7 @@
  */
 package com.sugarcrm.candybean.automation.mobile;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -54,15 +52,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
+import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.control.VHook;
+import com.sugarcrm.candybean.automation.control.VSelect;
+import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
- * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
- * with a 'TestApp' Android project.
+ * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
+ * with the Sugar Mobile android app.
  *
  * @author Larry Cao
  */
@@ -104,14 +109,17 @@ public class SugarAndroidTest {
         WebElement username = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
         assertTrue(username.isDisplayed());
 
-//        driver.getWindowHandles();
+        Set<String> handles = driver.getWindowHandles();
 
-        if (username.getText().equals("")) {
-            username.sendKeys("admin");
+        for (String s : handles) {
+            System.out.println(s);
         }
 
+        if (!username.getText().equals("")) {
+            username.clear();
+        }
+        username.sendKeys("admin");
 
-        assertEquals(username.getText(), "admin");
 
         WebElement password = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
 
@@ -119,13 +127,13 @@ public class SugarAndroidTest {
 
         password.click();
 
-        password.sendKeys("password");
+        password.sendKeys("asdf");
 
         WebElement login = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
 
         login.click();
 
-        Thread.sleep(10000);
+        Thread.sleep(1000000);
     }
 
 
