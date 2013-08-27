@@ -47,6 +47,7 @@ import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -492,6 +493,16 @@ public class VInterface {
 		return this.getSelect(new VHook(strategy, hook));
 	}
 	
+	
+	/**
+	 * Returns the predefined type of interface instantiated.
+	 * 
+	 * @return	The type of interface
+	 */
+	public Type getType() {
+		return this.iType;
+	}
+	
 	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
 		VInterface.Type iType = null;
 		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
@@ -529,10 +540,10 @@ public class VInterface {
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
 			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
-			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
+			candybean.log.info("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
-			System.out.println("chromeDriverPath: " + chromeDriverPath);
+			candybean.log.info("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			candybean.log.info("Instantiating Chrome with:\n    log path:"
@@ -541,7 +552,12 @@ public class VInterface {
 			wd = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
-			throw new Exception("Selenium: ie browser not yet supported.");
+			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
+			candybean.log.info("ieDriverPath: " + ieDriverPath);
+			System.setProperty("webdriver.ie.driver", ieDriverPath);
+			capabilities = DesiredCapabilities.internetExplorer();
+			wd = new InternetExplorerDriver(capabilities);
+			break;
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
         case ANDROID:
@@ -613,11 +629,11 @@ public class VInterface {
 	public boolean isDialogVisible() {
 		try { 
 			this.wd.switchTo().alert(); 
-			this.wd.switchTo().defaultContent();
+//			this.wd.switchTo().defaultContent();
 			candybean.log.info("Dialog present?: true.");
 			return true;
 		} catch(UnhandledAlertException uae) {
-			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.");
+			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored dialog...");
 			return true;
 		} catch(NoAlertPresentException nape) {
 			candybean.log.info("Dialog present?: false.");
