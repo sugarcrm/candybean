@@ -74,7 +74,7 @@ import com.sugarcrm.candybean.utilities.Utils;
  *
  * @author Larry Cao
  */
-public class  AppiumAndroidTest {
+public class AppiumAndroidTest {
 
     private WebDriver driver;
 
