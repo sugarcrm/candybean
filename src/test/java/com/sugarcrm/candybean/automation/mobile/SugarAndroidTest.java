@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -84,17 +85,18 @@ public class SugarAndroidTest {
     public void setUp() throws Exception {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+        capabilities.setCapability(CapabilityType.BROWSER_NAME, "Selendroid");
 
         capabilities.setCapability(CapabilityType.VERSION, "4.2.2");
 
         capabilities.setCapability("device", "Android");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/SugarCRM.apk.zip");
-        capabilities.setCapability("app-package", "com.example.TestApp");
-        capabilities.setCapability("app-activity", "MyActivity");
+        capabilities.setCapability("app-package", "com.sugarcrm.nomad");
+        capabilities.setCapability("app-activity", "NomadActivity");
 
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         values = new ArrayList<>();
     }
 

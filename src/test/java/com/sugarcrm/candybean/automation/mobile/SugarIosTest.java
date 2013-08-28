@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -88,7 +89,7 @@ public class SugarIosTest {
         URL remoteAddress = new URL("http://74.85.23.221:4723/wd/hub");
         driver = new SwipeableWebDriver(remoteAddress, capabilities);
 
-
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         values = new ArrayList<>();
     }
 
