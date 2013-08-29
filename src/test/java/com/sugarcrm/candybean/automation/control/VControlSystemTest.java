@@ -199,6 +199,21 @@ public class VControlSystemTest {
 	}
 	
 	@Test
+	public void pauseUntilTextPresentTest() throws Exception {
+		int timeout = 2000;
+		long startTime = 0;
+		long endTime = 0;
+		iface.go("http://fvsch.com/code/transition-fade/test5.html");
+		Assert.assertTrue(iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div").isDisplayed());
+		iface.pause(timeout);
+		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
+		startTime = System.currentTimeMillis();
+		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div").pause.untilVisible(timeout);
+		endTime = System.currentTimeMillis();
+		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
+	}
+	
+	@Test
 	public void pauseUntilVisibleTest() throws Exception {
 		long timeout = 10;
 		long startTime = 0;
@@ -206,15 +221,19 @@ public class VControlSystemTest {
 		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
 		VControl hideControl = iface.getControl(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
 		startTime = System.currentTimeMillis();
-		hideControl.pauseUntilVisible((int)timeout);
+		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < timeout);
 		hideControl.click();
 		startTime = System.currentTimeMillis();
 		thrown.expect(TimeoutException.class);
-		hideControl.pauseUntilVisible((int)timeout);
+		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") >= timeout);
+		
+		// until text present
+		iface.go("http://fvsch.com/code/transition-fade/test5.html");
+		
 	}
 	
 	@Ignore
