@@ -68,7 +68,7 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
 
 public class VInterface {
 
-	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS; }
+	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS }
 
 	private final Candybean candybean;
 	private final Configuration config;
