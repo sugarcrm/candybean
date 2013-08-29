@@ -39,11 +39,13 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
  */
 public class VControl {
 	
+	
 	protected final Candybean voodoo;
 	protected final VInterface iface;
 	protected final VHook hook;
 	protected int index;
 	public WebElement we;
+	public Pause pause;
 	
 	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook) throws Exception {
 		this(voodoo, iface, new VHook(strategy, hook));
@@ -60,9 +62,10 @@ public class VControl {
 	public VControl(Candybean voodoo, VInterface iface, VHook hook, int index) throws Exception {
 			this.voodoo = voodoo;
 			this.iface = iface;
-			List<WebElement> wes = iface.wd.findElements(this.getBy(hook));
+			List<WebElement> wes = iface.wd.findElements(VControl.makeBy(hook));
 			if (wes.size() == 0) throw new Exception("Control not found; zero web elements returned.");
 			this.we = wes.get(index);
+			this.pause = new Pause(this);
 			this.hook = hook;
 			this.index = index;
 	}
@@ -177,7 +180,7 @@ public class VControl {
 
 	public VControl getControl(VHook hook, int index) throws Exception {
 		voodoo.log.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
-		WebElement childWe = this.we.findElements(this.getBy(hook)).get(index);
+		WebElement childWe = this.we.findElements(VControl.makeBy(hook)).get(index);
 		return new VControl(this.voodoo, this.iface, hook, childWe);
 	}
 
@@ -187,27 +190,6 @@ public class VControl {
 
 	public VControl getControl(Strategy strategy, String hookString, int index) throws Exception {
 		return this.getControl(new VHook(strategy, hookString), index);
-	}
-
-	/**
-	 * Explicit wait until this control is visible.
-	 *
-	 * @param timeout		an explicit timeout in ms (must be less than configured implicit timeout to be triggered)
-	 * @throws Exception
-	 */
-	public VControl pauseUntilVisible(int timeout_ms) throws Exception {
-		voodoo.log.info("Selenium: waiting for " + timeout_ms + "ms on visibility of control: " + this.toString());
-		(new WebDriverWait(this.iface.wd, timeout_ms)).until(ExpectedConditions.visibilityOf(this.we));
-		return this;
-//		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
-//		WebElement we = wait.until(ExpectedConditions.visibilityOf(this.we));
-//		final WebElement we = this.getWebElement(this.getBy(this.hook));		
-//		WebDriverWait wait = new WebDriverWait(this.iface.wd, explicitWait);
-//		wait.until(new Function<WebDriver, Boolean>() {
-//			public Boolean apply(WebDriver driver) {
-//				return we.isDisplayed();
-//			}
-//		});
 	}
 
 //	@Deprecated
@@ -280,7 +262,7 @@ public class VControl {
 		this.we.clear();
 		
 		// Re-find the element to avoid the stale element problem.
-		this.we = iface.wd.findElements(this.getBy(hook)).get(index);
+		this.we = iface.wd.findElements(VControl.makeBy(hook)).get(index);
 		this.we.sendKeys(input);
 	}
 
@@ -289,11 +271,15 @@ public class VControl {
 		return "VControl(" + this.hook.toString() + ")";
 	}
 	
-	protected By getBy(VHook hook) throws Exception {
-		return this.getBy(hook.hookStrategy, hook.hookString);
+	protected By getBy() throws Exception {
+		return VControl.makeBy(this.hook);
 	}
 	
-	protected By getBy(Strategy strategy, String hook) throws Exception {
+	protected static By makeBy(VHook hook) throws Exception {
+		return VControl.makeBy(hook.hookStrategy, hook.hookString);
+	}
+	
+	protected static By makeBy(Strategy strategy, String hook) throws Exception {
 		switch (strategy) {
 		case CSS:
 			return By.cssSelector(hook);
