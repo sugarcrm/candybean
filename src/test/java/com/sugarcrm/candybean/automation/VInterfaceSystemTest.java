@@ -64,7 +64,7 @@ public class VInterfaceSystemTest {
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		String url1 = "https://www.google.com/";
-		String url2 = "http://www.yahoo.com/";
+		String url2 = "http://www.craigslist.org/about/sites";
 		String url3 = "http://www.reddit.com/";
 		iface.go(url1);
 		iface.go(url2);
