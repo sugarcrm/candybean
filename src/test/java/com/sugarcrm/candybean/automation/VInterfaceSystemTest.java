@@ -21,8 +21,7 @@
  */
 package com.sugarcrm.candybean.automation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import java.io.File;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -65,7 +64,7 @@ public class VInterfaceSystemTest {
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		String url1 = "https://www.google.com/";
-		String url2 = "http://www.yahoo.com/";
+		String url2 = "http://www.craigslist.org/about/sites";
 		String url3 = "http://www.reddit.com/";
 		iface.go(url1);
 		iface.go(url2);
@@ -143,16 +142,28 @@ public class VInterfaceSystemTest {
 //		this.iface.go("");
 	}
 
-	@Ignore
 	@Test
-	public void acceptDialogTest() throws Exception {
-//		this.iface.acceptDialog();
-	}
-
-	@Ignore
-	@Test
-	public void dismissDialogTest() throws Exception {
-//		this.iface.dismissDialog();
+	public void presentAcceptDismissDialogTest() throws Exception {
+		iface.go("http://www.mediacollege.com/internet/javascript/basic/alert.html");
+		
+		// dialog not yet visible
+		assertFalse(iface.isDialogVisible());
+		
+		// clicking; alert should be visible and window inactive
+		iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+		assertTrue(iface.isDialogVisible());
+		
+		// accepting alert dialog; should be gone
+		iface.acceptDialog();
+		assertFalse(iface.isDialogVisible());
+		
+		// Dismiss not available in Chrome
+		if (!iface.getType().equals(Type.CHROME)) {
+			iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+			assertTrue(iface.isDialogVisible());
+			iface.dismissDialog();
+			assertFalse(iface.isDialogVisible());
+		}
 	}
 
 //	@Ignore
@@ -162,9 +173,9 @@ public class VInterfaceSystemTest {
 		boolean actCaseSensPos = iface.contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.contains("google developers", true); //false
 		boolean actNeg = iface.contains("goggle devs", false); //false
-		assertEquals("Expecting: " + true + ", actual: " + actCaseSensPos, true, actCaseSensPos);
-		assertEquals("Expecting: " + false + ", actual: " + actCaseSensNeg, false, actCaseSensNeg);
-		assertEquals("Expecting: " + false + ", actual: " + actNeg, false, actNeg);
+		assertEquals(true, actCaseSensPos);
+		assertEquals(false, actCaseSensNeg);
+		assertEquals(false, actNeg);
 	}
 	
 	@Ignore
