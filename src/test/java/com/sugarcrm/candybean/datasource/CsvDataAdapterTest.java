@@ -92,7 +92,7 @@ public class CsvDataAdapterTest {
 						"Companies_0001_2");
 		printDataSource(dataSourceHashMap);
 		
-		cleanup();
+		cleanup(); 
 	}
 
 	private static String createDataDir(String dirStr) {
@@ -102,7 +102,7 @@ public class CsvDataAdapterTest {
 		try {
 			// Create directory if not exist
 			if (!dir.exists()) {
-				testDataPath = dir.getCanonicalPath();
+				testDataPath = dir.getAbsolutePath();
 				boolean result = dir.mkdirs();
 				if (result) {
 					System.out.println("createDataDir(): created "
@@ -128,9 +128,9 @@ public class CsvDataAdapterTest {
 			if (!file.exists()) {
 				file.createNewFile();
 				System.out.println("createFile(): created "
-						+ file.getCanonicalPath());
+						+ file.getAbsolutePath());
 			} else {
-				System.out.println("createFile(): " + file.getCanonicalPath()
+				System.out.println("createFile(): " + file.getAbsolutePath()
 						+ " already exists");
 			}
 
@@ -175,8 +175,8 @@ public class CsvDataAdapterTest {
 
 	private static void printCurrentDir() {
 		try {
-			String current = new java.io.File(".").getCanonicalPath();
-			System.out.println("CsvDataAdapterTest: Current dir using getCanonicalPath():"
+			String current = new java.io.File(".").getAbsolutePath();
+			System.out.println("CsvDataAdapterTest: Current dir using getAbsolutePath():"
 					+ current);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -245,28 +245,10 @@ public class CsvDataAdapterTest {
 			config.setValue("datasource.csv.baseDir", "testData");
 			config.setValue("datasource.csv.subDir", "testData/csvs/subDir");
 
-			// Store Configuration
-			try {
-//				config.store(configFilePath, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			// Checking that the created file exists
-			File propFile = new File(configFilePath);
-			assertTrue("The property files created does not exist!",
-					propFile.exists());
-
-			try {
-//				config.load(configFilePath);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
 			return config;
 		}
 
-		@Test
+		//@Test
 		public void deleteConfigFile() {
 			// Deleting the File created
 			File propFile = new File(configFilePath);
