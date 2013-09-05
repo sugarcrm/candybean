@@ -1,0 +1,84 @@
+/**
+ * Candybean is a next generation automation and testing framework suite.
+ * It is a collection of components that foster test automation, execution
+ * configuration, data abstraction, results illustration, tag-based execution,
+ * top-down and bottom-up batches, mobile variants, test translation across
+ * languages, plain-language testing, and web service testing.
+ * Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.sugarcrm.candybean.examples.sugar;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+
+import org.junit.Test;
+
+import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.examples.sugar.SugarUser.SugarUserBuilder;
+import com.sugarcrm.candybean.utilities.Utils;
+
+public class SugarTest {
+	
+	private static File relResourcesDir = new File(
+			System.getProperty("user.dir") + File.separator + 
+			"src" + File.separator +
+			"test" + File.separator + 
+			"resources" + File.separator);
+	private static Candybean candybean;
+	private static VInterface iface;
+	private static Sugar sugar;
+		
+	@BeforeClass
+	public static void first() throws Exception {
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) {
+			candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		}
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		candybean = Candybean.getInstance(candybeanConfig);
+		iface = candybean.getInterface();
+		String sugarHooksStr = System.getProperty("sugar_hooks");
+		if (sugarHooksStr == null) {
+			sugarHooksStr = relResourcesDir.getCanonicalPath() + File.separator + "sugar.hooks";
+		}
+		Properties sugarHooks = new Properties();
+		sugarHooks.load(new FileInputStream(new File(sugarHooksStr)));
+		SugarUser user = new SugarUserBuilder("Sugar", "Stevens", "95014", "cwarmbold@sugarcrm.com", "Sugar123!").build();
+		sugar = new Sugar(iface, sugarHooks, user);
+		iface.start();
+		sugar.start();
+	}
+
+//	@Ignore
+	@Test
+	public void sugarLoginLogoutTest() throws Exception {
+		sugar.login();
+		sugar.logout();
+	}
+	
+	@AfterClass
+	public static void last() throws Exception {
+		sugar.stop();
+		iface.stop();
+	}
+}	

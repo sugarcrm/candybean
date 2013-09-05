@@ -51,7 +51,6 @@ public class CsvDataAdapter extends DataAdapter {
 	public HashMap<String, DataSource> getData(String testData) {
 
 		List<File> csvFileList = getCsvFileList(testData);
-		//printCsvFileList(csvFileList);
 		HashMap<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
 
 		return dataSourceHashMap;
@@ -62,7 +61,6 @@ public class CsvDataAdapter extends DataAdapter {
 		selection = select;  // determines whether to select all the files based on file pattern
 		
 		List<File> csvFileList = getCsvFileList(testData);
-		//printCsvFileList(csvFileList);
 		HashMap<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
 
 		return dataSourceHashMap;
@@ -77,10 +75,10 @@ public class CsvDataAdapter extends DataAdapter {
 	 */
 	private static List<File> getCsvFileList(String dataPath) {
 
-		File dataFileCanonical = getDataFullPathCanonical(dataPath);
+		File dataFileAbsolute = getDataFullPath(dataPath);
 
-		String dataFilename = dataFileCanonical.getName();
-		String dataParent = dataFileCanonical.getParent();
+		String dataFilename = dataFileAbsolute.getName();
+		String dataParent = dataFileAbsolute.getParent();
 
 		File[] files = getAllFilesBasedOnPattern(dataParent, dataFilename,
 				"csv");
@@ -93,36 +91,25 @@ public class CsvDataAdapter extends DataAdapter {
 	private static String getDataBaseDirFromProp(Configuration config, String property) {
 
 		String currDir = System.getProperty("user.dir");
-
 		String csvBaseDir = config.getValue(property, "/home/testData");
-		//System.out
-		//		.println("CsvDataAdapter.java: getDataBaseDirFromProp(): csvBaseDir = "
-		//				+ csvBaseDir);
-
 		String fileFullPath = currDir + File.separator + csvBaseDir;
 
-		return fileFullPath; // it seems returning just filePath still works
+		return fileFullPath; // returning just filePath also works
 	}
 
-	private static File getDataFullPathCanonical(String dataPath) {
+	private static File getDataFullPath(String dataPath) {
 		String dataBaseDir = getDataBaseDirFromProp(DataAdapter.configuration, DataAdapter.dataBasePath);
-		//System.out
-		//		.println("CsvDataAdapter.java: getCsvFileList(): fileFullDirPath = "
-		//				+ dataBaseDir);
-
 		String dataFullPath = dataBaseDir + File.separator + dataPath;
 
 		File dataFile = new File(dataFullPath);
-		File dataFileCanonical = null;
+		File dataFileAbsolute = null;
 		try {
-			dataFileCanonical = dataFile.getCanonicalFile();
+			dataFileAbsolute = dataFile.getAbsoluteFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		//printDataFilePath(dataFileCanonical);
-
-		return dataFileCanonical;
+		return dataFileAbsolute;
 	}
 
 	/**
@@ -150,42 +137,4 @@ public class CsvDataAdapter extends DataAdapter {
 
 		return dataSourceHashMap;
 	}
-
-//	private static void printDataFilePath(File dataFileCanonical) {
-//		System.out
-//				.println("CsvDataAdapter.java: getCsvFileList(): dataCanonicalPath = "
-//						+ dataFileCanonical.getPath());
-//		String dataFilename = dataFileCanonical.getName();
-//		String dataParent = dataFileCanonical.getParent();
-//		System.out
-//				.println("CsvDataAdapter.java: getCsvFileList(): dataFilename = "
-//						+ dataFilename + "  dataParent = " + dataParent);
-//	}
-//
-//	private static void printCsvFileList(List<File> csvFileList) {
-//		try {
-//			for (File f : csvFileList) {
-//				System.out
-//						.println("CsvDataAdapter.java: printCsvFileList(): file = "
-//								+ f.getCanonicalPath());
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	private static void printCsvList(List<CSV> csvList) {
-//		for (CSV csv : csvList) {
-//			System.out.println(csv.toString());
-//			//printCSVData(csvData);
-//			printCSVData(csv);
-//		}
-//	}
-//
-//	private static void printCSVData(DataSource csvData) {
-//		System.out.println("printCSVData(): fsList.size() = " + csvData.size());
-//		for (FieldSet fs : csvData) {
-//			System.out.println(fs.toString());
-//		}
-//	}
 }
