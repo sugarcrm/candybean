@@ -25,6 +25,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
@@ -74,7 +76,10 @@ public class WS {
 	}
 	
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body) throws Exception {
-		
+		return request(op, uri, headers, body, null);
+	}
+	
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {		
 		HttpUriRequest request = null;
 	    Map<String, Object> mapParse = null;
 		switch (op) {
@@ -88,6 +93,15 @@ public class WS {
 				break;
 			case POST:
 				HttpPost post = new HttpPost(uri);
+				
+				if (postHeaders != null) {
+					for (HashMap<String, String> h : postHeaders) {
+						for (String key : h.keySet()) {
+							post.setHeader(key, h.get(key));
+						}
+					}
+				}
+
 	            mapParse = postRequest(post, headers, body); 
 				break;
 			case PUT:
