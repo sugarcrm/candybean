@@ -31,7 +31,6 @@ import org.junit.Ignore;
 
 import org.junit.Test;
 
-import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.examples.sugar.SugarUser.SugarUserBuilder;
@@ -44,8 +43,6 @@ public class SugarTest {
 			"src" + File.separator +
 			"test" + File.separator + 
 			"resources" + File.separator);
-	private static Candybean candybean;
-	private static VInterface iface;
 	private static Sugar sugar;
 		
 	@BeforeClass
@@ -55,17 +52,20 @@ public class SugarTest {
 			candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
 		}
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getInterface();
+		Candybean candybean = Candybean.getInstance(candybeanConfig);
+		String sugarConfigStr = System.getProperty("sugar_config");
+		if (sugarConfigStr == null) {
+			sugarConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "sugar.config";
+		}
+		Configuration sugarConfig = new Configuration(new File(sugarConfigStr));
 		String sugarHooksStr = System.getProperty("sugar_hooks");
 		if (sugarHooksStr == null) {
 			sugarHooksStr = relResourcesDir.getCanonicalPath() + File.separator + "sugar.hooks";
 		}
 		Properties sugarHooks = new Properties();
 		sugarHooks.load(new FileInputStream(new File(sugarHooksStr)));
-		SugarUser user = new SugarUserBuilder("Sugar", "Stevens", "95014", "cwarmbold@sugarcrm.com", "Sugar123!").build();
-		sugar = new Sugar(iface, sugarHooks, user);
-		iface.start();
+		SugarUser adminUser = new SugarUserBuilder("admin", "Conrad", "cwarmbold@sugarcrm.com", "310.993.2449", "asdf").build();
+		sugar = new Sugar(candybean, sugarConfig, sugarHooks, adminUser);
 		sugar.start();
 	}
 
@@ -73,12 +73,12 @@ public class SugarTest {
 	@Test
 	public void sugarLoginLogoutTest() throws Exception {
 		sugar.login();
+		sugar.iface.interact("pause...");
 		sugar.logout();
 	}
-	
+
 	@AfterClass
 	public static void last() throws Exception {
 		sugar.stop();
-		iface.stop();
 	}
-}	
+}
