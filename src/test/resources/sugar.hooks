@@ -1,0 +1,39 @@
+#
+# Candybean is a next generation automation and testing framework suite.
+# It is a collection of components that foster test automation, execution
+# configuration, data abstraction, results illustration, tag-based execution,
+# top-down and bottom-up batches, mobile variants, test translation across
+# languages, plain-language testing, and web service testing.
+# Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# HOOK FORMAT
+# HOOK_NAME = HOOK_STRATEGY_TYPE:HOOK_STRING
+#	where HOOK_NAME is a unique string, conventionally formatted as PAGE.WIDGET_TYPE.MEANINFUL_NAME
+#		where PAGE is the unique page the hook is found on
+#		where WIDGET_TYPE is BUTTON, LINK, TEXTFIELD
+#		where MEANINGFUL_NAME is a name to clearly identify the widget on the page
+#	where HOOK_STRATEGY_TYPE is CSS/XPATH/ID/NAME/LINK/PLINK/CLASS/TAG
+#	where HOOK_STRING is an identifier string for the given hook_strategy_type
+
+# login page
+login.textfield.username = NAME:username
+login.textfield.password = NAME:password
+login.button.login = NAME:login_button
+
+# main page
+main.menu.user = ID:userList
+main.link.logout = LINK:Log Out

@@ -256,7 +256,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<includes>
-								<include>**//*SystemTest.java</include>
+								<include>**/*SystemTest.java</include>
 							</includes>
 						</configuration>
 					</plugin>
