@@ -30,10 +30,10 @@
 #	where HOOK_STRING is an identifier string for the given hook_strategy_type
 
 # login page
-login.textfield.email = NAME:email
+login.textfield.username = NAME:username
 login.textfield.password = NAME:password
-login.button.login = NAME:action_submit
+login.button.login = NAME:login_button
 
 # main page
-main.link.account = ID:topbar-account-link
+main.menu.user = ID:userList
 main.link.logout = LINK:Log Out
