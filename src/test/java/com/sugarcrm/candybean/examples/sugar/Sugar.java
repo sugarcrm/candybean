@@ -23,78 +23,47 @@ package com.sugarcrm.candybean.examples.sugar;
 
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.Set;
 
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.control.VHook;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.model.IModel;
-import com.sugarcrm.candybean.model.Model;
-import com.sugarcrm.candybean.model.Page;
+import com.sugarcrm.candybean.configuration.Configuration;
 
-public class Sugar implements IModel {
+public class Sugar {
 	
-	public Model model;
-
-	private VInterface i;
-	private HashMap<String, VHook> hooks;
-	private SugarUser defaultUser;
+	protected Candybean candybean;
+	protected VInterface iface;
+	protected Configuration config;
+	protected HashMap<String, VHook> hooks;
+	protected SugarUser adminUser;
 	
-	public Sugar(VInterface i, Properties yelpHooks, SugarUser defaultUser) throws Exception {
-		this.i = i;
-		hooks = VHook.getHooks(yelpHooks);
-		defaultUser = defaultUser;
+	public Sugar(Candybean candybean, Configuration sugarConfig, Properties sugarHooks, SugarUser adminUser) throws Exception {
+		this.candybean = candybean;
+		this.iface = candybean.getInterface();
+		this.config = sugarConfig;
+		this.hooks = VHook.getHooks(sugarHooks);
+		this.adminUser = adminUser;
 //		model = buildModel();
 	}
 	
 	public void start() throws Exception {
-		String urlBase = "http://www.yelp.com/";
-		i.go(urlBase);
+		iface.start();
 	}
 	
 	public void login() throws Exception {
-		i.getControl(Strategy.LINK, "Log In").click();
-		String loginUrl = "https://www.yelp.com/login";
-		i.widget(hooks.get("login.textfield.email")).sendString(defaultUser.email());
-		i.widget(hooks.get("login.textfield.password")).sendString(defaultUser.password());
-		i.widget(hooks.get("login.button.login")).click();
+		String urlBase = config.getValue("url.base", "http://localhost/ent700/");
+		iface.go(urlBase);
+		iface.widget(hooks.get("login.textfield.username")).sendString(adminUser.builder.requiredAttributes.get("username"));
+		iface.widget(hooks.get("login.textfield.password")).sendString(adminUser.builder.requiredAttributes.get("password"));
+		iface.widget(hooks.get("login.button.login")).click();
 	}
 	
 	public void logout() throws Exception {
-		String mainUrlBase = "http://www.yelp.com/";
-		i.widget(hooks.get("main.link.account")).click();
-		i.widget(hooks.get("main.link.logout")).click();
+		iface.widget(hooks.get("main.menu.user")).click();
+		iface.widget(hooks.get("main.link.logout")).click();
 	}
 	
 	public void stop() throws Exception {
-		String finalUrl = "http://www.yelp.com/";
+		iface.stop();		
 	}
-	
-	public void run(int timeout_in_minutes) {
-		long startTime = System.currentTimeMillis();
-		long lap = System.currentTimeMillis();
-	}
-
-	@Override
-	public Set<Page> getStartPages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void executeRandomStartPage() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-//	private Model buildModel() {
-//		Page startPage = new Page();
-//		Page loginPage = new Page();
-//		Page mainPage = new Page();
-//		
-//		startPage.addLink(loginPage);
-//		Model yelpModel = new Model("http://www.yelp.com/");
-//		
-//		return yelpModel;
-//	}
 }	
