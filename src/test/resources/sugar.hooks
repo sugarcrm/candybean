@@ -28,6 +28,12 @@
 #		where MEANINGFUL_NAME is a name to clearly identify the widget on the page
 #	where HOOK_STRATEGY_TYPE is CSS/XPATH/ID/NAME/LINK/PLINK/CLASS/TAG
 #	where HOOK_STRING is an identifier string for the given hook_strategy_type
+#
+# PLATFORM-DEPENDENT FORMAT
+# HOOK_NAME = {\
+#	"linux": "HOOK_STRATEGY_TYPE:HOOK_STRING",\
+#	"mac": "HOOK_STRATEGY_TYPE:HOOK_STRING",\
+#	"windows": "HOOK_STRATEGY_TYPE:HOOK_STRING"}
 
 # login page
 login.textfield.username = NAME:username
@@ -37,3 +43,4 @@ login.button.login = NAME:login_button
 # main page
 main.menu.user = ID:userList
 main.link.logout = LINK:Log Out
+
