@@ -28,13 +28,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
-
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
 
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
@@ -204,11 +204,12 @@ public class VControlSystemTest {
 		long startTime = 0;
 		long endTime = 0;
 		iface.go("http://fvsch.com/code/transition-fade/test5.html");
-		Assert.assertTrue(iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div").isDisplayed());
+		iface.pause(1000);
+		Assert.assertTrue(iface.getControl(Strategy.XPATH, "//*[@id='test']/div/div").isDisplayed());
 		iface.pause(timeout);
-		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
+		iface.getControl(Strategy.XPATH, "//*[@id='test']/p[1]/button[1]").click();
 		startTime = System.currentTimeMillis();
-		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div").pause.untilVisible(timeout);
+		iface.getControl(Strategy.XPATH, "//*[@id='test']/div/div").pause.untilVisible(timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
 	}
@@ -246,10 +247,18 @@ public class VControlSystemTest {
 	@Test
 	public void isDisplayedTest() throws Exception {
 		iface.go("http://www.google.com");
-		VControl searchField = iface.getControl(Strategy.ID, "gbqfq");
+		VControl searchField;
+		if (iface.getType().equals(Type.IE)) 
+			searchField = iface.getControl(Strategy.NAME, "q");
+		else
+			searchField = iface.getControl(Strategy.ID, "gbqfq");
 		Assert.assertTrue(searchField.isDisplayed());
-		VControl output = iface.getControl(Strategy.NAME, "output");
-		Assert.assertFalse(output.isDisplayed());
+		VControl hiddenInput;
+		if (iface.getType().equals(Type.IE))
+			hiddenInput = iface.getControl(Strategy.NAME, "site");
+		else
+			hiddenInput = iface.getControl(Strategy.NAME, "output");
+		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
 	
 	@Ignore
@@ -301,6 +310,7 @@ public class VControlSystemTest {
 	public void sendStringTest() throws Exception {
 		String searchString = "sugarcrm";
 		iface.go("http://www.duckduckgo.com/");
+//		iface.pause(1000);
 //		iface.interact("pause0");
 		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString(searchString);
 //		iface.interact("pause1");
