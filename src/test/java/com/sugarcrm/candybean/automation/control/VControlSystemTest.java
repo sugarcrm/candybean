@@ -200,7 +200,7 @@ public class VControlSystemTest {
 		long startTime = 0;
 		long endTime = 0;
 		iface.go("http://fvsch.com/code/transition-fade/test5.html");
-//		iface.pause(1000);
+		iface.pause(timeout);
 		VControl textControl = iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div");
 		Assert.assertFalse(textControl.isDisplayed());
 		iface.pause(timeout);
