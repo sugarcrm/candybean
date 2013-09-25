@@ -244,19 +244,19 @@ public class VControlSystemTest {
 	@Test
 	public void isDisplayedTest() throws Exception {
 		int timeout = 1000;
-		iface.go("http://www.google.com");
+		iface.go("http://sfbay.craigslist.org/");
 		iface.pause(timeout);
 		VControl searchField;
-		if (iface.getType().equals(Type.IE)) 
-			searchField = iface.getControl(Strategy.NAME, "q");
-		else
-			searchField = iface.getControl(Strategy.ID, "gbqfq");
+//		if (iface.getType().equals(Type.IE)) 
+//			searchField = iface.getControl(Strategy.NAME, "q");
+//		else
+			searchField = iface.getControl(Strategy.ID, "query");
 		Assert.assertTrue(searchField.isDisplayed());
 		VControl hiddenInput;
-		if (iface.getType().equals(Type.IE))
-			hiddenInput = iface.getControl(Strategy.NAME, "site");
-		else
-			hiddenInput = iface.getControl(Strategy.NAME, "output");
+//		if (iface.getType().equals(Type.IE))
+//			hiddenInput = iface.getControl(Strategy.NAME, "site");
+//		else
+			hiddenInput = iface.getControl(Strategy.NAME, "areaID");
 		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
 	
