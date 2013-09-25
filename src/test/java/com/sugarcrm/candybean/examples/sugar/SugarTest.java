@@ -31,6 +31,7 @@ import org.junit.Ignore;
 
 import org.junit.Test;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.examples.sugar.SugarUser.SugarUserBuilder;
@@ -38,32 +39,27 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 public class SugarTest {
 	
-	private static File relResourcesDir = new File(
-			System.getProperty("user.dir") + File.separator + 
-			"src" + File.separator +
-			"test" + File.separator + 
-			"resources" + File.separator);
 	private static Sugar sugar;
 		
 	@BeforeClass
 	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) {
-			candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+			candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		}
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		Candybean candybean = Candybean.getInstance(candybeanConfig);
 		String sugarConfigStr = System.getProperty("sugar_config");
 		if (sugarConfigStr == null) {
-			sugarConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "sugar.config";
+			sugarConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.config";
 		}
-		Configuration sugarConfig = new Configuration(new File(sugarConfigStr));
+		Configuration sugarConfig = new Configuration(new File(Utils.adjustPath(sugarConfigStr)));
 		String sugarHooksStr = System.getProperty("sugar_hooks");
 		if (sugarHooksStr == null) {
-			sugarHooksStr = relResourcesDir.getCanonicalPath() + File.separator + "sugar.hooks";
+			sugarHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.hooks";
 		}
 		Properties sugarHooks = new Properties();
-		sugarHooks.load(new FileInputStream(new File(sugarHooksStr)));
+		sugarHooks.load(new FileInputStream(new File(Utils.adjustPath(sugarHooksStr))));
 		SugarUser adminUser = new SugarUserBuilder("admin", "Conrad", "cwarmbold@sugarcrm.com", "310.993.2449", "asdf").build();
 		sugar = new Sugar(candybean, sugarConfig, sugarHooks, adminUser);
 		sugar.start();
