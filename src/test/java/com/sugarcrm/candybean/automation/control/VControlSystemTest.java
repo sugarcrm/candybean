@@ -243,7 +243,9 @@ public class VControlSystemTest {
 	
 	@Test
 	public void isDisplayedTest() throws Exception {
+		int timeout = 1000;
 		iface.go("http://www.google.com");
+		iface.pause(timeout);
 		VControl searchField;
 		if (iface.getType().equals(Type.IE)) 
 			searchField = iface.getControl(Strategy.NAME, "q");
