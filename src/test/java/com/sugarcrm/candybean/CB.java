@@ -19,4 +19,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-Assert.assertEquals("Sample message, \" message," + "more message, message...", "Contracts", argument3);
+package com.sugarcrm.candybean;
+
+import java.io.File;
+
+public class CB {
+
+	public static File ROOT_DIR = new File(System.getProperty("user.dir") + File.separator);
+	public static File CONFIG_DIR = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator);
+	
+}

@@ -31,6 +31,7 @@ import org.junit.Ignore;
 
 import org.junit.Test;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
@@ -39,11 +40,6 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 public class YelpTest {
 	
-	private static File relResourcesDir = new File(
-			System.getProperty("user.dir") + File.separator + 
-			"src" + File.separator +
-			"test" + File.separator + 
-			"resources" + File.separator);
 	private static Candybean candybean;
 	private static VInterface iface;
 	private static Yelp yelp;
@@ -52,14 +48,14 @@ public class YelpTest {
 	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) {
-			candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+			candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		}
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		String yelpHooksStr = System.getProperty("yelp_hooks");
 		if (yelpHooksStr == null) {
-			yelpHooksStr = relResourcesDir.getCanonicalPath() + File.separator + "yelp.hooks";
+			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "yelp.hooks";
 		}
 		Properties yelpHooks = new Properties();
 		yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));

@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.VInterface.Type;
@@ -49,7 +50,6 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 public class VControlSystemTest {
 	
-	protected static File relResourcesDir;
 	protected static Candybean candybean;
 	protected static VInterface iface;
 		
@@ -58,12 +58,8 @@ public class VControlSystemTest {
 
 	@BeforeClass
 	public static void first() throws Exception {
-		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
-				"src" + File.separator +
-				"test" + File.separator + 
-				"resources" + File.separator);
 		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
@@ -204,12 +200,13 @@ public class VControlSystemTest {
 		long startTime = 0;
 		long endTime = 0;
 		iface.go("http://fvsch.com/code/transition-fade/test5.html");
-		iface.pause(1000);
-		Assert.assertTrue(iface.getControl(Strategy.XPATH, "//*[@id='test']/div/div").isDisplayed());
+//		iface.pause(1000);
+		VControl textControl = iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div");
+		Assert.assertFalse(textControl.isDisplayed());
 		iface.pause(timeout);
-		iface.getControl(Strategy.XPATH, "//*[@id='test']/p[1]/button[1]").click();
+		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
 		startTime = System.currentTimeMillis();
-		iface.getControl(Strategy.XPATH, "//*[@id='test']/div/div").pause.untilVisible(timeout);
+		textControl.pause.untilVisible(timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
 	}

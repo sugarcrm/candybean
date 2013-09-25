@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.mobile;
+package com.sugarcrm.candybean.examples.sugar;
 
 import org.junit.After;
 import org.junit.Before;
@@ -58,20 +58,10 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
-
-/**
- * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
- * with a 'TestApp' Android project.
- *
- * @author Larry Cao
- */
 public class AppiumAndroidTest {
 
     private WebDriver driver;
-
     private List<Integer> values;
-
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
 
@@ -80,23 +70,15 @@ public class AppiumAndroidTest {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
-
         capabilities.setCapability(CapabilityType.VERSION, "4.2.2");
-
         capabilities.setCapability("device", "Android");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.apk.zip");
 //        capabilities.setCapability("app", "/Users/lcao/workspace/testapp/out/artifacts/testapp/TestApp.apk");
         capabilities.setCapability("app-package", "com.example.TestApp");
         capabilities.setCapability("app-activity", "MyActivity");
-
-        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:5554"), capabilities);
         values = new ArrayList<Integer>();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        driver.quit();
     }
 
     private void populate() {
@@ -126,7 +108,6 @@ public class AppiumAndroidTest {
     public void testActive() throws Exception {
         WebElement text = driver.findElement(By.xpath("//textfield[1]"));
         assertTrue(text.isDisplayed());
-
         WebElement button = driver.findElement(By.xpath("//button[1]"));
         assertTrue(button.isDisplayed());
     }
@@ -134,12 +115,9 @@ public class AppiumAndroidTest {
     @Test
     public void testBasicAlert() throws Exception {
         driver.findElement(By.xpath("//button[2]")).click();
-//
 //        Alert alert = driver.switchTo().alert();
-//
 //        alert.accept();
         WebElement acceptButton = driver.findElement(By.xpath("//button[1]"));
-
         acceptButton.click();
 
     }
@@ -161,7 +139,6 @@ public class AppiumAndroidTest {
         WebElement text = driver.findElement(By.xpath("//textfield[1]"));
         text.sendKeys("12");
         text.clear();
-
         assertEquals(text.getText(), "");
     }
 
@@ -178,13 +155,10 @@ public class AppiumAndroidTest {
     @Test
     public void testFindElementByTagName() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElement(By.tagName("textfield"));
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         driver.findElement(By.tagName("button")).click();
-
         // is sum equal ?
         WebElement sumLabel = driver.findElement(By.tagName("text"));
         assertEquals(sumLabel.getText(), String.valueOf(number));
@@ -193,14 +167,10 @@ public class AppiumAndroidTest {
     @Test
     public void testFindElementsByTagName() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElements(By.tagName("textfield")).get(1);
-
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         driver.findElements(By.tagName("button")).get(0).click();
-
         // is sum equal ?
         WebElement texts = driver.findElements(By.tagName("text")).get(0);
         assertEquals(texts.getText(), String.valueOf(number));
@@ -209,47 +179,35 @@ public class AppiumAndroidTest {
     @Test
     public void testFindElementByName() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElement(By.name("TextField1"));
-
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         // is sum equal ?
         WebElement sumLabel = driver.findElement(By.name("SumLabel"));
         driver.findElement(By.name("ComputeSumButton")).click();
-
         assertEquals(sumLabel.getText(), String.valueOf(number));
     }
 
     @Test
     public void testFindElementsByName() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElements(By.name("TextField1")).get(0);
-
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         // is sum equal ?
         WebElement sumLabel = driver.findElements(By.name("SumLabel")).get(0);
         driver.findElements(By.name("ComputeSumButton")).get(0).click();
-
         assertEquals(sumLabel.getText(), String.valueOf(number));
     }
 
     @Test
     public void testFindElementByXpath() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElement(By.xpath("//textfield[1]"));
-
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         // is sum equal ?
         driver.findElement(By.xpath("//button[1]")).click();
-
         WebElement sumLabel = driver.findElement(By.xpath("//text[1]"));
         assertEquals(sumLabel.getText(), String.valueOf(number));
     }
@@ -257,15 +215,11 @@ public class AppiumAndroidTest {
     @Test
     public void testFindElementsByXpath() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElements(By.xpath("//textfield")).get(1);
-
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         // is sum equal ?
         driver.findElements(By.xpath("//button")).get(0).click();
-
         WebElement sumLabel = driver.findElements(By.xpath("//text")).get(0);
         assertEquals(sumLabel.getText(), String.valueOf(number));
     }
@@ -273,12 +227,9 @@ public class AppiumAndroidTest {
     @Test
     public void testAttribute() throws Exception {
         Random random = new Random();
-
         WebElement text = driver.findElement(By.xpath("//textfield[1]"));
-
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
-
         assertEquals(text.getAttribute("name"), "TextField1");
 //        assertEquals(text.getAttribute("label"), "TextField1");
         assertEquals(text.getAttribute("text"), String.valueOf(number));
@@ -297,9 +248,7 @@ public class AppiumAndroidTest {
     @Test
     public void testLocation() throws Exception {
         WebElement button = driver.findElement(By.xpath("//button[1]"));
-
         Point location = button.getLocation();
-
         assertEquals(location.getX(), 157);
         assertEquals(location.getY(), 182);
     }
@@ -311,7 +260,6 @@ public class AppiumAndroidTest {
         HttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
         JSONObject jsonObject = (JSONObject) new JSONParser().parse(EntityUtils.toString(entity));
-
         String sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
         assertEquals(sessionId, jsonObject.get("sessionId"));
     }
@@ -335,5 +283,10 @@ public class AppiumAndroidTest {
         public TouchScreen getTouch() {
             return touch;
         }
+    }
+    
+    @After
+    public void tearDown() throws Exception {
+        driver.quit();
     }
 }
