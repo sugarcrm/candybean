@@ -52,6 +52,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -89,19 +90,7 @@ public class AppiumIosTest {
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
         URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
 
-        try {
-            driver = new SwipeableWebDriver(remoteAddress, capabilities);
-        } catch (Exception e) {
-            System.err.println("Appium server offline. Starting...");
-            Runtime rt = Runtime.getRuntime();
-            Process pr = rt.exec("/usr/local/bin/node /usr/local/share/npm/lib/node_modules/appium/app/bin.js");
-
-            Thread.sleep(1000);
-            driver = new SwipeableWebDriver(remoteAddress, capabilities);
-        }
-
-
-
+        driver = new SwipeableWebDriver(remoteAddress, capabilities);
         values = new ArrayList<>();
     }
 
@@ -132,7 +121,7 @@ public class AppiumIosTest {
         WebElement texts = driver.findElement(By.tagName("staticText"));
         assertEquals(texts.getText(), String.valueOf(values.get(0) + values.get(1)));
     }
-    
+
     @Test
     public void testActive() throws Exception {
         WebElement text = driver.findElement(By.xpath("//textfield[1]"));
@@ -144,12 +133,16 @@ public class AppiumIosTest {
 
     @Test
     public void testBasicAlert() throws Exception {
+
         driver.findElement(By.xpath("//button[2]")).click();
 
         Alert alert = driver.switchTo().alert();
         //check if title of alert is correct
         assertEquals(alert.getText(), "Cool title");
-        alert.accept();
+
+        //Appium alert.accept() not yet supported in iOS7 yet. https://github.com/appium/appium/issues/994
+
+//        alert.accept();
     }
 
     @Test
