@@ -97,7 +97,6 @@ public class AppiumAndroidTest {
         capabilities.setCapability("app-package", "com.example.TestApp");
         capabilities.setCapability("app-activity", "MyActivity");
 
-
         driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         values = new ArrayList<>();
     }
