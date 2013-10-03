@@ -86,7 +86,7 @@ public class SugarIosTest {
         capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/SugarCRM.app.zip");
-        URL remoteAddress = new URL("http://74.85.23.221:4723/wd/hub");
+        URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
         driver = new SwipeableWebDriver(remoteAddress, capabilities);
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
