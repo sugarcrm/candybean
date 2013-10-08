@@ -19,30 +19,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.examples.sugar;
+package com.sugarcrm.candybean;
 
-import com.sugarcrm.candybean.model.ModelObject;
-import com.sugarcrm.candybean.model.ModelObjectBuilder;
+import java.io.File;
 
-public class SugarUser extends ModelObject {
+public class CB {
+
+	public static File ROOT_DIR = new File(System.getProperty("user.dir") + File.separator);
+	public static File CONFIG_DIR = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator);
 	
-	private SugarUser(SugarUserBuilder builder) { super.builder = builder; }
-	
-	@Override
-	public String toString() {
-		return this.getClass().getName() + super.toString();
-	}
-
-	public static class SugarUserBuilder extends ModelObjectBuilder {
-		public SugarUserBuilder(String username, String firstName, String email, String phoneNumber, String password) {
-			super.requiredAttributes.put("username", username);
-			super.requiredAttributes.put("firstName", firstName);
-			super.requiredAttributes.put("email", email);
-			super.requiredAttributes.put("phoneNumber", phoneNumber);
-			super.requiredAttributes.put("password", password);
-		}
-
-		@Override
-		public SugarUser build() { return new SugarUser(this); }
-	}
-}	
+}

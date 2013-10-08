@@ -174,6 +174,23 @@ public class Configuration {
             properties.setProperty(key, newValue);
         }
     }
+    
+    public static String getPlatformValue(Properties props, String key) throws Exception {
+	    String platform = Utils.getCurrentPlatform();
+	    String valueStr = props.getProperty(key);
+        JSONParser parser = new JSONParser();
+        try {
+            Object valueObject = parser.parse(valueStr);
+            if (valueObject instanceof Map) {
+                JSONObject valueMap = (JSONObject) valueObject;
+                return (String) valueMap.get(platform);
+            } else {
+                return valueStr;
+            }
+        } catch (ParseException pe) {
+            return valueStr;
+        }
+    }
 
     /**
      * Writes the property list from the Properties table to the file path in a format suitable for loading into

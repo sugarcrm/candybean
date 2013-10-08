@@ -19,30 +19,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.examples.sugar;
+package com.sugarcrm.candybean.model;
 
-import com.sugarcrm.candybean.model.ModelObject;
-import com.sugarcrm.candybean.model.ModelObjectBuilder;
+import java.util.Map;
 
-public class SugarUser extends ModelObject {
-	
-	private SugarUser(SugarUserBuilder builder) { super.builder = builder; }
+public abstract class ModelObject {
+	public ModelObjectBuilder builder;
 	
 	@Override
 	public String toString() {
-		return this.getClass().getName() + super.toString();
-	}
-
-	public static class SugarUserBuilder extends ModelObjectBuilder {
-		public SugarUserBuilder(String username, String firstName, String email, String phoneNumber, String password) {
-			super.requiredAttributes.put("username", username);
-			super.requiredAttributes.put("firstName", firstName);
-			super.requiredAttributes.put("email", email);
-			super.requiredAttributes.put("phoneNumber", phoneNumber);
-			super.requiredAttributes.put("password", password);
+		String s = "(";
+		for (Map.Entry<String, String> reqAttr : builder.requiredAttributes.entrySet()) {
+			s += reqAttr.getKey() + ":" + reqAttr.getValue() + ",";
 		}
-
-		@Override
-		public SugarUser build() { return new SugarUser(this); }
+		if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
+		for (Map.Entry<String, String> optAttr : builder.optionalAttributes.entrySet()) {
+			s += optAttr.getKey() + ":" + optAttr.getValue() + ",";
+		}
+		if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
+		s += ")";
+		return s;
 	}
 }	

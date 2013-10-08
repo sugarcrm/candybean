@@ -19,12 +19,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+#
+# HOOK FORMAT
+# HOOK_NAME = HOOK_STRATEGY_TYPE:HOOK_STRING
+#	where HOOK_NAME is a unique string, conventionally formatted as PAGE.WIDGET_TYPE.MEANINFUL_NAME
+#		where PAGE is the unique page the hook is found on
+#		where WIDGET_TYPE is BUTTON, LINK, TEXTFIELD
+#		where MEANINGFUL_NAME is a name to clearly identify the widget on the page
+#	where HOOK_STRATEGY_TYPE is CSS/XPATH/ID/NAME/LINK/PLINK/CLASS/TAG
+#	where HOOK_STRING is an identifier string for the given hook_strategy_type
+#
+# PLATFORM-DEPENDENT FORMAT
+# HOOK_NAME = {\
+#	"linux": "HOOK_STRATEGY_TYPE:HOOK_STRING",\
+#	"mac": "HOOK_STRATEGY_TYPE:HOOK_STRING",\
+#	"windows": "HOOK_STRATEGY_TYPE:HOOK_STRING"}
 
-translate.testpath = /var/lib/jenkins/git_repos/SodaIceBox/soda/tests/modules/manufacturer
-translate.output = /var/lib/jenkins/Translate_Tests-zh_CN/modules/manufacturer
-translate.language = zh_CN
-translate.database = Translations_6_7
-translate.serverName = localhost
-translate.username = root
-translate.password = root
-translate.module = Accounts
+# login page
+login.textfield.username = NAME:username
+login.textfield.password = NAME:password
+login.button.login = NAME:login_button
+
+# main page
+main.menu.user = ID:userList
+main.link.logout = LINK:Log Out
+
