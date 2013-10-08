@@ -19,4 +19,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-Assert.assertEquals("Sample message, \" argument1," + "more message", "Contracts", argument3);
+package com.sugarcrm.candybean.model;
+
+import java.util.Map;
+
+public abstract class ModelObject {
+	public ModelObjectBuilder builder;
+	
+	@Override
+	public String toString() {
+		String s = "(";
+		for (Map.Entry<String, String> reqAttr : builder.requiredAttributes.entrySet()) {
+			s += reqAttr.getKey() + ":" + reqAttr.getValue() + ",";
+		}
+		if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
+		for (Map.Entry<String, String> optAttr : builder.optionalAttributes.entrySet()) {
+			s += optAttr.getKey() + ":" + optAttr.getValue() + ",";
+		}
+		if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
+		s += ")";
+		return s;
+	}
+}	

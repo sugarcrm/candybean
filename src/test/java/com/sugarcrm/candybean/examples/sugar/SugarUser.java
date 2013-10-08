@@ -21,40 +21,28 @@
  */
 package com.sugarcrm.candybean.examples.sugar;
 
-public class SugarUser {
+import com.sugarcrm.candybean.model.ModelObject;
+import com.sugarcrm.candybean.model.ModelObjectBuilder;
 
-	private SugarUserBuilder builder;
-	private SugarUser(SugarUserBuilder b) { this.builder = b; }
+public class SugarUser extends ModelObject {
 	
-	public String firstName() {
-		return builder.firstName;
-	}
-	public String lastName() { return builder.lastName; }
-	public String zipCode() { return builder.zipCode; }
-	public String email() { return builder.email; }
-	public String password() { return builder.password; }
-
+	private SugarUser(SugarUserBuilder builder) { super.builder = builder; }
+	
 	@Override
 	public String toString() {
-		String s = "SugarUser(" + firstName() + "," + lastName() + "," + zipCode() + "," + email() + "," + password() + ")";
-		return s;
+		return this.getClass().getName() + super.toString();
 	}
 
-	public static class SugarUserBuilder {
-		private String firstName = null;
-		private String lastName = null;
-		private String zipCode = null;
-		private String email = null;
-		private String password = null;
-		
-		public SugarUserBuilder(String firstName, String lastName, String zipCode, String email, String password) {
-			this.firstName = firstName;
-			this.lastName = lastName;
-			this.zipCode = zipCode;
-			this.email = email;
-			this.password = password;
+	public static class SugarUserBuilder extends ModelObjectBuilder {
+		public SugarUserBuilder(String username, String firstName, String email, String phoneNumber, String password) {
+			super.requiredAttributes.put("username", username);
+			super.requiredAttributes.put("firstName", firstName);
+			super.requiredAttributes.put("email", email);
+			super.requiredAttributes.put("phoneNumber", phoneNumber);
+			super.requiredAttributes.put("password", password);
 		}
-		
+
+		@Override
 		public SugarUser build() { return new SugarUser(this); }
 	}
 }	

@@ -31,6 +31,7 @@ import org.junit.BeforeClass;
 
 import org.junit.Test;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
@@ -46,18 +47,13 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 public class VSelectSystemTest {
 	
-	protected static File relResourcesDir;
 	protected static Candybean candybean;
 	protected static VInterface iface;
 	
 	@BeforeClass
 	public static void first() throws Exception {
-		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
-				"src" + File.separator +
-				"test" + File.separator + 
-				"resources" + File.separator);
 		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
