@@ -69,14 +69,11 @@ public class VControlSystemTest {
 //	@Ignore
 	@Test
 	public void getAttributeTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/html/default.asp";
+		String w3Url = "http://sfbay.craigslist.org/";
 		iface.go(w3Url);
-		String actAltValue = iface.getControl(Strategy.XPATH, "//*[@id=\"topLogo\"]/a[2]/img").getAttribute("alt");
-		String expAltValue = "W3Schools.com";
+		String actAltValue = iface.getControl(Strategy.ID, "container").getAttribute("summary");
+		String expAltValue = "page";
 		Assert.assertEquals(expAltValue, actAltValue);
-		String actHrefValue = iface.getControl(Strategy.ID, "top").getControl(Strategy.TAG, "a", 1).getAttribute("href");
-		String expHrefValue = "http://www.w3schools.com/";
-		Assert.assertEquals(expHrefValue, actHrefValue);
 	}
 	
 //	@Ignore
