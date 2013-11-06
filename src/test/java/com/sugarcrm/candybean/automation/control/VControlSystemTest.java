@@ -79,8 +79,8 @@ public class VControlSystemTest {
 //	@Ignore
 	@Test
 	public void getControlTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/";
-		String expH2 = "HTML5 Introduction";
+		String w3Url = "http://www.w3schools.com/html/default.asp";
+		String expH2 = "HTML Introduction";
 		iface.go(w3Url);
 		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
 		VControl h1Control = iface.getControl(Strategy.TAG, "h1");
