@@ -206,8 +206,14 @@
 			<groupId>io.selendroid</groupId>
 			<artifactId>selendroid-server-common</artifactId>
 			<version>LATEST</version>
-		</dependency -->
+		</dependency>
 	    <dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.7</version>
+			<scope>test</scope>
+		</dependency -->
+		<dependency>
 		    <groupId>xml-apis</groupId>
 		    <artifactId>xml-apis</artifactId>
 		    <version>LATEST</version>
