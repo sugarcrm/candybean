@@ -21,10 +21,8 @@
  */
 package com.sugarcrm.candybean.runner;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -32,10 +30,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
 public class VTagRunner extends BlockJUnit4ClassRunner {
-	private final String MAC = "MAC";
-	private final String WINDOWS = "WINDOWS";
-	private final String LINUX = "LINUX";
-
 	public VTagRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
@@ -53,10 +47,10 @@ public class VTagRunner extends BlockJUnit4ClassRunner {
 					if (vTag.tags().length != 0) {
 						if (!vTag.tagLogicClass().isEmpty() && !vTag.tagLogicMethod().isEmpty()) {
 							for (String tag : vTag.tags()) {
-								System.out.println("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
+//								System.out.println("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
 								Class<?> c = Class.forName(vTag.tagLogicClass());
-								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), vTag.tags().getClass());
-								if ((boolean) m.invoke(null, (Object) vTag.tags())) {
+								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), tag.getClass());
+								if ((boolean) m.invoke(null, (Object) tag)) {
 									finalTestMethods.add(method);
 								}
 							}
