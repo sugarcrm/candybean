@@ -22,7 +22,9 @@
 package com.sugarcrm.candybean.automation.mobile;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.json.simple.JSONObject;
@@ -41,9 +43,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.HasTouchScreen;
+import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.TouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -58,10 +60,16 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
+import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.control.VHook;
+import com.sugarcrm.candybean.automation.control.VSelect;
+import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
- * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against a local Appium instance deployed
+ * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an appium server deployed
  * with a 'TestApp' Android project.
  *
  * @author Larry Cao
@@ -86,12 +94,11 @@ public class AppiumAndroidTest {
         capabilities.setCapability("device", "Android");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
         capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.apk.zip");
-//        capabilities.setCapability("app", "/Users/lcao/workspace/testapp/out/artifacts/testapp/TestApp.apk");
         capabilities.setCapability("app-package", "com.example.TestApp");
         capabilities.setCapability("app-activity", "MyActivity");
 
-                driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-        values = new ArrayList<Integer>();
+        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        values = new ArrayList<>();
     }
 
     @After

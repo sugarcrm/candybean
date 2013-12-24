@@ -58,7 +58,7 @@ public class Translations {
 	public static void main(String[] args) {
 		try {
 			if (args.length == 1)
-				Translate(args[0]);
+				Translate(new File(args[0]));
 			else if (args.length == 7)
 				Translate(args[0], args[1], args[2], args[3], args[4], args[5],
 						args[6]);
@@ -79,9 +79,10 @@ public class Translations {
 	 * @author ylin
 	 * 
 	 * @param configPath
+	 * @throws Exception 
 	 */
-	private static void Translate(String configPath) {
-		Configuration config = new Configuration(configPath);
+	private static void Translate(File translateConfig) throws Exception {
+		Configuration config = new Configuration(translateConfig);
 		try {
 
 

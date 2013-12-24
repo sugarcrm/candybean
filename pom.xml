@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sugarcrm.candybean</groupId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>candybean</name>
 	<artifactId>candybean</artifactId>
 	<properties>
@@ -192,7 +192,28 @@
 		</plugins>
 	</build>
 	<dependencies>
+	    <!-- >dependency>
+			<groupId>io.selendroid</groupId>
+			<artifactId>selendroid-standalone</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>io.selendroid</groupId>
+			<artifactId>selendroid-common</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>io.selendroid</groupId>
+			<artifactId>selendroid-server-common</artifactId>
+			<version>LATEST</version>
+		</dependency>
 	    <dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.7</version>
+			<scope>test</scope>
+		</dependency -->
+		<dependency>
 		    <groupId>xml-apis</groupId>
 		    <artifactId>xml-apis</artifactId>
 		    <version>LATEST</version>
@@ -256,7 +277,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<includes>
-								<include>**//*SystemTest.java</include>
+								<include>**/*SystemTest.java</include>
 							</includes>
 						</configuration>
 					</plugin>
@@ -292,6 +313,22 @@
 						<configuration>
 							<includes>
 								<include>**/mobile/**.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>sugar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/*Sugar*.java</include>
 							</includes>
 						</configuration>
 					</plugin>
