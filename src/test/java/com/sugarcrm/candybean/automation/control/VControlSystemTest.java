@@ -28,17 +28,19 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
-
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
 //import com.sugarcrm.candybean.automation.VHook;
@@ -47,6 +49,7 @@ import com.sugarcrm.candybean.configuration.Configuration;
 //import static org.junit.Assert.assertEquals;
 
 public class VControlSystemTest {
+	
 	protected static Candybean candybean;
 	protected static VInterface iface;
 		
@@ -55,13 +58,9 @@ public class VControlSystemTest {
 
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_config");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
-		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
@@ -70,21 +69,18 @@ public class VControlSystemTest {
 //	@Ignore
 	@Test
 	public void getAttributeTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/html/default.asp";
+		String w3Url = "http://sfbay.craigslist.org/";
 		iface.go(w3Url);
-		String actAltValue = iface.getControl(Strategy.XPATH, "//*[@id=\"topLogo\"]/a[2]/img").getAttribute("alt");
-		String expAltValue = "W3Schools.com";
+		String actAltValue = iface.getControl(Strategy.ID, "container").getAttribute("summary");
+		String expAltValue = "page";
 		Assert.assertEquals(expAltValue, actAltValue);
-		String actHrefValue = iface.getControl(Strategy.ID, "top").getControl(Strategy.TAG, "a", 1).getAttribute("href");
-		String expHrefValue = "http://www.w3schools.com/";
-		Assert.assertEquals(expHrefValue, actHrefValue);
 	}
 	
 //	@Ignore
 	@Test
 	public void getControlTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/";
-		String expH2 = "HTML5 Introduction";
+		String w3Url = "http://www.w3schools.com/html/default.asp";
+		String expH2 = "HTML Introduction";
 		iface.go(w3Url);
 		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
 		VControl h1Control = iface.getControl(Strategy.TAG, "h1");
@@ -99,7 +95,7 @@ public class VControlSystemTest {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
 		String expChapterText = "W3Schools Home";
-		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[1]/div[1]/a").getText().substring(2);
+		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[2]/div[1]/a").getText().substring(2);
 		Assert.assertEquals(expChapterText, actChapterText);
 		w3Url = "http://www.echoecho.com/htmlforms12.htm";
 		iface.go(w3Url);
@@ -196,6 +192,23 @@ public class VControlSystemTest {
 	}
 	
 	@Test
+	public void pauseUntilTextPresentTest() throws Exception {
+		int timeout = 2000;
+		long startTime = 0;
+		long endTime = 0;
+		iface.go("http://fvsch.com/code/transition-fade/test5.html");
+		iface.pause(timeout);
+		VControl textControl = iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div");
+		Assert.assertFalse(textControl.isDisplayed());
+		iface.pause(timeout);
+		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
+		startTime = System.currentTimeMillis();
+		textControl.pause.untilVisible(timeout);
+		endTime = System.currentTimeMillis();
+		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
+	}
+	
+	@Test
 	public void pauseUntilVisibleTest() throws Exception {
 		long timeout = 10;
 		long startTime = 0;
@@ -203,15 +216,19 @@ public class VControlSystemTest {
 		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
 		VControl hideControl = iface.getControl(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
 		startTime = System.currentTimeMillis();
-		hideControl.pauseUntilVisible((int)timeout);
+		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < timeout);
 		hideControl.click();
 		startTime = System.currentTimeMillis();
 		thrown.expect(TimeoutException.class);
-		hideControl.pauseUntilVisible((int)timeout);
+		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") >= timeout);
+		
+		// until text present
+		iface.go("http://fvsch.com/code/transition-fade/test5.html");
+		
 	}
 	
 	@Ignore
@@ -223,11 +240,21 @@ public class VControlSystemTest {
 	
 	@Test
 	public void isDisplayedTest() throws Exception {
-		iface.go("http://www.google.com");
-		VControl searchField = iface.getControl(Strategy.ID, "gbqfq");
+		int timeout = 1000;
+		iface.go("http://sfbay.craigslist.org/");
+		iface.pause(timeout);
+		VControl searchField;
+//		if (iface.getType().equals(Type.IE)) 
+//			searchField = iface.getControl(Strategy.NAME, "q");
+//		else
+			searchField = iface.getControl(Strategy.ID, "query");
 		Assert.assertTrue(searchField.isDisplayed());
-		VControl output = iface.getControl(Strategy.NAME, "output");
-		Assert.assertFalse(output.isDisplayed());
+		VControl hiddenInput;
+//		if (iface.getType().equals(Type.IE))
+//			hiddenInput = iface.getControl(Strategy.NAME, "site");
+//		else
+			hiddenInput = iface.getControl(Strategy.NAME, "areaID");
+		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
 	
 	@Ignore
@@ -244,11 +271,42 @@ public class VControlSystemTest {
 //		scroll(int index);
 	}
 
+//    @Test
+//    public void checkBoxSelectTest() throws Exception {
+//
+//        // Checking checkbox select
+//        String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+//        iface.go(w3Url);
+//        VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
+//        Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(0), select.isSelected(0), false);
+//        select.select("I have a bike");
+//        Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
+//
+//        // Exception should throw for non-checkbox element
+//        //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
+//        //candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
+//
+//        // Checking getAttributeValue()
+////		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+////		String actText = control.getAttribute("type");
+////        String expText = "text";
+////        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
+////
+////		String actSize = control.getAttribute("size");
+////        String expSize = "20";
+////        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
+////
+////		String actName = control.getAttribute("name");
+////        String expName = "firstname";
+////        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
+//    }
+
 //	@Ignore
 	@Test
 	public void sendStringTest() throws Exception {
 		String searchString = "sugarcrm";
 		iface.go("http://www.duckduckgo.com/");
+//		iface.pause(1000);
 //		iface.interact("pause0");
 		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString(searchString);
 //		iface.interact("pause1");

@@ -109,19 +109,17 @@ public class Candybean {
 	 */
 	private Logger getLogger() throws Exception {
 		// check for Log directory existence
-		String currentWorkingPath = System.getProperty("user.dir");
-		File tempLogPropsFile = new File(currentWorkingPath + File.separator + "logging.properties");
-		tempLogPropsFile.createNewFile();
+//		File tempLogPropsFile = new File(System.getProperty("user.dir") + File.separator + "logging.properties");
+//		tempLogPropsFile.createNewFile();
 		//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
 		//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
 //		OutputStream output = new FileOutputStream(tempLogPropsFile);
 //		this.config.store(output, null);
 		//		JOptionPane.showInputDialog("pause");
-		InputStream input = new FileInputStream(tempLogPropsFile);
 		Logger logger = Logger.getLogger(Candybean.class.getName());
-		LogManager.getLogManager().readConfiguration(input);
+//		LogManager.getLogManager().readConfiguration(new FileInputStream(tempLogPropsFile));
 		//		logger.setLevel(this.getLogLevel());
-		tempLogPropsFile.delete();
+//		tempLogPropsFile.delete();
 		return logger;
 	}
 

@@ -29,6 +29,7 @@ import java.util.Properties;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 
@@ -38,12 +39,7 @@ public class VHookUnitTest {
 	@Test
 	public void testGetHooks() {
 		try {
-			String currentWorkingPath = System.getProperty("user.dir") + File.separator;
-			String hooksFilePath = currentWorkingPath + "testutils.hooks";
-//			System.out.println("Hooks file path: " + hooksFilePath);
-
-			// Resource setup
-			File hooksFile = new File(hooksFilePath);
+			File hooksFile = new File(CB.CONFIG_DIR.getCanonicalPath() + File.separator + "testutils.hooks");
 			hooksFile.createNewFile();
 			Properties hooksProps = new Properties();
 			String hook1Name = "hook1name";

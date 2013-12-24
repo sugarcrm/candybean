@@ -22,6 +22,8 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,12 +31,14 @@ import org.junit.BeforeClass;
 
 import org.junit.Test;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
 //import com.sugarcrm.candybean.automation.VHook;
@@ -42,51 +46,18 @@ import com.sugarcrm.candybean.configuration.Configuration;
 //import com.sugarcrm.candybean.Voodoo;
 
 public class VSelectSystemTest {
+	
 	protected static Candybean candybean;
 	protected static VInterface iface;
 	
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
-		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_config");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
-		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
-	}
-
-	@Test
-	public void checkBoxSelectTest() throws Exception {
-		
-		// Checking checkbox select 
-		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
-		iface.go(w3Url);
-		VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]/input[1]"));
-		Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(), select.isSelected(), false);
-		select.select(true);
-		Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(), select.isSelected(), true);
-		
-        // Exception should throw for non-checkbox element
-        //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
-		//candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
-        
-        // Checking getAttributeValue()
-//		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
-//		String actText = control.getAttribute("type");
-//        String expText = "text";
-//        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
-//        
-//		String actSize = control.getAttribute("size");
-//        String expSize = "20";
-//        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
-//        
-//		String actName = control.getAttribute("name");
-//        String expName = "firstname";
-//        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
 	}
 	
 	@Test
@@ -95,14 +66,105 @@ public class VSelectSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect dropDownList = new VSelect(candybean, iface, new VHook(Strategy.ID, "month"));
+		VSelect select = new VSelect(candybean, iface, new VHook(Strategy.ID, "month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
-		dropDownList.select(option);
+		select.select(option);
 		// 3. Verify that 'Sep' was actually selected
-		String actual = dropDownList.getSelected();
+		String actual = select.getAllSelectedOptions().get(0);
 		String expected = option;
 		Assert.assertEquals(expected, actual);
 	}
+
+    @Test
+    public void selectMultipleTest() throws Exception {
+        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
+        iface.go(multipleSelectURL);
+        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+
+        Assert.assertTrue(select.isMultiple());
+
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Cheese");
+        options.add("Olives");
+        options.add("Green Pepper");
+
+        Assert.assertFalse(select.isSelected());
+
+        select.select(options);
+
+        Assert.assertTrue(select.isSelected(options, true));
+    }
+
+    @Test
+    public void selectAllTest() throws Exception {
+        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
+        iface.go(multipleSelectURL);
+        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+
+        Assert.assertFalse(select.isSelected());
+
+        select.selectAll();
+
+        Assert.assertTrue(select.isSelected(select.getOptions(), true));
+    }
+
+    @Test
+    public void deselectTest() throws Exception {
+        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
+        iface.go(multipleSelectURL);
+        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+
+        select.select("Ham");
+
+        Assert.assertTrue(select.isSelected("Ham"));
+
+        select.deselect("Ham");
+
+        Assert.assertFalse(select.isSelected("Ham"));
+    }
+
+    @Test
+    public void deselectMultiple() throws Exception {
+        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
+        iface.go(multipleSelectURL);
+        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+
+        select.selectAll();
+
+        Assert.assertEquals(select.getAllSelectedOptions().size(), select.getOptions().size());
+
+        List<String> selected = select.getOptions();
+
+        selected.remove("Ham");
+        selected.remove("Green Pepper");
+        selected.remove("Mushrooms");
+
+        select.deselect("Ham");
+        select.deselect("Green Pepper");
+        select.deselect("Mushrooms");
+
+        Assert.assertTrue(select.isSelected(selected, true));
+    }
+
+    @Test
+    public void deselectAllTest() throws Exception {
+        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
+        iface.go(multipleSelectURL);
+        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+
+        Assert.assertFalse(select.isSelected());
+
+        select.select(0);
+        select.select(1);
+        select.select(2);
+
+        Assert.assertTrue(select.isSelected());
+        Assert.assertEquals(select.getAllSelectedOptions().size(), 3);
+
+        select.deselectAll();
+
+        Assert.assertFalse(select.isSelected());
+    }
 	
 	@Test
 	public void getSelectedTest() throws Exception {
@@ -111,9 +173,9 @@ public class VSelectSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect dropDownList = iface.getSelect(new VHook(Strategy.ID, "month"));
+		VSelect select = iface.getSelect(new VHook(Strategy.ID, "month"));
 		// 2. Get the current option from the drop-down list
-		actual = dropDownList.getSelected();
+		actual = select.getFirstSelectedOption();
 		// 3. Verify that actual value is the expected value
 		Assert.assertEquals(expected, actual);
 	}

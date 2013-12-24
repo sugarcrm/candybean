@@ -40,10 +40,14 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.HasTouchScreen;
-import org.openqa.selenium.TouchScreen;
+import org.openqa.selenium.interactions.HasTouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -64,7 +68,7 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
 
 public class VInterface {
 
-	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS; }
+	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS }
 
 	private final Candybean candybean;
 	private final Configuration config;
@@ -236,18 +240,6 @@ public class VInterface {
 	}
 
 	/**
-	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
-	 * as a &quot;javascript dialog&quot;).
-	 *
-	 * @throws Exception	 if no dialog box is present
-	 */
-	public void acceptDialog() throws Exception {
-		candybean.log.info("Accepting dialog.");
-		Alert alert = this.wd.switchTo().alert();
-		alert.accept();
-	}
-	
-	/**
 	 * Navigates the interface backward.  If backward is undefined, it does nothing.
 	 * 
 	 * @throws Exception
@@ -255,18 +247,6 @@ public class VInterface {
 	public void backward() throws Exception {
 		candybean.log.info("Navigating the interface backward.");
 		this.wd.navigate().back();
-	}
-
-	/**
-	 * Dismisses a modal dialog box (usually referred to
-	 * as a &quot;javascript dialog&quot;).
-	 *
-	 * @throws Exception	 if no dialog box is present
-	 */
-	public void dismissDialog() throws Exception {
-		candybean.log.info("Dismissing dialog.");
-		Alert alert = this.wd.switchTo().alert();
-		alert.dismiss();
 	}
 
 	/**
@@ -438,7 +418,7 @@ public class VInterface {
 		}
 		return s;
 	}
-
+	
 	/**
 	 * Maximize the browser window.
 	 *
@@ -513,6 +493,99 @@ public class VInterface {
 		return this.getSelect(new VHook(strategy, hook));
 	}
 	
+	
+	/**
+	 * Returns the predefined type of interface instantiated.
+	 * 
+	 * @return	The type of interface
+	 */
+	public Type getType() {
+		return this.iType;
+	}
+	
+	/**
+	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
+	 * as a &quot;javascript dialog&quot;).
+	 *
+	 * @throws Exception	 if no dialog box is present
+	 */
+	public void acceptDialog() throws Exception {
+		try {
+			candybean.log.info("Accepting dialog.");
+			this.wd.switchTo().alert().accept();
+//			this.wd.switchTo().defaultContent();
+		} catch(UnhandledAlertException uae) {
+			candybean.log.warning("Unhandled alert exception");
+		}
+	}
+	
+	/**
+	 * Dismisses a modal dialog box (usually referred to
+	 * as a &quot;javascript dialog&quot;).
+	 *
+	 * @throws Exception	 if no dialog box is present
+	 */
+	public void dismissDialog() throws Exception {
+		try {
+			candybean.log.info("Dismissing dialog.");
+			this.wd.switchTo().alert().dismiss();
+//			this.wd.switchTo().defaultContent();
+		} catch(UnhandledAlertException uae) {
+			candybean.log.warning("Unhandled alert exception");
+		}
+	}
+
+	/**
+	 * Returns true if a modal dialog can be switched to 
+	 * and switched back from; otherwise, returns false.
+	 * 
+	 * @return 	Boolean true only if a modal dialog can 
+	 * be switched to, then switched back from.
+	 */
+	public boolean isDialogVisible() {
+		try { 
+			this.wd.switchTo().alert(); 
+//			this.wd.switchTo().defaultContent();
+			candybean.log.info("Dialog present?: true.");
+			return true;
+		} catch(UnhandledAlertException uae) {
+			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored dialog...");
+			return true;
+		} catch(NoAlertPresentException nape) {
+			candybean.log.info("Dialog present?: false.");
+			return false;
+		}
+	}
+	
+    /**
+	 * Encompasses a widget from the current page in order to perform
+	 * an action on it.  Providing this as a more aptly named alternative
+	 * to getControl as the 'thing' encompassed by this is not necessarily
+	 * a 'control' and merely referencing it does nothing; an action must be
+	 * performed off of it, hence not named 'getWidget'.
+	 *
+	 * @param hookStrategy	method to use to search for the widget
+	 * @param hookString	string to find using the specified strategy
+	 * @throws Exception	<i>not thrown</i>
+	 */
+	public VControl widget(Strategy hookStrategy, String hookString) throws Exception {
+		return this.getControl(new VHook(hookStrategy, hookString));
+	}
+	
+	/**
+	 * Encompasses a widget from the current page in order to perform
+	 * an action on it.  Providing this as a more aptly named alternative
+	 * to getControl as the 'thing' encompassed by this is not necessarily
+	 * a 'control' and merely referencing it does nothing; an action must be
+	 * performed off of it, hence not named 'getWidget'.
+	 *
+	 * @param hook			VHook method to use to search for the widget
+	 * @throws Exception	<i>not thrown</i>
+	 */
+	public VControl widget(VHook hook) throws Exception {
+		return this.getControl(hook);
+	}
+	
 	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
 		VInterface.Type iType = null;
 		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
@@ -527,15 +600,16 @@ public class VInterface {
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
-        DesiredCapabilities capabilities;
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+//        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
         WebDriver wd = null;
         switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
-			String ffBinaryPath = this.config.getPathValue("browser.firefox_binary");
+			File ffBinaryPath = new File(this.config.getPathValue("browser.firefox_binary"));
 			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
 //			ffProfile.setEnableNativeEvents(false);
-			FirefoxBinary ffBinary = new FirefoxBinary(new File(ffBinaryPath));
+			FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
 			// if (System.getProperty("headless") != null) {
 			// FirefoxBinary ffBinary = new FirefoxBinary();//new
 			// File("//home//conrad//Applications//firefox-10//firefox"));
@@ -549,10 +623,10 @@ public class VInterface {
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
 			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
-			System.out.println("chromeDriverLogPath: " + chromeDriverLogPath);
+			candybean.log.info("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
-			System.out.println("chromeDriverPath: " + chromeDriverPath);
+			candybean.log.info("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 			candybean.log.info("Instantiating Chrome with:\n    log path:"
@@ -561,7 +635,12 @@ public class VInterface {
 			wd = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
-			throw new Exception("Selenium: ie browser not yet supported.");
+			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
+			candybean.log.info("ieDriverPath: " + ieDriverPath);
+			System.setProperty("webdriver.ie.driver", ieDriverPath);
+			capabilities = DesiredCapabilities.internetExplorer();
+			wd = new InternetExplorerDriver(capabilities);
+			break;
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
         case ANDROID:
@@ -590,8 +669,8 @@ public class VInterface {
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		return wd;
 	}
-
-    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+	
+	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 
         public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {

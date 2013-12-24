@@ -21,8 +21,7 @@
  */
 package com.sugarcrm.candybean.automation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import java.io.File;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,28 +34,23 @@ import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.CB;
+import com.sugarcrm.candybean.utilities.Utils;
 
 public class VInterfaceSystemTest {
 
 	protected static Candybean candybean;
 	protected static VInterface iface;
-	protected static final String curWorkDir = System.getProperty("user.dir");
-	protected static final String relPropsPath = curWorkDir + File.separator + "src"
-			+ File.separator + "test" + File.separator + "resources";
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
 	public static void first() throws Exception {
-		String curWorkDir = System.getProperty("user.dir");
-		String relPropsPath = curWorkDir + File.separator + "src"
-				+ File.separator + "test" + File.separator + "resources";
-		String candybeanPropsPath = relPropsPath + File.separator;
-		String candybeanPropsFilename = System.getProperty("candybean_config");
-		if (candybeanPropsFilename == null) candybeanPropsFilename = "candybean.config";
-		candybeanPropsPath += candybeanPropsFilename;
-		Configuration candybeanConfig = new Configuration(candybeanPropsPath);
+		String candybeanConfigStr = System.getProperty("candybean_config");
+		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		System.out.println("candybeanConfigPath: " + candybeanConfigStr);
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
@@ -66,39 +60,33 @@ public class VInterfaceSystemTest {
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		String url1 = "https://www.google.com/";
-		String url2 = "http://www.yahoo.com/";
+		String url2 = "http://www.wikipedia.org/";
 		String url3 = "http://www.reddit.com/";
 		iface.go(url1);
 		iface.go(url2);
 		iface.go(url3);
-		iface.refresh();
 		assertEquals(url3, iface.getURL());
 		iface.backward();
-		iface.refresh();
 		assertEquals(url2, iface.getURL());
 		iface.backward();
-		iface.refresh();
 		assertEquals(url1, iface.getURL());
-//		iface.interact("backward at 1");
-//		iface.backward();
 		iface.forward();
-		iface.refresh();
 		assertEquals(url2, iface.getURL());
 		iface.forward();
-		iface.refresh();
 		assertEquals(url3, iface.getURL());		
-//		iface.interact("forward at 3");
-//		iface.forward();
+		iface.refresh(); // refreshing only at end; mid-refreshes crash in Chrome
+		assertEquals(url3, iface.getURL());		
 	}
 	
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
-		File screenshotFile = new File(relPropsPath + File.separator + "screenshot.png");
+		File screenshotFile = new File(CB.CONFIG_DIR.getCanonicalPath() + File.separator + "screenshot.png");
 		String url = "https://www.google.com/";
 		iface.go(url);
 		iface.screenshot(screenshotFile);
 		assertTrue(screenshotFile.exists());
+		screenshotFile.delete();
 	}
 
 //	@Ignore
@@ -144,16 +132,28 @@ public class VInterfaceSystemTest {
 //		this.iface.go("");
 	}
 
-	@Ignore
 	@Test
-	public void acceptDialogTest() throws Exception {
-//		this.iface.acceptDialog();
-	}
-
-	@Ignore
-	@Test
-	public void dismissDialogTest() throws Exception {
-//		this.iface.dismissDialog();
+	public void presentAcceptDismissDialogTest() throws Exception {
+		iface.go("http://www.mediacollege.com/internet/javascript/basic/alert.html");
+		
+		// dialog not yet visible
+		assertFalse(iface.isDialogVisible());
+		
+		// clicking; alert should be visible and window inactive
+		iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+		assertTrue(iface.isDialogVisible());
+		
+		// accepting alert dialog; should be gone
+		iface.acceptDialog();
+		assertFalse(iface.isDialogVisible());
+		
+		// Dismiss not available in Chrome
+		if (!iface.getType().equals(Type.CHROME)) {
+			iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+			assertTrue(iface.isDialogVisible());
+			iface.dismissDialog();
+			assertFalse(iface.isDialogVisible());
+		}
 	}
 
 //	@Ignore
@@ -163,9 +163,9 @@ public class VInterfaceSystemTest {
 		boolean actCaseSensPos = iface.contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.contains("google developers", true); //false
 		boolean actNeg = iface.contains("goggle devs", false); //false
-		assertEquals("Expecting: " + true + ", actual: " + actCaseSensPos, true, actCaseSensPos);
-		assertEquals("Expecting: " + false + ", actual: " + actCaseSensNeg, false, actCaseSensNeg);
-		assertEquals("Expecting: " + false + ", actual: " + actNeg, false, actNeg);
+		assertEquals(true, actCaseSensPos);
+		assertEquals(false, actCaseSensNeg);
+		assertEquals(false, actNeg);
 	}
 	
 	@Ignore
