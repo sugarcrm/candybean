@@ -1,3 +1,0 @@
-[submodule "appium"]
-	path = appium
-	url = git@github.com:appium/appium.git
