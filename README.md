@@ -1,7 +1,5 @@
 Candybean
 =========
-Summary
--------
 Candybean is SugarCRM's next generation automation and testing framework.  It is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batches, mobile variants, plain-language testing, and web service testing.
 
 Features
