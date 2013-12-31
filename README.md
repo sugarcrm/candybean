@@ -33,6 +33,20 @@ Some project features planned for Candybean:
 * Best practice, OOP-organized code for ease of maintenance
 * Easy to install (GUI installer or minimal configuration)
 
+Components
+----------
+This is a list of components that collectively fall under Candybean:
+* Automation: contains functionality that automates application interaction
+* Configuration: an extension of the native Java Properties object with configuration-file-specific functionality
+* Data Source: an abstracted data source object with iterative and key-value behavior
+* Results: an encapsulation of test result parsing and illustrative/presentation functionality
+* Runner: an annotation-based orchestration object that executes identified code portions
+* Test: a utilities package with test-specific helper functionality
+* Translations: outputs given files with translated strings; can be used for i18n, etc.
+* Utilities: contains generic helper functionality
+* Web Services: contains REST request-building and response-parsing functionality
+* Mobile: a cross platform mobile testing framework
+
 Installation
 ------------
 Install and configure the following dependencies:
@@ -43,7 +57,7 @@ Install and configure the following dependencies:
 
 Configuration
 -------------
-The following key-value keys should be defined in a configuration file used to instantiate Candybean, which is outlined in the 'Getting started' section:
+The following key-value keys should be defined in a configuration file used to instantiate Candybean
 ```
 automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
 browser.firefox_binary = {\
@@ -61,7 +75,7 @@ perf.page_load_timeout = /page/load/in/seconds
 perf.implicit_wait_seconds = /passive/wait/in/seconds
 ```
 
-Write a test
+Writing tests
 ------------
 Here's an example Java-JUnit test that instantiates Candybean and begins testing through a Chrome browser:
 ```
@@ -75,7 +89,7 @@ public class CandybeanTest {
 	public static void first() throws Exception {
 		Configuration candybeanConfig = new Configuration(new File("path/to/candybean.config"));
 		cb = Candybean.getInstance(candybeanConfig);
-		cb.getInterface(Type.CHROME);
+		cb.getInterface().start(Type.CHROME);
 	}
 	
 	@Test
@@ -88,12 +102,29 @@ public class CandybeanTest {
 		... perform other logging
 		... use other candybean features		
 	}
+	
+	@AfterClass
+	public static void last() throws Exception {
+		cb.getInterface().stop();
+	}
 }
 ```
 
-Execute a test
+Executing tests
 --------------
 At this point, because Candybean is Maven-based, executing simple maven commands will detect written tests and execute them for test results:
 ```
 > mvn clean install
 ```
+You can also see the included system tests to see test examples.  System tests can be executing via maven and the 'system' profile:
+```
+> mvn clean install -Psystem
+```
+
+Core contributors
+-----------------
+Conrad Warmbold (<a href="https://github.com/cradbold">@cradbold</a>)
+Soon Han (<a href="https://github.com/hans-sugarcrm">@hans-sugarcrm</a>)
+Larry Cao (<a href="https://github.com/sqwerl">@sqwerl</a>)
+Jason Lin (<a href="https://github.com/Raydians">@Raydians</a>)
+Wilson Li (<a href="https://github.com/wli-sugarcrm">@wli-sugarcrm</a>)
