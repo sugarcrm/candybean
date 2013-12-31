@@ -61,8 +61,8 @@ perf.page_load_timeout = /page/load/in/seconds
 perf.implicit_wait_seconds = /passive/wait/in/seconds
 ```
 
-Getting started
----------------
+Write a test
+------------
 Here's an example Java-JUnit test that instantiates Candybean and begins testing through a Chrome browser:
 ```
 import com.sugarcrm.candybean;
@@ -89,4 +89,11 @@ public class CandybeanTest {
 		... use other candybean features		
 	}
 }
+```
+
+Execute a test
+--------------
+At this point, because Candybean is Maven-based, executing simple maven commands will detect written tests and execute them for test results:
+```
+> mvn clean install
 ```
