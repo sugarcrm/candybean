@@ -1,59 +1,92 @@
-=======
 Candybean
-=======
+=========
+Summary
+-------
+Candybean is SugarCRM's next generation automation and testing framework.  It is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batches, mobile variants, plain-language testing, and web service testing.
 
+Features
+--------
+Some project features planned for Candybean:
+* HTML 5 support (Sugar 7): supports HTML 5 elements
+* Support Java-based tests/calls: executes Java-based test scripts
+* Abstraction from dependent technologies:
+** Supports multiple, independent reporting options (e.g. XML, HTML)
+** Supports multiple automation frameworks (de-prioritized)
+** Data-driven resource agnostic (e.g. DB, XML, JSON)
+* Independent from project-specific parameters:
+** Supports product objectification, thus platform-independent
+** Product independent (no Sugar-specific references)
+* Self-testing:
+** Verify element hooks are valid before running tests
+** Verify abstract element behavior (fields, menus, etc.)
+** Unit and system tested
+* Script-style logging: make debugging readable, easier
+* Failure/error non-blocking: option to continue executing tests upon error/failure
+* Resource consolidating: pre-execution resource scan for consolidated allocation
+* Supports 'smart' waits (WIP definition)
+* Configurable with ease/overridable via CLI
+* Randomized testing: Supports randomized/stress testing
+* Open-source:
+** JavaDoc/API with usage details, examples, best practices
+** Externally-facing site/wiki with installation documentation
+** Code samples
+* Best practice, OOP-organized code for ease of maintenance
+* Easy to install (GUI installer or minimal configuration)
 
-***
-## Component: Translations 
-### Background: 
-Files are used as a form of tests to run along an environment like Sugar. However, Sugar supports 
-many languages and therefore it is required that the test files contain the appropriate language-specific
-strings to compare with. This program will take-in a file and generate a new file where the attribute of an
-'assertEquals' statement are replaced according to the language specified. 
+Installation
+------------
+Install and configure the following dependencies:
+* <a href="http://git-scm.com/downloads">Git (clone your fork)</a>
+* <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE 7 JDK</a>
+* <a href="http://maven.apache.org/download.html">Maven 3</a>
+* <a href="https://www.google.com/intl/en/chrome/browser/">Chrome (default browser)</a>
 
-### Usage: 
-There are mainly two ways to run translations on a file or a directory containing multiple files.
-**Method 1:** passing specific parameters to the Translate method as follows:
-<pre><code> Translate(database, module(s), language, testfile); </pre></code>
+Configuration
+-------------
+The following key-value keys should be defined in a configuration file used to instantiate Candybean, which is outlined in the 'Getting started' section:
+```
+automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
+browser.firefox_binary = {\
+	"linux": "/path/to/firefox/binary/in/linux", \
+	"mac": "/path/to/firefox/binary/on/mac", \
+	"windows": "c:/path/to/firefox/binary/in/windows"}
+browser.firefox_profile = default
+browser.chrome_driver_path = {\
+	"linux": "/path/to/chrome/driver/in/linux", \
+	"mac": "/path/to/chrome/driver/on/mac", \
+	"windows": "/path/to/chrome/driver/in/windows"}
+browser.chrome_driver_log_path = /path/to/chromedriver/log
+browser.ie_driver_path = /path/to/ie/driver
+perf.page_load_timeout = /page/load/in/seconds
+perf.implicit_wait_seconds = /passive/wait/in/seconds
+```
 
-where,
-+ database - name of the database (ie, "translate\_6\_3") 
-+ module - name of the module (ie, "Accounts") or path to a file containing a list of modules (ie, ../resources/module-list.txt) where each module is separated by a newline
-+ language - desire translation language (ie, fr\_FR, es\_ES)
-+ testfile - path to a single test file (ie, ../Accounts\_xxxx.java) or a path to a directory containing multiple test files (ie, ../MyTestFiles/)
+Getting started
+---------------
+Here's an example Java-JUnit test that instantiates Candybean and begins testing through a Chrome browser:
+```
+import com.sugarcrm.candybean;
 
-*NOTE:* The output file path and database access information has been hardcoded (see below). So If you want to use another output 
-path or another database, it is suggested to use **Method 2** or you can simple add them to your System's property with the following keys:
-+ output path (translate.output) -  [hardcoded as]: will be stored in the execution-program path, pre-named as: ../translated\_Files\_[language]
-+ database server(translate.server) - [hardcoded as]: 10.8.31.10
-+ database username(translate.username) - [hardcoded as]: translator
-+ database password(translate.password) - [hardcoded as]: Sugar123!
+public class CandybeanTest {
 
-**Method 2:** passing a properties file path to the Translate method as follows: 
-<pre><code> Translate("/resources/translate.properties"); </pre></code>
-
-The properties files must contain the following keys for the program execution to succeed:
-**Properties key/value format:** <pre><code> translate.key=value </pre></code>
-+ translate.database - name of the database (ie, "translate\_6\_3") 
-+ translate.module - name of the module (ie, "Accounts") or path to a file containing a list of modules (ie, ../resources/module-list.txt) where each module is separated by a newline
-+ translate.language - desire translation language (ie, fr\_FR, es\_ES)
-+ translate.testpath - path to a single test file (ie, ../Accounts\_xxxx.java) or a path to a directory containing multiple test files (ie, ../MyTestFiles/)
-+ translate.output - output path/directory (ie, ../TestOutput)
-
-+ translate.server - database server address (eg. 10.8.31.10)
-+ translate.username - database server username (eg. translator)
-+ translate.password - database server password (eg. Sugar123!)
-
-### Supported Assert Statements:
-The 'expectedValue' will be replaced with a language-specified string from the database 
-+ assertEquals(expectedValue, actualValue); 
-+ assertEquals(message, expectedValue, actualValue);
-
-### TODO::
-+ Use Centralized Database
-+ Add assert robustness by adding more assert types or use a global wrapper assert method 
-
-###Last-Minute Update 12-21-2012
-+ Voodoo2 Translation will support .xml format tests (instead of only .java)
-
-***
+	static Candybean cb;
+	
+	@BeforeClass
+	public static void first() throws Exception {
+		Configuration candybeanConfig = new Configuration(new File("path/to/candybean.config"));
+		cb = Candybean.getInstance(candybeanConfig);
+		cb.getInterface(Type.CHROME);
+	}
+	
+	@Test
+	public void backwardForwardRefreshTest() throws Exception {
+		cb.log("Bringing up craigslist.com for an apartment search!");
+		cb.getInterface().go("http://www.craigslist.com/");
+		assertEquals("http://www.craigslist.com/", cb.getURL());
+		... do other things
+		... perform other assertions
+		... perform other logging
+		... use other candybean features		
+	}
+}
+```
