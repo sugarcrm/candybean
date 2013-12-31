@@ -123,8 +123,8 @@ You can also see the included system tests to see test examples.  System tests c
 
 Core contributors
 -----------------
-Conrad Warmbold (<a href="https://github.com/cradbold">@cradbold</a>)
-Soon Han (<a href="https://github.com/hans-sugarcrm">@hans-sugarcrm</a>)
-Larry Cao (<a href="https://github.com/sqwerl">@sqwerl</a>)
-Jason Lin (<a href="https://github.com/Raydians">@Raydians</a>)
-Wilson Li (<a href="https://github.com/wli-sugarcrm">@wli-sugarcrm</a>)
+* Conrad Warmbold (<a href="https://github.com/cradbold">@cradbold</a>)
+* Soon Han (<a href="https://github.com/hans-sugarcrm">@hans-sugarcrm</a>)
+* Larry Cao (<a href="https://github.com/sqwerl">@sqwerl</a>)
+* Jason Lin (<a href="https://github.com/Raydians">@Raydians</a>)
+* Wilson Li (<a href="https://github.com/wli-sugarcrm">@wli-sugarcrm</a>)
