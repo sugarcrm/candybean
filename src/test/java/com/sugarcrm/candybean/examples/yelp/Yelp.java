@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.model.IModel;
@@ -43,7 +44,7 @@ public class Yelp implements IModel {
 	public Yelp(VInterface i, Properties yelpHooks, YelpUser defaultUser) throws Exception {
 		this.i = i;
 		hooks = VHook.getHooks(yelpHooks);
-		defaultUser = defaultUser;
+		this.defaultUser = defaultUser;
 //		model = buildModel();
 	}
 	

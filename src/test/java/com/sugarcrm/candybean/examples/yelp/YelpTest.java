@@ -65,7 +65,6 @@ public class YelpTest {
 		yelp.start();
 	}
 
-	@Ignore
 	@Test
 	public void yelpLoginLogoutTest() throws Exception {
 		yelp.login();
