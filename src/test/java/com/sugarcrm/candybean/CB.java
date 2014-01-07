@@ -22,10 +22,28 @@
 package com.sugarcrm.candybean;
 
 import java.io.File;
+import java.io.IOException;
+
+import com.sugarcrm.candybean.automation.Candybean;
 
 public class CB {
 
+	/**
+	 * The root directory of candy bean
+	 */
 	public static File ROOT_DIR = new File(System.getProperty("user.dir") + File.separator);
+	
+	/**
+	 * The default configuration directory 
+	 */
 	public static File CONFIG_DIR = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator);
+	
+	/**
+	 * @return The complete path to the candybean configuration file in this JRE
+	 * @throws IOException
+	 */
+	public static String getConfugrationFilePath() throws IOException{
+		return CONFIG_DIR.getCanonicalPath() + File.separator + Candybean.CONFIG_FILE_NAME;
+	}
 	
 }

@@ -24,13 +24,9 @@ package com.sugarcrm.candybean.examples.yelp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
-
 import org.junit.Test;
-
 import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
@@ -46,9 +42,9 @@ public class YelpTest {
 		
 	@BeforeClass
 	public static void first() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
 		if (candybeanConfigStr == null) {
-			candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+			candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + Candybean.CONFIG_FILE_NAME;
 		}
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
