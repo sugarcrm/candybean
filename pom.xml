@@ -1,32 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sugarcrm.candybean</groupId>
 	<artifactId>candybean</artifactId>
 	<packaging>jar</packaging>
 	<name>candybean</name>
-	<version>1.1</version>
+	<version>1.1.1-SNAPSHOT</version>
 	<description>A highly configurable testing framework that seeks to automate across web and mobile while encapsulating common testing features.</description>
 	<url>http://sugarcrm.github.io/candybean/</url>
 	<licenses>
-	    <license>
-	      	<name>GNU Affero General Public License Version 3</name>
-	      	<url>http://www.gnu.org/licenses/agpl.html</url>
-	    </license>
-  	</licenses>
-  	<properties>
+		<license>
+			<name>GNU Affero General Public License Version 3</name>
+			<url>http://www.gnu.org/licenses/agpl.html</url>
+		</license>
+	</licenses>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<inceptionYear>2013</inceptionYear>
-  	<organization>
-	    <name>SugarCRM, Inc.</name>
-	    <url>http://www.sugarcrm.com</url>
-  	</organization>
-  	<scm>
-	    <connection>scm:git:https://github.com/sugarcrm/candybean.git</connection>
-	    <url>https://github.com/sugarcrm/candybean</url>
-  	</scm>
-  	<developers>
+	<organization>
+		<name>SugarCRM, Inc.</name>
+		<url>http://www.sugarcrm.com</url>
+	</organization>
+	<scm>
+		<connection>scm:git:https://github.com/sugarcrm/candybean.git</connection>
+		<url>https://github.com/sugarcrm/candybean</url>
+	</scm>
+	<developers>
 		<developer>
 			<id>conrad</id>
 			<name>Conrad</name>
@@ -53,49 +53,57 @@
 			<name>Shehryay</name>
 		</developer>
 	</developers>
-  	<prerequisites>
+	<prerequisites>
 		<maven>2.2.1</maven>
 	</prerequisites>
-  	<pluginRepositories>
-        <pluginRepository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>maven-snapshots</id>
-            <name>Maven Snapshots</name>
-            <url>http://bits.netbeans.org/netbeans/trunk/maven-snapshot/</url>
-        </pluginRepository>
-    </pluginRepositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>maven-snapshots</id>
+			<name>Maven Snapshots</name>
+			<url>http://bits.netbeans.org/netbeans/trunk/maven-snapshot/</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!-- plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.6.2.201302030002</version>
-					<configuration>
-						<destfile>${basedir}/target/coverage-reports/jacoco-unit.exec</destfile>
-				  		<datafile>${basedir}/target/coverage-reports/jacoco-unit.exec</datafile>
-					</configuration>
+				<!-- plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
+					<version>0.6.2.201302030002</version> <configuration> <destfile>${basedir}/target/coverage-reports/jacoco-unit.exec</destfile> 
+					<datafile>${basedir}/target/coverage-reports/jacoco-unit.exec</datafile> 
+					</configuration> <executions> <execution> <id>jacoco-initialize</id> <goals> 
+					<goal>prepare-agent</goal> </goals> </execution> <execution> <id>jacoco-site</id> 
+					<phase>package</phase> <goals> <goal>report</goal> </goals> </execution> 
+					</executions> </plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
 					<executions>
 						<execution>
-							<id>jacoco-initialize</id>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
 							<goals>
-								<goal>prepare-agent</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>jacoco-site</id>
-							<phase>package</phase>
-							<goals>
-								<goal>report</goal>
+								<goal>sign</goal>
 							</goals>
 						</execution>
 					</executions>
-				</plugin -->
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 				<plugin>
 					<groupId>com.mycila.maven-license-plugin</groupId>
 					<artifactId>maven-license-plugin</artifactId>
@@ -103,42 +111,17 @@
 					<configuration>
 						<header>./header.txt</header>
 					</configuration>
-		        </plugin>
-		        <plugin>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-dependency-plugin</artifactId>
-        			<version>2.8</version>
-        		</plugin>
-    			<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-jar-plugin</artifactId>
-        			<version>2.4</version>
-        		</plugin>
-    			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-clean-plugin</artifactId>
-        			<version>2.5</version>
-        		</plugin>
-    			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-deploy-plugin</artifactId>
-        			<version>2.7</version>
-        		</plugin>
-    			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-install-plugin</artifactId>
-        			<version>2.4</version>
-        		</plugin>
-    			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-resources-plugin</artifactId>
-        			<version>2.6</version>
-        		</plugin>
-        		<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-site-plugin</artifactId>
-        			<version>3.3</version>
-        		</plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.15</version>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -147,13 +130,8 @@
 						<source>1.7</source>
 						<target>1.7</target>
 					</configuration>
-        		</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.15</version>
 				</plugin>
-			 	<plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>LATEST</version>
@@ -161,15 +139,23 @@
 						<show>private</show>
 						<nohelp>true</nohelp>
 					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-                 	<artifactId>maven-project-info-reports-plugin</artifactId>
-                 	<version>2.0</version>
-                 	<configuration>
-                     	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                 	</configuration>
-             	</plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>2.0</version>
+					<configuration>
+						<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -207,53 +193,30 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
-				<!--execution>
-				   <id>copy-dependencies</id>
-				   <phase>package</phase>
-				   <goals>
-				      <goal>copy-dependencies</goal>
-				   </goals>
-				   <configuration>
-				      <outputDirectory>
-				         ${project.build.directory}/lib
-				      </outputDirectory>
-				   </configuration>
-				</execution-->
+					<!--execution> <id>copy-dependencies</id> <phase>package</phase> <goals> 
+						<goal>copy-dependencies</goal> </goals> <configuration> <outputDirectory> 
+						${project.build.directory}/lib </outputDirectory> </configuration> </execution -->
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
-	    <!-- >dependency>
-			<groupId>io.selendroid</groupId>
-			<artifactId>selendroid-standalone</artifactId>
-			<version>LATEST</version>
-		</dependency>
+		<!-- >dependency> <groupId>io.selendroid</groupId> <artifactId>selendroid-standalone</artifactId> 
+			<version>LATEST</version> </dependency> <dependency> <groupId>io.selendroid</groupId> 
+			<artifactId>selendroid-common</artifactId> <version>LATEST</version> </dependency> 
+			<dependency> <groupId>io.selendroid</groupId> <artifactId>selendroid-server-common</artifactId> 
+			<version>LATEST</version> </dependency> <dependency> <groupId>org.testng</groupId> 
+			<artifactId>testng</artifactId> <version>6.8.7</version> <scope>test</scope> 
+			</dependency -->
 		<dependency>
-			<groupId>io.selendroid</groupId>
-			<artifactId>selendroid-common</artifactId>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
 			<version>LATEST</version>
-		</dependency>
-		<dependency>
-			<groupId>io.selendroid</groupId>
-			<artifactId>selendroid-server-common</artifactId>
-			<version>LATEST</version>
-		</dependency>
-	    <dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.7</version>
-			<scope>test</scope>
-		</dependency -->
-		<dependency>
-		    <groupId>xml-apis</groupId>
-		    <artifactId>xml-apis</artifactId>
-		    <version>LATEST</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.25</version>
+			<version>5.1.28</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -280,24 +243,24 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.2.5</version>
+			<version>4.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>LATEST</version>
-	 	</dependency>
-	 	<dependency>
-		     <groupId>org.simpleframework</groupId>
-		     <artifactId>simple-xml</artifactId>
-		     <version>LATEST</version>
 		</dependency>
 		<dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>LATEST</version>
-            <!-- scope>test</scope -->
-        </dependency>
+			<groupId>org.simpleframework</groupId>
+			<artifactId>simple-xml</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>LATEST</version>
+			<!-- scope>test</scope -->
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
