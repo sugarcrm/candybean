@@ -21,13 +21,11 @@
  */
 package com.sugarcrm.candybean.automation;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+
 import java.util.Properties;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
 
 /**
@@ -38,6 +36,16 @@ import com.sugarcrm.candybean.configuration.Configuration;
  * @author Conrad Warmbold
  */
 public class Candybean {
+	
+	/**
+	 * The default name of the system property that may contain the candybean configuration file path.
+	 */
+	public static final String CONFIG_SYSTEM_PROPERTY = "candybean_config";
+	
+	/**
+	 * The default name for the configuration file used to instantiate candybean.
+	 */
+	public static final String CONFIG_FILE_NAME = "candybean.config";
 
 	/**
 	 * {@link Logger} object for use by tests.
@@ -108,18 +116,10 @@ public class Candybean {
 	 * @throws Exception if initializing a logger fails
 	 */
 	private Logger getLogger() throws Exception {
-		// check for Log directory existence
-//		File tempLogPropsFile = new File(System.getProperty("user.dir") + File.separator + "logging.properties");
-//		tempLogPropsFile.createNewFile();
-		//		String defaultLogPath = logDirPath + File.separator + "voodoo.log";
-		//		String logPath = Utils.getCascadingPropertyValue(props, defaultLogPath, "system.log_path");
-//		OutputStream output = new FileOutputStream(tempLogPropsFile);
-//		this.config.store(output, null);
-		//		JOptionPane.showInputDialog("pause");
+		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
+		System.setProperty("java.util.logging.config.file", CB.getConfugrationFilePath());
+		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		Logger logger = Logger.getLogger(Candybean.class.getName());
-//		LogManager.getLogManager().readConfiguration(new FileInputStream(tempLogPropsFile));
-		//		logger.setLevel(this.getLogLevel());
-//		tempLogPropsFile.delete();
 		return logger;
 	}
 
