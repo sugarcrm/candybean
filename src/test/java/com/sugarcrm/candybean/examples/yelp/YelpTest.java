@@ -40,7 +40,7 @@ public class YelpTest extends AbstractTest{
 		
 	@Before
 	public void first() throws Exception {
-		
+		iface.start();
 		String yelpHooksStr = System.getProperty("yelp_hooks");
 		if (yelpHooksStr == null) {
 			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "yelp.hooks";
