@@ -131,19 +131,19 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
-				<plugin>
+				<!-- plugin>
 				    <groupId>org.apache.maven.plugins</groupId>
 				    <artifactId>maven-scm-publish-plugin</artifactId>
 				    <version>1.0-beta-2</version>
 				    <configuration>
 				        <checkoutDirectory>${project.build.directory}/doc</checkoutDirectory>
 				        <checkinComment>publishing javadoc for ${project.artifactId}:${project.version}</checkinComment>
-				        <content>${project.reporting.outputDirectory}/target/site/apidocs</content>
+				        <content>${project.reporting.outputDirectory}/apidocs</content>
 				        <skipDeletedFiles>true</skipDeletedFiles>
-				        <pubScmUrl>scm:git:https://github.com/sugarcrm/candybean.git</pubScmUrl>
+				        <pubScmUrl>scm:git:git@github.com:sugarcrm/candybean.git</pubScmUrl>
 				        <scmBranch>gh-pages</scmBranch>
 				    </configuration>
-				</plugin>
+				</plugin -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
