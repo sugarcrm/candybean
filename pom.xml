@@ -136,9 +136,15 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>LATEST</version>
 					<configuration>
-						<show>private</show>
+						<show>public</show>
 						<nohelp>true</nohelp>
-					</configuration>
+				       	<header>candybean ${project.version}</header>
+				       	<footer>candybean ${project.version}</footer>
+				       	<doctitle>candybean ${project.version}</doctitle>
+				       	<links>
+				        	<link>http://sugarcrm.github.io/candybean/</link>
+				       	</links>
+				   	</configuration>
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
