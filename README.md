@@ -105,7 +105,8 @@ public class CandybeanTest extends AbstractTest{
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		logger.log("Bringing up craigslist.com for an apartment search!");
-		iface.go("http://www.craigslist.com/");
+		candybean.getInterface().start();
+		candybean.getInterface().go("http://www.craigslist.com/");
 		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
 		... do other things
 		... perform other assertions
@@ -115,7 +116,7 @@ public class CandybeanTest extends AbstractTest{
 	
 	@AfterClass
 	public static void last() throws Exception {
-		iface.stop();
+		candybean.getInterface().stop();
 	}
 }
 ```
