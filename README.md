@@ -106,7 +106,7 @@ public class CandybeanTest extends AbstractTest{
 	public void backwardForwardRefreshTest() throws Exception {
 		logger.log("Bringing up craigslist.com for an apartment search!");
 		iface.go("http://www.craigslist.com/");
-		assertEquals("http://www.craigslist.com/", cb.getURL());
+		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
 		... do other things
 		... perform other assertions
 		... perform other logging
