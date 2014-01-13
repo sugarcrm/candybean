@@ -32,8 +32,8 @@ import org.junit.Ignore;
 
 import org.junit.Test;
 
-import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.examples.sugar.SugarUser.SugarUserBuilder;
 import com.sugarcrm.candybean.utilities.Utils;

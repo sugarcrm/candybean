@@ -27,7 +27,8 @@ import java.util.Properties;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import com.sugarcrm.candybean.CB;
+
+import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
 import com.sugarcrm.candybean.test.AbstractTest;
 

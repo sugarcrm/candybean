@@ -19,14 +19,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean;
+package com.sugarcrm.candybean.configuration;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
 public class CB {

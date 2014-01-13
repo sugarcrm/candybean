@@ -25,7 +25,7 @@ package com.sugarcrm.candybean.automation;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import com.sugarcrm.candybean.CB;
+import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
 
 /**
