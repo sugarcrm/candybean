@@ -117,7 +117,7 @@ public class Candybean {
 	 */
 	private Logger getLogger() throws Exception {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
-		System.setProperty("java.util.logging.config.file", CB.getConfugrationFilePath());
+		System.setProperty("java.util.logging.config.file", CB.getConfigrationFilePath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		Logger logger = Logger.getLogger(Candybean.class.getName());
 		return logger;
