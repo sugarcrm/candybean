@@ -27,8 +27,6 @@ import java.util.Properties;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
 import com.sugarcrm.candybean.test.AbstractTest;
 
@@ -41,17 +39,17 @@ public class YelpTest extends AbstractTest {
 
 	@Before
 	public void first() throws Exception {
-		candybean.getInterface().start();
 		String yelpHooksStr = System.getProperty("yelp_hooks");
 		if (yelpHooksStr == null) {
-			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator
+			yelpHooksStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator
 					+ "yelp.hooks";
 		}
 		Properties yelpHooks = new Properties();
 		yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));
 		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
 				"cwarmbold@sugarcrm.com", "Sugar123!").build();
-		yelp = new Yelp(candybean.getInterface(), yelpHooks, user);
+		yelp = new Yelp(iface, yelpHooks, user);
+		iface.start();
 		yelp.start();
 	}
 
