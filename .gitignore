@@ -7,4 +7,5 @@ libpeerconnection.log
 log/*.log*
 log/*.log
 src/test/resources/screenshot.png
+release.properties
 
