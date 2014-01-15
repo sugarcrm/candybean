@@ -24,64 +24,50 @@ package com.sugarcrm.candybean.examples.yelp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
-
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-
+import org.junit.Before;
 import org.junit.Test;
-
-import com.sugarcrm.candybean.CB;
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.test.AbstractTest;
 
-public class YelpTest {
-	
-	private static Candybean candybean;
-	private static VInterface iface;
+public class YelpTest extends AbstractTest {
+
+	/**
+	 * Contains methods for yelp test
+	 */
 	private static Yelp yelp;
-		
-	@BeforeClass
-	public static void first() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) {
-			candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		}
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getInterface();
+
+	@Before
+	public void first() throws Exception {
 		String yelpHooksStr = System.getProperty("yelp_hooks");
 		if (yelpHooksStr == null) {
-			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "yelp.hooks";
+			yelpHooksStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator
+					+ "yelp.hooks";
 		}
 		Properties yelpHooks = new Properties();
 		yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));
-		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014", "cwarmbold@sugarcrm.com", "Sugar123!").build();
+		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
+				"cwarmbold@sugarcrm.com", "Sugar123!").build();
 		yelp = new Yelp(iface, yelpHooks, user);
 		iface.start();
 		yelp.start();
 	}
 
-	@Ignore
 	@Test
 	public void yelpLoginLogoutTest() throws Exception {
 		yelp.login();
 		yelp.logout();
 	}
-	
-//	@Ignore
+
 	@Test
 	public void yelpRandomTest() throws Exception {
 		int timeout_in_minutes = 10;
 		yelp.run(timeout_in_minutes);
 	}
-	
+
 	@AfterClass
 	public static void last() throws Exception {
 		yelp.stop();
-		iface.stop();
+		candybean.getInterface().stop();
 	}
-}	
+}

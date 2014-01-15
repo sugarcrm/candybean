@@ -55,9 +55,13 @@ Install and configure the following dependencies:
 
 Configuration
 -------------
-The following key-value keys should be defined in a configuration file used to instantiate Candybean
+The following key-value keys should be defined in a configuration file used to instantiate Candybean.
+By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory
 ```
+#specifies the type of autmation interface
 automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
+
+#browser specific profiles and driver paths
 browser.firefox_binary = {\
 	"linux": "/path/to/firefox/binary/in/linux", \
 	"mac": "/path/to/firefox/binary/on/mac", \
@@ -71,30 +75,39 @@ browser.chrome_driver_log_path = /path/to/chromedriver/log
 browser.ie_driver_path = /path/to/ie/driver
 perf.page_load_timeout = /page/load/in/seconds
 perf.implicit_wait_seconds = /passive/wait/in/seconds
+
+#candybean logger configuration
+handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
+
+#file logging
+java.util.logging.FileHandler.limit = 50000
+java.util.logging.FileHandler.count = 1
+java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.level = INFO
+
+#logging format
+java.util.logging.SimpleFormatter.format = [%1$tm-%1$td-%1$tY %1$tk:%1$tM:%1$tS:%1$tL] %2$s %4$s: %5$s %6$s %n
+
 ```
 
 Writing tests
 ------------
-Here's an example Java-JUnit test that instantiates Candybean and begins testing through a Chrome browser:
+Here's an example Java-JUnit test that extends AbstractTest (which instantiates a candybean interface from the configuration file)
+and begins testing through the interface defined in the configuration.
 ```
 import com.sugarcrm.candybean;
+import org.junit.AfterClass;
+import org.junit.Test;
+import com.sugarcrm.candybean.test.AbstractTest;
 
-public class CandybeanTest {
-
-	static Candybean cb;
-	
-	@BeforeClass
-	public static void first() throws Exception {
-		Configuration candybeanConfig = new Configuration(new File("path/to/candybean.config"));
-		cb = Candybean.getInstance(candybeanConfig);
-		cb.getInterface().start(Type.CHROME);
-	}
+public class CandybeanTest extends AbstractTest{
 	
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
-		cb.log("Bringing up craigslist.com for an apartment search!");
-		cb.getInterface().go("http://www.craigslist.com/");
-		assertEquals("http://www.craigslist.com/", cb.getURL());
+		logger.log("Bringing up craigslist.com for an apartment search!");
+		candybean.getInterface().start();
+		candybean.getInterface().go("http://www.craigslist.com/");
+		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
 		... do other things
 		... perform other assertions
 		... perform other logging
@@ -103,7 +116,7 @@ public class CandybeanTest {
 	
 	@AfterClass
 	public static void last() throws Exception {
-		cb.getInterface().stop();
+		candybean.getInterface().stop();
 	}
 }
 ```
