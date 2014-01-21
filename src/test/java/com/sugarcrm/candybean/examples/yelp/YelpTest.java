@@ -32,23 +32,25 @@ import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
 import com.sugarcrm.candybean.test.AbstractTest;
 
-public class YelpTest extends AbstractTest{
-	
+public class YelpTest extends AbstractTest {
+
 	/**
 	 * Contains methods for yelp test
 	 */
 	private static Yelp yelp;
-		
+
 	@Before
 	public void first() throws Exception {
 		candybean.getInterface().start();
 		String yelpHooksStr = System.getProperty("yelp_hooks");
 		if (yelpHooksStr == null) {
-			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "yelp.hooks";
+			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator
+					+ "yelp.hooks";
 		}
 		Properties yelpHooks = new Properties();
 		yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));
-		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014", "cwarmbold@sugarcrm.com", "Sugar123!").build();
+		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
+				"cwarmbold@sugarcrm.com", "Sugar123!").build();
 		yelp = new Yelp(candybean.getInterface(), yelpHooks, user);
 		yelp.start();
 	}
@@ -58,16 +60,16 @@ public class YelpTest extends AbstractTest{
 		yelp.login();
 		yelp.logout();
 	}
-	
+
 	@Test
 	public void yelpRandomTest() throws Exception {
 		int timeout_in_minutes = 10;
 		yelp.run(timeout_in_minutes);
 	}
-	
+
 	@AfterClass
 	public static void last() throws Exception {
 		yelp.stop();
 		candybean.getInterface().stop();
 	}
-}	
+}

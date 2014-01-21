@@ -469,8 +469,8 @@ public class VInterface {
 	 * @return The list of all controls that match the strategy and hook
 	 * @throws Exception
 	 */
-	public List<VControl> getControls(Strategy strategy, String hook) throws Exception{
-		return this.getControls(strategy,new VHook(strategy,hook));
+	public List<VControl> getControls(Strategy strategy, String hook) throws Exception {
+		return this.getControls(strategy, new VHook(strategy, hook));
 	}
 	
 	/**
@@ -480,11 +480,11 @@ public class VInterface {
 	 * @return The list of all controls that match the strategy and hook
 	 * @throws Exception
 	 */
-	private List<VControl> getControls(Strategy strategy, VHook hook) throws Exception{
+	private List<VControl> getControls(Strategy strategy, VHook hook) throws Exception {
 		List<VControl> controls = new ArrayList<VControl>();
 		List<WebElement> wes = this.wd.findElements(VControl.makeBy(hook));
-		for(WebElement we: wes)
-			controls.add(new VControl(this.candybean,this,hook,we));
+		for (WebElement we : wes)
+			controls.add(new VControl(this.candybean, this, hook, we));
 		return controls;
 	}
 

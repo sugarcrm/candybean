@@ -31,7 +31,7 @@ import com.sugarcrm.candybean.utilities.Utils;
 public class CB {
 
 	/**
-	 * The root directory of candy bean
+	 * The root directory of candybean
 	 */
 	public static File ROOT_DIR = new File(System.getProperty("user.dir") + File.separator);
 	
@@ -54,8 +54,6 @@ public class CB {
 	 * @throws Exception If default configuration files do not exist.
 	 */
 	public static Candybean configureCandybean() throws Exception{
-		
-		VInterface iface;
 		Candybean candybean;
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
 		if (candybeanConfigStr == null) 
