@@ -1,1 +1,4 @@
 
+[submodule "config"]
+	path = config
+	url = https://github.com/sugarcrm/Voodoo2.git
