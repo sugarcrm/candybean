@@ -25,8 +25,8 @@ package com.sugarcrm.candybean.automation;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.test.AbstractTest;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -117,7 +117,7 @@ public class Candybean {
 	 */
 	private Logger getLogger() throws Exception {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
-		System.setProperty("java.util.logging.config.file", CB.getConfigrationFilePath());
+		System.setProperty("java.util.logging.config.file", AbstractTest.getConfigrationFilePath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		Logger logger = Logger.getLogger(Candybean.class.getName());
 		return logger;

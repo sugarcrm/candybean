@@ -33,8 +33,8 @@ import org.junit.rules.ExpectedException;
 import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.test.AbstractTest;
 import com.sugarcrm.candybean.utilities.Utils;
 
 public class VInterfaceSystemTest {
@@ -48,7 +48,7 @@ public class VInterfaceSystemTest {
 	@BeforeClass
 	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		if (candybeanConfigStr == null) candybeanConfigStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		System.out.println("candybeanConfigPath: " + candybeanConfigStr);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
@@ -81,7 +81,7 @@ public class VInterfaceSystemTest {
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
-		File screenshotFile = new File(CB.CONFIG_DIR.getCanonicalPath() + File.separator + "screenshot.png");
+		File screenshotFile = new File(AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator + "screenshot.png");
 		String url = "https://www.google.com/";
 		iface.go(url);
 		iface.screenshot(screenshotFile);
