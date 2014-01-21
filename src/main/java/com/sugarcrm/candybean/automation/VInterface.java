@@ -26,6 +26,7 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -459,6 +460,32 @@ public class VInterface {
 	 */
 	public VControl getControl(Strategy strategy, String hook) throws Exception {
 		return this.getControl(new VHook(strategy, hook));
+	}
+	
+	/**
+	 * Gets a list of controls from the current page
+	 * @param strategy The strategy used to search for the control
+	 * @param hook The associated hook for the strategy
+	 * @return The list of all controls that match the strategy and hook
+	 * @throws Exception
+	 */
+	public List<VControl> getControls(Strategy strategy, String hook) throws Exception{
+		return this.getControls(strategy,new VHook(strategy,hook));
+	}
+	
+	/**
+	 * Gets a list of controls from the current page based on a VHook
+	 * @param strategy The strategy used to search for the control
+	 * @param hook The associated hook for the strategy
+	 * @return The list of all controls that match the strategy and hook
+	 * @throws Exception
+	 */
+	private List<VControl> getControls(Strategy strategy, VHook hook) throws Exception{
+		List<VControl> controls = new ArrayList<VControl>();
+		List<WebElement> wes = this.wd.findElements(VControl.makeBy(hook));
+		for(WebElement we: wes)
+			controls.add(new VControl(this.candybean,this,hook,we));
+		return controls;
 	}
 
 	/**

@@ -70,7 +70,7 @@ public class VControl {
 			this.index = index;
 	}
 	
-	private VControl(Candybean voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
+	public VControl(Candybean voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
 		this.voodoo = voodoo;
 		this.iface = iface;
 		this.hook = hook;
@@ -271,15 +271,15 @@ public class VControl {
 		return "VControl(" + this.hook.toString() + ")";
 	}
 	
-	protected By getBy() throws Exception {
+	public By getBy() throws Exception {
 		return VControl.makeBy(this.hook);
 	}
 	
-	protected static By makeBy(VHook hook) throws Exception {
+	public static By makeBy(VHook hook) throws Exception {
 		return VControl.makeBy(hook.hookStrategy, hook.hookString);
 	}
 	
-	protected static By makeBy(Strategy strategy, String hook) throws Exception {
+	public static By makeBy(Strategy strategy, String hook) throws Exception {
 		switch (strategy) {
 		case CSS:
 			return By.cssSelector(hook);
