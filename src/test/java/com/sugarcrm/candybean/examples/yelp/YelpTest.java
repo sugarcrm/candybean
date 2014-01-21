@@ -41,7 +41,7 @@ public class YelpTest extends AbstractTest{
 		
 	@Before
 	public void first() throws Exception {
-		iface.start();
+		candybean.getInterface().start();
 		String yelpHooksStr = System.getProperty("yelp_hooks");
 		if (yelpHooksStr == null) {
 			yelpHooksStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "yelp.hooks";
@@ -49,7 +49,7 @@ public class YelpTest extends AbstractTest{
 		Properties yelpHooks = new Properties();
 		yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));
 		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014", "cwarmbold@sugarcrm.com", "Sugar123!").build();
-		yelp = new Yelp(iface, yelpHooks, user);
+		yelp = new Yelp(candybean.getInterface(), yelpHooks, user);
 		yelp.start();
 	}
 
@@ -68,6 +68,6 @@ public class YelpTest extends AbstractTest{
 	@AfterClass
 	public static void last() throws Exception {
 		yelp.stop();
-		iface.stop();
+		candybean.getInterface().stop();
 	}
 }	

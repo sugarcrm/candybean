@@ -13,7 +13,7 @@ public abstract class AbstractTest {
 	/**
 	 * The VInterface used to conduct this testß
 	 */
-	protected static VInterface iface;
+	protected static Candybean candybean;
 	
 	/**
 	 * Candybean logger
@@ -27,7 +27,7 @@ public abstract class AbstractTest {
 	 * @throws Exception
 	 */
 	public void initialize() throws Exception{
-		iface = CB.buildInterface();
+		candybean = CB.configureCandybean();
 		FileHandler fh = new FileHandler("./log/"+this.getClass().getSimpleName()+".log");
 		logger = Logger.getLogger(this.getClass().getSimpleName());
 		logger.addHandler(fh);

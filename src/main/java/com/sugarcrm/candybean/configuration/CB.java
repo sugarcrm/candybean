@@ -53,7 +53,7 @@ public class CB {
 	 * @return The VInterface
 	 * @throws Exception If default configuration files do not exist.
 	 */
-	public static VInterface buildInterface() throws Exception{
+	public static Candybean configureCandybean() throws Exception{
 		
 		VInterface iface;
 		Candybean candybean;
@@ -62,8 +62,7 @@ public class CB {
 			candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + Candybean.CONFIG_FILE_NAME;
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getInterface();
-		return iface;
+		return candybean;
 	}
 	
 }
