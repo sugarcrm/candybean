@@ -29,9 +29,8 @@ public abstract class AbstractTest {
 	public void initialize() throws Exception{
 		iface = CB.buildInterface();
 		FileHandler fh = new FileHandler("./log/"+this.getClass().getSimpleName()+".log");
-		logger = Logger.getLogger(Candybean.class.getName());
+		logger = Logger.getLogger(this.getClass().getSimpleName());
 		logger.addHandler(fh);
-		iface.start();
 	}
 	
 	
