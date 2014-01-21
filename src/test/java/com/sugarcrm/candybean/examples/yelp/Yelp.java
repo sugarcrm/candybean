@@ -43,7 +43,7 @@ public class Yelp implements IModel {
 	public Yelp(VInterface i, Properties yelpHooks, YelpUser defaultUser) throws Exception {
 		this.i = i;
 		hooks = VHook.getHooks(yelpHooks);
-		defaultUser = defaultUser;
+		this.defaultUser = defaultUser;
 //		model = buildModel();
 	}
 	
