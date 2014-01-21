@@ -44,7 +44,7 @@ public class CB {
 	 * @return The complete path to the candybean configuration file in this JRE
 	 * @throws IOException
 	 */
-	public static String getConfugrationFilePath() throws IOException{
+	public static String getConfigrationFilePath() throws IOException{
 		return CONFIG_DIR.getCanonicalPath() + File.separator + Candybean.CONFIG_FILE_NAME;
 	}
 	
