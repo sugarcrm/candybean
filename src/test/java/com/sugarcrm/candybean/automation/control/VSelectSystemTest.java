@@ -31,12 +31,12 @@ import org.junit.BeforeClass;
 
 import org.junit.Test;
 
-import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 

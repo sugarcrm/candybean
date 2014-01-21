@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 
 import org.junit.Before;
 
-import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.configuration.CB;
 
 public abstract class AbstractTest {
 	/**

@@ -29,9 +29,9 @@ import java.util.Properties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.CB;
 
 
 public class VHookUnitTest {

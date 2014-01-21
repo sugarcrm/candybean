@@ -33,8 +33,8 @@ import org.junit.rules.ExpectedException;
 import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.configuration.CB;
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.utilities.Utils;
 
 public class VInterfaceSystemTest {
