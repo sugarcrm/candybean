@@ -101,7 +101,9 @@ public class Basic {
 				"test" + File.separator + 
 				"resources" + File.separator);
 		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + "candybean.config";
+		if (candybeanConfigStr == null) {
+			candybeanConfigStr = relResourcesDir.getCanonicalPath() + "candybean.config";
+		}
 		c = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		
 		try {

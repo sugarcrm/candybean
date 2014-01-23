@@ -92,7 +92,9 @@ public class Utils {
 		}
 		// replace all one or more consecutive forward slashes with a File Separator
 		tempPath = tempPath.replaceAll("/+", Matcher.quoteReplacement(File.separator));
-		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
+		if (!tempPath.equals(path)) {
+			System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
+		}
 		return tempPath;
 	}
 

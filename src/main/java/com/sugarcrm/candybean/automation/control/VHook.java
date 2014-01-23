@@ -60,8 +60,9 @@ public class VHook {
 //			System.out.println("hook name: " + name);
 //			String[] strategyNHook = hooks.getProperty(name).split(HOOK_DELIMITER);
 			String[] strategyNHook = Configuration.getPlatformValue(hooks, name).split(HOOK_DELIMITER);
-			if (strategyNHook.length != 2) throw new Exception("Malformed hooks file for name: " + name);
-			else {
+			if (strategyNHook.length != 2) {
+				throw new Exception("Malformed hooks file for name: " + name);
+			}else {
 //				System.out.println("strategy: " + strategyNHook[0] + ", hook: " + strategyNHook[1]);
 				Strategy strategy = VHook.getStrategy(strategyNHook[0]);
 				String hook = strategyNHook[1];

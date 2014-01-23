@@ -133,7 +133,10 @@ public class RunExamples {
             buffer.write(b);
          }
 
-         try { fin.close(); } catch (IOException e) {}
+         try { 
+        	 fin.close(); 
+         } catch (IOException e) {
+         }
          bytes = buffer.toByteArray();
 
          return defineClass(null, bytes, 0, bytes.length);

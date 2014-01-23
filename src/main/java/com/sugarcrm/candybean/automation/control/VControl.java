@@ -65,7 +65,9 @@ public class VControl {
 			this.voodoo = voodoo;
 			this.iface = iface;
 			List<WebElement> wes = iface.wd.findElements(VControl.makeBy(hook));
-			if (wes.size() == 0) throw new Exception("Control not found; zero web elements returned.");
+			if (wes.size() == 0) {
+				throw new Exception("Control not found; zero web elements returned.");
+			}
 			this.we = wes.get(index);
 			this.pause = new Pause(this);
 			this.hook = hook;
@@ -90,7 +92,9 @@ public class VControl {
 	public String getAttribute(String attribute) throws Exception {
 		voodoo.log.info("Selenium: getting attribute: " + attribute	+ " for control: " + this.toString());
 		String value = we.getAttribute(attribute);
-		if (value == null) throw new Exception("Selenium: attribute does not exist.");
+		if (value == null) {
+			throw new Exception("Selenium: attribute does not exist.");
+		}
 		else return value;
 	}
 
@@ -141,14 +145,20 @@ public class VControl {
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
 		voodoo.log.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
-		if (!caseSensitive) s = s.toLowerCase();
+		if (!caseSensitive) {
+			s = s.toLowerCase();
+		}
 		List<WebElement> wes = this.we.findElements(By.xpath(".//*[not(@visible='false')]"));
 		wes.add(this.we);
 		for (WebElement we : wes) {
 			String text = we.getText();
-			if (!caseSensitive) text = text.toLowerCase();
+			if (!caseSensitive) {
+				text = text.toLowerCase();
+			}
 //			System.out.println("text: " + text);
-			if (text.contains(s)) return true;
+			if (text.contains(s)) {
+				return true;
+			}
 		}
 		return false;
 	}

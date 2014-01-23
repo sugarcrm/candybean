@@ -32,11 +32,15 @@ public abstract class ModelObject {
 		for (Map.Entry<String, String> reqAttr : builder.requiredAttributes.entrySet()) {
 			s += reqAttr.getKey() + ":" + reqAttr.getValue() + ",";
 		}
-		if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
+		if (s.endsWith(",")) {
+			s = s.substring(0, s.length() - 1);
+		}
 		for (Map.Entry<String, String> optAttr : builder.optionalAttributes.entrySet()) {
 			s += optAttr.getKey() + ":" + optAttr.getValue() + ",";
 		}
-		if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
+		if (s.endsWith(",")) {
+			s = s.substring(0, s.length() - 1);
+		}
 		s += ")";
 		return s;
 	}
