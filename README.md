@@ -57,6 +57,11 @@ Install and configure the following dependencies:
 * <a href="http://maven.apache.org/download.html">Maven 3</a>
 * <a href="https://www.google.com/intl/en/chrome/browser/">Chrome (default browser)</a>
 
+Additional Tools
+------------
+We find the following tools useful for development with candybean:
+* <a href="http://developer.android.com/tools/testing/testing_ui.html#uianalysis">UIAutomatorViewer</a> for android devices. Useful UI analysis tool when writing mobile automation tests.
+
 Configuration
 -------------
 The following key-value keys should be defined in a configuration file used to instantiate Candybean.
