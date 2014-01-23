@@ -22,11 +22,12 @@
 package com.sugarcrm.candybean.automation;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.test.AbstractTest;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -57,6 +58,18 @@ public class Candybean {
 	 * properties configuration file.
 	 */
 	public final Configuration config;
+
+	/**
+	 * The root directory of candybean
+	 */
+	public static File ROOT_DIR = new File(System.getProperty("user.dir")
+			+ File.separator);
+
+	/**
+	 * The default test configuration directory
+	 */
+	public static File CONFIG_DIR = new File(System.getProperty("user.dir")
+			+ File.separator + "config" + File.separator);
 
 	/**
 	 * The one Voodoo instance.  Created when a Voodoo instance is
@@ -117,10 +130,19 @@ public class Candybean {
 	 */
 	private Logger getLogger() throws Exception {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
-		System.setProperty("java.util.logging.config.file", AbstractTest.getConfigrationFilePath());
+		System.setProperty("java.util.logging.config.file", Candybean.getConfigrationFilePath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		Logger logger = Logger.getLogger(Candybean.class.getName());
 		return logger;
+	}
+
+	/**
+	 * @return The complete path to the candybean configuration file in this JRE
+	 * @throws IOException
+	 */
+	public static String getConfigrationFilePath() throws IOException {
+		return CONFIG_DIR.getCanonicalPath() + File.separator
+				+ CONFIG_FILE_NAME;
 	}
 
 	//	private Level getLogLevel() {

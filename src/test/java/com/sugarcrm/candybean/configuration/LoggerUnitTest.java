@@ -13,7 +13,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import org.junit.Test;
-import com.sugarcrm.candybean.test.AbstractTest;
+
+import com.sugarcrm.candybean.examples.AbstractTest;
 
 /**
  * Logger unit test that checks to see if the logging configuration is always reading from the default configuration file.

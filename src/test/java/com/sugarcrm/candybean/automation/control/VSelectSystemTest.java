@@ -37,7 +37,6 @@ import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.test.AbstractTest;
 import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
@@ -53,7 +52,7 @@ public class VSelectSystemTest {
 	@BeforeClass
 	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
