@@ -35,6 +35,8 @@ import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 
 /**
+ * Represents an identifiable (via {@link By}) element or widget on a page that can be interacted with.
+ * A {@link VControl} object should be used to automate tasks that require interaction with elements on a page.
  * @author cwarmbold
  */
 public class VControl {
@@ -275,7 +277,7 @@ public class VControl {
 		return VControl.makeBy(this.hook);
 	}
 	
-	protected static By makeBy(VHook hook) throws Exception {
+	private static By makeBy(VHook hook) throws Exception {
 		return VControl.makeBy(hook.hookStrategy, hook.hookString);
 	}
 	
