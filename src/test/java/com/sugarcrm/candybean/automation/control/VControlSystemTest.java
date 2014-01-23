@@ -113,7 +113,6 @@ public class VControlSystemTest {
 		Assert.assertEquals(expChapterText, actChapterText);
 	}
 
-
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
@@ -128,7 +127,6 @@ public class VControlSystemTest {
 		Assert.assertEquals(false, negFalse);
 		Assert.assertEquals(true, negTrue);
 	}
-	
 
 	@Test
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
@@ -149,7 +147,7 @@ public class VControlSystemTest {
 //		doubleClick(int index);
 	}
 	
-
+	@Ignore
 	@Test
 	public void dragNDropTest() throws Exception {
 		// http://jqueryui.com/resources/demos/droppable/default.html -- suggested from dev mailing list
@@ -167,14 +165,13 @@ public class VControlSystemTest {
         Assert.assertEquals(expItemid, actItemid);
 //		dragNDrop(VControl dropControl, int dragIndex, int dropIndex);
 	}
-	
 
+	@Ignore
 	@Test
 	public void dragNDropTest2() throws Exception {
-//		candybean.go("http://www.w3schools.com/html/html5_draganddrop.asp");
-//		candybean.halt(new VHook(Strategy.ID, "drag1"));
+//		iface.go("http://www.w3schools.com/html/html5_draganddrop.asp");
+//		candybean.interact(new VHook(Strategy.ID, "drag1"));
 //		candybean.dragNDrop(new VHook(Strategy.ID, "drag1"), new VHook(Strategy.ID, "div2"));
-		
 //		WebDriver driver = new ChromeDriver();
 //		driver.get("http://www.w3schools.com/html/html5_draganddrop.asp");
 //		Action dragAndDrop = (new Actions(driver)).clickAndHold(driver.findElement(By.id("drag1")))
@@ -184,10 +181,8 @@ public class VControlSystemTest {
 //		candybean.interact("wait for it...");
 //		dragAndDrop.perform();
 //		candybean.interact("wait for it...");
-		
 //		candybean.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
 	}
-	
 
 	@Test
 	public void pauseUntilTextPresentTest() throws Exception {
@@ -205,7 +200,6 @@ public class VControlSystemTest {
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
 	}
-	
 
 	@Test
 	public void pauseUntilVisibleTest() throws Exception {
@@ -227,15 +221,15 @@ public class VControlSystemTest {
 		
 		// until text present
 		iface.go("http://fvsch.com/code/transition-fade/test5.html");
-		
 	}
-	
 
+	@Ignore
 	@Test
 	public void hoverTest() throws Exception {
 //		hover();
 //		hover(int index);
 	}
+	
 	@Ignore
 	@Test
 	public void isDisplayedTest() throws Exception {
@@ -255,51 +249,51 @@ public class VControlSystemTest {
 			hiddenInput = iface.getControl(Strategy.NAME, "areaID");
 		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
-	
 
+	@Ignore
 	@Test
 	public void rightClickTest() throws Exception {
 //		rightClick();
 //		rightClick(int index);
 	}
-	
 
+	@Ignore
 	@Test
 	public void scrollTest() throws Exception {
 //		scroll();
 //		scroll(int index);
 	}
 
-//    @Test
-//    public void checkBoxSelectTest() throws Exception {
-//
-//        // Checking checkbox select
-//        String w3Url = "http://www.w3schools.com/html/html_forms.asp";
-//        iface.go(w3Url);
-//        VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
-//        Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(0), select.isSelected(0), false);
-//        select.select("I have a bike");
-//        Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
-//
-//        // Exception should throw for non-checkbox element
-//        //VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
-//        //candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
-//
-//        // Checking getAttributeValue()
-////		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
-////		String actText = control.getAttribute("type");
-////        String expText = "text";
-////        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
-////
-////		String actSize = control.getAttribute("size");
-////        String expSize = "20";
-////        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
-////
-////		String actName = control.getAttribute("name");
-////        String expName = "firstname";
-////        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
-//    }
+	@Ignore
+    @Test
+    public void checkBoxSelectTest() throws Exception {
 
+        // Checking checkbox select
+        String w3Url = "http://www.w3schools.com/html/html_forms.asp";
+        iface.go(w3Url);
+        VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
+        Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(0), select.isSelected(0), false);
+        select.select("I have a bike");
+        Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
+
+        // Exception should throw for non-checkbox element
+//        VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
+//        candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
+
+        // Checking getAttributeValue()
+		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+		String actText = control.getAttribute("type");
+        String expText = "text";
+        Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
+
+		String actSize = control.getAttribute("size");
+        String expSize = "20";
+        Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
+
+		String actName = control.getAttribute("name");
+        String expName = "firstname";
+        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
+    }
 
 	@Test
 	public void sendStringTest() throws Exception {
