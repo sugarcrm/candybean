@@ -24,6 +24,9 @@ package com.sugarcrm.candybean.automation.control;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * Utility class that provides several methods for a VControl to pause until an action occurs.
+ */
 public class Pause {
 	
 	private VControl c;

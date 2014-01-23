@@ -31,8 +31,9 @@ import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 
 /**
+ * VControl is a control that represents and allows for interaction with the TABLE element.
+ * Any HTML table tag on the page can be represented by a VTable.
  * @author cwarmbold
- *
  */
 public class VTable extends VControl {
 	
