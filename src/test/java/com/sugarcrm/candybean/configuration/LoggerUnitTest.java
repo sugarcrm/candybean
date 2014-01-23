@@ -13,7 +13,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import org.junit.Test;
-import com.sugarcrm.candybean.test.AbstractTest;
+
+import com.sugarcrm.candybean.examples.AbstractTest;
 
 /**
  * Logger unit test that checks to see if the logging configuration is always reading from the default configuration file.
@@ -21,7 +22,7 @@ import com.sugarcrm.candybean.test.AbstractTest;
  */
 public class LoggerUnitTest extends AbstractTest{
 	
-	private Logger logger;
+private Logger logger;
 
 	/**
 	 * A system test for the default configured logger.
@@ -53,7 +54,7 @@ public class LoggerUnitTest extends AbstractTest{
 	@Test
 	public void cbConfiguredLogger() throws Exception {
 		// Load the initial properties from the candybean config file
-		Properties initialProperties = new Properties();
+        Properties initialProperties = new Properties();
 		initialProperties.load(new FileInputStream("./config/candybean.config"));
 		// Change the Formatter for the FileHandler to XMLFormatter
 		initialProperties.setProperty("java.util.logging.FileHandler.formatter", "java.util.logging.XMLFormatter");

@@ -26,8 +26,8 @@ import org.junit.Assert;
 
 import org.junit.Test;
 
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.test.AbstractTest;
 import com.sugarcrm.candybean.utilities.Utils;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
 import com.sugarcrm.candybean.utilities.Utils.Triplet;
@@ -38,7 +38,7 @@ public class UtilsUnitTest {
 	@Test
 	public void testGetCascadingPropertyValue() {
 		try {
-			String propsFilePath = AbstractTest.CONFIG_DIR + File.separator + "testutils.properties";
+			String propsFilePath = Candybean.CONFIG_DIR + File.separator + "testutils.properties";
 //			System.out.println("Props file path: " + propsFilePath);
 			String propKey = "key";
 			String propSysKey = "syskey";

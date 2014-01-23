@@ -482,7 +482,7 @@ public class VInterface {
 	 */
 	private List<VControl> getControls(Strategy strategy, VHook hook) throws Exception {
 		List<VControl> controls = new ArrayList<VControl>();
-		List<WebElement> wes = this.wd.findElements(VControl.makeBy(hook));
+		List<WebElement> wes = this.wd.findElements(VControl.makeBy(strategy, hook.hookString));
 		for (WebElement we : wes)
 			controls.add(new VControl(this.candybean, this, hook, we));
 		return controls;

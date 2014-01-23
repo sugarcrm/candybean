@@ -35,7 +35,6 @@ import org.junit.Test;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.examples.sugar.SugarUser.SugarUserBuilder;
-import com.sugarcrm.candybean.test.AbstractTest;
 import com.sugarcrm.candybean.utilities.Utils;
 
 public class SugarTest {
@@ -68,7 +67,7 @@ public class SugarTest {
 	private static Candybean getCandybean() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) {
-			candybeanConfigStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		}
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		return Candybean.getInstance(candybeanConfig);
@@ -77,7 +76,7 @@ public class SugarTest {
 	private static Configuration getSugarConfig() throws Exception {
 		String sugarConfigStr = System.getProperty("sugar_config");
 		if (sugarConfigStr == null) {
-			sugarConfigStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.config";
+			sugarConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.config";
 		}
 		return new Configuration(new File(Utils.adjustPath(sugarConfigStr)));
 	}
@@ -85,7 +84,7 @@ public class SugarTest {
 	private static Properties getSugarHooks() throws Exception {
 		String sugarHooksStr = System.getProperty("sugar_hooks");
 		if (sugarHooksStr == null) {
-			sugarHooksStr = AbstractTest.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.hooks";
+			sugarHooksStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.hooks";
 		}
 		Properties sugarHooks = new Properties();
 		sugarHooks.load(new FileInputStream(new File(Utils.adjustPath(sugarHooksStr))));
