@@ -10,6 +10,15 @@ import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
+/**
+ * An abstract class to be inherited by any test using candybean. Whenever a test class inherited by this class
+ * is instantiated, the {@link Candybean} class variable will be instantiated automatically for use. Furthermore,
+ * the logger will be configured to use the candybean logging configuration and will log all test-specific messages to
+ * a separate log file. 
+ * 
+ * @author Shehryar Farooq
+ *
+ */
 public abstract class AbstractTest {
 
 	protected static Candybean candybean;

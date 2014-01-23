@@ -47,8 +47,8 @@ import org.json.simple.JSONValue;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * @author Conrad Warmbold
- *
+ * Helps make web-service calls and supports several operations like POST and GET.
+ * 
  */
 public class WS {
 	
