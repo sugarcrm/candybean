@@ -24,7 +24,7 @@ import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import com.sugarcrm.candybean.test.AbstractTest;
+import com.sugarcrm.candybean.examples.AbstractTest;
 
 public class EvernoteAndroidTest extends AbstractTest{
 
