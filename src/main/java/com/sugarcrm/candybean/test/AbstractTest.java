@@ -35,13 +35,13 @@ public abstract class AbstractTest {
 	 */
 	public static File ROOT_DIR = new File(System.getProperty("user.dir")
 			+ File.separator);
-
-	@Before
+	
 	/**
 	 * Starts the VInterface to be used for this test, and initializes the logger for this test
 	 * by adding a new FileHandler specific to this tests class.
 	 * @throws Exception
 	 */
+	@Before
 	public void initialize() throws Exception {
 		candybean = AbstractTest.configureCandybean();
 		iface = candybean.getInterface();
