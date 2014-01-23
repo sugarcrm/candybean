@@ -22,6 +22,7 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -32,7 +33,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
 
-import com.sugarcrm.candybean.CB;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.VInterface.Type;
@@ -59,14 +59,13 @@ public class VControlSystemTest {
 	@BeforeClass
 	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = CB.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
 		iface.start();
 	}
 
-//	@Ignore
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://sfbay.craigslist.org/";
@@ -76,7 +75,6 @@ public class VControlSystemTest {
 		Assert.assertEquals(expAltValue, actAltValue);
 	}
 	
-//	@Ignore
 	@Test
 	public void getControlTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
@@ -86,10 +84,16 @@ public class VControlSystemTest {
 		VControl h1Control = iface.getControl(Strategy.TAG, "h1");
 		String actH2 = h1Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
-//		String text2 = getText(int index);
 	}
 	
-//	@Ignore
+	@Test
+	public void getControlsTest() throws Exception{
+		String w3Url = "http://www.w3schools.com/html/default.asp";
+		iface.go(w3Url);
+		List<VControl> controls = iface.getControls(Strategy.CLASS,"topnav");
+		Assert.assertEquals(controls.size(),14);
+	}
+	
 	@Test
 	public void getTextTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
@@ -107,16 +111,9 @@ public class VControlSystemTest {
 		actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
 		expChapterText = "Generic Button";
 		Assert.assertEquals(expChapterText, actChapterText);
-}
-
-	@Ignore
-	@Test
-	public void clickTest() throws Exception {
-//		click();
-//		click(int index);
 	}
-	
-//	@Ignore
+
+
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
@@ -132,14 +129,14 @@ public class VControlSystemTest {
 		Assert.assertEquals(true, negTrue);
 	}
 	
-	@Ignore
+
 	@Test
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
 	public void doubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
 		//Checkbox control
-		VControl checkboxControl = iface.getControl(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[4]/input[1]");
+		VControl checkboxControl = iface.getControl(Strategy.NAME, "vehicle");
 		// DoubleClick on a Checkbox
 		checkboxControl.scroll();
 		iface.pause(2000);
@@ -152,7 +149,7 @@ public class VControlSystemTest {
 //		doubleClick(int index);
 	}
 	
-	@Ignore
+
 	@Test
 	public void dragNDropTest() throws Exception {
 		// http://jqueryui.com/resources/demos/droppable/default.html -- suggested from dev mailing list
@@ -171,7 +168,7 @@ public class VControlSystemTest {
 //		dragNDrop(VControl dropControl, int dragIndex, int dropIndex);
 	}
 	
-	@Ignore
+
 	@Test
 	public void dragNDropTest2() throws Exception {
 //		candybean.go("http://www.w3schools.com/html/html5_draganddrop.asp");
@@ -191,6 +188,7 @@ public class VControlSystemTest {
 //		candybean.halt(new VHook(Strategy.XPATH, "/html/body/div/div/div[4]/div[2]/hr[2]/div[2]/img"));
 	}
 	
+
 	@Test
 	public void pauseUntilTextPresentTest() throws Exception {
 		int timeout = 2000;
@@ -208,6 +206,7 @@ public class VControlSystemTest {
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
 	}
 	
+
 	@Test
 	public void pauseUntilVisibleTest() throws Exception {
 		long timeout = 10;
@@ -231,13 +230,13 @@ public class VControlSystemTest {
 		
 	}
 	
-	@Ignore
+
 	@Test
 	public void hoverTest() throws Exception {
 //		hover();
 //		hover(int index);
 	}
-	
+	@Ignore
 	@Test
 	public void isDisplayedTest() throws Exception {
 		int timeout = 1000;
@@ -257,14 +256,14 @@ public class VControlSystemTest {
 		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
 	
-	@Ignore
+
 	@Test
 	public void rightClickTest() throws Exception {
 //		rightClick();
 //		rightClick(int index);
 	}
 	
-	@Ignore
+
 	@Test
 	public void scrollTest() throws Exception {
 //		scroll();
@@ -301,7 +300,7 @@ public class VControlSystemTest {
 ////        Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
 //    }
 
-//	@Ignore
+
 	@Test
 	public void sendStringTest() throws Exception {
 		String searchString = "sugarcrm";

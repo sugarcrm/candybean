@@ -29,7 +29,7 @@ import java.util.Properties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.sugarcrm.candybean.CB;
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 
@@ -39,7 +39,7 @@ public class VHookUnitTest {
 	@Test
 	public void testGetHooks() {
 		try {
-			File hooksFile = new File(CB.CONFIG_DIR.getCanonicalPath() + File.separator + "testutils.hooks");
+			File hooksFile = new File(Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "testutils.hooks");
 			hooksFile.createNewFile();
 			Properties hooksProps = new Properties();
 			String hook1Name = "hook1name";
