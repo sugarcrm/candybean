@@ -87,7 +87,9 @@ public class Candybean {
 	 * @throws Exception if instantiating the logger fails
 	 */
 	public static Candybean getInstance(Configuration config) throws Exception {
-		if (Candybean.instance == null) Candybean.instance = new Candybean(config); 
+		if (Candybean.instance == null) {
+			Candybean.instance = new Candybean(config); 
+		}
 		return Candybean.instance;
 	}
 

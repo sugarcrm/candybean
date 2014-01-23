@@ -179,7 +179,9 @@ public class VInterface {
 //			this.vac = null;
 //			this.start();
 //		}
-		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
+		if (this.wd != null) {
+			throw new Exception("Automation interface already started with type: " + this.iType);
+		}
 		this.iType = iType;
 		this.wd = this.getWebDriver(iType);
 		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
@@ -217,7 +219,9 @@ public class VInterface {
 	 */
 	public void restart() throws Exception {
 		candybean.log.info("Restarting automation interface with type: " + this.iType);
-		if (this.wd == null) throw new Exception("Automation interface not yet started; cannot restart.");
+		if (this.wd == null) {
+			throw new Exception("Automation interface not yet started; cannot restart.");
+		}
 		Type type = this.iType;
 		this.stop();
 		this.start(type);
@@ -271,13 +275,19 @@ public class VInterface {
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
 		candybean.log.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
-		if (!caseSensitive) s = s.toLowerCase();
+		if (!caseSensitive){
+			s = s.toLowerCase();
+		}
 		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
 		for (WebElement we : wes) {
 			String text = we.getText();
-			if (!caseSensitive) text = text.toLowerCase();
+			if (!caseSensitive) {
+				text = text.toLowerCase();
+			}
 //			System.out.println("text: " + text);
-			if (text.contains(s)) return true;
+			if (text.contains(s)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -628,8 +638,11 @@ public class VInterface {
 				break;
 			}
 		}
-		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
-		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
+		if (iType == Type.ANDROID) {
+			throw new Exception("Android interface type not yet implemented.");
+		}else if (iType == Type.IOS) {
+			throw new Exception("iOS interface type not yet implemented.");
+		}
 		return iType;
 	}
 

@@ -44,7 +44,9 @@ public class VTagRunner extends BlockJUnit4ClassRunner {
 	@Override
 	protected List<FrameworkMethod> computeTestMethods() {
 		final List<FrameworkMethod> testMethods = getTestClass().getAnnotatedMethods(Test.class);
-        if (testMethods == null || testMethods.size() == 0) return testMethods;
+        if (testMethods == null || testMethods.size() == 0) {
+        	return testMethods;
+        }
         final List<FrameworkMethod> finalTestMethods = new ArrayList<FrameworkMethod>(testMethods.size());
 		try {
 			for (final FrameworkMethod method : testMethods) {

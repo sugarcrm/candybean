@@ -106,7 +106,9 @@ public class WS {
 				break;
 			case PUT:
 				HttpPut put = new HttpPut(uri);
-				if (body != null) put.setEntity(new StringEntity(body));
+				if (body != null) {
+					put.setEntity(new StringEntity(body));
+				}
 				request = put;
 	            mapParse = requestIt(request, headers);
 				break;
