@@ -1,5 +1,5 @@
 /**
-3 * Candybean is a next generation automation and testing framework suite.
+ * Candybean is a next generation automation and testing framework suite.
  * It is a collection of components that foster test automation, execution
  * configuration, data abstraction, results illustration, tag-based execution,
  * top-down and bottom-up batches, mobile variants, test translation across
