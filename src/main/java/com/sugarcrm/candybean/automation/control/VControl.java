@@ -275,7 +275,7 @@ public class VControl {
 		return VControl.makeBy(this.hook);
 	}
 	
-	public static By makeBy(VHook hook) throws Exception {
+	protected static By makeBy(VHook hook) throws Exception {
 		return VControl.makeBy(hook.hookStrategy, hook.hookString);
 	}
 	
