@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sugarcrm.candybean.test.AbstractTest;
+import com.sugarcrm.candybean.examples.AbstractTest;
 
 /**
  * Wolfram alpha test class defining any tests using the {@link Test } annotation.
