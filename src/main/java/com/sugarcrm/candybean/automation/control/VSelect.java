@@ -27,6 +27,7 @@ import org.openqa.selenium.support.ui.Select;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.utilities.exception.CandybeanException;
 
 import java.util.*;
 
@@ -49,10 +50,9 @@ public class VSelect extends VControl {
 	 * @param iface	  {@link VInterface} for this run
 	 * @param strategy  {@link Strategy} used to search for element
 	 * @param hook		  value of strategy to search for
-	 * @throws Exception	 hook does not grab a SELECT
+	 * @throws CandybeanException hook does not grab a SELECT
 	 */
-	public VSelect(Candybean voodoo, VInterface iface,
-						Strategy strategy, String hook) throws Exception {
+	public VSelect(Candybean voodoo, VInterface iface, Strategy strategy, String hook) throws CandybeanException {
 		this(voodoo, iface, new VHook(strategy, hook));
 	}
 
@@ -62,10 +62,9 @@ public class VSelect extends VControl {
 	 * @param voodoo	{@link Candybean} object for this run
 	 * @param iface	{@link VInterface} for this run
 	 * @param hook		{@link VHook} used to search for this element
-	 * @throws Exception	 hook does not grab a SELECT
+	 * @throws CandybeanException hook does not grab a SELECT
 	 */
-	public VSelect(Candybean voodoo, VInterface iface, VHook hook)
-		throws Exception {
+	public VSelect(Candybean voodoo, VInterface iface, VHook hook) throws CandybeanException {
 		super(voodoo, iface, hook);
         select = new Select(super.we);
         isMultiple = select.isMultiple();

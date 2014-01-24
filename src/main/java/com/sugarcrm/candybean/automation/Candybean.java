@@ -81,10 +81,11 @@ public class Candybean {
 
 	/**
 	 * Instantiate a Voodoo object.
+	 * @throws IOException 
 	 *
 	 * @throws Exception if instantiating the logger fails
 	 */
-	private Candybean(Configuration config) throws Exception {
+	private Candybean(Configuration config) throws IOException{
 		this.config = config;
 		this.log = this.getLogger();
 		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
@@ -97,9 +98,10 @@ public class Candybean {
 	 *
 	 * @param props  {@link Properties} object created from voodoo.properties
 	 * @return global Voodoo instance
+	 * @throws IOException 
 	 * @throws Exception if instantiating the logger fails
 	 */
-	public static Candybean getInstance(Configuration config) throws Exception {
+	public static Candybean getInstance(Configuration config) throws IOException{
 		if (Candybean.instance == null) {
 			Candybean.instance = new Candybean(config); 
 		}
@@ -109,10 +111,10 @@ public class Candybean {
 	/**
 	 * Get an {@link VInterface} for use by a test.
 	 *
-	 * @return 				a new {@link VInterface}
+	 * @return a new {@link VInterface}
 	 * @throws Exception
 	 */
-	public VInterface getInterface() throws Exception {
+	public VInterface getInterface() {
 		return new VInterface(this, this.config);
 	}
 
@@ -128,9 +130,10 @@ public class Candybean {
 	 * Load the loggers specified in logging.properties.
 	 *
 	 * @return the initialized {@link Logger} object
+	 * @throws IOException 
 	 * @throws Exception if initializing a logger fails
 	 */
-	private Logger getLogger() throws Exception {
+	private Logger getLogger() throws IOException {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
 		System.setProperty("java.util.logging.config.file", Candybean.getConfigrationFilePath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
