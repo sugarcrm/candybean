@@ -68,8 +68,9 @@ public class Utils {
 	 * @return
 	 */
 	public static String pretruncate(String s, int length) {
-		if (s.length() <= length)
+		if (s.length() <= length) {
 			return s;
+		}
 		return s.substring(s.length() - length);
 	}
 
@@ -107,8 +108,9 @@ public class Utils {
 	 */
 	public static void closeStream(Closeable s) {
 		try {
-			if (s != null)
+			if (s != null) {
 				s.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

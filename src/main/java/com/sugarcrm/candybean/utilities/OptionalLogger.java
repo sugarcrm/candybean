@@ -44,18 +44,17 @@ public class OptionalLogger {
 
 	public void info(String msg, boolean writeBoth) {
 		if (writeBoth) {
-			if (log != null)
+			if (log != null) {
 				log.info(msg);
-			else {
+			}else {
 				System.err.println("Logger is null!");
 				System.out.print(msg);
 			}
 			System.out.print(msg);
-		} else {
-			if (log != null)
+		} else if (log != null) {
 				log.info(msg);
-			else
-				System.out.print(msg);
+		} else {
+			System.out.print(msg);
 		}
 	}
 	
@@ -65,17 +64,16 @@ public class OptionalLogger {
 
 	public void severe(String msg, boolean writeBoth) {
 		if (writeBoth) {
-			if (log != null)
+			if (log != null) {
 				log.severe(msg);
-			else {
+			}else {
 				System.err.println("Logger is null!");
 				System.err.print(msg);
 			}
-		} else {
-			if (log != null)
+		} else if (log != null) {
 				log.severe(msg);
-			else
-				System.err.print(msg);
+		} else {
+			System.err.print(msg);
 		}
 	}
 	

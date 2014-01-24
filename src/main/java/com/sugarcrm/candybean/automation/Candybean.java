@@ -91,7 +91,9 @@ public class Candybean {
 		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
 	}
 
-	public boolean debug() { return Candybean.debug; }
+	public boolean debug() { 
+		return Candybean.debug; 
+	}
 
 	/**
 	 * Get the global Voodoo instance.
