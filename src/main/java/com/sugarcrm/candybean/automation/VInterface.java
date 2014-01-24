@@ -198,7 +198,9 @@ public class VInterface {
 		if (this.wd != null) {
 			this.wd.quit();
 			this.wd = null;
-		} else candybean.log.warning("Automation interface already stopped.");
+		} else {
+			candybean.log.warning("Automation interface already stopped.");
+		}
 	}
 	
 	/**
@@ -269,7 +271,7 @@ public class VInterface {
 	 */
 	public boolean contains(String s, boolean caseSensitive) {
 		candybean.log.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
-		if (!caseSensitive){
+		if (!caseSensitive) {
 			s = s.toLowerCase();
 		}
 		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));

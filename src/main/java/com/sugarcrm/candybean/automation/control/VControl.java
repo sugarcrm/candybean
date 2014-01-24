@@ -97,8 +97,9 @@ public class VControl {
 		String value = we.getAttribute(attribute);
 		if (value == null) {
 			throw new CandybeanException("Selenium: attribute " + value + "does not exist for element " + we.toString());
+		}else { 
+			return value;
 		}
-		else return value;
 	}
 
 	public String getSource() {
