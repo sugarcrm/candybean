@@ -77,11 +77,11 @@ public class Basic {
 
 	/**
 	 * Run the basic example code.
-	 * @throws Exception 
+	 * @throws IOException 
 	 */
 
 	@Example
-	public void runExample() throws Exception  {
+	public void runExample() throws IOException {
 		Configuration c;
 		Candybean v = null;
 		VInterface i = null;

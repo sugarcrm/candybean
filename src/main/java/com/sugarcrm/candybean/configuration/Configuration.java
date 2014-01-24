@@ -64,8 +64,9 @@ public class Configuration {
 
     /**
      * @param propertiesPath
+     * @throws IOException 
      */
-    public Configuration(File configFile) throws Exception {
+    public Configuration(File configFile) throws IOException{
         properties = new Properties();
         this.load(configFile);
     }
@@ -121,14 +122,13 @@ public class Configuration {
      *
      * @param key
      * @return adjusted path or null if it does not exist.
-     * @throws Exception 
      */
-    public String getPathValue(String key) throws Exception {
+    public String getPathValue(String key) {
         String pathValue = getValue(key);
         return Utils.adjustPath(pathValue);
     }
 
-    public void load(File file) throws Exception {
+    public void load(File file) throws IOException{
     	try {
         	if (file == null) {
         		throw new FileNotFoundException("Given file is null.");
@@ -175,7 +175,7 @@ public class Configuration {
         }
     }
     
-    public static String getPlatformValue(Properties props, String key) throws Exception {
+    public static String getPlatformValue(Properties props, String key) {
 	    String platform = Utils.getCurrentPlatform();
 	    String valueStr = props.getProperty(key);
         JSONParser parser = new JSONParser();
@@ -197,8 +197,9 @@ public class Configuration {
      * a properties table using the load(InputStream) or load(String) method.
      *
      * @param filePath
+     * @throws IOException 
      */
-    public void store(File file) throws Exception {
+    public void store(File file) throws IOException {
         try {
             store(new FileOutputStream(file));
         } catch (IOException e) {

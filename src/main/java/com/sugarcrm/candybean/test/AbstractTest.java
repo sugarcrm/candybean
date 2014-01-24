@@ -51,7 +51,7 @@ public abstract class AbstractTest {
 	 * by adding a new FileHandler specific to this tests class.
 	 * @throws Exception
 	 */
-	public void initialize() throws Exception {
+	public void initialize() throws IOException{
 		candybean = AbstractTest.configureCandybean();
 		iface = candybean.getInterface();
 		FileHandler fh = new FileHandler("./log/"
@@ -64,10 +64,10 @@ public abstract class AbstractTest {
 	 * Build a VInterface based on default configuration.
 	 * 
 	 * @return The VInterface
-	 * @throws Exception
+	 * @throws IOException 
 	 *             If default configuration files do not exist.
 	 */
-	public static Candybean configureCandybean() throws Exception {
+	public static Candybean configureCandybean() throws IOException{
 		Candybean candybean;
 		String candybeanConfigStr = System
 				.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
@@ -84,7 +84,7 @@ public abstract class AbstractTest {
 	 * @return The complete path to the candybean configuration file in this JRE
 	 * @throws IOException
 	 */
-	public static String getConfigrationFilePath() throws IOException {
+	public static String getConfigrationFilePath() throws IOException{
 		return CONFIG_DIR.getCanonicalPath() + File.separator
 				+ Candybean.CONFIG_FILE_NAME;
 	}

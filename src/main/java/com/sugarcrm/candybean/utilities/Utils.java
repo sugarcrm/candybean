@@ -47,9 +47,9 @@ public class Utils {
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
 	 * 
 	 * @param cmd 
-	 * @throws Exception
+	 * @throws IOException 
 	 */
-	public static void run(String cmd) throws Exception {
+	public static void run(String cmd) throws IOException {
 		Process process = new ProcessBuilder(cmd).start();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 		String line = reader.readLine();

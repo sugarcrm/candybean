@@ -35,12 +35,12 @@ public class Pause {
 		this.c = c;
 	}
 	
-	public VControl untilTextPresent(String text, int timeout_ms) throws Exception {
+	public VControl untilTextPresent(String text, int timeout_ms) {
 		(new WebDriverWait(this.c.iface.wd, timeout_ms)).until(ExpectedConditions.textToBePresentInElement(this.c.getBy(), text));
 		return this.c;
 	}
 	
-	public VControl untilVisible(int timeout_ms) throws Exception {
+	public VControl untilVisible(int timeout_ms) {
 		(new WebDriverWait(this.c.iface.wd, timeout_ms)).until(ExpectedConditions.visibilityOf(this.c.we));
 		return this.c;
 	}
