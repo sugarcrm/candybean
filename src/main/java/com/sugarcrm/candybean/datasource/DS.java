@@ -22,6 +22,7 @@
 package com.sugarcrm.candybean.datasource;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.datasource.DataAdapter;
@@ -62,7 +63,7 @@ public class DS {
      */
 	public DataSource getDataSource(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
-		HashMap<String, DataSource> dataSourceHashMap = getDataAdapter()
+		Map<String, DataSource> dataSourceHashMap = getDataAdapter()
 				.setDataBasePath(getPropKey()).getData(dataSet,
 						DataAdapter.Selection.SINGLE);
 		DataSource ds = dataSourceHashMap.get(dataSet);
@@ -80,9 +81,9 @@ public class DS {
      *         extension as the key, the value is a DataSource
      *         
      */
-	public HashMap<String, DataSource> getDataSources(String dataSet) {
+	public Map<String, DataSource> getDataSources(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
-		HashMap<String, DataSource> dataSourceHashMap = getDataAdapter()
+		Map<String, DataSource> dataSourceHashMap = getDataAdapter()
 				.setDataBasePath(getPropKey()).getData(dataSet);
 		//printDataSource(dataSourceHashMap);
 		

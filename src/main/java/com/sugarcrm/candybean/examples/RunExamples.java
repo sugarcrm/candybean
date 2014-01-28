@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>Program to run the Voodoo2 code examples.</p>
@@ -115,7 +116,7 @@ public class RunExamples {
     * specified on the command line.</p>
     */
 
-   private HashMap<String,Pair> classes;
+   private Map<String, Pair> classes;
 
    /**
     * Class loader for example classes.

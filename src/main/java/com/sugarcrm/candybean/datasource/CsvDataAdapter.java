@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -60,12 +61,12 @@ public class CsvDataAdapter extends DataAdapter {
 		return dataSourceHashMap;
 	}
 
-	public HashMap<String, DataSource> getData(String testData, DataAdapter.Selection select) {
+	public Map<String, DataSource> getData(String testData, DataAdapter.Selection select) {
 
 		selection = select;  // determines whether to select all the files based on file pattern
 		
 		List<File> csvFileList = getCsvFileList(testData);
-		HashMap<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
+		Map<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
 
 		return dataSourceHashMap;
 	}
