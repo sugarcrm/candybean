@@ -140,7 +140,7 @@ public class RunExamples {
        */
 
       public Class<?> loadClass(File f)
-         throws FileNotFoundException, IOException {
+         throws IOException {
          FileInputStream fin = new FileInputStream(f);
          ByteArrayOutputStream buffer = new ByteArrayOutputStream();
          byte bytes[];
