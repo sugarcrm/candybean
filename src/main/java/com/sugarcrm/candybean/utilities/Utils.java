@@ -32,6 +32,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
@@ -42,6 +43,8 @@ import java.util.regex.Matcher;
  *
  */
 public class Utils {
+	
+	private static Logger log = Logger.getLogger(Utils.class.getName());
 
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
@@ -112,7 +115,7 @@ public class Utils {
 				s.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 	}
 

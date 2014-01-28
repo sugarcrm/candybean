@@ -138,13 +138,13 @@ public class Configuration {
         } catch (FileNotFoundException e) {
             // get file name using substring of adjustedPath that starts after the last /
             logger.warning(file.getCanonicalPath() + " not found.\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         } catch (IOException e) {
             logger.warning("Unable to load " + file.getCanonicalPath() + ".\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         } catch (NullPointerException e) {
             logger.warning("File path is null.\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
     }
@@ -204,7 +204,7 @@ public class Configuration {
             store(new FileOutputStream(file));
         } catch (IOException e) {
             logger.warning("Unable to store " + file.getCanonicalPath() + ".\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
