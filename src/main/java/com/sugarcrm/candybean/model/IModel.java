@@ -6,5 +6,5 @@ public interface IModel {
 	
 	public Set<Page> getStartPages();
 	public void executeRandomStartPage();
-	public void run(int timeout_in_minutes);
+	public void run(int timeoutInMinutes);
 }
