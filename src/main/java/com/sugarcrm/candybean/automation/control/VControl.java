@@ -145,8 +145,9 @@ public class VControl {
 	 */
 	public boolean contains(String s, boolean caseSensitive) {
 		getVoodoo().log.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
+		String lowercase = s;
 		if (!caseSensitive) {
-			s = s.toLowerCase();
+			lowercase = s.toLowerCase();
 		}
 		List<WebElement> wes = this.getWe().findElements(By.xpath(".//*[not(@visible='false')]"));
 		wes.add(this.getWe());
@@ -156,7 +157,7 @@ public class VControl {
 				text = text.toLowerCase();
 			}
 //			System.out.println("text: " + text);
-			if (text.contains(s)) {
+			if (text.contains(lowercase)) {
 				return true;
 			}
 		}
