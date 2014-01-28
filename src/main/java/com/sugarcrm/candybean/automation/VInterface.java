@@ -617,25 +617,25 @@ public class VInterface {
 	}
 	
 	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
-		VInterface.Type iType = null;
+		VInterface.Type interfaceType = null;
 		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
 			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
-				iType = iTypeIter;
+				interfaceType = iTypeIter;
 				break;
 			}
 		}
-		if (iType == Type.ANDROID) {
+		if (interfaceType == Type.ANDROID) {
 			throw new Exception("Android interface type not yet implemented.");
-		}else if (iType == Type.IOS) {
+		}else if (interfaceType == Type.IOS) {
 			throw new Exception("iOS interface type not yet implemented.");
 		}
-		return iType;
+		return interfaceType;
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 //        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
-        WebDriver wd = null;
+        WebDriver webDriver = null;
         switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
@@ -651,7 +651,7 @@ public class VInterface {
 			// }
 			candybean.log.info("Instantiating Firefox with profile name: "
 					+ profileName + " and binary path: " + ffBinaryPath);
-			wd = new FirefoxDriver(ffBinary, ffProfile);
+			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
@@ -665,14 +665,14 @@ public class VInterface {
 			candybean.log.info("Instantiating Chrome with:\n    log path:"
 					+ chromeDriverLogPath + "\n    driver path: "
 					+ chromeDriverPath);
-			wd = new ChromeDriver(chromeOptions);
+			webDriver = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
 			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
 			candybean.log.info("ieDriverPath: " + ieDriverPath);
 			System.setProperty("webdriver.ie.driver", ieDriverPath);
 			capabilities = DesiredCapabilities.internetExplorer();
-			wd = new InternetExplorerDriver(capabilities);
+			webDriver = new InternetExplorerDriver(capabilities);
 			break;
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
@@ -681,7 +681,7 @@ public class VInterface {
             capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
             capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
-            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            webDriver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
             break;
         case IOS:
             capabilities = new DesiredCapabilities();
@@ -689,7 +689,7 @@ public class VInterface {
             capabilities.setCapability(CapabilityType.VERSION, "6.0");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
             capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
-            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            webDriver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
             break;
         default:
 			throw new Exception("Selenium: browser type not recognized.");
@@ -697,10 +697,10 @@ public class VInterface {
 		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+			webDriver.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 		}
-		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-		return wd;
+		webDriver.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+		return webDriver;
 	}
 	
 	public WebDriver getWd() {

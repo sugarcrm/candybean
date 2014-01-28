@@ -150,8 +150,8 @@ public class VControl {
 		}
 		List<WebElement> wes = this.getWe().findElements(By.xpath(".//*[not(@visible='false')]"));
 		wes.add(this.getWe());
-		for (WebElement we : wes) {
-			String text = we.getText();
+		for (WebElement webElement : wes) {
+			String text = webElement.getText();
 			if (!caseSensitive) {
 				text = text.toLowerCase();
 			}
