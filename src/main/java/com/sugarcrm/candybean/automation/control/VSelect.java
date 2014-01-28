@@ -32,7 +32,7 @@ import java.util.*;
 
 /**
  * VSelect is a control that represents and allows for interaction with the SELECT element.
- *
+ * Any HTML select tag on the page can be represented by a VSelect.
  * @author cwarmbold
  */
 

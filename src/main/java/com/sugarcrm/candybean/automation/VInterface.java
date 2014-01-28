@@ -67,6 +67,13 @@ import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
 
+/**
+ * Drives the creation of multi-platform automation tests by providing a resourceful API
+ * containing several helper methods to write automation tests. The {@link Candybean} configuration
+ * will build a {@link VInterface} based on the platform specified in the configuration. An appropriate platform-specific
+ * driver is instantiated for use to write tests.
+ *
+ */
 public class VInterface {
 
 	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS }
