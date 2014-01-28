@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface IModel {
 	
-	public Set<Page> getStartPages();
-	public void executeRandomStartPage();
-	public void run(int timeoutInMinutes);
+	Set<Page> getStartPages();
+	void executeRandomStartPage();
+	void run(int timeoutInMinutes);
 }
