@@ -249,7 +249,8 @@ public class RunExamples {
          Class<?> cls = null;
 
          if (arg.equals("--help") || arg.equals("-h")) {
-            help();  // does not return
+        	 // does not return
+        	 help(); 
          }
 
          try {
