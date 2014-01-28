@@ -137,6 +137,7 @@ public class Utils {
 			String tableName = resultSet.getString("TABLE_NAME");
 			tables.add(tableName);
 		}
+		resultSet.close();
 		return tables;
 	}
 
