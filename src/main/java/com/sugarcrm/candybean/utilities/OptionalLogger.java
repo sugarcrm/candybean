@@ -47,14 +47,14 @@ public class OptionalLogger {
 			if (getLog() != null) {
 				getLog().info(msg);
 			}else {
-				System.err.println("Logger is null!");
-				System.out.print(msg);
+				Logger.getGlobal().severe("Logger is null!");
+				Logger.getGlobal().info(msg);
 			}
-			System.out.print(msg);
+			Logger.getGlobal().info(msg);
 		} else if (getLog() != null) {
 				getLog().info(msg);
 		} else {
-			System.out.print(msg);
+			Logger.getGlobal().info(msg);
 		}
 	}
 	
@@ -67,13 +67,13 @@ public class OptionalLogger {
 			if (getLog() != null) {
 				getLog().severe(msg);
 			}else {
-				System.err.println("Logger is null!");
-				System.err.print(msg);
+				Logger.getGlobal().severe("Logger is null!");
+				Logger.getGlobal().info(msg);
 			}
 		} else if (getLog() != null) {
 				getLog().severe(msg);
 		} else {
-			System.err.print(msg);
+			Logger.getGlobal().info(msg);
 		}
 	}
 	
