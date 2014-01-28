@@ -30,6 +30,7 @@ package com.sugarcrm.candybean.examples;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
@@ -47,6 +48,8 @@ import com.sugarcrm.candybean.utilities.Utils;
  */
 
 public class Basic {
+	
+	private Logger log = Logger.getLogger(Basic.class.getName());
 
 	/**
 	 * Log a message
@@ -55,7 +58,7 @@ public class Basic {
 	 */
 
 	protected void log(String m) {
-		System.out.println(m);
+		log.info(m);
 	}
 
 	/**
@@ -71,8 +74,8 @@ public class Basic {
 	 */
 
 	protected void ve(Throwable e, String m) {
-		System.err.println("Exception caught " + m + ":");
-		e.printStackTrace(System.err);
+		log.severe("Exception caught " + m + ":");
+		log.severe(e.getMessage());
 	}
 
 	/**

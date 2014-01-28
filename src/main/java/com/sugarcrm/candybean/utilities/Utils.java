@@ -57,9 +57,9 @@ public class Utils {
 		Process process = new ProcessBuilder(cmd).start();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 		String line = reader.readLine();
-		System.out.print("Run command: " + cmd);
+		log.info("Run command: " + cmd);
 		while (line != null) {
-			System.out.println(line);
+			log.info(line);
 			line = reader.readLine();
 		}
 	}
@@ -98,7 +98,7 @@ public class Utils {
 		// replace all one or more consecutive forward slashes with a File Separator
 		tempPath = tempPath.replaceAll("/+", Matcher.quoteReplacement(File.separator));
 		if (!tempPath.equals(path)) {
-			System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
+			log.info("The following path: " + path + " has been adjusted to: " + tempPath);
 		}
 		return tempPath;
 	}
