@@ -39,7 +39,7 @@ import com.thoughtworks.selenium.SeleniumException;
  */
 public class VHook {
 	
-	public final static String HOOK_DELIMITER = ":";
+	public static final String HOOK_DELIMITER = ":";
 	
 	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK, CLASS, TAG; }
 	private final Strategy hookStrategy;
