@@ -70,13 +70,13 @@ public class RunExamples {
        * The class field.
        */
 
-      public Class<?> cls;
+      private Class<?> cls;
 
       /**
        * The method field.
        */
 
-      public Method method;
+      private Method method;
 
       /**
        * Instantiate a Pair with a class and a method.
@@ -86,9 +86,25 @@ public class RunExamples {
        */
 
       Pair(Class<?> cls, Method method) {
-         this.cls = cls;
-         this.method = method;
+         this.setCls(cls);
+         this.setMethod(method);
       }
+
+	public Class<?> getCls() {
+		return cls;
+	}
+
+	public void setCls(Class<?> cls) {
+		this.cls = cls;
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
+	}
    }
 
    /**
@@ -265,7 +281,7 @@ public class RunExamples {
          Pair p = this.classes.get(className);
          log("Running example " + className);
          try {
-            p.method.invoke(p.cls.newInstance());
+            p.getMethod().invoke(p.getCls().newInstance());
          } catch (InstantiationException e) {
             error(e, "Failed to instantiate " + className);
          } catch (IllegalAccessException e) {

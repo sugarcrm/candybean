@@ -53,8 +53,8 @@ public class Sugar {
 	public void login() throws Exception {
 		String urlBase = config.getValue("url.base", "http://localhost/ent700/");
 		iface.go(urlBase);
-		iface.widget(hooks.get("login.textfield.username")).sendString(adminUser.builder.requiredAttributes.get("username"));
-		iface.widget(hooks.get("login.textfield.password")).sendString(adminUser.builder.requiredAttributes.get("password"));
+		iface.widget(hooks.get("login.textfield.username")).sendString(adminUser.getBuilder().getRequiredAttributes().get("username"));
+		iface.widget(hooks.get("login.textfield.password")).sendString(adminUser.getBuilder().getRequiredAttributes().get("password"));
 		iface.widget(hooks.get("login.button.login")).click();
 	}
 	

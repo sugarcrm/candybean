@@ -41,8 +41,8 @@ public class VHook {
 	public final static String HOOK_DELIMITER = ":";
 	
 	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK, CLASS, TAG; }
-	public final Strategy hookStrategy;
-	public final String hookString;
+	private final Strategy hookStrategy;
+	private final String hookString;
 
 	public VHook(Strategy hookStrategy, String hookString) {
 		this.hookStrategy = hookStrategy;
@@ -97,6 +97,14 @@ public class VHook {
 	}
 	
 	public String toString() {
-		return "VHook(" + this.hookStrategy + "," + this.hookString + ")";
+		return "VHook(" + this.getHookStrategy() + "," + this.getHookString() + ")";
+	}
+
+	public Strategy getHookStrategy() {
+		return hookStrategy;
+	}
+
+	public String getHookString() {
+		return hookString;
 	}
 }

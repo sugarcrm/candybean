@@ -56,11 +56,11 @@ public class VHookUnitTest {
 			// Test
 			HashMap<String, VHook> hooksMap = VHook.getHooks(hooksProps);
 			VHook hook1 = hooksMap.get(hook1Name);
-			Assert.assertEquals("Test hook1 strategy doesn't match expected: " + hook1Strategy, hook1Strategy, hook1.hookStrategy);
-			Assert.assertEquals("Test hook1 string doesn't match expected: " + hook1String, hook1String, hook1.hookString);
+			Assert.assertEquals("Test hook1 strategy doesn't match expected: " + hook1Strategy, hook1Strategy, hook1.getHookStrategy());
+			Assert.assertEquals("Test hook1 string doesn't match expected: " + hook1String, hook1String, hook1.getHookString());
 			VHook hook2 = hooksMap.get(hook2Name);
-			Assert.assertEquals("Test hook2 strategy doesn't match expected: " + hook2Strategy, hook2Strategy, hook2.hookStrategy);
-			Assert.assertEquals("Test hook2 string doesn't match expected: " + hook2String, hook2String, hook2.hookString);
+			Assert.assertEquals("Test hook2 strategy doesn't match expected: " + hook2Strategy, hook2Strategy, hook2.getHookStrategy());
+			Assert.assertEquals("Test hook2 string doesn't match expected: " + hook2String, hook2String, hook2.getHookString());
 
 			// Resource cleanup
 			hooksFile.delete();

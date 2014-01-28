@@ -32,27 +32,27 @@ import java.util.logging.Logger;
  * 
  */
 public class OptionalLogger {
-	Logger log;
+	private Logger log;
 
 	public OptionalLogger() {
 		this(null);
 	}
 
 	public OptionalLogger(Logger log) {
-		this.log = log;
+		this.setLog(log);
 	}
 
 	public void info(String msg, boolean writeBoth) {
 		if (writeBoth) {
-			if (log != null) {
-				log.info(msg);
+			if (getLog() != null) {
+				getLog().info(msg);
 			}else {
 				System.err.println("Logger is null!");
 				System.out.print(msg);
 			}
 			System.out.print(msg);
-		} else if (log != null) {
-				log.info(msg);
+		} else if (getLog() != null) {
+				getLog().info(msg);
 		} else {
 			System.out.print(msg);
 		}
@@ -64,14 +64,14 @@ public class OptionalLogger {
 
 	public void severe(String msg, boolean writeBoth) {
 		if (writeBoth) {
-			if (log != null) {
-				log.severe(msg);
+			if (getLog() != null) {
+				getLog().severe(msg);
 			}else {
 				System.err.println("Logger is null!");
 				System.err.print(msg);
 			}
-		} else if (log != null) {
-				log.severe(msg);
+		} else if (getLog() != null) {
+				getLog().severe(msg);
 		} else {
 			System.err.print(msg);
 		}
@@ -79,5 +79,13 @@ public class OptionalLogger {
 	
 	public void severe(String msg) {
 		severe(msg, false);
+	}
+
+	Logger getLog() {
+		return log;
+	}
+
+	void setLog(Logger log) {
+		this.log = log;
 	}
 }

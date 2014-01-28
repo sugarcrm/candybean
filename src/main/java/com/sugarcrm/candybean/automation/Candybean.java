@@ -28,6 +28,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.test.AbstractTest;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -57,7 +58,7 @@ public class Candybean {
 	 * {@link Properties} object created by loading the voodoo
 	 * properties configuration file.
 	 */
-	public final Configuration config;
+	private final Configuration config;
 
 	/**
 	 * The root directory of candybean
@@ -88,7 +89,7 @@ public class Candybean {
 	private Candybean(Configuration config) throws IOException{
 		this.config = config;
 		this.log = this.getLogger();
-		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
+		debug = Boolean.parseBoolean(this.getConfig().getValue("debug", "false"));
 	}
 
 	public boolean debug() { 
@@ -117,7 +118,7 @@ public class Candybean {
 	 * @throws Exception
 	 */
 	public VInterface getInterface() {
-		return new VInterface(this, this.config);
+		return new VInterface(this, this.getConfig());
 	}
 
 	//	public long getPageLoadTimeout() {
@@ -150,6 +151,10 @@ public class Candybean {
 	public static String getConfigrationFilePath() throws IOException {
 		return CONFIG_DIR.getCanonicalPath() + File.separator
 				+ CONFIG_FILE_NAME;
+	}
+
+	public Configuration getConfig() {
+		return config;
 	}
 
 	//	private Level getLogLevel() {

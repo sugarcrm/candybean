@@ -110,8 +110,8 @@ public class UtilsUnitTest {
 		Object o1 = new Object();
 		Object o2 = new Object();
 		Pair<Object, Object> pair = new Pair<Object, Object>(o1, o2);
-		Assert.assertEquals("Actual pair object x does not match expected, original object x.", pair.x, o1);
-		Assert.assertEquals("Actual pair object y does not match expected, original object y.", pair.y, o2);
+		Assert.assertEquals("Actual pair object x does not match expected, original object x.", pair.getX(), o1);
+		Assert.assertEquals("Actual pair object y does not match expected, original object y.", pair.getY(), o2);
 	}
 
 
@@ -121,8 +121,8 @@ public class UtilsUnitTest {
 		Object o2 = new Object();
 		Object o3 = new Object();
 		Triplet<Object, Object, Object> pair = new Triplet<Object, Object, Object>(o1, o2, o3);
-		Assert.assertEquals("Actual pair object x does not match expected, original object x.", pair.x, o1);
-		Assert.assertEquals("Actual pair object y does not match expected, original object y.", pair.y, o2);
-		Assert.assertEquals("Actual pair object z does not match expected, original object z.", pair.z, o3);
+		Assert.assertEquals("Actual pair object x does not match expected, original object x.", pair.getX(), o1);
+		Assert.assertEquals("Actual pair object y does not match expected, original object y.", pair.getY(), o2);
+		Assert.assertEquals("Actual pair object z does not match expected, original object z.", pair.getZ(), o3);
 	}
 }

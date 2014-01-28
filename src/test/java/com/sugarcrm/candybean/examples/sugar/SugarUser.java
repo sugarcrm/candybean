@@ -26,7 +26,9 @@ import com.sugarcrm.candybean.model.ModelObjectBuilder;
 
 public class SugarUser extends ModelObject {
 	
-	private SugarUser(SugarUserBuilder builder) { super.builder = builder; }
+	private SugarUser(SugarUserBuilder builder) { 
+		super.setBuilder(builder);
+	}
 	
 	@Override
 	public String toString() {
@@ -35,11 +37,11 @@ public class SugarUser extends ModelObject {
 
 	public static class SugarUserBuilder extends ModelObjectBuilder {
 		public SugarUserBuilder(String username, String firstName, String email, String phoneNumber, String password) {
-			super.requiredAttributes.put("username", username);
-			super.requiredAttributes.put("firstName", firstName);
-			super.requiredAttributes.put("email", email);
-			super.requiredAttributes.put("phoneNumber", phoneNumber);
-			super.requiredAttributes.put("password", password);
+			super.getRequiredAttributes().put("username", username);
+			super.getRequiredAttributes().put("firstName", firstName);
+			super.getRequiredAttributes().put("email", email);
+			super.getRequiredAttributes().put("phoneNumber", phoneNumber);
+			super.getRequiredAttributes().put("password", password);
 		}
 
 		@Override
