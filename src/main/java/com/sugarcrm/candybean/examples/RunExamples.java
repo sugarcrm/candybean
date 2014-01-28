@@ -328,7 +328,7 @@ public class RunExamples {
     */
 
    protected void error(Throwable exc, String errm) {
-      System.err.println(errm + ":");
+     log.severe(errm + ":");
       if (exc != null) {
          exc.printStackTrace(System.err);
       }
