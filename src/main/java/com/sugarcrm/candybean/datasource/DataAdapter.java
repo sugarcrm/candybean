@@ -23,7 +23,6 @@ package com.sugarcrm.candybean.datasource;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.filefilter.RegexFileFilter;

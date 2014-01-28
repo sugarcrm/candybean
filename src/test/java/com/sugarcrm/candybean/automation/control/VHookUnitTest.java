@@ -23,7 +23,6 @@ package com.sugarcrm.candybean.automation.control;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 

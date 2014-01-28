@@ -23,13 +23,10 @@ package com.sugarcrm.candybean.examples.sugar;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
-
 import org.junit.Test;
 
 import com.sugarcrm.candybean.automation.Candybean;

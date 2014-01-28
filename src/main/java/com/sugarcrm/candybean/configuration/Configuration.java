@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 import com.sugarcrm.candybean.utilities.Utils;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 

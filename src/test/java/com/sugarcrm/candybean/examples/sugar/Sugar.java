@@ -21,7 +21,6 @@
  */
 package com.sugarcrm.candybean.examples.sugar;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
