@@ -32,6 +32,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
@@ -127,9 +128,9 @@ public class Utils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ArrayList<String> getTables(Connection connection) throws SQLException {
+	public static List<String> getTables(Connection connection) throws SQLException {
 		DatabaseMetaData dbmd = connection.getMetaData();
-		ArrayList<String> tables = new ArrayList<String>();
+		List<String> tables = new ArrayList<String>();
 		String[] types = { "TABLE" };
 		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
 		while (resultSet.next()) {

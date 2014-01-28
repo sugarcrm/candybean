@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import au.com.bytecode.opencsv.CSVParser;
@@ -40,7 +41,7 @@ public class CSV extends DataSource {
 	
 	private Logger log = Logger.getLogger(CSV.class.getName());
 	private static final long serialVersionUID = 1L;
-	private ArrayList<String> keys = null;
+	private List<String> keys = null;
 	private CSVParser parser = null;
 
 	public CSV(String csvfile) {

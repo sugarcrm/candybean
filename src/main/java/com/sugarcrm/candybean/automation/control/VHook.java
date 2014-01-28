@@ -22,6 +22,7 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.sugarcrm.candybean.configuration.Configuration;
@@ -56,8 +57,8 @@ public class VHook {
 	 * @return
 	 * @throws MalformedHookException 
 	 */
-	public static HashMap<String, VHook> getHooks(Properties hooks) throws MalformedHookException {
-		HashMap<String, VHook> hooksMap = new HashMap<String, VHook>();
+	public static Map<String, VHook> getHooks(Properties hooks) throws MalformedHookException {
+		Map<String, VHook> hooksMap = new HashMap<String, VHook>();
 		for(String name : hooks.stringPropertyNames()) {
 //			System.out.println("hook name: " + name);
 //			String[] strategyNHook = hooks.getProperty(name).split(HOOK_DELIMITER);

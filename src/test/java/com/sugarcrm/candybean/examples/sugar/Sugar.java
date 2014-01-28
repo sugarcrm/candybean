@@ -22,6 +22,7 @@
 package com.sugarcrm.candybean.examples.sugar;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.sugarcrm.candybean.automation.Candybean;
@@ -34,7 +35,7 @@ public class Sugar {
 	protected Candybean candybean;
 	protected VInterface iface;
 	protected Configuration config;
-	protected HashMap<String, VHook> hooks;
+	protected Map<String, VHook> hooks;
 	protected SugarUser adminUser;
 	
 	public Sugar(Candybean candybean, Configuration sugarConfig, Properties sugarHooks, SugarUser adminUser) throws Exception {

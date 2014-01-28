@@ -141,7 +141,7 @@ public class VSelect extends VControl {
      *
      * @param options
      */
-    public void deselect(ArrayList<String> options) {
+    public void deselect(List<String> options) {
         for (String text : options) {
             deselect(text);
         }
