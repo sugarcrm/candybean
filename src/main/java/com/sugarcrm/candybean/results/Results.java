@@ -39,7 +39,7 @@ public class Results {
 	public Results(File resultsFile) throws FileNotFoundException {
 		Scanner scanner = new Scanner(resultsFile);
 		while (scanner.hasNextLine()) {
-            results.add(new Result(scanner.nextLine()));
+            results.add(new Result(/*scanner.nextLine()*/));
         }
 		scanner.close();
 	}
