@@ -436,7 +436,8 @@ public class VInterface {
 	public void maximize() {
 		candybean.log.info("Maximizing window");
 //		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.getWd().manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
+		this.getWd().manage().window().maximize();
+		//.setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
 	/**

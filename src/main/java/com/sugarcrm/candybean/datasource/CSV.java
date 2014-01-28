@@ -90,7 +90,8 @@ public class CSV extends DataSource {
 				FieldSet tmphash = new FieldSet();
 				for (int i = 0; i <= this.keys.size() - 1; i++) {
 					if (i <= linelen) {
-						tmphash.put(this.keys.get(i), linedata[i]);  // do not remove leading and trailing spaces: CB-18
+						// do not remove leading and trailing spaces: CB-18
+						tmphash.put(this.keys.get(i), linedata[i]);  
 					} else {
 						tmphash.put(this.keys.get(i), "");
 					}

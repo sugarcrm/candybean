@@ -62,8 +62,9 @@ public class CsvDataAdapter extends DataAdapter {
 	}
 
 	public Map<String, DataSource> getData(String testData, DataAdapter.Selection select) {
+		// determines whether to select all the files based on file pattern
+		selection = select;  
 
-		selection = select;  // determines whether to select all the files based on file pattern
 		
 		List<File> csvFileList = getCsvFileList(testData);
 		Map<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
