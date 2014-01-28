@@ -9,9 +9,10 @@ Features
 Some project features planned for Candybean:
 * HTML 5 support (Sugar 7): supports HTML 5 elements
 * Support Java-based tests/calls: executes Java-based test scripts
+* Mobile support: tests run on web or mobile
 * Abstraction from dependent technologies:
 ** Supports multiple, independent reporting options (e.g. XML, HTML)
-** Supports multiple automation frameworks (de-prioritized)
+** Supports multiple automation frameworks
 ** Data-driven resource agnostic (e.g. DB, XML, JSON)
 * Independent from project-specific parameters:
 ** Supports product objectification, thus platform-independent
@@ -20,7 +21,8 @@ Some project features planned for Candybean:
 ** Verify element hooks are valid before running tests
 ** Verify abstract element behavior (fields, menus, etc.)
 ** Unit and system tested
-* Script-style logging: make debugging readable, easier
+* Script-style logging: make debugging readable, easier and fully configurable
+* Tag-based execution: define tag logic determining which methods execute
 * Failure/error non-blocking: option to continue executing tests upon error/failure
 * Resource consolidating: pre-execution resource scan for consolidated allocation
 * Supports 'smart' waits (WIP definition)
@@ -28,8 +30,8 @@ Some project features planned for Candybean:
 * Randomized testing: Supports randomized/stress testing
 * Open-source:
 ** JavaDoc/API with usage details, examples, best practices
-** Externally-facing site/wiki with installation documentation
-** Code samples
+** Externally-facing site with installation documentation
+** Code examples
 * Best practice, OOP-organized code for ease of maintenance
 * Easy to install (GUI installer or minimal configuration)
 
@@ -38,14 +40,14 @@ Components
 This is a list of components that collectively fall under Candybean:
 * Automation: contains functionality that automates application interaction
 * Configuration: an extension of the native Java Properties object with configuration-file-specific functionality
-* Data Source: an abstracted data source object with iterative and key-value behavior
+* Data Source: an abstracted data source object with iterative and key-value behavior for data-driven testing
+* Examples: example automated test projects that highlight Candybean's features
+* Model: test target abstraction framework for automated testing
 * Results: an encapsulation of test result parsing and illustrative/presentation functionality
-* Runner: an annotation-based orchestration object that executes identified code portions
+* Runner: an annotation-based orchestration object that executes identified methods for test execution
 * Test: a utilities package with test-specific helper functionality
-* Translations: outputs given files with translated strings; can be used for i18n, etc.
 * Utilities: contains generic helper functionality
-* Web Services: contains REST request-building and response-parsing functionality
-* Mobile: a cross platform mobile testing framework
+* Web Services: contains request-building and response-parsing functionality
 
 Installation
 ------------
