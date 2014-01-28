@@ -36,7 +36,7 @@ import com.sugarcrm.candybean.test.AbstractTest;
  *
  * @author Conrad Warmbold
  */
-public class Candybean {
+public final class Candybean {
 	
 	/**
 	 * The default name of the system property that may contain the candybean configuration file path.
