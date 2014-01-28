@@ -184,7 +184,7 @@ public class VInterface {
 		}
 		this.iType = iType;
 		this.setWd(this.getWebDriver(iType));
-		this.windows.push(new Pair<Integer, String>(new Integer(0), this.getWd().getWindowHandle()));
+		this.windows.push(new Pair<Integer, String>(Integer.valueOf(0), this.getWd().getWindowHandle()));
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class VInterface {
 				throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 			} else {
 				this.getWd().switchTo().window(windowHandles[index]);
-				windows.push(new Pair<Integer, String>(new Integer(index), this.getWd().getWindowHandle()));
+				windows.push(new Pair<Integer, String>(Integer.valueOf(index), this.getWd().getWindowHandle()));
 				candybean.log.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
 		}
@@ -390,7 +390,7 @@ public class VInterface {
 			while (i < windowHandles.length && !windowFound) {
 				WebDriver window = this.getWd().switchTo().window(windowHandles[i]);
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
-					windows.push(new Pair<Integer, String>(new Integer(i), this.getWd().getWindowHandle()));
+					windows.push(new Pair<Integer, String>(Integer.valueOf(i), this.getWd().getWindowHandle()));
 					candybean.log.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
 					windowFound = true;
 				}
