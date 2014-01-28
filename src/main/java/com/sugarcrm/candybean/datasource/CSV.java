@@ -42,7 +42,7 @@ public class CSV extends DataSource {
 	public CSV(String csvfile) {
 		super();
 
-		this.filename = csvfile;
+		this.setFilename(csvfile);
 		FileInputStream fs = null;
 		BufferedReader br = null;
 
@@ -50,7 +50,7 @@ public class CSV extends DataSource {
 
 		try {
 			this.keys = new ArrayList<String>();
-			data = new DataSource();
+			setData(new DataSource());
 
 			fs = new FileInputStream(csvfile);
 			br = new BufferedReader(new InputStreamReader(fs));
@@ -90,7 +90,7 @@ public class CSV extends DataSource {
 						tmphash.put(this.keys.get(i), "");
 					}
 				}
-				this.data.add(tmphash);
+				this.getData().add(tmphash);
 			}
 		} catch (Exception exp) {
 			exp.printStackTrace();
@@ -130,6 +130,6 @@ public class CSV extends DataSource {
 	}
 	
 	public DataSource getDataSource() {
-		return this.data;
+		return this.getData();
 	}
 }

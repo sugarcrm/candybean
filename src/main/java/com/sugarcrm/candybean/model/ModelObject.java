@@ -24,18 +24,19 @@ package com.sugarcrm.candybean.model;
 import java.util.Map;
 
 public abstract class ModelObject {
-	public ModelObjectBuilder builder;
+	
+	private ModelObjectBuilder builder;
 	
 	@Override
 	public String toString() {
 		String s = "(";
-		for (Map.Entry<String, String> reqAttr : builder.requiredAttributes.entrySet()) {
+		for (Map.Entry<String, String> reqAttr : getBuilder().getRequiredAttributes().entrySet()) {
 			s += reqAttr.getKey() + ":" + reqAttr.getValue() + ",";
 		}
 		if (s.endsWith(",")) {
 			s = s.substring(0, s.length() - 1);
 		}
-		for (Map.Entry<String, String> optAttr : builder.optionalAttributes.entrySet()) {
+		for (Map.Entry<String, String> optAttr : getBuilder().getOptionalAttributes().entrySet()) {
 			s += optAttr.getKey() + ":" + optAttr.getValue() + ",";
 		}
 		if (s.endsWith(",")) {
@@ -43,5 +44,13 @@ public abstract class ModelObject {
 		}
 		s += ")";
 		return s;
+	}
+
+	public ModelObjectBuilder getBuilder() {
+		return builder;
+	}
+
+	public void setBuilder(ModelObjectBuilder builder) {
+		this.builder = builder;
 	}
 }	

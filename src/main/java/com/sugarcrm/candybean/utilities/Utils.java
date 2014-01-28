@@ -183,8 +183,8 @@ public class Utils {
 	 * @param <Y>
 	 */
 	public static class Pair<X, Y> {
-		public final X x;
-		public final Y y;
+		private final X x;
+		private final Y y;
 
 		public Pair(X x, Y y) {
 			this.x = x;
@@ -193,7 +193,15 @@ public class Utils {
 
 		@Override
 		public String toString() {
-			return "x:" + x.toString() + ",y:" + y.toString();
+			return "x:" + getX().toString() + ",y:" + getY().toString();
+		}
+
+		public X getX() {
+			return x;
+		}
+
+		public Y getY() {
+			return y;
 		}
 	}
 
@@ -207,9 +215,9 @@ public class Utils {
 	 * @param <Z>
 	 */
 	public static class Triplet<X, Y, Z> { 
-		public final X x; 
-		public final Y y; 
-		public final Z z;
+		private final X x; 
+		private final Y y; 
+		private final Z z;
 
 		public Triplet(X x, Y y, Z z) { 
 			this.x = x; 
@@ -219,7 +227,19 @@ public class Utils {
 
 		@Override
 		public String toString() {
-			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
+			return "x:" + getX().toString() + ",y:" + getY().toString() + ",z:" + getZ().toString();
+		}
+
+		public X getX() {
+			return x;
+		}
+
+		public Y getY() {
+			return y;
+		}
+
+		public Z getZ() {
+			return z;
 		}
 	}
 

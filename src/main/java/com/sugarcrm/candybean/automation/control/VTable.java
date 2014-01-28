@@ -53,7 +53,7 @@ public class VTable extends VControl {
   	 * @return
   	 */
   	public boolean containsText(String value) {
-  		List<WebElement> webElements = super.iface.wd.findElements(By.xpath("*"));
+  		List<WebElement> webElements = super.getIface().getWd().findElements(By.xpath("*"));
   		for (WebElement we : webElements) {
   			if (we.getText().trim().equals(value)) {
   				return true;

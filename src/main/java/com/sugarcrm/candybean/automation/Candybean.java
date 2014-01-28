@@ -57,7 +57,7 @@ public class Candybean {
 	 * {@link Properties} object created by loading the voodoo
 	 * properties configuration file.
 	 */
-	public final Configuration config;
+	private final Configuration config;
 
 	/**
 	 * The one Voodoo instance.  Created when a Voodoo instance is
@@ -76,7 +76,7 @@ public class Candybean {
 	private Candybean(Configuration config) throws IOException{
 		this.config = config;
 		this.log = this.getLogger();
-		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
+		debug = Boolean.parseBoolean(this.getConfig().getValue("debug", "false"));
 	}
 
 	public boolean debug() { 
@@ -105,7 +105,7 @@ public class Candybean {
 	 * @throws Exception
 	 */
 	public VInterface getInterface() {
-		return new VInterface(this, this.config);
+		return new VInterface(this, this.getConfig());
 	}
 
 	//	public long getPageLoadTimeout() {
@@ -129,6 +129,10 @@ public class Candybean {
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		Logger logger = Logger.getLogger(Candybean.class.getName());
 		return logger;
+	}
+
+	public Configuration getConfig() {
+		return config;
 	}
 
 	//	private Level getLogLevel() {

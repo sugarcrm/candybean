@@ -85,7 +85,7 @@ public class VInterface {
 	private final Candybean candybean;
 	private final Configuration config;
 
-	public WebDriver wd = null;
+	private WebDriver wd = null;
 	private Type iType = null;
 //	public final AndroidInterface vac; //vac as in candybean android control
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
@@ -179,12 +179,12 @@ public class VInterface {
 //			this.vac = null;
 //			this.start();
 //		}
-		if (this.wd != null) {
+		if (this.getWd() != null) {
 			throw new Exception("Automation interface already started with type: " + this.iType);
 		}
 		this.iType = iType;
-		this.wd = this.getWebDriver(iType);
-		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
+		this.setWd(this.getWebDriver(iType));
+		this.windows.push(new Pair<Integer, String>(new Integer(0), this.getWd().getWindowHandle()));
 	}
 
 	/**
@@ -195,9 +195,9 @@ public class VInterface {
 		candybean.log.info("Stopping automation interface with type: " + this.iType);
 		this.windows.clear();
 		this.iType = null;
-		if (this.wd != null) {
-			this.wd.quit();
-			this.wd = null;
+		if (this.getWd() != null) {
+			this.getWd().quit();
+			this.setWd(null);
 		} else {
 			candybean.log.warning("Automation interface already stopped.");
 		}
@@ -209,7 +209,7 @@ public class VInterface {
 	 */
 	public void refresh() {
 		candybean.log.info("Refreshing the interface.");
-		this.wd.navigate().refresh();
+		this.getWd().navigate().refresh();
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class VInterface {
 	 */
 	public void restart() throws Exception {
 		candybean.log.info("Restarting automation interface with type: " + this.iType);
-		if (this.wd == null) {
+		if (this.getWd() == null) {
 			throw new Exception("Automation interface not yet started; cannot restart.");
 		}
 		Type type = this.iType;
@@ -234,7 +234,7 @@ public class VInterface {
 	 */
 	public void go(String url) {
 		candybean.log.info("Going to URL and switching to window: " + url);
-		this.wd.get(url);
+		this.getWd().get(url);
 //		this.wd.switchTo().window(this.wd.getWindowHandle());
 	}
 	
@@ -244,7 +244,7 @@ public class VInterface {
 	 * @return		Returns the current window's URL as a String
 	 */
 	public String getURL() {
-		String url = this.wd.getCurrentUrl();
+		String url = this.getWd().getCurrentUrl();
 		candybean.log.info("Getting URL " + url);
 		return url;
 	}
@@ -255,7 +255,7 @@ public class VInterface {
 	 */
 	public void backward() {
 		candybean.log.info("Navigating the interface backward.");
-		this.wd.navigate().back();
+		this.getWd().navigate().back();
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class VInterface {
 		if (!caseSensitive) {
 			s = s.toLowerCase();
 		}
-		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
+		List<WebElement> wes = this.getWd().findElements(By.xpath("//*[not(@visible='false')]"));
 		for (WebElement we : wes) {
 			String text = we.getText();
 			if (!caseSensitive) {
@@ -294,7 +294,7 @@ public class VInterface {
 	 */
 	public void focusDefault() {
 		candybean.log.info("Focusing to default content.");
-		this.wd.switchTo().defaultContent();
+		this.getWd().switchTo().defaultContent();
 	}
 	
 	/**
@@ -304,7 +304,7 @@ public class VInterface {
 	 */
 	public void focusFrame(int index) {
 		candybean.log.info("Focusing to frame by index: " + index);
-		this.wd.switchTo().frame(index);
+		this.getWd().switchTo().frame(index);
 	}
 	
 	/**
@@ -314,7 +314,7 @@ public class VInterface {
 	 */
 	public void focusFrame(String nameOrId) {
 		candybean.log.info("Focusing to frame by name or ID: " + nameOrId);
-		this.wd.switchTo().frame(nameOrId);
+		this.getWd().switchTo().frame(nameOrId);
 	}
 	
 	/**
@@ -324,7 +324,7 @@ public class VInterface {
 	 */
 	public void focusFrame(VControl control) {
 		candybean.log.info("Focusing to frame by control: " + control.toString());
-		this.wd.switchTo().frame(control.we);
+		this.getWd().switchTo().frame(control.getWe());
 	}
 	
 	/**
@@ -333,10 +333,10 @@ public class VInterface {
 	 */
 	public void closeWindow() {
 		candybean.log.info("Closing window with handle: " + windows.peek());
-		this.wd.close();
+		this.getWd().close();
 		this.windows.pop();
 		candybean.log.info("Refocusing to previous window with handle: " + windows.peek());
-		this.wd.switchTo().window(windows.peek().y);
+		this.getWd().switchTo().window(windows.peek().getY());
 	}
 
 	/**
@@ -350,18 +350,18 @@ public class VInterface {
 	 * @throws Exception	if the specified window index is out of range
 	 */
 	public void focusWindow(int index) throws Exception {
-		if (index == windows.peek().x.intValue()) {
+		if (index == windows.peek().getX().intValue()) {
 			candybean.log.warning("No focus was made because the given index matched the current index: " + index);
 		} else if (index < 0) {
 			throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 		} else {
-			Set<String> windowHandlesSet = this.wd.getWindowHandles();
+			Set<String> windowHandlesSet = this.getWd().getWindowHandles();
 			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
 			if (index >= windowHandles.length) {
 				throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 			} else {
-				this.wd.switchTo().window(windowHandles[index]);
-				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
+				this.getWd().switchTo().window(windowHandles[index]);
+				windows.push(new Pair<Integer, String>(new Integer(index), this.getWd().getWindowHandle()));
 				candybean.log.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
 		}
@@ -378,26 +378,26 @@ public class VInterface {
 	 * @throws Exception	if the specified window cannot be found
 	 */
 	public void focusWindow(String titleOrUrl) throws Exception {
-		String curTitle = this.wd.getTitle();
-		String curUrl = this.wd.getCurrentUrl();
+		String curTitle = this.getWd().getTitle();
+		String curUrl = this.getWd().getCurrentUrl();
 		if (titleOrUrl.equals(curTitle) || titleOrUrl.equals(curUrl)) {
 			candybean.log.warning("No focus was made because the given string matched the current title or URL: " + titleOrUrl);
 		} else {
-			Set<String> windowHandlesSet = this.wd.getWindowHandles();
+			Set<String> windowHandlesSet = this.getWd().getWindowHandles();
 			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
 			int i = 0;
 			boolean windowFound = false;
 			while (i < windowHandles.length && !windowFound) {
-				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
+				WebDriver window = this.getWd().switchTo().window(windowHandles[i]);
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
-					windows.push(new Pair<Integer, String>(new Integer(i), this.wd.getWindowHandle()));
+					windows.push(new Pair<Integer, String>(new Integer(i), this.getWd().getWindowHandle()));
 					candybean.log.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
 					windowFound = true;
 				}
 				i++;
 			}
 			if (!windowFound) {
-				this.wd.switchTo().window(windows.peek().y);
+				this.getWd().switchTo().window(windows.peek().getY());
 				throw new Exception("The given focus window string matched no title or URL: " + titleOrUrl);
 			}
 		}	
@@ -409,7 +409,7 @@ public class VInterface {
 	 */
 	public void forward() {
 		candybean.log.info("Navigating the interface forward.");
-		this.wd.navigate().forward();
+		this.getWd().navigate().forward();
 	}
 	
 	/**
@@ -435,7 +435,7 @@ public class VInterface {
 	public void maximize() {
 		candybean.log.info("Maximizing window");
 //		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.wd.manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
+		this.getWd().manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
 	/**
@@ -487,7 +487,7 @@ public class VInterface {
 	 */
 	private List<VControl> getControls(Strategy strategy, VHook hook) {
 		List<VControl> controls = new ArrayList<VControl>();
-		List<WebElement> wes = this.wd.findElements(VControl.makeBy(strategy, hook.hookString));
+		List<WebElement> wes = this.getWd().findElements(VControl.makeBy(strategy, hook.getHookString()));
 		for (WebElement we : wes)
 			controls.add(new VControl(this.candybean, this, hook, we));
 		return controls;
@@ -543,7 +543,7 @@ public class VInterface {
 	public void acceptDialog() {
 		try {
 			candybean.log.info("Accepting dialog.");
-			this.wd.switchTo().alert().accept();
+			this.getWd().switchTo().alert().accept();
 //			this.wd.switchTo().defaultContent();
 		} catch(UnhandledAlertException uae) {
 			candybean.log.warning("Unhandled alert exception");
@@ -558,7 +558,7 @@ public class VInterface {
 	public void dismissDialog() {
 		try {
 			candybean.log.info("Dismissing dialog.");
-			this.wd.switchTo().alert().dismiss();
+			this.getWd().switchTo().alert().dismiss();
 //			this.wd.switchTo().defaultContent();
 		} catch(UnhandledAlertException uae) {
 			candybean.log.warning("Unhandled alert exception");
@@ -574,7 +574,7 @@ public class VInterface {
 	 */
 	public boolean isDialogVisible() {
 		try { 
-			this.wd.switchTo().alert(); 
+			this.getWd().switchTo().alert(); 
 //			this.wd.switchTo().defaultContent();
 			candybean.log.info("Dialog present?: true.");
 			return true;
@@ -703,6 +703,14 @@ public class VInterface {
 		return wd;
 	}
 	
+	public WebDriver getWd() {
+		return wd;
+	}
+
+	public void setWd(WebDriver wd) {
+		this.wd = wd;
+	}
+
 	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 

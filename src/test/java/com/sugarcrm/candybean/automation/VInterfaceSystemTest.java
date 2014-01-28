@@ -230,22 +230,22 @@ public class VInterfaceSystemTest {
 		iface.go(expWindow0URL);
 	
 		// Check assumptions
-		assertEquals(expWindow0Title, iface.wd.getTitle());
+		assertEquals(expWindow0Title, iface.getWd().getTitle());
 		
 		// Click pops-up window titled "Tryit Editor v1.8"
 		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Verify title without switching
-		assertEquals(expWindow0Title, iface.wd.getTitle());
+		assertEquals(expWindow0Title, iface.getWd().getTitle());
 		
 		// Verify title with switching
 		iface.focusWindow(1);
-		assertEquals(expWindow1Title, iface.wd.getTitle());
+		assertEquals(expWindow1Title, iface.getWd().getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window which should auto-focus to previous window; verify title
 		iface.closeWindow();
-		assertEquals(expWindow0Title, iface.wd.getTitle());
+		assertEquals(expWindow0Title, iface.getWd().getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pop-up window titled "Tryit Editor v1.8"
@@ -260,7 +260,7 @@ public class VInterfaceSystemTest {
 		
 		// Verify title with (not) switching to current window by index
 		iface.focusWindow(0);
-		assertEquals(expWindow2Title, iface.wd.getTitle());
+		assertEquals(expWindow2Title, iface.getWd().getTitle());
 //		iface.interact(iface.getWindowsString());
 				
 		// Verify URL with switching to window by title
@@ -271,7 +271,7 @@ public class VInterfaceSystemTest {
 		
 		// Verify URL with switching to window by URL
 		iface.focusWindow(expWindow3URL);
-		assertEquals(expWindow3Title, iface.wd.getTitle());
+		assertEquals(expWindow3Title, iface.getWd().getTitle());
 //		iface.interact(iface.getWindowsString());
 		
 		// Close window and revert to previous window (1 index); verify URL

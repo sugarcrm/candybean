@@ -31,27 +31,27 @@ import com.sugarcrm.candybean.datasource.DataAdapterFactory.DataAdapterType;
 
 public class DS {
 	public enum DataType { CSV, XML };
-	String testName;
-	DataAdapterFactory adapterFactory;
-	DataAdapter dataAdapter;
-	String propKey;
-	String propValue;
-	Configuration config;
+	private String testName;
+	private DataAdapterFactory adapterFactory;
+	private DataAdapter dataAdapter;
+	private String propKey;
+	private String propValue;
+	private Configuration config;
 	
 	public DS(String testName) {
-		this.testName = testName;
+		this.setTestName(testName);
 	}
 	
 	public void init(DataType dataType, String propKey, String propValue) {
-		this.propKey = propKey; 
-		this.propValue = propValue; 
-		config = new Configuration();
-		config.setValue(propKey, propValue);
+		this.setPropKey(propKey); 
+		this.setPropValue(propValue); 
+		setConfig(new Configuration());
+		getConfig().setValue(propKey, propValue);
 //		config.createFile(System.getProperty("user.dir") + File.separator + "TemporaryConfigFiles" + File.separator + testName + ".properties");
 		
         DataAdapterType type = getDataType(dataType);
-		adapterFactory = new DataAdapterFactory(config);
-		dataAdapter = adapterFactory.createDataAdapter(type);
+		setAdapterFactory(new DataAdapterFactory(getConfig()));
+		setDataAdapter(getAdapterFactory().createDataAdapter(type));
 	}
 	
 	/**
@@ -62,8 +62,8 @@ public class DS {
      */
 	public DataSource getDataSource(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
-		HashMap<String, DataSource> dataSourceHashMap = dataAdapter
-				.setDataBasePath(propKey).getData(dataSet,
+		HashMap<String, DataSource> dataSourceHashMap = getDataAdapter()
+				.setDataBasePath(getPropKey()).getData(dataSet,
 						DataAdapter.Selection.SINGLE);
 		DataSource ds = dataSourceHashMap.get(dataSet);
 		//printDataSourceSingle(ds);
@@ -82,8 +82,8 @@ public class DS {
      */
 	public HashMap<String, DataSource> getDataSources(String dataSet) {
 		// Eg of a dataSet is "Account_0001"
-		HashMap<String, DataSource> dataSourceHashMap = dataAdapter
-				.setDataBasePath(propKey).getData(dataSet);
+		HashMap<String, DataSource> dataSourceHashMap = getDataAdapter()
+				.setDataBasePath(getPropKey()).getData(dataSet);
 		//printDataSource(dataSourceHashMap);
 		
 		return dataSourceHashMap;
@@ -99,6 +99,54 @@ public class DS {
 		default:
 			return DataAdapterType.CSV;
 		}
+	}
+
+	public String getTestName() {
+		return testName;
+	}
+
+	public void setTestName(String testName) {
+		this.testName = testName;
+	}
+
+	public DataAdapterFactory getAdapterFactory() {
+		return adapterFactory;
+	}
+
+	public void setAdapterFactory(DataAdapterFactory adapterFactory) {
+		this.adapterFactory = adapterFactory;
+	}
+
+	public DataAdapter getDataAdapter() {
+		return dataAdapter;
+	}
+
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.dataAdapter = dataAdapter;
+	}
+
+	public String getPropKey() {
+		return propKey;
+	}
+
+	public void setPropKey(String propKey) {
+		this.propKey = propKey;
+	}
+
+	public String getPropValue() {
+		return propValue;
+	}
+
+	public void setPropValue(String propValue) {
+		this.propValue = propValue;
+	}
+
+	public Configuration getConfig() {
+		return config;
+	}
+
+	public void setConfig(Configuration config) {
+		this.config = config;
 	}
 
 //	private static void printDataSourceSingle(DataSource ds) {
