@@ -24,7 +24,6 @@ package com.sugarcrm.candybean.automation.control;
 import java.io.File;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -35,8 +34,6 @@ import org.openqa.selenium.TimeoutException;
 
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VControl;
-import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;

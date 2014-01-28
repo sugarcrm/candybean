@@ -21,7 +21,6 @@
  */
 package com.sugarcrm.candybean.datasource;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.sugarcrm.candybean.configuration.Configuration;

@@ -1,7 +1,5 @@
 package com.sugarcrm.candybean.utilities.exception;
 
-import java.io.File;
-
 /**
  * Exception thrown when a hook file is not formatted correctly.
  * @author Shehryar Farooq
