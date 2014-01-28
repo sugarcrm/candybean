@@ -39,7 +39,9 @@ import java.util.*;
 
 public class VSelect extends VControl {
 
-    private Select select;
+    private static final String FROM_CONTROL = "' from control: ";
+
+	private Select select;
 
     private boolean isMultiple;
 
@@ -80,7 +82,7 @@ public class VSelect extends VControl {
 	 * @param value  text of the option to be selected
 	 */
 	public void select(String value) {
-		getVoodoo().log.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
+		getVoodoo().log.info("Selenium: selecting value '" + value  +  FROM_CONTROL + this.toString());
 		select.selectByVisibleText(value);
 	}
 
@@ -91,7 +93,7 @@ public class VSelect extends VControl {
      */
     public void select(int index) {
         List<WebElement> options = select.getOptions();
-        getVoodoo().log.info("Selenium: selecting value '" + options.get(index).getText() + "' from control: " + this.toString());
+        getVoodoo().log.info("Selenium: selecting value '" + options.get(index).getText() + FROM_CONTROL + this.toString());
         select.selectByIndex(index);
     }
 
@@ -121,7 +123,7 @@ public class VSelect extends VControl {
      * @param text  text of the option to be deselected
      */
     public void deselect(String text) {
-        getVoodoo().log.info("Selenium: deselecting value '" + text + "' from control: " + this.toString());
+        getVoodoo().log.info("Selenium: deselecting value '" + text + FROM_CONTROL + this.toString());
         select.deselectByVisibleText(text);
     }
 
@@ -132,7 +134,7 @@ public class VSelect extends VControl {
      */
     public void deselect(int index) {
         List<WebElement> options = select.getOptions();
-        getVoodoo().log.info("Selenium: deselecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
+        getVoodoo().log.info("Selenium: deselecting value '" + options.get(index).getText()  +  FROM_CONTROL + this.toString());
         select.deselectByIndex(index);
     }
 
