@@ -25,6 +25,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
 import au.com.bytecode.opencsv.CSVParser;
 
 /**
@@ -35,6 +37,8 @@ import au.com.bytecode.opencsv.CSVParser;
  */
 
 public class CSV extends DataSource {
+	
+	private Logger log = Logger.getLogger(CSV.class.getName());
 	private static final long serialVersionUID = 1L;
 	private ArrayList<String> keys = null;
 	private CSVParser parser = null;
@@ -57,7 +61,7 @@ public class CSV extends DataSource {
 			this.findKeys(br);
 			this.createData(br);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 	}
 
@@ -93,7 +97,7 @@ public class CSV extends DataSource {
 				this.getData().add(tmphash);
 			}
 		} catch (Exception exp) {
-			exp.printStackTrace();
+			log.severe(exp.getMessage());
 		}
 	}
 
@@ -125,7 +129,7 @@ public class CSV extends DataSource {
 			}
 
 		} catch (Exception exp) {
-			exp.printStackTrace();
+			log.severe(exp.getMessage());
 		}
 	}
 	
