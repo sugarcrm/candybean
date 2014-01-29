@@ -29,6 +29,12 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+/**
+ * Custom JUnit test runner class. When a test is annotated to use this runner,
+ * the runner will look into the specified tags to determine the platform for which the test
+ * is to be run. If the tag does not match the system OS, the test will not run.
+ *
+ */
 public class VTagRunner extends BlockJUnit4ClassRunner {
 	public VTagRunner(Class<?> klass) throws InitializationError {
 		super(klass);

@@ -26,6 +26,14 @@ import java.util.Properties;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 
+/**
+ * A mechanism to locate an element on a page using a pre-defined hook string and a {@link Strategy}.
+ * A collection of {@link VHook} objects can be obtained from a properties file that contains
+ * all the hooks. The format of a hook is as follows: <br>
+ * <b>key=strategy:hook</b> <br>where they key is a uniqe key assigned to the element, the strategy is the type of strategy
+ * used to locate the element, and the hook is the value used by the strategy to locate the element.
+ *
+ */
 public class VHook {
 	
 	public final static String HOOK_DELIMITER = ":";
