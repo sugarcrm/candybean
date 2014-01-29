@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.automation.mobile;
+package com.sugarcrm.candybean.examples.evernote;
 
 import static org.junit.Assert.*;
 
@@ -48,15 +48,11 @@ public class EvernoteAndroidTest extends AbstractTest{
 		closeWelcomeOverlay();
 	}
 
-	
-
-
 	@After
 	public void tearDown() throws Exception {
 		driver.quit();
 	}
 	
-
 	@Test
 	public void openNotes() throws Exception {
 		openUsersMenu();
@@ -66,8 +62,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 		iface.pause(3000);
 	}
 	
-	
-
 	@Test
 	public void newNote() throws Exception {
 		openUsersMenu();
@@ -95,9 +89,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 		iface.pause(2000);
 	}
 
-
-	
-	
 	@Test
 	public void deleteAllNotes() throws Exception {
 		openNotes();
@@ -129,8 +120,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 		assertEquals(driver.findElements(By.id("com.evernote:id/title")).size(), 0);
 	}
 
-
-	
 	@Test
 	public void openNotebookFromShortcut() throws Exception {
 		openShortcutsMenu();
@@ -139,9 +128,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 		shortcut.click();
 		iface.pause(1000);
 	}
-
-
-	
 
 	@Test
 	public void signOut() throws Exception {
@@ -154,8 +140,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 		iface.pause(4000);
 	}
 	
-
-	
 	private boolean isLoggedIn() {
 		try {
 			openUsersMenu();
@@ -165,7 +149,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 			return false;
 		}
 	}
-
 	
 	private boolean overlayExists(){
 		try {
@@ -185,8 +168,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 			return false;
 		}
 	}
-	
-	
 
 	public void closeWelcomeOverlay() throws Exception {
 		if(overlayExists()){
@@ -229,14 +210,12 @@ public class EvernoteAndroidTest extends AbstractTest{
 		iface.pause(1000);
 	}
 	
-
 	public void closeConfirmation(boolean option) throws Exception {
 		WebElement confirmation = driver.findElement(By
 				.id(option ? "android:id/button1" : "android:id/button2"));
 		confirmation.click();
 		iface.pause(1000);
 	}
-
 
 	public String getFooterTitleText() {
 		WebElement startingElement = driver.findElement(By
@@ -256,8 +235,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 		js.executeScript("mobile: swipe", swipeObject);
 	}
 	
-
-	
 	public void openShortcutsMenu() throws Exception {
 		openRightSideMenu();
 		openRightSideMenu();
@@ -272,7 +249,6 @@ public class EvernoteAndroidTest extends AbstractTest{
 			return;
 		}
 	}
-
 
 	public void openUsersMenu() throws Exception {
 		try {
@@ -299,6 +275,4 @@ public class EvernoteAndroidTest extends AbstractTest{
 			return touch;
 		}
 	}
-
 }
-
