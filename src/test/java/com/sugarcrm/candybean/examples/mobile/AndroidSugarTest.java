@@ -19,53 +19,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.mobile;
+package com.sugarcrm.candybean.examples.mobile;
 
-//import static org.junit.Assert.assertTrue;
+//import java.io.File;
+//import java.io.FileInputStream;
+//import java.util.Properties;
 //
-//import org.junit.After;
-//import org.junit.AfterClass;
-//import org.junit.Before;
-//import org.junit.BeforeClass;
-//import org.junit.Test;
+//import com.sugarcrm.candybean.automation.Candybean;
 
-public class CalculatorTest_0001 extends AndroidSugarTest {
+public abstract class AndroidSugarTest {
 
-//	@BeforeClass
+//	protected static Voodoo voodoo;
+//	protected static IInterface iface;
+//	
+//	private static final String curWorkDir = System.getProperty("user.dir");
+//	private static final String relPropsPath = curWorkDir + File.separator + "src" + File.separator + "test" + File.separator + "resources";
+//	private static final String voodooPropsPath = relPropsPath + File.separator + "candybean-android.properties";
+//
 //	public static void setupOnce() throws Exception {
-//		AndroidSugarTest.setupOnce();
+//		Properties voodooProps = new Properties();
+//		voodooProps.load(new FileInputStream(new File(voodooPropsPath)));
+//		voodoo = Voodoo.getInstance(voodooProps);
+//		iface = voodoo.getInterface();
 //	}
-//
-//	@Override
-//	@Before 
+//	
 //	public void setup() throws Exception {
-//		super.setup();
+//		//iface.setApkPath("./android/AndroidCalculator.apk", "./android/SAFSTCPMessenger-debug.apk", "./android/RobotiumTestRunner-debug.apk");
+//		iface.startApp();
+//		// SugarAndroid.login(...)
 //	}
 //
-//	@Test
-//	public void test() throws Exception {	
-//		//Enter 10 in first editfield
-//		iface.getAControl().enterText(0, "10");
-//
-//		//Enter 20 in first editfield
-//		iface.getAControl().enterText(1, "20");
-//
-//		//Click on Multiply button
-//		iface.getAControl().clickOnButton("Multiply");
-//
-//		//Verify that resultant of 10 x 20 
-//		assertTrue(iface.getAControl().searchText("200"));
-//		
-//	}
-//
-//	@Override
-//	@After
 //	public void cleanup() throws Exception {
-//		super.cleanup();
+//		// SugarAndroid.logout(...)
+//		iface.finishApp();
 //	}
 //
-//	@AfterClass
-//	public static void cleanupOnce() {
-//		AndroidSugarTest.cleanupOnce(); 
-//	}
+//	public static void cleanupOnce() {}
+		
 }

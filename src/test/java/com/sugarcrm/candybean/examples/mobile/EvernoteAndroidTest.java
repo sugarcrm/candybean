@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.automation.mobile;
+package com.sugarcrm.candybean.examples.mobile;
 
 import static org.junit.Assert.*;
 

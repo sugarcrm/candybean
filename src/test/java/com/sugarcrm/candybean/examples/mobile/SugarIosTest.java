@@ -19,12 +19,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.mobile;
+package com.sugarcrm.candybean.examples.mobile;
 
 import org.junit.*;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
@@ -68,15 +65,15 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
- * with the Sugar Mobile android app.
+ * with the Sugar Mobile iOS app.
  *
  * @author Larry Cao
  */
-public class SugarAndroidTest {
+public class SugarIosTest {
 
-    private WebDriver driver;
+    private static WebDriver driver;
 
-    private List<Integer> values;
+    private static List<Integer> values;
 
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
@@ -85,17 +82,13 @@ public class SugarAndroidTest {
     public void setUp() throws Exception {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, "Selendroid");
-
-        capabilities.setCapability(CapabilityType.VERSION, "4.2.2");
-
-        capabilities.setCapability("device", "Android");
+        capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+        capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/SugarCRM.apk.zip");
-        capabilities.setCapability("app-package", "com.sugarcrm.nomad");
-        capabilities.setCapability("app-activity", "NomadActivity");
+        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/SugarCRM.app.zip");
+        URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
+        driver = new SwipeableWebDriver(remoteAddress, capabilities);
 
-        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         values = new ArrayList<>();
     }
@@ -104,7 +97,6 @@ public class SugarAndroidTest {
     public void tearDown() throws Exception {
         driver.quit();
     }
-
 
     @Test
     public void testLogin() throws Exception {
@@ -138,8 +130,7 @@ public class SugarAndroidTest {
         Thread.sleep(1000000);
     }
 
-
-    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+    public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 
         public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {

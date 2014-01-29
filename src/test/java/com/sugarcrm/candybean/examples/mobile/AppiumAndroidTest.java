@@ -19,9 +19,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.mobile;
+package com.sugarcrm.candybean.examples.mobile;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -52,7 +56,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -67,15 +70,15 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an appium server deployed
- * with the 'TestApp' iPhone project which is included in the Appium source distribution.
+ * with a 'TestApp' Android project.
  *
  * @author Larry Cao
  */
-public class AppiumIosTest {
+public class AppiumAndroidTest {
 
-    private static WebDriver driver;
+    private WebDriver driver;
 
-    private static List<Integer> values;
+    private List<Integer> values;
 
     private static final int MINIMUM = 0;
     private static final int MAXIMUM = 10;
@@ -84,13 +87,17 @@ public class AppiumIosTest {
     public void setUp() throws Exception {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
-        capabilities.setCapability(CapabilityType.VERSION, "6.0");
-        capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
-        URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
+        capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
 
-        driver = new SwipeableWebDriver(remoteAddress, capabilities);
+        capabilities.setCapability(CapabilityType.VERSION, "4.2.2");
+
+        capabilities.setCapability("device", "Android");
+        capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.apk.zip");
+        capabilities.setCapability("app-package", "com.example.TestApp");
+        capabilities.setCapability("app-activity", "MyActivity");
+
+        driver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         values = new ArrayList<>();
     }
 
@@ -101,7 +108,7 @@ public class AppiumIosTest {
 
     private void populate() {
         //populate text fields with two random number
-        List<WebElement> elems = driver.findElements(By.tagName("textField"));
+        List<WebElement> elems = driver.findElements(By.tagName("EditText"));
         Random random = new Random();
         for (WebElement elem : elems) {
             int rndNum = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
@@ -115,10 +122,10 @@ public class AppiumIosTest {
         // populate text fields with values
         populate();
         // trigger computation by using the button
-        WebElement button = driver.findElement(By.tagName("button"));
+        WebElement button = driver.findElement(By.tagName("Button"));
         button.click();
         // is sum equal ?
-        WebElement texts = driver.findElement(By.tagName("staticText"));
+        WebElement texts = driver.findElement(By.tagName("text"));
         assertEquals(texts.getText(), String.valueOf(values.get(0) + values.get(1)));
     }
 
@@ -133,28 +140,27 @@ public class AppiumIosTest {
 
     @Test
     public void testBasicAlert() throws Exception {
-
         driver.findElement(By.xpath("//button[2]")).click();
-
-        Alert alert = driver.switchTo().alert();
-        //check if title of alert is correct
-        assertEquals(alert.getText(), "Cool title");
-
-        //Appium alert.accept() not yet supported in iOS7 yet. https://github.com/appium/appium/issues/994
-
+//
+//        Alert alert = driver.switchTo().alert();
+//
 //        alert.accept();
+        WebElement acceptButton = driver.findElement(By.xpath("//button[1]"));
+
+        acceptButton.click();
+
     }
 
-    @Test
-    public void testBasicTagName() throws Exception {
-        WebElement text = driver.findElement(By.xpath("//textfield[1]"));
-        assertEquals(text.getTagName(), "UIATextField");
-    }
+//    @Test
+//    public void testBasicTagName() throws Exception {
+//        WebElement text = driver.findElement(By.xpath("//text[2]"));
+//        assertEquals(text.getTagName(), "UIATextField");
+//    }
 
     @Test
     public void testBasicButton() throws Exception {
         WebElement button = driver.findElement(By.xpath("//button[1]"));
-        assertEquals(button.getText(), "ComputeSumButton");
+        assertEquals(button.getText(), "Compute Sum");
     }
 
     @Test
@@ -166,28 +172,28 @@ public class AppiumIosTest {
         assertEquals(text.getText(), "");
     }
 
-    @Test
-    public void testHideKeyboard() throws Exception {
-        driver.findElement(By.xpath("//textfield[1]")).sendKeys("12");
-
-        WebElement button = driver.findElement(By.name("Done"));
-        assertTrue(button.isDisplayed());
-
-        button.click();
-    }
+//    @Test
+//    public void testHideKeyboard() throws Exception {
+//        driver.findElement(By.xpath("//textfield[1]")).sendKeys("12");
+//
+//        WebElement button = driver.findElement(By.name("Done"));
+//        assertTrue(button.isDisplayed());
+//
+//        button.click();
+//    }
 
     @Test
     public void testFindElementByTagName() throws Exception {
         Random random = new Random();
 
-        WebElement text = driver.findElement(By.tagName("textField"));
+        WebElement text = driver.findElement(By.tagName("textfield"));
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
 
         driver.findElement(By.tagName("button")).click();
 
         // is sum equal ?
-        WebElement sumLabel = driver.findElement(By.tagName("staticText"));
+        WebElement sumLabel = driver.findElement(By.tagName("text"));
         assertEquals(sumLabel.getText(), String.valueOf(number));
     }
 
@@ -195,7 +201,7 @@ public class AppiumIosTest {
     public void testFindElementsByTagName() throws Exception {
         Random random = new Random();
 
-        WebElement text = driver.findElements(By.tagName("textField")).get(1);
+        WebElement text = driver.findElements(By.tagName("textfield")).get(1);
 
         int number = random.nextInt(MAXIMUM - MINIMUM + 1) + MINIMUM;
         text.sendKeys(String.valueOf(number));
@@ -203,7 +209,7 @@ public class AppiumIosTest {
         driver.findElements(By.tagName("button")).get(0).click();
 
         // is sum equal ?
-        WebElement texts = driver.findElements(By.tagName("staticText")).get(0);
+        WebElement texts = driver.findElements(By.tagName("text")).get(0);
         assertEquals(texts.getText(), String.valueOf(number));
     }
 
@@ -281,18 +287,18 @@ public class AppiumIosTest {
         text.sendKeys(String.valueOf(number));
 
         assertEquals(text.getAttribute("name"), "TextField1");
-        assertEquals(text.getAttribute("label"), "TextField1");
-        assertEquals(text.getAttribute("value"), String.valueOf(number));
+//        assertEquals(text.getAttribute("label"), "TextField1");
+        assertEquals(text.getAttribute("text"), String.valueOf(number));
     }
 
     @Test
     public void testSlider() throws Exception {
         //get the slider
-        WebElement slider = driver.findElement(By.xpath("//slider[1]"));
-        assertEquals(slider.getAttribute("value"), "50%");
+        WebElement slider = driver.findElement(By.xpath("//seek[1]"));
+//        assertEquals(slider.getAttribute("value"), "50%");
         TouchActions drag = new TouchActions(driver).flick(slider, new Integer(-1), 0, 0);
-        drag.perform();
-        assertEquals(slider.getAttribute("value"), "0%");
+//        drag.perform();
+//        assertEquals(slider.getAttribute("value"), "0%");
     }
 
     @Test
@@ -301,8 +307,8 @@ public class AppiumIosTest {
 
         Point location = button.getLocation();
 
-        assertEquals(location.getX(), 94);
-        assertEquals(location.getY(), 122);
+        assertEquals(location.getX(), 157);
+        assertEquals(location.getY(), 182);
     }
 
     @Test
@@ -317,15 +323,15 @@ public class AppiumIosTest {
         assertEquals(sessionId, jsonObject.get("sessionId"));
     }
 
-    @Test
-    public void testSize() {
-        Dimension text1 = driver.findElement(By.xpath("//textfield[1]")).getSize();
-        Dimension text2 = driver.findElement(By.xpath("//textfield[2]")).getSize();
-        assertEquals(text1.getWidth(), text2.getWidth());
-        assertEquals(text1.getHeight(), text2.getHeight());
-    }
+//    @Test
+//    public void testSize() {
+//        Dimension text1 = driver.findElement(By.xpath("//textfield[1]")).getSize();
+//        Dimension text2 = driver.findElement(By.xpath("//textfield[2]")).getSize();
+//        assertEquals(text1.getWidth(), text2.getWidth());
+//        assertEquals(text1.getHeight(), text2.getHeight());
+//    }
 
-    public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 
         public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
