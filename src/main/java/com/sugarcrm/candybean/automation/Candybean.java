@@ -28,7 +28,6 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.test.AbstractTest;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
