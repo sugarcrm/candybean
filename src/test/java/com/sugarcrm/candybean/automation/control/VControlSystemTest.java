@@ -195,7 +195,7 @@ public class VControlSystemTest {
 		iface.pause(timeout);
 		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
 		startTime = System.currentTimeMillis();
-		textControl.getPause().untilVisible(timeout);
+		textControl.pause.untilVisible(timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
 	}
@@ -208,13 +208,13 @@ public class VControlSystemTest {
 		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
 		VControl hideControl = iface.getControl(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
 		startTime = System.currentTimeMillis();
-		hideControl.getPause().untilVisible((int)timeout);
+		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < timeout);
 		hideControl.click();
 		startTime = System.currentTimeMillis();
 		thrown.expect(TimeoutException.class);
-		hideControl.getPause().untilVisible((int)timeout);
+		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") >= timeout);
 		

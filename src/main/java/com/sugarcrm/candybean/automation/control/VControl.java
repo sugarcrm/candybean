@@ -50,7 +50,7 @@ public class VControl {
 	private final VHook hook;
 	private int index;
 	private WebElement we;
-	private Pause pause;
+	public Pause pause;
 	
 	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook) throws CandybeanException {
 		this(voodoo, iface, new VHook(strategy, hook));
@@ -328,10 +328,6 @@ public class VControl {
 
 	public void setWe(WebElement we) {
 		this.we = we;
-	}
-
-	public Pause getPause() {
-		return pause;
 	}
 
 	public void setPause(Pause pause) {
