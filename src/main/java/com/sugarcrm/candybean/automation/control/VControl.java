@@ -67,7 +67,7 @@ public class VControl {
 	public VControl(Candybean voodoo, VInterface iface, VHook hook, int index) throws CandybeanException {
 			this.voodoo = voodoo;
 			this.iface = iface;
-			List<WebElement> wes = iface.getWd().findElements(VControl.makeBy(hook));
+			List<WebElement> wes = iface.wd.findElements(VControl.makeBy(hook));
 			if (wes.size() == 0) {
 				throw new CandybeanException("Control not found; zero web elements returned.");
 			}
@@ -104,7 +104,7 @@ public class VControl {
 
 	public String getSource() {
 		getVoodoo().log.info("Selenium: getting source for control: " + this.toString());
-		return (String)((JavascriptExecutor)getIface().getWd()).executeScript("return arguments[0].innerHTML;", this.getWe());
+		return (String)((JavascriptExecutor)getIface().wd).executeScript("return arguments[0].innerHTML;", this.getWe());
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class VControl {
 	 */
 	public void doubleClick() {
 		getVoodoo().log.info("Selenium: double-clicking on control: " + this.toString());
-		Actions action = new Actions(this.getIface().getWd());
+		Actions action = new Actions(this.getIface().wd);
 		action.doubleClick(getWe()).perform();
 	}
 
@@ -178,7 +178,7 @@ public class VControl {
 	 */
 	public void dragNDrop(VControl dropControl)	{
 		getVoodoo().log.info("Selenium: dragging control: " + this.toString() + " to control: " + dropControl.toString());
-		Actions action = new Actions(this.getIface().getWd());
+		Actions action = new Actions(this.getIface().wd);
 		action.dragAndDrop(this.getWe(), dropControl.getWe()).build().perform();
 	}
 
@@ -221,7 +221,7 @@ public class VControl {
 	 */
 	public void hover() {
 		getVoodoo().log.info("Selenium: hovering over control: " + this.toString());
-		Actions action = new Actions(this.getIface().getWd());
+		Actions action = new Actions(this.getIface().wd);
 		action.moveToElement(this.getWe()).perform();
 	}
 	
@@ -241,7 +241,7 @@ public class VControl {
 	 */
 	public void rightClick() {
 		getVoodoo().log.info("Selenium: right-clicking control: " + this.toString());
-		Actions action = new Actions(this.getIface().getWd());
+		Actions action = new Actions(this.getIface().wd);
 		action.contextClick(this.getWe()).perform();
 	}
 
@@ -251,7 +251,7 @@ public class VControl {
 	public void scroll() {
 		getVoodoo().log.info("Selenium: scrolling to control: " + this.toString());
 		int y = this.getWe().getLocation().y;
-		((JavascriptExecutor) this.getIface().getWd()).executeScript("window.scrollBy(0," + y + ");");
+		((JavascriptExecutor) this.getIface().wd).executeScript("window.scrollBy(0," + y + ");");
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class VControl {
 		getVoodoo().log.info("Selenium: sending string: " + input + " to control: " + this.toString());
 		this.getWe().clear();
 		// Re-find the element to avoid the stale element problem.
-		this.setWe(getIface().getWd().findElements(VControl.makeBy(getHook())).get(getIndex()));
+		this.setWe(getIface().wd.findElements(VControl.makeBy(getHook())).get(getIndex()));
 		this.getWe().sendKeys(input);
 	}
 
