@@ -26,21 +26,21 @@ package com.sugarcrm.candybean.utilities;
  *
  */
 public class OSValidator {
-	private static String OperatingSystem = System.getProperty("os.name").toLowerCase();
+	private static String Os = System.getProperty("os.name").toLowerCase();
  
 	public static boolean isWindows() {
-		return (OperatingSystem.indexOf("win") >= 0);
+		return (Os.indexOf("win") >= 0);
 	}
  
 	public static boolean isMac() {
-		return (OperatingSystem.indexOf("mac") >= 0);
+		return (Os.indexOf("mac") >= 0);
 	}
  
 	public static boolean isUnix() {
-		return (OperatingSystem.indexOf("nix") >= 0 || OperatingSystem.indexOf("nux") >= 0 || OperatingSystem.indexOf("aix") > 0 );
+		return (Os.indexOf("nix") >= 0 || Os.indexOf("nux") >= 0 || Os.indexOf("aix") > 0 );
 	}
  
 	public static boolean isSolaris() {
-		return (OperatingSystem.indexOf("sunos") >= 0);
+		return (Os.indexOf("sunos") >= 0);
 	}
 }
