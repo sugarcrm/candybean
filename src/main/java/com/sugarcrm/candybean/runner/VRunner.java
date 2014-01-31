@@ -130,7 +130,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 			}
 			return blockedTestNames;
 		} catch (FileNotFoundException fnfe) {
-			throw new FileNotFoundException("The given block list file was not found; ensure path is correct for the system variable: " + BLOCKLIST_PATH_KEY);
+			throw new FileNotFoundException("The given blocklist file was not found; ensure path is correct for the system variable: " + BLOCKLIST_PATH_KEY);
 		}
 	}
 }
