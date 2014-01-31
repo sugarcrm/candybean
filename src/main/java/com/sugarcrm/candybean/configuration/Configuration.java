@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 import com.sugarcrm.candybean.utilities.Utils;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -64,8 +63,9 @@ public class Configuration {
 
     /**
      * @param propertiesPath
+     * @throws IOException 
      */
-    public Configuration(File configFile) throws Exception {
+    public Configuration(File configFile) throws IOException{
         properties = new Properties();
         this.load(configFile);
     }
@@ -121,14 +121,13 @@ public class Configuration {
      *
      * @param key
      * @return adjusted path or null if it does not exist.
-     * @throws Exception 
      */
-    public String getPathValue(String key) throws Exception {
+    public String getPathValue(String key) {
         String pathValue = getValue(key);
         return Utils.adjustPath(pathValue);
     }
 
-    public void load(File file) throws Exception {
+    public void load(File file) throws IOException{
     	try {
         	if (file == null) {
         		throw new FileNotFoundException("Given file is null.");
@@ -138,13 +137,13 @@ public class Configuration {
         } catch (FileNotFoundException e) {
             // get file name using substring of adjustedPath that starts after the last /
             logger.warning(file.getCanonicalPath() + " not found.\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         } catch (IOException e) {
             logger.warning("Unable to load " + file.getCanonicalPath() + ".\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         } catch (NullPointerException e) {
             logger.warning("File path is null.\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
     }
@@ -175,7 +174,7 @@ public class Configuration {
         }
     }
     
-    public static String getPlatformValue(Properties props, String key) throws Exception {
+    public static String getPlatformValue(Properties props, String key) {
 	    String platform = Utils.getCurrentPlatform();
 	    String valueStr = props.getProperty(key);
         JSONParser parser = new JSONParser();
@@ -197,13 +196,14 @@ public class Configuration {
      * a properties table using the load(InputStream) or load(String) method.
      *
      * @param filePath
+     * @throws IOException 
      */
-    public void store(File file) throws Exception {
+    public void store(File file) throws IOException {
         try {
             store(new FileOutputStream(file));
         } catch (IOException e) {
             logger.warning("Unable to store " + file.getCanonicalPath() + ".\n");
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 

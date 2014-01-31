@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
 
 import com.sugarcrm.candybean.configuration.Configuration;
 
@@ -36,6 +39,8 @@ import com.sugarcrm.candybean.configuration.Configuration;
  * 
  */
 public class CsvDataAdapter extends DataAdapter {
+	
+	private static Logger log = Logger.getLogger(CsvDataAdapter.class.getName());
 
 	public CsvDataAdapter(Configuration config) {
 		super(config);
@@ -56,12 +61,13 @@ public class CsvDataAdapter extends DataAdapter {
 		return dataSourceHashMap;
 	}
 
-	public HashMap<String, DataSource> getData(String testData, DataAdapter.Selection select) {
+	public Map<String, DataSource> getData(String testData, DataAdapter.Selection select) {
+		// determines whether to select all the files based on file pattern
+		selection = select;  
 
-		selection = select;  // determines whether to select all the files based on file pattern
 		
 		List<File> csvFileList = getCsvFileList(testData);
-		HashMap<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
+		Map<String, DataSource> dataSourceHashMap = convertIt(csvFileList);
 
 		return dataSourceHashMap;
 	}
@@ -106,7 +112,7 @@ public class CsvDataAdapter extends DataAdapter {
 		try {
 			dataFileAbsolute = dataFile.getAbsoluteFile();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info(e.getMessage());
 		}
 
 		return dataFileAbsolute;

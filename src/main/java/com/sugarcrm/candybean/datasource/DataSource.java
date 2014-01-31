@@ -30,8 +30,8 @@ import java.util.ArrayList;
  */
 public class DataSource extends ArrayList<FieldSet> {
 	private static final long serialVersionUID = 1L;
-	protected DataSource data = null;
-	protected String filename = "";
+	private DataSource data = null;
+	private String filename = "";
 
 	public DataSource() {
 		super();
@@ -39,5 +39,17 @@ public class DataSource extends ArrayList<FieldSet> {
 	
 	public String getFilename() {
 		return this.filename;
+	}
+
+	protected DataSource getData() {
+		return data;
+	}
+
+	protected void setData(DataSource data) {
+		this.data = data;
+	}
+
+	protected void setFilename(String filename) {
+		this.filename = filename;
 	}
 }

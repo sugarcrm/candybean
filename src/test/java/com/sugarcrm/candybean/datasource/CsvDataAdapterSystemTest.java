@@ -27,7 +27,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class CsvDataAdapterSystemTest {
 		adapterFactory = new DataAdapterFactory(myConfig);
 		dataAdapter = adapterFactory.createDataAdapter(DataAdapterType.CSV);
 
-		HashMap<String, DataSource> dataSourceHashMap = dataAdapter.setDataBasePath(
+		Map<String, DataSource> dataSourceHashMap = dataAdapter.setDataBasePath(
 				"datasource.csv.baseDir").getData("csvs/Companies_0001", DataAdapter.Selection.SINGLE);
 		DataSource ds = dataSourceHashMap.get("Companies_0001");
 		printDataSourceSingle(ds);
@@ -191,7 +191,7 @@ public class CsvDataAdapterSystemTest {
 		printDataSourceFieldSet(ds);
 	}
 
-	private static void printDataSource(HashMap<String, DataSource> dataSourceHashMap) {
+	private static void printDataSource(Map<String, DataSource> dataSourceHashMap) {
 		for (String filenameNoExt : dataSourceHashMap.keySet()) {
 			System.out.println("CsvDataAdapterTest: printDataSourceData(): dataSource filenameNoExt = "
 							+ filenameNoExt);

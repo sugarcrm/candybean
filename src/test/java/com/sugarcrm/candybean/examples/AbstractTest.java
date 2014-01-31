@@ -1,6 +1,7 @@
 package com.sugarcrm.candybean.examples;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import org.junit.Before;
@@ -37,8 +38,7 @@ public abstract class AbstractTest {
 	 * by adding a new FileHandler specific to this tests class.
 	 * @throws Exception
 	 */
-	@Before
-	public void initialize() throws Exception {
+	public void initialize() throws IOException{
 		candybean = AbstractTest.configureCandybean();
 		iface = candybean.getInterface();
 		FileHandler fh = new FileHandler("./log/"
@@ -51,10 +51,10 @@ public abstract class AbstractTest {
 	 * Build a VInterface based on default configuration.
 	 * 
 	 * @return The VInterface
-	 * @throws Exception
+	 * @throws IOException 
 	 *             If default configuration files do not exist.
 	 */
-	private static Candybean configureCandybean() throws Exception {
+	public static Candybean configureCandybean() throws IOException{
 		Candybean candybean;
 		String candybeanConfigStr = System
 				.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);

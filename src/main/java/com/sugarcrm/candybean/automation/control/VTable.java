@@ -29,6 +29,7 @@ import org.openqa.selenium.WebElement;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.utilities.exception.CandybeanException;
 
 /**
  * VControl is a control that represents and allows for interaction with the TABLE element.
@@ -37,11 +38,11 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
  */
 public class VTable extends VControl {
 	
-	public VTable(Candybean voodoo, VInterface iface, Strategy tableStrategy, String tableHook) throws Exception {
+	public VTable(Candybean voodoo, VInterface iface, Strategy tableStrategy, String tableHook) throws CandybeanException {
 		super(voodoo, iface, tableStrategy, tableHook);
 	}
 	
-	public VTable(Candybean voodoo, VInterface iface, VHook tableHook) throws Exception {
+	public VTable(Candybean voodoo, VInterface iface, VHook tableHook) throws CandybeanException {
 		super(voodoo, iface, tableHook);
 	}
 	
@@ -52,9 +53,11 @@ public class VTable extends VControl {
   	 * @return
   	 */
   	public boolean containsText(String value) {
-  		List<WebElement> webElements = super.iface.wd.findElements(By.xpath("*"));
+  		List<WebElement> webElements = super.getIface().wd.findElements(By.xpath("*"));
   		for (WebElement we : webElements) {
-  			if (we.getText().trim().equals(value)) return true;
+  			if (we.getText().trim().equals(value)) {
+  				return true;
+  			}
   		}
   		return false;
   	}

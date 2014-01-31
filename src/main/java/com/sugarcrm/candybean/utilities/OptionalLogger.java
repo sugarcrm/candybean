@@ -32,30 +32,29 @@ import java.util.logging.Logger;
  * 
  */
 public class OptionalLogger {
-	Logger log;
+	private Logger log;
 
 	public OptionalLogger() {
 		this(null);
 	}
 
 	public OptionalLogger(Logger log) {
-		this.log = log;
+		this.setLog(log);
 	}
 
 	public void info(String msg, boolean writeBoth) {
 		if (writeBoth) {
-			if (log != null)
-				log.info(msg);
-			else {
-				System.err.println("Logger is null!");
-				System.out.print(msg);
+			if (getLog() != null) {
+				getLog().info(msg);
+			}else {
+				Logger.getGlobal().severe("Logger is null!");
+				Logger.getGlobal().info(msg);
 			}
-			System.out.print(msg);
+			Logger.getGlobal().info(msg);
+		} else if (getLog() != null) {
+				getLog().info(msg);
 		} else {
-			if (log != null)
-				log.info(msg);
-			else
-				System.out.print(msg);
+			Logger.getGlobal().info(msg);
 		}
 	}
 	
@@ -65,21 +64,28 @@ public class OptionalLogger {
 
 	public void severe(String msg, boolean writeBoth) {
 		if (writeBoth) {
-			if (log != null)
-				log.severe(msg);
-			else {
-				System.err.println("Logger is null!");
-				System.err.print(msg);
+			if (getLog() != null) {
+				getLog().severe(msg);
+			}else {
+				Logger.getGlobal().severe("Logger is null!");
+				Logger.getGlobal().info(msg);
 			}
+		} else if (getLog() != null) {
+				getLog().severe(msg);
 		} else {
-			if (log != null)
-				log.severe(msg);
-			else
-				System.err.print(msg);
+			Logger.getGlobal().info(msg);
 		}
 	}
 	
 	public void severe(String msg) {
 		severe(msg, false);
+	}
+
+	Logger getLog() {
+		return log;
+	}
+
+	void setLog(Logger log) {
+		this.log = log;
 	}
 }
