@@ -24,6 +24,8 @@ package com.sugarcrm.candybean.runner;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 import org.junit.Test;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -36,6 +38,9 @@ import org.junit.runners.model.InitializationError;
  *
  */
 public class VTagRunner extends BlockJUnit4ClassRunner {
+	
+	private Logger log = Logger.getLogger(VTagRunner.class.getName());
+	
 	public VTagRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
@@ -44,7 +49,9 @@ public class VTagRunner extends BlockJUnit4ClassRunner {
 	@Override
 	protected List<FrameworkMethod> computeTestMethods() {
 		final List<FrameworkMethod> testMethods = getTestClass().getAnnotatedMethods(Test.class);
-        if (testMethods == null || testMethods.size() == 0) return testMethods;
+        if (testMethods == null || testMethods.size() == 0) {
+        	return testMethods;
+        }
         final List<FrameworkMethod> finalTestMethods = new ArrayList<FrameworkMethod>(testMethods.size());
 		try {
 			for (final FrameworkMethod method : testMethods) {
@@ -75,7 +82,7 @@ public class VTagRunner extends BlockJUnit4ClassRunner {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 		return finalTestMethods;
 	}

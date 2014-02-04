@@ -22,9 +22,7 @@
 package com.sugarcrm.candybean.examples.mobile;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.json.simple.JSONObject;
@@ -38,7 +36,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -59,14 +56,6 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VHook;
-import com.sugarcrm.candybean.automation.control.VSelect;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an appium server deployed

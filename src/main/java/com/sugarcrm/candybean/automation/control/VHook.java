@@ -22,9 +22,12 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.exception.MalformedHookException;
+import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * A mechanism to locate an element on a page using a pre-defined hook string and a {@link Strategy}.
@@ -36,11 +39,11 @@ import com.sugarcrm.candybean.configuration.Configuration;
  */
 public class VHook {
 	
-	public final static String HOOK_DELIMITER = ":";
+	public static final String HOOK_DELIMITER = ":";
 	
 	public enum Strategy { CSS, XPATH, ID, NAME, LINK, PLINK, CLASS, TAG; }
-	public final Strategy hookStrategy;
-	public final String hookString;
+	private final Strategy hookStrategy;
+	private final String hookString;
 
 	public VHook(Strategy hookStrategy, String hookString) {
 		this.hookStrategy = hookStrategy;
@@ -52,16 +55,17 @@ public class VHook {
 	 * 
 	 * @param hooks
 	 * @return
-	 * @throws Exception
+	 * @throws MalformedHookException 
 	 */
-	public static HashMap<String, VHook> getHooks(Properties hooks) throws Exception {
-		HashMap<String, VHook> hooksMap = new HashMap<String, VHook>();
+	public static Map<String, VHook> getHooks(Properties hooks) throws MalformedHookException {
+		Map<String, VHook> hooksMap = new HashMap<String, VHook>();
 		for(String name : hooks.stringPropertyNames()) {
 //			System.out.println("hook name: " + name);
 //			String[] strategyNHook = hooks.getProperty(name).split(HOOK_DELIMITER);
 			String[] strategyNHook = Configuration.getPlatformValue(hooks, name).split(HOOK_DELIMITER);
-			if (strategyNHook.length != 2) throw new Exception("Malformed hooks file for name: " + name);
-			else {
+			if (strategyNHook.length != 2) {
+				throw new MalformedHookException(name);
+			}else {
 //				System.out.println("strategy: " + strategyNHook[0] + ", hook: " + strategyNHook[1]);
 				Strategy strategy = VHook.getStrategy(strategyNHook[0]);
 				String hook = strategyNHook[1];
@@ -76,9 +80,9 @@ public class VHook {
 	 * 
 	 * @param strategy
 	 * @return
-	 * @throws Exception
+	 * @throws SeleniumException 
 	 */
-	public static Strategy getStrategy(String strategy) throws Exception {
+	public static Strategy getStrategy(String strategy) {
 		switch(strategy) {
 		case "CSS": return Strategy.CSS;
 		case "ID": return Strategy.ID;
@@ -89,11 +93,19 @@ public class VHook {
 		case "CLASS": return Strategy.CLASS;
 		case "TAG": return Strategy.TAG;
 		default:
-			throw new Exception("Strategy not recognized: " + strategy);
+			throw new SeleniumException("Selenium: Strategy not recognized: " + strategy);
 		}
 	}
 	
 	public String toString() {
-		return "VHook(" + this.hookStrategy + "," + this.hookString + ")";
+		return "VHook(" + this.getHookStrategy() + "," + this.getHookString() + ")";
+	}
+
+	public Strategy getHookStrategy() {
+		return hookStrategy;
+	}
+
+	public String getHookString() {
+		return hookString;
 	}
 }

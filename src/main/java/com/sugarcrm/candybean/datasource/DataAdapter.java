@@ -23,7 +23,7 @@ package com.sugarcrm.candybean.datasource;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.filefilter.RegexFileFilter;
 
@@ -49,8 +49,8 @@ public abstract class DataAdapter {
 		return this;
 	}
 	
-	public abstract HashMap<String, DataSource> getData(String testData);
-	public abstract HashMap<String, DataSource> getData(String testData, DataAdapter.Selection select);
+	public abstract Map<String, DataSource> getData(String testData);
+	public abstract Map<String, DataSource> getData(String testData, DataAdapter.Selection select);
 
 	protected static File[] getAllFilesBasedOnPattern(String fileFullDirPath,
 			String testData, String ext) {

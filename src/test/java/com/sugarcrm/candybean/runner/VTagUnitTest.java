@@ -23,11 +23,6 @@ package com.sugarcrm.candybean.runner;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.List;
-
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

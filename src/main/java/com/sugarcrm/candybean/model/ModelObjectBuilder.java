@@ -25,7 +25,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ModelObjectBuilder {	
-	public Map<String, String> requiredAttributes = new HashMap<String, String>();
-	public Map<String, String> optionalAttributes = new HashMap<String, String>();
+	
+	private Map<String, String> requiredAttributes = new HashMap<String, String>();
+	private Map<String, String> optionalAttributes = new HashMap<String, String>();
 	public abstract ModelObject build();
+	
+	public Map<String, String> getRequiredAttributes() {
+		return requiredAttributes;
+	}
+	public void setRequiredAttributes(Map<String, String> requiredAttributes) {
+		this.requiredAttributes = requiredAttributes;
+	}
+	public Map<String, String> getOptionalAttributes() {
+		return optionalAttributes;
+	}
+	public void setOptionalAttributes(Map<String, String> optionalAttributes) {
+		this.optionalAttributes = optionalAttributes;
+	}
 }	

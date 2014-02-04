@@ -21,10 +21,9 @@
  */
 package com.sugarcrm.candybean.examples.yelp;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
@@ -37,7 +36,7 @@ public class Yelp implements IModel {
 	public Model model;
 
 	private VInterface i;
-	private HashMap<String, VHook> hooks;
+	private Map<String, VHook> hooks;
 	private YelpUser defaultUser;
 	
 	public Yelp(VInterface i, Properties yelpHooks, YelpUser defaultUser) throws Exception {

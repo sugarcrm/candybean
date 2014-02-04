@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -44,6 +45,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -51,6 +53,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  */
 public class WS {
+	
+	private static Logger log = Logger.getLogger(WS.class.getName());
 	
 	public enum TYPE { JSON, XML };
 	public enum OP { DELETE, GET, POST, PUT };
@@ -106,7 +110,9 @@ public class WS {
 				break;
 			case PUT:
 				HttpPut put = new HttpPut(uri);
-				if (body != null) put.setEntity(new StringEntity(body));
+				if (body != null) {
+					put.setEntity(new StringEntity(body));
+				}
 				request = put;
 	            mapParse = requestIt(request, headers);
 				break;
@@ -133,7 +139,7 @@ public class WS {
         try {
 			execute = httpClient.execute(request);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 		
 		httpErrorSimpleCheckHttp(execute);
@@ -145,7 +151,7 @@ public class WS {
 			parse = (JSONObject) JSONValue.parse(new InputStreamReader(entity
 					.getContent()));
 		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 
 		@SuppressWarnings("unchecked")
@@ -163,7 +169,7 @@ public class WS {
 			try {
 				post.setEntity(new StringEntity(body));
 			} catch (UnsupportedEncodingException e1) {
-				e1.printStackTrace();
+				log.severe(e1.getMessage());
 			}
 		}
 		
@@ -172,7 +178,7 @@ public class WS {
 		try {
 			execute = defaultHttpClient.execute(post);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 
 		httpErrorSimpleCheckHttp(execute);
@@ -184,7 +190,7 @@ public class WS {
 			parse = (JSONObject) JSONValue.parse(new InputStreamReader(entity
 					.getContent()));
 		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 
 		@SuppressWarnings("unchecked")
@@ -202,7 +208,7 @@ public class WS {
 						new StringBody(entry.getValue()));
 			}
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 
 		return multipartEntity;
@@ -226,7 +232,7 @@ public class WS {
 //			System.out.println(arr.has("2"));
 //			System.out.println(arr.get("2"));
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 	}
 }

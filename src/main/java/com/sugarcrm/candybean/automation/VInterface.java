@@ -21,10 +21,12 @@
  */
 package com.sugarcrm.candybean.automation;
 
+import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,6 +68,7 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
+import com.sugarcrm.candybean.utilities.exception.CandybeanException;
 
 /**
  * Drives the creation of multi-platform automation tests by providing a resourceful API
@@ -93,11 +96,9 @@ public class VInterface {
 	 * @param candybean  {@link Candybean} object
 	 * @param config   {@link Configuration} for this test run
 	 * @param iType   {@link IInterface.Type} of interface to run
-	 * @throws Exception
 	 */
 	@Deprecated
-	public VInterface(Candybean candybean, Configuration config, Type iType)
-			throws Exception {
+	public VInterface(Candybean candybean, Configuration config, Type iType) {
 		this.candybean = candybean;
 		this.config = config;
 		this.iType = iType;
@@ -108,10 +109,8 @@ public class VInterface {
 	 *
 	 * @param candybean  {@link Candybean} object
 	 * @param config   {@link Configuration} for this test run
-	 * @throws Exception
 	 */
-	public VInterface(Candybean candybean, Configuration config)
-			throws Exception {
+	public VInterface(Candybean candybean, Configuration config) {
 		this.candybean = candybean;
 		this.config = config;
 	}
@@ -120,9 +119,9 @@ public class VInterface {
 	 * Pause the test for the specified duration.
 	 *
 	 * @param ms  duration of pause in milliseconds
-	 * @throws Exception	 if the underlying {@link Thread#sleep} is interrupted
+	 * @throws InterruptedException if the underlying {@link Thread#sleep} is interrupted
 	 */
-	public void pause(long ms) throws Exception {
+	public void pause(long ms) throws InterruptedException {
 		candybean.log.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
@@ -131,7 +130,6 @@ public class VInterface {
 	 * Display a modal dialog box to the test user.
 	 *
 	 * @param message	 	String to display on the dialog box
-	 * @throws Exception	if the program is running headless (with no GUI)
 	 */
 	public void interact(String message) {
 		candybean.log.info("Interaction via popup dialog with message: " + message);
@@ -142,9 +140,10 @@ public class VInterface {
 	 * Takes a full screenshot and saves it to the given file.
 	 * 
 	 * @param file			The file to which a screenshot is saved
-	 * @throws Exception	
+	 * @throws IOException 
+	 * @throws AWTException 
 	 */
-	public void screenshot(File file) throws Exception {
+	public void screenshot(File file) throws IOException, AWTException {
 		this.candybean.log.info("Taking screenshot; saving to file: " + file.toString());
 		Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		BufferedImage screenshot = (new Robot()).createScreenCapture(screen);
@@ -179,33 +178,35 @@ public class VInterface {
 //			this.vac = null;
 //			this.start();
 //		}
-		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
+		if (this.wd != null) {
+			throw new Exception("Automation interface already started with type: " + this.iType);
+		}
 		this.iType = iType;
 		this.wd = this.getWebDriver(iType);
-		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
+		this.windows.push(new Pair<Integer, String>(Integer.valueOf(0), this.wd.getWindowHandle()));
 	}
 
 	/**
 	 * Close the interface and perform final cleanup.
 	 *
-	 * @throws Exception
 	 */
-	public void stop() throws Exception {
+	public void stop() {
 		candybean.log.info("Stopping automation interface with type: " + this.iType);
 		this.windows.clear();
 		this.iType = null;
 		if (this.wd != null) {
 			this.wd.quit();
 			this.wd = null;
-		} else candybean.log.warning("Automation interface already stopped.");
+		} else {
+			candybean.log.warning("Automation interface already stopped.");
+		}
 	}
 	
 	/**
 	 * Refreshes the interface.  If refresh is undefined, it does nothing.
 	 * 
-	 * @throws Exception
 	 */
-	public void refresh() throws Exception {
+	public void refresh() {
 		candybean.log.info("Refreshing the interface.");
 		this.wd.navigate().refresh();
 	}
@@ -217,7 +218,9 @@ public class VInterface {
 	 */
 	public void restart() throws Exception {
 		candybean.log.info("Restarting automation interface with type: " + this.iType);
-		if (this.wd == null) throw new Exception("Automation interface not yet started; cannot restart.");
+		if (this.wd == null) {
+			throw new Exception("Automation interface not yet started; cannot restart.");
+		}
 		Type type = this.iType;
 		this.stop();
 		this.start(type);
@@ -227,9 +230,8 @@ public class VInterface {
 	 * Load a URL in the browser window.
 	 *
 	 * @param url	the URL to be loaded by the browser
-	 * @throws Exception		<i>not thrown</i>
 	 */
-	public void go(String url) throws Exception {
+	public void go(String url) {
 		candybean.log.info("Going to URL and switching to window: " + url);
 		this.wd.get(url);
 //		this.wd.switchTo().window(this.wd.getWindowHandle());
@@ -239,9 +241,8 @@ public class VInterface {
 	 * Returns the current URL of the current window
 	 * 
 	 * @return		Returns the current window's URL as a String
-	 * @throws Exception
 	 */
-	public String getURL() throws Exception {
+	public String getURL() {
 		String url = this.wd.getCurrentUrl();
 		candybean.log.info("Getting URL " + url);
 		return url;
@@ -250,9 +251,8 @@ public class VInterface {
 	/**
 	 * Navigates the interface backward.  If backward is undefined, it does nothing.
 	 * 
-	 * @throws Exception
 	 */
-	public void backward() throws Exception {
+	public void backward() {
 		candybean.log.info("Navigating the interface backward.");
 		this.wd.navigate().back();
 	}
@@ -267,17 +267,22 @@ public class VInterface {
 	 * is case sensitive		
 	 * @return		Returns true if the interface visibly 
 	 * contains the given string
-	 * @throws Exception
 	 */
-	public boolean contains(String s, boolean caseSensitive) throws Exception {
+	public boolean contains(String s, boolean caseSensitive) {
 		candybean.log.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
-		if (!caseSensitive) s = s.toLowerCase();
+		if (!caseSensitive) {
+			s = s.toLowerCase();
+		}
 		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
 		for (WebElement we : wes) {
 			String text = we.getText();
-			if (!caseSensitive) text = text.toLowerCase();
+			if (!caseSensitive) {
+				text = text.toLowerCase();
+			}
 //			System.out.println("text: " + text);
-			if (text.contains(s)) return true;
+			if (text.contains(s)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -285,9 +290,8 @@ public class VInterface {
 	/**
 	 * Switches focus to default content.
 	 * 
-	 * @throws Exception
 	 */
-	public void focusDefault() throws Exception {
+	public void focusDefault() {
 		candybean.log.info("Focusing to default content.");
 		this.wd.switchTo().defaultContent();
 	}
@@ -296,9 +300,8 @@ public class VInterface {
 	 * Switches focus to the IFrame identified by the given zero-based index
 	 * 
 	 * @param index		the serial, zero-based index of the iframe to focus
-	 * @throws Exception
 	 */
-	public void focusFrame(int index) throws Exception {
+	public void focusFrame(int index) {
 		candybean.log.info("Focusing to frame by index: " + index);
 		this.wd.switchTo().frame(index);
 	}
@@ -307,9 +310,8 @@ public class VInterface {
 	 * Switches focus to the IFrame identified by the given name or ID string
 	 * 
 	 * @param nameOrId	the name or ID identifying the targeted IFrame
-	 * @throws Exception
 	 */
-	public void focusFrame(String nameOrId) throws Exception {
+	public void focusFrame(String nameOrId) {
 		candybean.log.info("Focusing to frame by name or ID: " + nameOrId);
 		this.wd.switchTo().frame(nameOrId);
 	}
@@ -318,24 +320,22 @@ public class VInterface {
 	 * Switches focus to the IFrame identified by the given {@link VControl}
 	 * 
 	 * @param control		The VControl representing a focus-targeted IFrame
-	 * @throws Exception
 	 */
-	public void focusFrame(VControl control) throws Exception {
+	public void focusFrame(VControl control) {
 		candybean.log.info("Focusing to frame by control: " + control.toString());
-		this.wd.switchTo().frame(control.we);
+		this.wd.switchTo().frame(control.getWe());
 	}
 	
 	/**
 	 * Close the current browser window.
 	 *
-	 * @throws Exception	  <i>not thrown</i>
 	 */
-	public void closeWindow() throws Exception {
+	public void closeWindow() {
 		candybean.log.info("Closing window with handle: " + windows.peek());
 		this.wd.close();
 		this.windows.pop();
 		candybean.log.info("Refocusing to previous window with handle: " + windows.peek());
-		this.wd.switchTo().window(windows.peek().y);
+		this.wd.switchTo().window(windows.peek().getY());
 	}
 
 	/**
@@ -349,7 +349,7 @@ public class VInterface {
 	 * @throws Exception	if the specified window index is out of range
 	 */
 	public void focusWindow(int index) throws Exception {
-		if (index == windows.peek().x.intValue()) {
+		if (index == windows.peek().getX().intValue()) {
 			candybean.log.warning("No focus was made because the given index matched the current index: " + index);
 		} else if (index < 0) {
 			throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
@@ -360,7 +360,7 @@ public class VInterface {
 				throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 			} else {
 				this.wd.switchTo().window(windowHandles[index]);
-				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
+				windows.push(new Pair<Integer, String>(Integer.valueOf(index), this.wd.getWindowHandle()));
 				candybean.log.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
 		}
@@ -389,14 +389,14 @@ public class VInterface {
 			while (i < windowHandles.length && !windowFound) {
 				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
-					windows.push(new Pair<Integer, String>(new Integer(i), this.wd.getWindowHandle()));
+					windows.push(new Pair<Integer, String>(Integer.valueOf(i), this.wd.getWindowHandle()));
 					candybean.log.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
 					windowFound = true;
 				}
 				i++;
 			}
 			if (!windowFound) {
-				this.wd.switchTo().window(windows.peek().y);
+				this.wd.switchTo().window(windows.peek().getY());
 				throw new Exception("The given focus window string matched no title or URL: " + titleOrUrl);
 			}
 		}	
@@ -405,9 +405,8 @@ public class VInterface {
 	/**
 	 * Navigates the interface forward.  If forward is undefined, it does nothing.
 	 * 
-	 * @throws Exception
 	 */
-	public void forward() throws Exception {
+	public void forward() {
 		candybean.log.info("Navigating the interface forward.");
 		this.wd.navigate().forward();
 	}
@@ -435,16 +434,17 @@ public class VInterface {
 	public void maximize() {
 		candybean.log.info("Maximizing window");
 //		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.wd.manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
+		this.wd.manage().window().maximize();
+		//.setSize(new Dimension(screenSize.width, screenSize.height));
 	}
 
 	/**
 	 * Get a control from the current page.
 	 *
 	 * @param hook	 description of how to find the control
-	 * @throws Exception	 <i>not thrown</i>
+	 * @throws CandybeanException 
 	 */
-	public VControl getControl(VHook hook) throws Exception {
+	public VControl getControl(VHook hook) throws CandybeanException {
 		return new VControl(this.candybean, this, hook);
 	}
 
@@ -454,7 +454,7 @@ public class VInterface {
 	 * @param hook	 description of how to find the control
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-	public VControl getControl(VHook hook, int index) throws Exception {
+	public VControl getControl(VHook hook, int index) throws CandybeanException {
 		return new VControl(this.candybean, this, hook, index);
 	}
 
@@ -465,7 +465,7 @@ public class VInterface {
 	 * @param hook		  string to find using the specified strategy
 	 * @throws Exception	 <i>not thrown</i>
 	 */
-	public VControl getControl(Strategy strategy, String hook) throws Exception {
+	public VControl getControl(Strategy strategy, String hook) throws CandybeanException {
 		return this.getControl(new VHook(strategy, hook));
 	}
 	
@@ -474,9 +474,8 @@ public class VInterface {
 	 * @param strategy The strategy used to search for the control
 	 * @param hook The associated hook for the strategy
 	 * @return The list of all controls that match the strategy and hook
-	 * @throws Exception
 	 */
-	public List<VControl> getControls(Strategy strategy, String hook) throws Exception {
+	public List<VControl> getControls(Strategy strategy, String hook) {
 		return this.getControls(strategy, new VHook(strategy, hook));
 	}
 	
@@ -485,11 +484,10 @@ public class VInterface {
 	 * @param strategy The strategy used to search for the control
 	 * @param hook The associated hook for the strategy
 	 * @return The list of all controls that match the strategy and hook
-	 * @throws Exception
 	 */
-	private List<VControl> getControls(Strategy strategy, VHook hook) throws Exception {
+	private List<VControl> getControls(Strategy strategy, VHook hook) {
 		List<VControl> controls = new ArrayList<VControl>();
-		List<WebElement> wes = this.wd.findElements(VControl.makeBy(strategy, hook.hookString));
+		List<WebElement> wes = this.wd.findElements(VControl.makeBy(strategy, hook.getHookString()));
 		for (WebElement we : wes)
 			controls.add(new VControl(this.candybean, this, hook, we));
 		return controls;
@@ -500,9 +498,9 @@ public class VInterface {
 	 *
 	 * @param strategy  method to use to search for the control
 	 * @param hook		  string to find using the specified strategy
-	 * @throws Exception	 <i>not thrown</i>
+	 * @throws CandybeanException 
 	 */
-	public VControl getControl(Strategy strategy, String hook, int index) throws Exception {
+	public VControl getControl(Strategy strategy, String hook, int index) throws CandybeanException {
 		return this.getControl(new VHook(strategy, hook), index);
 	}
 
@@ -510,9 +508,9 @@ public class VInterface {
 	 * Get a &lt;SELECT&gt; control from the current page.
 	 *
 	 * @param hook	 description of how to find the control
-	 * @throws Exception	 <i>not thrown</i>
+	 * @throws CandybeanException 
 	 */
-	public VSelect getSelect(VHook hook) throws Exception {
+	public VSelect getSelect(VHook hook) throws CandybeanException {
 		return new VSelect(this.candybean, this, hook);
 	}
 
@@ -521,9 +519,9 @@ public class VInterface {
 	 *
 	 * @param strategy  method to use to search for the control
 	 * @param hook		  string to find using the specified strategy
-	 * @throws Exception	 <i>not thrown</i>
+	 * @throws CandybeanException 
 	 */
-	public VSelect getSelect(Strategy strategy, String hook) throws Exception {
+	public VSelect getSelect(Strategy strategy, String hook) throws CandybeanException {
 		return this.getSelect(new VHook(strategy, hook));
 	}
 	
@@ -541,9 +539,8 @@ public class VInterface {
 	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
 	 * as a &quot;javascript dialog&quot;).
 	 *
-	 * @throws Exception	 if no dialog box is present
 	 */
-	public void acceptDialog() throws Exception {
+	public void acceptDialog() {
 		try {
 			candybean.log.info("Accepting dialog.");
 			this.wd.switchTo().alert().accept();
@@ -557,9 +554,8 @@ public class VInterface {
 	 * Dismisses a modal dialog box (usually referred to
 	 * as a &quot;javascript dialog&quot;).
 	 *
-	 * @throws Exception	 if no dialog box is present
 	 */
-	public void dismissDialog() throws Exception {
+	public void dismissDialog() {
 		try {
 			candybean.log.info("Dismissing dialog.");
 			this.wd.switchTo().alert().dismiss();
@@ -600,9 +596,9 @@ public class VInterface {
 	 *
 	 * @param hookStrategy	method to use to search for the widget
 	 * @param hookString	string to find using the specified strategy
-	 * @throws Exception	<i>not thrown</i>
+     * @throws CandybeanException 
 	 */
-	public VControl widget(Strategy hookStrategy, String hookString) throws Exception {
+	public VControl widget(Strategy hookStrategy, String hookString) throws CandybeanException {
 		return this.getControl(new VHook(hookStrategy, hookString));
 	}
 	
@@ -614,29 +610,32 @@ public class VInterface {
 	 * performed off of it, hence not named 'getWidget'.
 	 *
 	 * @param hook			VHook method to use to search for the widget
-	 * @throws Exception	<i>not thrown</i>
+	 * @throws CandybeanException 
 	 */
-	public VControl widget(VHook hook) throws Exception {
+	public VControl widget(VHook hook) throws CandybeanException {
 		return this.getControl(hook);
 	}
 	
 	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
-		VInterface.Type iType = null;
+		VInterface.Type interfaceType = null;
 		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
 			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
-				iType = iTypeIter;
+				interfaceType = iTypeIter;
 				break;
 			}
 		}
-		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
-		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
-		return iType;
+		if (interfaceType == Type.ANDROID) {
+			throw new Exception("Android interface type not yet implemented.");
+		}else if (interfaceType == Type.IOS) {
+			throw new Exception("iOS interface type not yet implemented.");
+		}
+		return interfaceType;
 	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 //        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
-        WebDriver wd = null;
+        WebDriver webDriver = null;
         switch (iType) {
 		case FIREFOX:
 			String profileName = this.config.getValue("browser.firefox_profile", "default");
@@ -652,7 +651,7 @@ public class VInterface {
 			// }
 			candybean.log.info("Instantiating Firefox with profile name: "
 					+ profileName + " and binary path: " + ffBinaryPath);
-			wd = new FirefoxDriver(ffBinary, ffProfile);
+			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
@@ -666,14 +665,14 @@ public class VInterface {
 			candybean.log.info("Instantiating Chrome with:\n    log path:"
 					+ chromeDriverLogPath + "\n    driver path: "
 					+ chromeDriverPath);
-			wd = new ChromeDriver(chromeOptions);
+			webDriver = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
 			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
 			candybean.log.info("ieDriverPath: " + ieDriverPath);
 			System.setProperty("webdriver.ie.driver", ieDriverPath);
 			capabilities = DesiredCapabilities.internetExplorer();
-			wd = new InternetExplorerDriver(capabilities);
+			webDriver = new InternetExplorerDriver(capabilities);
 			break;
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
@@ -682,7 +681,7 @@ public class VInterface {
             capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
             capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
-            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            webDriver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
             break;
         case IOS:
             capabilities = new DesiredCapabilities();
@@ -690,7 +689,7 @@ public class VInterface {
             capabilities.setCapability(CapabilityType.VERSION, "6.0");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
             capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
-            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            webDriver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
             break;
         default:
 			throw new Exception("Selenium: browser type not recognized.");
@@ -698,12 +697,12 @@ public class VInterface {
 		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
 		if (System.getProperty("headless") == null) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+			webDriver.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 		}
-		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-		return wd;
+		webDriver.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+		return webDriver;
 	}
-	
+
 	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
 

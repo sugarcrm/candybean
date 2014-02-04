@@ -34,6 +34,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * <p>Program to run the Voodoo2 code examples.</p>
@@ -42,6 +44,8 @@ import java.util.HashMap;
  */
 
 public class RunExamples {
+	
+	private static Logger log = Logger.getLogger(RunExamples.class.getName());
 
    /**
     * Entry point of RunExamples
@@ -70,13 +74,13 @@ public class RunExamples {
        * The class field.
        */
 
-      public Class<?> cls;
+      private Class<?> cls;
 
       /**
        * The method field.
        */
 
-      public Method method;
+      private Method method;
 
       /**
        * Instantiate a Pair with a class and a method.
@@ -86,9 +90,25 @@ public class RunExamples {
        */
 
       Pair(Class<?> cls, Method method) {
-         this.cls = cls;
-         this.method = method;
+         this.setCls(cls);
+         this.setMethod(method);
       }
+
+	public Class<?> getCls() {
+		return cls;
+	}
+
+	public void setCls(Class<?> cls) {
+		this.cls = cls;
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
+	}
    }
 
    /**
@@ -99,7 +119,7 @@ public class RunExamples {
     * specified on the command line.</p>
     */
 
-   private HashMap<String,Pair> classes;
+   private Map<String, Pair> classes;
 
    /**
     * Class loader for example classes.
@@ -120,7 +140,7 @@ public class RunExamples {
        */
 
       public Class<?> loadClass(File f)
-         throws FileNotFoundException, IOException {
+         throws IOException {
          FileInputStream fin = new FileInputStream(f);
          ByteArrayOutputStream buffer = new ByteArrayOutputStream();
          byte bytes[];
@@ -133,7 +153,7 @@ public class RunExamples {
             buffer.write(b);
          }
 
-         try { fin.close(); } catch (IOException e) {}
+         fin.close(); 
          bytes = buffer.toByteArray();
 
          return defineClass(null, bytes, 0, bytes.length);
@@ -229,7 +249,8 @@ public class RunExamples {
          Class<?> cls = null;
 
          if (arg.equals("--help") || arg.equals("-h")) {
-            help();  // does not return
+        	 // does not return
+        	 help(); 
          }
 
          try {
@@ -262,7 +283,7 @@ public class RunExamples {
          Pair p = this.classes.get(className);
          log("Running example " + className);
          try {
-            p.method.invoke(p.cls.newInstance());
+            p.getMethod().invoke(p.getCls().newInstance());
          } catch (InstantiationException e) {
             error(e, "Failed to instantiate " + className);
          } catch (IllegalAccessException e) {
@@ -284,7 +305,7 @@ public class RunExamples {
     */
 
    protected void log(String msg) {
-      System.out.println(msg);
+      log.info(msg);
    }
 
    /**
@@ -305,7 +326,7 @@ public class RunExamples {
     */
 
    protected void error(Throwable exc, String errm) {
-      System.err.println(errm + ":");
+     log.severe(errm + ":");
       if (exc != null) {
          exc.printStackTrace(System.err);
       }

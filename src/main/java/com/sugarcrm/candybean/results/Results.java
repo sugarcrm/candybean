@@ -22,7 +22,9 @@
 package com.sugarcrm.candybean.results;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -32,12 +34,12 @@ import java.util.Scanner;
 public class Results {
 	
 	public static enum Type { PASS, FAIL, ERROR, NOTE; }
-	private ArrayList<Result> results = new ArrayList<Result>();
+	private List<Result> results = new ArrayList<Result>();
 	
-	public Results(File resultsFile) throws Exception {
+	public Results(File resultsFile) throws FileNotFoundException {
 		Scanner scanner = new Scanner(resultsFile);
 		while (scanner.hasNextLine()) {
-            results.add(new Result(scanner.nextLine()));
+            results.add(new Result(/*scanner.nextLine()*/));
         }
 		scanner.close();
 	}
