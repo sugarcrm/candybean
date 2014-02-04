@@ -54,18 +54,18 @@ Installation
 Install and configure the following dependencies:
 * <a href="http://git-scm.com/downloads">Git (clone your fork)</a>
 * <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE 7 JDK</a>
-* <a href="http://maven.apache.org/download.html">Maven 3</a>
 * <a href="https://www.google.com/intl/en/chrome/browser/">Chrome (default browser)</a>
-
-Additional Tools
-------------
-We find the following tools useful for development with candybean:
-* <a href="http://developer.android.com/tools/testing/testing_ui.html#uianalysis">UIAutomatorViewer</a> for android devices. Useful UI analysis tool when writing mobile automation tests.
+* <a href="http://maven.apache.org/download.html">Maven 3 (recommended build management)</a>
 
 Configuration
 -------------
+Candybean's git repo includes a git submodule at '/config' referencing SugarCRM's private repo.  Out 
+of the box, Candybean will look for its configuration file in this directory, which should either be 
+explicitly defined or overridden via command line or system variable.
+
 The following key-value keys should be defined in a configuration file used to instantiate Candybean.
-By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory
+By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory, but
+a path can also be specified from the command line or a system variable 'candybean_config'.
 ```
 #specifies the type of autmation interface
 automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
@@ -100,9 +100,13 @@ java.util.logging.SimpleFormatter.format = [%1$tm-%1$td-%1$tY %1$tk:%1$tM:%1$tS:
 ```
 
 Writing tests
-------------
-Here's an example Java-JUnit test that extends AbstractTest (which instantiates a candybean interface from the configuration file)
-and begins testing through the interface defined in the configuration.
+-------------
+Candybean recommends the use of <a href="http://maven.apache.org/">Maven</a>!  So if you're not familiar 
+with Maven already, <a href="http://www.tutorialspoint.com/maven/maven_overview.htm">try this link for an overview.</a>   
+
+Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
+a Candybean interface from the configuration file) and begins testing through 
+the interface defined in the configuration.
 ```
 import com.sugarcrm.candybean;
 import org.junit.AfterClass;
@@ -131,15 +135,15 @@ public class CandybeanTest extends AbstractTest{
 ```
 
 Executing tests
---------------
-At this point, because Candybean is Maven-based, executing simple maven commands will detect written tests and execute them for test results:
-```
-> mvn clean install
-```
-You can also see the included system tests to see test examples.  System tests can be executing via maven and the 'system' profile:
-```
-> mvn clean install -Psystem
-```
+---------------
+Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
+located correctly in a standardized directory structure and/or naming them using certain 
+conventions.  For more information, review the <a href="http://maven.apache.org/surefire/maven-surefire-plugin/">Maven Surefire Plugin</a>.
+
+Additional tools
+----------------
+We find the following tools useful for development with Candybean:
+* <a href="http://developer.android.com/tools/testing/testing_ui.html#uianalysis">UIAutomatorViewer</a> for android devices. Useful UI analysis tool when writing mobile automation tests.
 
 Core contributors
 -----------------
