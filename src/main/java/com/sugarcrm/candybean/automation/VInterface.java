@@ -657,6 +657,9 @@ public class VInterface {
 	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 	            break;
 	        case IOS:
+	            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+	            capabilities.setCapability(CapabilityType.VERSION, "6.0");
+	            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
 	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 	            break;
 	        default:

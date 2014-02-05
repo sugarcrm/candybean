@@ -25,14 +25,10 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		closeWelcomeOverlay();
 	}
 
-	
-
-
 	@After
 	public void tearDown() throws Exception {
 		wd.quit();
 	}
-	
 
 	@Test
 	public void openNotes() throws Exception {
@@ -42,8 +38,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		notesAction.click();
 		iface.pause(3000);
 	}
-	
-	
 
 	@Test
 	public void newNote() throws Exception {
@@ -72,9 +66,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		iface.pause(2000);
 	}
 
-
-	
-	
 	@Test
 	public void deleteAllNotes() throws Exception {
 		openNotes();
@@ -106,8 +97,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		assertEquals(wd.findElements(By.id("com.evernote:id/title")).size(), 0);
 	}
 
-
-	
 	@Test
 	public void openNotebookFromShortcut() throws Exception {
 		openShortcutsMenu();
@@ -116,9 +105,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		shortcut.click();
 		iface.pause(1000);
 	}
-
-
-	
 
 	@Test
 	public void signOut() throws Exception {
@@ -131,8 +117,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		iface.pause(4000);
 	}
 	
-
-	
 	private boolean isLoggedIn() {
 		try {
 			openUsersMenu();
@@ -142,7 +126,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 			return false;
 		}
 	}
-
 	
 	private boolean overlayExists(){
 		try {
@@ -163,8 +146,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		}
 	}
 	
-	
-
 	public void closeWelcomeOverlay() throws Exception {
 		if(overlayExists()){
 			try {
@@ -233,8 +214,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 		js.executeScript("mobile: swipe", swipeObject);
 	}
 	
-
-	
 	public void openShortcutsMenu() throws Exception {
 		openRightSideMenu();
 		openRightSideMenu();
@@ -249,7 +228,6 @@ public class EvernoteAndroidTest extends AndroidTest implements ITest{
 			return;
 		}
 	}
-
 
 	public void openUsersMenu() throws Exception {
 		try {

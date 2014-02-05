@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.examples;
+package com.sugarcrm.candybean.examples.mobile;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,19 +6,15 @@ import java.io.IOException;
 import org.junit.Before;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.VInterface.SwipeableWebDriver;
 import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.examples.AbstractTest;
 
-/**
- * Will configure any android test to use the desired capabilities from the configuration file.
- * @author Shehryar Farooq
- *
- */
-public class AndroidTest extends AbstractTest {
+public class IOsTest extends AbstractTest {
 	
-	protected final Type iType = Type.ANDROID;
+
+	protected final Type iType = Type.IOS;
 	
 	/**
 	 * The driver for this interface
@@ -36,7 +32,7 @@ public class AndroidTest extends AbstractTest {
 	 * @throws Exception Failed to start interface
 	 */
 	@Before
-	public void startAndroidInterface() throws IOException, Exception {
+	public void startIosInterface() throws IOException, Exception {
 		
 		String className = this.getClass().getSimpleName();
 		
@@ -45,8 +41,6 @@ public class AndroidTest extends AbstractTest {
 						+ File.separator + "lib" + File.separator).getCanonicalPath() +File.separator+"capabilities.config"));
 		
 		capabilities.setCapability("app", new File(config.getValue(className+".app")).getAbsolutePath());
-		capabilities.setCapability("app-package", config.getValue(className+".app-package"));
-		capabilities.setCapability("app-activity", config.getValue(className+".app-activity"));
 		
 		iface.start(iType, capabilities);
 		wd = (SwipeableWebDriver) iface.wd;
