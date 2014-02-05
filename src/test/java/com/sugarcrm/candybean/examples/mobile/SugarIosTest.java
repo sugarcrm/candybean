@@ -41,7 +41,7 @@ import com.sugarcrm.candybean.examples.ITest;
  *
  * @author Larry Cao
  */
-public class SugarIosTest extends IOsTest implements ITest{
+public class SugarIosTest extends IosTest implements ITest{
 
     @Before
     public void setUp() throws Exception {
