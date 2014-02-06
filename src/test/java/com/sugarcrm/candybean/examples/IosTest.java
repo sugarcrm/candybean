@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.examples.mobile;
+package com.sugarcrm.candybean.examples;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.sugarcrm.candybean.automation.VInterface.SwipeableWebDriver;
 import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.examples.AbstractTest;
 
 public class IosTest extends AbstractTest {
 

@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertTrue;
 import com.sugarcrm.candybean.examples.ITest;
+import com.sugarcrm.candybean.examples.IosTest;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
