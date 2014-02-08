@@ -157,7 +157,9 @@ public class VInterface {
 	 * @throws Exception		if type is undefined during instantiation
 	 */
 	public void start() throws Exception {
+		this.candybean.log.info("No interface type specified; attempting to start from configuration-defined type...");
 		this.iType = this.parseInterfaceType(this.config.getValue("automation.interface", "chrome"));
+		this.candybean.log.info("Configuration-defined interface type parsed as type: " + this.iType);
 		this.start(this.iType);
 	}
 
