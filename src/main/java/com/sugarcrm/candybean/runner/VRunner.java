@@ -54,6 +54,7 @@ import com.sugarcrm.candybean.automation.Candybean;
 public class VRunner extends BlockJUnit4ClassRunner {
 	
 	private static final String BLOCKLIST_PATH_KEY = "blocklist";
+	private static final Logger logger = Logger.getAnonymousLogger();
 	
 	public VRunner(Class<?> klass) throws InitializationError {
 		super(klass);
@@ -68,7 +69,9 @@ public class VRunner extends BlockJUnit4ClassRunner {
         }
         final List<FrameworkMethod> finalTestMethods = new ArrayList<FrameworkMethod>(testMethods.size());
 		try {
-			if (System.getProperty(VRunner.BLOCKLIST_PATH_KEY) != null) {
+			String blockListPathValue = System.getProperty(VRunner.BLOCKLIST_PATH_KEY);
+			if (blockListPathValue != null) {
+				logger.info("Blocklist enabled via system variable: " + VRunner.BLOCKLIST_PATH_KEY + ":" + blockListPathValue);
 				testMethods = this.removeBlockedTests(testMethods); // scrub tests for blocked tests
 			}
 			for (final FrameworkMethod method : testMethods) {
@@ -81,25 +84,29 @@ public class VRunner extends BlockJUnit4ClassRunner {
 								Class<?> c = Class.forName(vTag.tagLogicClass());
 								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), tag.getClass());
 								if ((boolean) m.invoke(null, (Object) tag)) {
+									logger.info("Adding test to execution list -- tag logic succeeds: " + method.getName());
 									finalTestMethods.add(method);
 								}
 							}
 						} else {
 							for (String tag : vTag.tags()) {
 								if (Boolean.parseBoolean(System.getProperty(tag))) {
+									logger.info("Adding test to execution list -- sysvar tag true: " + method.getName());
 									finalTestMethods.add(method);
 								}
 							}
 						}
 					} else {
+						logger.info("Adding test to execution list -- empty tags: " + method.getName());
 						finalTestMethods.add(method);
 					}
 				} else {
+					logger.info("Adding test to execution list -- no tags: " + method.getName());
 					finalTestMethods.add(method);
 				}
 			}
 		} catch (Exception e) {
-			Logger.getGlobal().severe(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 		return finalTestMethods;
 	}
@@ -109,13 +116,12 @@ public class VRunner extends BlockJUnit4ClassRunner {
 		List<FrameworkMethod> removeTests = new ArrayList<FrameworkMethod>();
 		for (FrameworkMethod test : tests) {
 			String testName = test.getMethod().getDeclaringClass().getSimpleName() + "." + test.getMethod().getName();
-//			System.out.println("testName: " + testName);
 			if (blockListTests.contains(testName)) {
 				removeTests.add(test); // add to separate list to avoid concurrent modification
 			}
 		}
 		for (FrameworkMethod removeTest : removeTests) {
-			System.out.println("removing: " + removeTest.getName());
+			logger.info("Removing blocked test from execution: " + removeTest.getName());
 			tests.remove(removeTest);
 		}
 		return tests;
