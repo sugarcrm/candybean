@@ -4,6 +4,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.List;
+import java.util.logging.Logger;
+
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -15,14 +17,17 @@ public class TestRecorder extends RunListener {
 	private SpecializedScreenRecorder screenRecorder;
 	
 	private boolean testFailed = false;
+	
+	private Logger logger;
 
 	@Override
 	public void testStarted(Description description) throws Exception {
 		Record record = description.getAnnotation(Record.class);
+		logger = Logger.getLogger(description.getTestClass().getSimpleName());
 		this.testFailed = false;
 		if (record != null) {
-			System.out.println("Recording started: "
-					+ description.getMethodName());
+			logger.info("Recording started: "
+					+ description.getClassName() + "." + description.getMethodName());
 			startRecording(description.getClassName()+"-"+description.getMethodName());
 		}
 	}
@@ -31,8 +36,8 @@ public class TestRecorder extends RunListener {
 	public void testFinished(Description description) throws Exception {
 		Record record = description.getAnnotation(Record.class);
 		if (record != null) {
-			System.out.println("Recording ended: "
-					+ description.getMethodName());
+			logger.info("Recording ended: "
+					+ description.getClassName() + "." + description.getMethodName());
 			stopRecording();
 			if (!testFailed) {
 				List<File> recordedTests = this.screenRecorder.getCreatedMovieFiles();
