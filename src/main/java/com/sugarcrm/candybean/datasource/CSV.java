@@ -25,6 +25,9 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
 import au.com.bytecode.opencsv.CSVParser;
 
 /**
@@ -35,14 +38,16 @@ import au.com.bytecode.opencsv.CSVParser;
  */
 
 public class CSV extends DataSource {
+	
+	private Logger log = Logger.getLogger(CSV.class.getName());
 	private static final long serialVersionUID = 1L;
-	private ArrayList<String> keys = null;
+	private List<String> keys = null;
 	private CSVParser parser = null;
 
 	public CSV(String csvfile) {
 		super();
 
-		this.filename = csvfile;
+		this.setFilename(csvfile);
 		FileInputStream fs = null;
 		BufferedReader br = null;
 
@@ -50,14 +55,14 @@ public class CSV extends DataSource {
 
 		try {
 			this.keys = new ArrayList<String>();
-			data = new DataSource();
+			setData(new DataSource());
 
 			fs = new FileInputStream(csvfile);
 			br = new BufferedReader(new InputStreamReader(fs));
 			this.findKeys(br);
 			this.createData(br);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 	}
 
@@ -85,15 +90,16 @@ public class CSV extends DataSource {
 				FieldSet tmphash = new FieldSet();
 				for (int i = 0; i <= this.keys.size() - 1; i++) {
 					if (i <= linelen) {
-						tmphash.put(this.keys.get(i), linedata[i]);  // do not remove leading and trailing spaces: CB-18
+						// do not remove leading and trailing spaces: CB-18
+						tmphash.put(this.keys.get(i), linedata[i]);  
 					} else {
 						tmphash.put(this.keys.get(i), "");
 					}
 				}
-				this.data.add(tmphash);
+				this.getData().add(tmphash);
 			}
 		} catch (Exception exp) {
-			exp.printStackTrace();
+			log.severe(exp.getMessage());
 		}
 	}
 
@@ -125,11 +131,11 @@ public class CSV extends DataSource {
 			}
 
 		} catch (Exception exp) {
-			exp.printStackTrace();
+			log.severe(exp.getMessage());
 		}
 	}
 	
 	public DataSource getDataSource() {
-		return this.data;
+		return this.getData();
 	}
 }

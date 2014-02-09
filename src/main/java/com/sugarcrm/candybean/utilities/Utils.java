@@ -32,6 +32,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
@@ -42,20 +44,22 @@ import java.util.regex.Matcher;
  *
  */
 public class Utils {
+	
+	private static Logger log = Logger.getLogger(Utils.class.getName());
 
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
 	 * 
 	 * @param cmd 
-	 * @throws Exception
+	 * @throws IOException 
 	 */
-	public static void run(String cmd) throws Exception {
+	public static void run(String cmd) throws IOException {
 		Process process = new ProcessBuilder(cmd).start();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 		String line = reader.readLine();
-		System.out.print("Run command: " + cmd);
+		log.info("Run command: " + cmd);
 		while (line != null) {
-			System.out.println(line);
+			log.info(line);
 			line = reader.readLine();
 		}
 	}
@@ -68,8 +72,9 @@ public class Utils {
 	 * @return
 	 */
 	public static String pretruncate(String s, int length) {
-		if (s.length() <= length)
+		if (s.length() <= length) {
 			return s;
+		}
 		return s.substring(s.length() - length);
 	}
 
@@ -92,7 +97,9 @@ public class Utils {
 		}
 		// replace all one or more consecutive forward slashes with a File Separator
 		tempPath = tempPath.replaceAll("/+", Matcher.quoteReplacement(File.separator));
-		if (!tempPath.equals(path)) System.out.println("The following path: " + path + " has been adjusted to: " + tempPath);
+		if (!tempPath.equals(path)) {
+			log.info("The following path: " + path + " has been adjusted to: " + tempPath);
+		}
 		return tempPath;
 	}
 
@@ -105,10 +112,11 @@ public class Utils {
 	 */
 	public static void closeStream(Closeable s) {
 		try {
-			if (s != null)
+			if (s != null) {
 				s.close();
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.severe(e.getMessage());
 		}
 	}
 
@@ -120,15 +128,16 @@ public class Utils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ArrayList<String> getTables(Connection connection) throws SQLException {
+	public static List<String> getTables(Connection connection) throws SQLException {
 		DatabaseMetaData dbmd = connection.getMetaData();
-		ArrayList<String> tables = new ArrayList<String>();
+		List<String> tables = new ArrayList<String>();
 		String[] types = { "TABLE" };
 		ResultSet resultSet = dbmd.getTables(null, null, "%", types);
 		while (resultSet.next()) {
 			String tableName = resultSet.getString("TABLE_NAME");
 			tables.add(tableName);
 		}
+		resultSet.close();
 		return tables;
 	}
 
@@ -179,8 +188,8 @@ public class Utils {
 	 * @param <Y>
 	 */
 	public static class Pair<X, Y> {
-		public final X x;
-		public final Y y;
+		private final X x;
+		private final Y y;
 
 		public Pair(X x, Y y) {
 			this.x = x;
@@ -189,7 +198,15 @@ public class Utils {
 
 		@Override
 		public String toString() {
-			return "x:" + x.toString() + ",y:" + y.toString();
+			return "x:" + getX().toString() + ",y:" + getY().toString();
+		}
+
+		public X getX() {
+			return x;
+		}
+
+		public Y getY() {
+			return y;
 		}
 	}
 
@@ -203,9 +220,9 @@ public class Utils {
 	 * @param <Z>
 	 */
 	public static class Triplet<X, Y, Z> { 
-		public final X x; 
-		public final Y y; 
-		public final Z z;
+		private final X x; 
+		private final Y y; 
+		private final Z z;
 
 		public Triplet(X x, Y y, Z z) { 
 			this.x = x; 
@@ -215,7 +232,19 @@ public class Utils {
 
 		@Override
 		public String toString() {
-			return "x:" + x.toString() + ",y:" + y.toString() + ",z:" + z.toString();
+			return "x:" + getX().toString() + ",y:" + getY().toString() + ",z:" + getZ().toString();
+		}
+
+		public X getX() {
+			return x;
+		}
+
+		public Y getY() {
+			return y;
+		}
+
+		public Z getZ() {
+			return z;
 		}
 	}
 

@@ -21,7 +21,7 @@
  */
 package com.sugarcrm.candybean.examples.sugar;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.sugarcrm.candybean.automation.Candybean;
@@ -34,7 +34,7 @@ public class Sugar {
 	protected Candybean candybean;
 	protected VInterface iface;
 	protected Configuration config;
-	protected HashMap<String, VHook> hooks;
+	protected Map<String, VHook> hooks;
 	protected SugarUser adminUser;
 	
 	public Sugar(Candybean candybean, Configuration sugarConfig, Properties sugarHooks, SugarUser adminUser) throws Exception {
@@ -53,8 +53,8 @@ public class Sugar {
 	public void login() throws Exception {
 		String urlBase = config.getValue("url.base", "http://localhost/ent700/");
 		iface.go(urlBase);
-		iface.widget(hooks.get("login.textfield.username")).sendString(adminUser.builder.requiredAttributes.get("username"));
-		iface.widget(hooks.get("login.textfield.password")).sendString(adminUser.builder.requiredAttributes.get("password"));
+		iface.widget(hooks.get("login.textfield.username")).sendString(adminUser.getBuilder().getRequiredAttributes().get("username"));
+		iface.widget(hooks.get("login.textfield.password")).sendString(adminUser.getBuilder().getRequiredAttributes().get("password"));
 		iface.widget(hooks.get("login.button.login")).click();
 	}
 	

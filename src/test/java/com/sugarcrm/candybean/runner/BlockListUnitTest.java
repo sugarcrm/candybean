@@ -19,27 +19,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.model;
+package com.sugarcrm.candybean.runner;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.*;
 
-public abstract class ModelObjectBuilder {	
+import java.util.Arrays;
+import java.util.List;
+
+import junit.framework.Assert;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.sugarcrm.candybean.runner.VTag;
+import com.sugarcrm.candybean.runner.VRunner;
+
+@RunWith(VRunner.class)
+public class BlockListUnitTest {
+
+	@Ignore
+	@Test
+	public void ignoreFail() throws Exception {
+		fail();
+	}
 	
-	private Map<String, String> requiredAttributes = new HashMap<String, String>();
-	private Map<String, String> optionalAttributes = new HashMap<String, String>();
-	public abstract ModelObject build();
+	@Test
+	public void blockListFail() throws Exception {
+		fail();
+	}
 	
-	public Map<String, String> getRequiredAttributes() {
-		return requiredAttributes;
+	@Test
+	public void pass() throws Exception {
+		assertTrue(true);
 	}
-	public void setRequiredAttributes(Map<String, String> requiredAttributes) {
-		this.requiredAttributes = requiredAttributes;
-	}
-	public Map<String, String> getOptionalAttributes() {
-		return optionalAttributes;
-	}
-	public void setOptionalAttributes(Map<String, String> optionalAttributes) {
-		this.optionalAttributes = optionalAttributes;
-	}
-}	
+}

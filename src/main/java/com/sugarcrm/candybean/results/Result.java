@@ -42,7 +42,7 @@ public class Result {
 //	private String failMessage;
 //	private HashSet<String> tags;
 
-	public Result(String line) { 
+	public Result(/*String line*/) { 
 //		this.line = line;
 		// split line and store each; check for optional tokens
 	}

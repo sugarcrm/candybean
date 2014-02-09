@@ -23,18 +23,13 @@ package com.sugarcrm.candybean.runner;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.List;
-
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.sugarcrm.candybean.runner.VTag;
-import com.sugarcrm.candybean.runner.VTagRunner;
+import com.sugarcrm.candybean.runner.VRunner;
 
-@RunWith(VTagRunner.class)
+@RunWith(VRunner.class)
 public class VTagUnitTest {
 
 	@Test
