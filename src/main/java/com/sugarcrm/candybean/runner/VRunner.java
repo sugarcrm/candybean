@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -142,4 +143,11 @@ public class VRunner extends BlockJUnit4ClassRunner {
 			throw new FileNotFoundException("The given blocklist file was not found; ensure path is correct for the system variable: " + BLOCKLIST_PATH_KEY);
 		}
 	}
+	
+	
+    @Override
+    public void run(final RunNotifier notifier) {
+    	notifier.addListener(new TestRecorder());
+    	super.run(notifier);
+    }
 }
