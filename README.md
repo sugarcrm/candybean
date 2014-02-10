@@ -10,16 +10,16 @@ Some project features planned for Candybean:
 * HTML 5 support (Sugar 7): supports HTML 5 elements
 * Support Java-based tests/calls: executes Java-based test scripts
 * Abstraction from dependent technologies:
-** Supports multiple, independent reporting options (e.g. XML, HTML)
-** Supports multiple automation frameworks (de-prioritized)
-** Data-driven resource agnostic (e.g. DB, XML, JSON)
+    * Supports multiple, independent reporting options (e.g. XML, HTML)
+    * Supports multiple automation frameworks (de-prioritized)
+    * Data-driven resource agnostic (e.g. DB, XML, JSON)
 * Independent from project-specific parameters:
-** Supports product objectification, thus platform-independent
-** Product independent (no Sugar-specific references)
+    * Supports product objectification, thus platform-independent
+    * Product independent (no Sugar-specific references)
 * Self-testing:
-** Verify element hooks are valid before running tests
-** Verify abstract element behavior (fields, menus, etc.)
-** Unit and system tested
+    * Verify element hooks are valid before running tests
+    * Verify abstract element behavior (fields, menus, etc.)
+    * Unit and system tested
 * Script-style logging: make debugging readable, easier
 * Failure/error non-blocking: option to continue executing tests upon error/failure
 * Resource consolidating: pre-execution resource scan for consolidated allocation
@@ -27,9 +27,9 @@ Some project features planned for Candybean:
 * Configurable with ease/overridable via CLI
 * Randomized testing: Supports randomized/stress testing
 * Open-source:
-** JavaDoc/API with usage details, examples, best practices
-** Externally-facing site/wiki with installation documentation
-** Code samples
+    * JavaDoc/API with usage details, examples, best practices
+    * Externally-facing site/wiki with installation documentation
+    * Code samples
 * Best practice, OOP-organized code for ease of maintenance
 * Easy to install (GUI installer or minimal configuration)
 
