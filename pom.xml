@@ -233,6 +233,13 @@
 			<artifactId>testng</artifactId> <version>6.8.7</version> <scope>test</scope> 
 			</dependency -->
 		<dependency>
+			<groupId>org.monte</groupId>
+			<artifactId>cc</artifactId>
+			<version>0.7.7</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/monte-cc.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
 			<version>2.0.2</version>
