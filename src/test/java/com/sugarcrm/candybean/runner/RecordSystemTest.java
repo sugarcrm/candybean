@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.test;
+package com.sugarcrm.candybean.runner;
 
 import static org.junit.Assert.*;
 
@@ -14,8 +14,13 @@ import com.sugarcrm.candybean.runner.Record;
 import com.sugarcrm.candybean.runner.VTag;
 import com.sugarcrm.candybean.runner.VRunner;
 
+/**
+ * Show-cases the ability to record failing tests using {@link Record} annotation.
+ * @author Shehryar Farooq
+ *
+ */
 @RunWith(VRunner.class)
-public class RecordTest extends AbstractTest{
+public class RecordSystemTest extends AbstractTest{
 	
 	@Before
 	public void first() throws Exception {
