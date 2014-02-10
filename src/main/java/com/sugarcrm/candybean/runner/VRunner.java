@@ -144,7 +144,10 @@ public class VRunner extends BlockJUnit4ClassRunner {
 		}
 	}
 	
-	
+	/**
+	 * Adds a {@link TestRecorder} listener to the JUnit {@link RunNotifier} which
+	 * listens to a failing state of a test annotated with {@link Record}. 
+	 */
     @Override
     public void run(final RunNotifier notifier) {
     	notifier.addListener(new TestRecorder());
