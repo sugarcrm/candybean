@@ -38,6 +38,7 @@ public abstract class AbstractTest {
 	 * by adding a new FileHandler specific to this tests class.
 	 * @throws Exception
 	 */
+	@Before
 	public void initialize() throws IOException{
 		candybean = AbstractTest.configureCandybean();
 		iface = candybean.getInterface();
