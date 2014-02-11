@@ -6,8 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.JavascriptExecutor;
-
 import com.sugarcrm.candybean.examples.AbstractTest;
 import com.sugarcrm.candybean.runner.Duration;
 import com.sugarcrm.candybean.runner.Record;
@@ -25,7 +23,6 @@ public class RecordSystemTest extends AbstractTest{
 	@Before
 	public void first() throws Exception {
 		iface.start();
-		((JavascriptExecutor)iface.wd).executeScript("self.focus()");
 	}
 	
 	@Test
