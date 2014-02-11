@@ -66,14 +66,19 @@ public class VInterfaceSystemTest {
 		iface.go(url3);
 		assertEquals(url3, iface.getURL());
 		iface.backward();
+		iface.pause(1000);
 		assertEquals(url2, iface.getURL());
 		iface.backward();
+		iface.pause(1000);
 		assertEquals(url1, iface.getURL());
 		iface.forward();
+		iface.pause(1000);
 		assertEquals(url2, iface.getURL());
 		iface.forward();
+		iface.pause(1000);
 		assertEquals(url3, iface.getURL());		
 		iface.refresh(); // refreshing only at end; mid-refreshes crash in Chrome
+		iface.pause(2000);
 		assertEquals(url3, iface.getURL());		
 	}
 	
