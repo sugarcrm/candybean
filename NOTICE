@@ -6,5 +6,8 @@ To obtain JUnit, please go to http://junit.org/
 Candybean makes use of Connector/J, which is made available under GNU General 
 Public License v 2.0.
 
+Candybean makes use of Monte Media Library for test recording, which is made available under
+the under the terms of Creative Commons Attribution 3.0.
+
 To obtain Connector/J, please go to http://dev.mysql.com/downloads/connector/j/
 
