@@ -12,7 +12,10 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.monte.screenrecorder.ScreenRecorder;
 
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.SpecializedScreenRecorder;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * A custom {@link RunListener} which includes callback routines for when any {@link Test} annotated
@@ -83,7 +86,12 @@ public class TestRecorder extends RunListener {
 				.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 				.getDefaultConfiguration();
 
-		this.screenRecorder = new SpecializedScreenRecorder(gc, testFileName);
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
+		if (candybeanConfigStr == null)
+			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
+					+ Candybean.CONFIG_FILE_NAME;
+		Configuration config = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		this.screenRecorder = new SpecializedScreenRecorder(gc, testFileName, config);
 		this.screenRecorder.start();
 
 	}
