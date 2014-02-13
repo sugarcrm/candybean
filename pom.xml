@@ -124,12 +124,18 @@
 									<type>zip</type>
 									<outputDirectory>${project.basedir}/lib</outputDirectory>
 								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>apks</artifactId>
+									<version>1.0.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
 			<!-- plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
 				<version>0.6.2.201302030002</version> <configuration> <destfile>${basedir}/target/coverage-reports/jacoco-unit.exec</destfile> 
 				<datafile>${basedir}/target/coverage-reports/jacoco-unit.exec</datafile> 
@@ -246,26 +252,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	<distributionManagement>
-		<repository>
-			<id>Sugar</id>
-			<url>http://10.25.10.170:8080/archiva/repository/internal/</url>
-		</repository>
-	</distributionManagement>
-	<repositories>
-		<repository>
-			<id>internal</id>
-			<name>Archiva Managed Internal Repository</name>
-			<url>http://10.25.10.170:8080/archiva/repository/internal/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<!-- >dependency> <groupId>io.selendroid</groupId> <artifactId>selendroid-standalone</artifactId> 
 			<version>LATEST</version> </dependency> <dependency> <groupId>io.selendroid</groupId> 
@@ -276,11 +262,16 @@
 			</dependency -->
 		<dependency>
 			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>apks</artifactId>
+			<version>1.0.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
 			<artifactId>drivers</artifactId>
 			<version>1.0.0</version>
-			<type>zip</type>
+			<type>distribution-zip</type>
 		</dependency>
-
 		<dependency>
 			<groupId>org.monte</groupId>
 			<artifactId>cc</artifactId>
