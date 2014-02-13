@@ -22,15 +22,14 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
-
 import org.junit.Test;
-
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
@@ -50,11 +49,15 @@ public class VSelectSystemTest {
 	protected static VInterface iface;
 	
 	@BeforeClass
-	public static void first() throws Exception {
+	public static void instantiateCb() throws IOException{
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
+	}
+	
+	@Before
+	public void first() throws Exception {
 		iface = candybean.getInterface();
 		iface.start();
 	}
@@ -179,8 +182,8 @@ public class VSelectSystemTest {
 		Assert.assertEquals(expected, actual);
 	}
 	
-	@AfterClass
-	public static void last() throws Exception {
+	@After
+	public void last() throws Exception {
 		iface.stop();
 	}
 }	
