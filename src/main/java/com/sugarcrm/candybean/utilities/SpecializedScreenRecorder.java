@@ -52,7 +52,7 @@ public class SpecializedScreenRecorder extends ScreenRecorder {
 
 	@Override
 	protected File createMovieFile(Format fileFormat) throws IOException {
-		String platformPath = Configuration.getPlatformValue(config.getPropertiesCopy(), "video.directory");
+		String platformPath = config.getPathValue("video.directory");
 		if (StringUtils.isNotEmpty(platformPath)) {
 			movieFolder = new File(platformPath);
 		}

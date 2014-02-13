@@ -64,8 +64,10 @@ public class TestRecorder extends RunListener {
 			// If the test didnt fail, delete the recording.
 			if (!testFailed) {
 				List<File> recordedTests = this.screenRecorder.getCreatedMovieFiles();
-				File createdVideoFile = recordedTests.get(recordedTests.size()-1);
-				createdVideoFile.delete();
+				if(recordedTests.size() > 0) {
+					File createdVideoFile = recordedTests.get(recordedTests.size()-1);
+					createdVideoFile.delete();
+				}
 			}
 		}
 	}
