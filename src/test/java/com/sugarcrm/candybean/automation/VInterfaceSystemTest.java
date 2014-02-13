@@ -23,13 +23,13 @@ package com.sugarcrm.candybean.automation;
 
 import static org.junit.Assert.*;
 import java.io.File;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
@@ -44,8 +44,8 @@ public class VInterfaceSystemTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	@BeforeClass
-	public static void first() throws Exception {
+	@Before
+	public void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		System.out.println("candybeanConfigPath: " + candybeanConfigStr);
@@ -319,8 +319,8 @@ public class VInterfaceSystemTest {
 //		this.iface.getSelect(null);
 	}
 
-	@AfterClass
-	public static void last() throws Exception {
+	@After
+	public void last() throws Exception {
 		iface.stop();
 	}
 }

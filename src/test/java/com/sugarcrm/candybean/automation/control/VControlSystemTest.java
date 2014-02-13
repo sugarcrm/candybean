@@ -24,15 +24,14 @@ package com.sugarcrm.candybean.automation.control;
 import java.io.File;
 import java.util.List;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
-
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VControl;
@@ -55,8 +54,8 @@ public class VControlSystemTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	@BeforeClass
-	public static void first() throws Exception {
+	@Before
+	public void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
@@ -306,8 +305,8 @@ public class VControlSystemTest {
 		Assert.assertTrue(iface.getControl(Strategy.PLINK, "SugarCRM").isDisplayed());
 	}
 	
-	@AfterClass
-	public static void last() throws Exception {
+	@After
+	public void last() throws Exception {
 		iface.stop();
 	}
 }	
