@@ -46,7 +46,7 @@ public class TestRecorder extends RunListener {
 		this.testFailed = false;
 		// Check to see if this test is annotated with Record
 		if (record != null) {
-			logger.info("Recording started: "
+			logger.info("Recording started for: "
 					+ description.getClassName() + "." + description.getMethodName());
 			// Start the recording
 			startRecording(description.getClassName()+"-"+description.getMethodName());
@@ -57,12 +57,13 @@ public class TestRecorder extends RunListener {
 	public void testFinished(Description description) throws Exception {
 		Record record = description.getAnnotation(Record.class);
 		if (record != null) {
-			logger.info("Recording ended: "
+			logger.info("Recording ended for: "
 					+ description.getClassName() + "." + description.getMethodName());
 			// Stop the recording
 			stopRecording();
 			// If the test didnt fail, delete the recording.
 			if (!testFailed) {
+				logger.info("Deleting the recording for this test since the test passed");
 				List<File> recordedTests = this.screenRecorder.getCreatedMovieFiles();
 				if(recordedTests.size() > 0) {
 					File createdVideoFile = recordedTests.get(recordedTests.size()-1);
@@ -93,7 +94,7 @@ public class TestRecorder extends RunListener {
 			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
 					+ Candybean.CONFIG_FILE_NAME;
 		Configuration config = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		this.screenRecorder = new SpecializedScreenRecorder(gc, testFileName, config);
+		this.screenRecorder = new SpecializedScreenRecorder(gc, testFileName, config, logger);
 		this.screenRecorder.start();
 
 	}
