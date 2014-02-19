@@ -2,11 +2,11 @@ package com.sugarcrm.candybean.utilities;
 
 import java.awt.AWTException;
 import java.awt.GraphicsConfiguration;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.monte.media.math.Rational;
 import org.monte.media.Format;
@@ -21,9 +21,11 @@ public class SpecializedScreenRecorder extends ScreenRecorder {
 	private String name;
 
 	private Configuration config;
+	
+	private Logger logger;
 
 	public SpecializedScreenRecorder(GraphicsConfiguration cfg, String name,
-			Configuration config) throws IOException, AWTException {
+			Configuration config, Logger logger) throws IOException, AWTException {
 		super(cfg, new Format(MediaTypeKey, MediaType.FILE, MimeTypeKey,
 				config.getValue("video.format", MIME_AVI)), new Format(
 				MediaTypeKey, MediaType.VIDEO, EncodingKey,
@@ -36,18 +38,9 @@ public class SpecializedScreenRecorder extends ScreenRecorder {
 								"15"))), QualityKey, 1.0f, KeyFrameIntervalKey,
 				(int) (15 * 60)), new Format(MediaTypeKey, MediaType.VIDEO,
 				EncodingKey, "black", FrameRateKey, Rational.valueOf(30)), null);
-		
 		this.name = name;
 		this.config = config;
-	}
-
-	public SpecializedScreenRecorder(GraphicsConfiguration cfg,
-			Rectangle captureArea, Format fileFormat, Format screenFormat,
-			Format mouseFormat, Format audioFormat, File movieFolder,
-			String name) throws IOException, AWTException {
-		super(cfg, captureArea, fileFormat, screenFormat, mouseFormat,
-				audioFormat, movieFolder);
-		this.name = name;
+		this.logger = logger;
 	}
 
 	@Override
@@ -64,7 +57,9 @@ public class SpecializedScreenRecorder extends ScreenRecorder {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH.mm.ss");
-		return new File(movieFolder, name + "-" + dateFormat.format(new Date())
+		File file = new File(movieFolder, name + "-" + dateFormat.format(new Date())
 				+ "." + Registry.getInstance().getExtension(fileFormat));
+		logger.info("Recording to: " + file.getAbsolutePath());
+		return file;
 	}
 }
