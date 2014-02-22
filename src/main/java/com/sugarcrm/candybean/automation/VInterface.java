@@ -197,6 +197,7 @@ public class VInterface {
 		this.windows.clear();
 		this.iType = null;
 		if (this.wd != null) {
+			this.wd.close();
 			this.wd.quit();
 			this.wd = null;
 		} else {
