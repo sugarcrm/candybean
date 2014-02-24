@@ -51,9 +51,8 @@ public class VSelect extends VControl {
 	 * @param hook		  value of strategy to search for
 	 * @throws Exception	 hook does not grab a SELECT
 	 */
-	public VSelect(Candybean voodoo, VInterface iface,
-						Strategy strategy, String hook) throws Exception {
-		this(voodoo, iface, new VHook(strategy, hook));
+	public VSelect(VInterface iface,Strategy strategy, String hook) throws Exception {
+		this(iface, new VHook(strategy, hook));
 	}
 
 	/**
@@ -64,9 +63,9 @@ public class VSelect extends VControl {
 	 * @param hook		{@link VHook} used to search for this element
 	 * @throws Exception	 hook does not grab a SELECT
 	 */
-	public VSelect(Candybean voodoo, VInterface iface, VHook hook)
+	public VSelect(VInterface iface, VHook hook)
 		throws Exception {
-		super(voodoo, iface, hook);
+		super(iface, hook);
         select = new Select(super.we);
         isMultiple = select.isMultiple();
 	}
@@ -81,7 +80,7 @@ public class VSelect extends VControl {
 	 * @param value  text of the option to be selected
 	 */
 	public void select(String value) {
-		voodoo.log.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
+		iface.logger.info("Selenium: selecting value '" + value  +  "' from control: " + this.toString());
 		select.selectByVisibleText(value);
 	}
 
@@ -92,7 +91,7 @@ public class VSelect extends VControl {
      */
     public void select(int index) {
         List<WebElement> options = select.getOptions();
-        voodoo.log.info("Selenium: selecting value '" + options.get(index).getText() + "' from control: " + this.toString());
+        iface.logger.info("Selenium: selecting value '" + options.get(index).getText() + "' from control: " + this.toString());
         select.selectByIndex(index);
     }
 
@@ -122,7 +121,7 @@ public class VSelect extends VControl {
      * @param text  text of the option to be deselected
      */
     public void deselect(String text) {
-        voodoo.log.info("Selenium: deselecting value '" + text + "' from control: " + this.toString());
+        iface.logger.info("Selenium: deselecting value '" + text + "' from control: " + this.toString());
         select.deselectByVisibleText(text);
     }
 
@@ -133,7 +132,7 @@ public class VSelect extends VControl {
      */
     public void deselect(int index) {
         List<WebElement> options = select.getOptions();
-        voodoo.log.info("Selenium: deselecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
+        iface.logger.info("Selenium: deselecting value '" + options.get(index).getText()  +  "' from control: " + this.toString());
         select.deselectByIndex(index);
     }
 
@@ -153,7 +152,7 @@ public class VSelect extends VControl {
      *
      */
     public void deselectAll() {
-        voodoo.log.info("Selenium: deselecting all values from control: " + this.toString());
+        iface.logger.info("Selenium: deselecting all values from control: " + this.toString());
         select.deselectAll();
     }
 
@@ -202,7 +201,7 @@ public class VSelect extends VControl {
      * @return	boolean true if any options in the select element are selected
      */
     public boolean isSelected() {
-        super.voodoo.log.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
+        super.iface.logger.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
         return getAllSelectedOptions().size() > 0;
     }
 

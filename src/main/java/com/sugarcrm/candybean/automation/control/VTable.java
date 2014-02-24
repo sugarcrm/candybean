@@ -37,12 +37,12 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
  */
 public class VTable extends VControl {
 	
-	public VTable(Candybean voodoo, VInterface iface, Strategy tableStrategy, String tableHook) throws Exception {
-		super(voodoo, iface, tableStrategy, tableHook);
+	public VTable(VInterface iface, Strategy tableStrategy, String tableHook) throws Exception {
+		super(iface, tableStrategy, tableHook);
 	}
 	
 	public VTable(Candybean voodoo, VInterface iface, VHook tableHook) throws Exception {
-		super(voodoo, iface, tableHook);
+		super(iface, tableHook);
 	}
 	
 	/**

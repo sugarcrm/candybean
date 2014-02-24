@@ -56,7 +56,6 @@ public class VSelectSystemTest {
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
-		iface.start();
 	}
 	
 	@Test
@@ -65,7 +64,7 @@ public class VSelectSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect select = new VSelect(candybean, iface, new VHook(Strategy.ID, "month"));
+		VSelect select = new VSelect(iface, new VHook(Strategy.ID, "month"));
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		select.select(option);
 		// 3. Verify that 'Sep' was actually selected
@@ -78,7 +77,7 @@ public class VSelectSystemTest {
     public void selectMultipleTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        VSelect select = new VSelect(iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
 
         Assert.assertTrue(select.isMultiple());
 
@@ -98,7 +97,7 @@ public class VSelectSystemTest {
     public void selectAllTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        VSelect select = new VSelect(iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
 
         Assert.assertFalse(select.isSelected());
 
@@ -111,7 +110,7 @@ public class VSelectSystemTest {
     public void deselectTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        VSelect select = new VSelect(iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
 
         select.select("Ham");
 
@@ -126,7 +125,7 @@ public class VSelectSystemTest {
     public void deselectMultiple() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        VSelect select = new VSelect(iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
 
         select.selectAll();
 
@@ -149,7 +148,7 @@ public class VSelectSystemTest {
     public void deselectAllTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        VSelect select = new VSelect(iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
 
         Assert.assertFalse(select.isSelected());
 

@@ -46,10 +46,6 @@ public class Sugar {
 //		model = buildModel();
 	}
 	
-	public void start() throws Exception {
-		iface.start();
-	}
-	
 	public void login() throws Exception {
 		String urlBase = config.getValue("url.base", "http://localhost/ent700/");
 		iface.go(urlBase);

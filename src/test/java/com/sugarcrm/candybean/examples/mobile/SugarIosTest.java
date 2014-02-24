@@ -46,20 +46,20 @@ public class SugarIosTest extends IosTest implements ITest{
 
     @Before
     public void setUp() throws Exception {
-        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        iface.wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @After
     public void tearDown() throws Exception {
-        wd.quit();
+        iface.wd.quit();
     }
 
     @Test
     public void testLogin() throws Exception {
-        WebElement username = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
+        WebElement username = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
         assertTrue(username.isDisplayed());
 
-        Set<String> handles = wd.getWindowHandles();
+        Set<String> handles = iface.wd.getWindowHandles();
 
         for (String s : handles) {
             System.out.println(s);
@@ -71,7 +71,7 @@ public class SugarIosTest extends IosTest implements ITest{
         username.sendKeys("admin");
 
 
-        WebElement password = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
+        WebElement password = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
 
         assertTrue(password.isDisplayed());
 
@@ -79,7 +79,7 @@ public class SugarIosTest extends IosTest implements ITest{
 
         password.sendKeys("asdf");
 
-        WebElement login = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
+        WebElement login = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
 
         login.click();
 

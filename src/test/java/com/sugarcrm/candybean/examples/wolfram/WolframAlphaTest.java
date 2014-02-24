@@ -2,6 +2,8 @@ package com.sugarcrm.candybean.examples.wolfram;
 
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +30,6 @@ public class WolframAlphaTest extends AbstractTest{
 	 * @throws Exception 
 	 */
 	@Before public void before() throws Exception{
-		iface.start();
 		wolfram = new WolframAlpha(iface);
 	};
 	
@@ -50,8 +51,8 @@ public class WolframAlphaTest extends AbstractTest{
 	 * Any processing to do after executing the tests.
 	 * @throws Exception 
 	 */
-	@AfterClass
-	public static void last() throws Exception{
+	@After
+	public void last() throws Exception{
 		iface.stop();
 	};
 	

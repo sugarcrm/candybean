@@ -114,15 +114,7 @@ public class Basic {
 		try {
 			i = v.getInterface();
 		} catch (Exception e) {
-			ve(e, "getting Voodoo interface");
-			return;
-		}
-
-		log("Starting WebDriver");
-		try {
-			i.start();
-		} catch (Exception e) {
-			ve(e, "starting WebDriver");
+			ve(e, "Getting Voodoo interface");
 			return;
 		}
 

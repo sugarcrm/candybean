@@ -67,7 +67,6 @@ public class Adhoc {
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
-		iface.start();
 	}
 
 	@Ignore

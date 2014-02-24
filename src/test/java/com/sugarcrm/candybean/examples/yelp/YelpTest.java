@@ -24,6 +24,8 @@ package com.sugarcrm.candybean.examples.yelp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
+
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +53,6 @@ public class YelpTest extends AbstractTest {
 		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
 				"cwarmbold@sugarcrm.com", "Sugar123!").build();
 		yelp = new Yelp(iface, yelpHooks, user);
-		iface.start();
 		yelp.start();
 	}
 
@@ -67,9 +68,9 @@ public class YelpTest extends AbstractTest {
 		yelp.run(timeout_in_minutes);
 	}
 
-	@AfterClass
-	public static void last() throws Exception {
+	@After
+	public void last() throws Exception {
 		yelp.stop();
-		candybean.getInterface().stop();
+		iface.stop();
 	}
 }

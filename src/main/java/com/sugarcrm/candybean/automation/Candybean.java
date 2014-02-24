@@ -27,6 +27,10 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.sugarcrm.candybean.configuration.Configuration;
 
 /**
@@ -105,24 +109,6 @@ public class Candybean {
 	}
 
 	/**
-	 * Get an {@link VInterface} for use by a test.
-	 *
-	 * @return 				a new {@link VInterface}
-	 * @throws Exception
-	 */
-	public VInterface getInterface() throws Exception {
-		return new VInterface(this, this.config);
-	}
-
-	//	public long getPageLoadTimeout() {
-	//		return Long.parseLong(props.getString("perf.page_load_timeout"));
-	//	}
-
-	//	public String getTime() {
-	//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
-	//	}
-
-	/**
 	 * Load the loggers specified in logging.properties.
 	 *
 	 * @return the initialized {@link Logger} object
@@ -135,6 +121,53 @@ public class Candybean {
 		Logger logger = Logger.getLogger(Candybean.class.getName());
 		return logger;
 	}
+	
+	/**
+	 * Instantiates an interface based on the configuration
+	 * @return VInterface
+	 * @throws Exception
+	 */
+	public VInterface getInterface() throws Exception {
+		VInterface iface = null;
+		if (Candybean.instance == null) {
+			throw new Exception("Candybean has not yet been instantiated with a configuration");
+		} else {
+			switch (parseInterfaceType(this.config.getValue("automation.interface", "chrome"))) {
+			case FIREFOX:
+				iface = new FirefoxInterface(new DesiredCapabilities());
+				break;
+			case CHROME:
+				iface = new ChromeInterface(new DesiredCapabilities());
+				break;
+			case IE:
+				iface = new InternetExplorerInterface(new DesiredCapabilities());
+			case SAFARI:
+				throw new Exception("Selenium: SAFARI interface type not yet supported");
+			default:
+				throw new Exception("Selenium: browser type not recognized.");
+			}
+		}
+		return iface;
+	}
+	
+	/**
+	 * Returns the interface type configured for use by the user.
+	 * @param iTypeString
+	 * @return
+	 * @throws Exception
+	 */
+	private InterfaceType parseInterfaceType(String iTypeString) throws Exception {
+		InterfaceType iType = null;
+		for (InterfaceType iTypeIter : InterfaceType.values()) {
+			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
+				iType = iTypeIter;
+				break;
+			}
+		}
+		if (iType == InterfaceType.ANDROID) throw new Exception("Android interface type not yet implemented.");
+		if (iType == InterfaceType.IOS) throw new Exception("iOS interface type not yet implemented.");
+		return iType;
+	}
 
 	/**
 	 * @return The complete path to the candybean configuration file in this JRE
@@ -144,19 +177,4 @@ public class Candybean {
 		return CONFIG_DIR.getCanonicalPath() + File.separator
 				+ CONFIG_FILE_NAME;
 	}
-
-	//	private Level getLogLevel() {
-	//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
-	//		switch(logLevel) {
-	//		case "SEVERE": return Level.SEVERE;
-	//		case "WARNING": return Level.WARNING;
-	//		case "INFO": return Level.INFO;
-	//		case "FINE": return Level.FINE;
-	//		case "FINER": return Level.FINER;
-	//		case "FINEST": return Level.FINEST;
-	//		default:
-	//			log.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
-	//			return Level.INFO;
-	//		}
-	//	}
 }

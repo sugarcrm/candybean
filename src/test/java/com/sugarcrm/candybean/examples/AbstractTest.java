@@ -20,18 +20,16 @@ import com.sugarcrm.candybean.utilities.Utils;
  */
 public abstract class AbstractTest {
 
-	protected static Candybean candybean;
-
 	/**
 	 * The VInterface used to conduct this test
 	 */
-	protected static VInterface iface;
+	protected VInterface iface;
 
 	/**
 	 * Candybean logger
 	 */
-	protected static Logger logger;
-
+	protected Logger logger;
+	
 	/**
 	 * Starts the VInterface to be used for this test, and initializes the logger for this test
 	 * by adding a new FileHandler specific to this tests class.
@@ -39,8 +37,7 @@ public abstract class AbstractTest {
 	 */
 	@Before
 	public void initialize() throws Exception {
-		candybean = AbstractTest.configureCandybean();
-		iface = candybean.getInterface();
+		iface = AbstractTest.configureCandybean().getInterface();
 		FileHandler fh = new FileHandler("./log/"
 				+ this.getClass().getSimpleName() + ".log");
 		logger = Logger.getLogger(this.getClass().getSimpleName());
@@ -54,7 +51,7 @@ public abstract class AbstractTest {
 	 * @throws Exception
 	 *             If default configuration files do not exist.
 	 */
-	private static Candybean configureCandybean() throws Exception {
+	protected static Candybean configureCandybean() throws Exception {
 		Candybean candybean;
 		String candybeanConfigStr = System
 				.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);

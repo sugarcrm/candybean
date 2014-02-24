@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -74,47 +76,27 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
  * driver is instantiated for use to write tests.
  *
  */
-public class VInterface {
+public abstract class VInterface {
 
-	public enum Type { FIREFOX, IE, CHROME, SAFARI, ANDROID, IOS }
-
-	private final Candybean candybean;
-	private final Configuration config;
-
+	protected DesiredCapabilities capabilities;
 	public WebDriver wd = null;
-	private Type iType = null;
-//	public final AndroidInterface vac; //vac as in candybean android control
+	public final Logger logger;
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
+	
 
 	/**
-	 * Instantiate VInterface; Deprecated in favor of the type-less
-	 * constructor (where type is given during start or from config)
+	 * Instantiate VInterface;
 	 *
 	 * @param candybean  {@link Candybean} object
 	 * @param config   {@link Configuration} for this test run
-	 * @param iType   {@link IInterface.Type} of interface to run
 	 * @throws Exception
 	 */
-	@Deprecated
-	public VInterface(Candybean candybean, Configuration config, Type iType)
+	protected VInterface(DesiredCapabilities capabilities)
 			throws Exception {
-		this.candybean = candybean;
-		this.config = config;
-		this.iType = iType;
+		this.capabilities = capabilities;
+		this.logger = Logger.getLogger(this.getClass().getName());
 	}
 	
-	/**
-	 * Instantiate VInterface
-	 *
-	 * @param candybean  {@link Candybean} object
-	 * @param config   {@link Configuration} for this test run
-	 * @throws Exception
-	 */
-	public VInterface(Candybean candybean, Configuration config)
-			throws Exception {
-		this.candybean = candybean;
-		this.config = config;
-	}
 
 	/**
 	 * Pause the test for the specified duration.
@@ -123,7 +105,7 @@ public class VInterface {
 	 * @throws Exception	 if the underlying {@link Thread#sleep} is interrupted
 	 */
 	public void pause(long ms) throws Exception {
-		candybean.log.info("Pausing for " + ms + "ms via thread sleep.");
+		logger.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
 
@@ -134,7 +116,7 @@ public class VInterface {
 	 * @throws Exception	if the program is running headless (with no GUI)
 	 */
 	public void interact(String message) {
-		candybean.log.info("Interaction via popup dialog with message: " + message);
+		logger.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
 	}
 	
@@ -145,74 +127,21 @@ public class VInterface {
 	 * @throws Exception	
 	 */
 	public void screenshot(File file) throws Exception {
-		this.candybean.log.info("Taking screenshot; saving to file: " + file.toString());
+		this.logger.info("Taking screenshot; saving to file: " + file.toString());
 		Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		BufferedImage screenshot = (new Robot()).createScreenCapture(screen);
 		ImageIO.write(screenshot, "png", file);
 	}
 
-	/**
-	 * Launch and initialize an interface with type defined
-	 * during instantiation.
-	 * 
-	 * @throws Exception		if type is undefined during instantiation
-	 */
-	public void start() throws Exception {
-		this.iType = this.parseInterfaceType(this.config.getValue("automation.interface", "chrome"));
-		this.start(this.iType);
-	}
 
-	/**
-	 * Launch and initialize an interface.
-	 * 
-	 * @param iType			The interface type to start automation 
-	 * @throws Exception
-	 */
-	public void start(Type iType) throws Exception {
-		candybean.log.info("Starting automation interface with type: " + iType);
-//		if (iType == Type.ANDROID) {
-//			this.vac = this.getAndroidControl();
-//			this.wd = null;
-//		}
-//		else {
-//			this.wd = this.getWebDriver(iType);
-//			this.vac = null;
-//			this.start();
-//		}
-		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
-		this.iType = iType;
-		this.wd = this.getWebDriver(iType);
-		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
-	}
-	
-
-	/**
-	 * Launch and initialize an interface.
-	 * @param iType			The interface type to start automation 
-	 * @param capabilities	The desired capabilities to assign for the interface (for iOS and Android interfaces)
-	 * @throws Exception
-	 */
-	public void start(Type iType, DesiredCapabilities capabilities) throws Exception {
-		candybean.log.info("Starting automation interface with type: " + iType);
-		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
-		this.iType = iType;
-		this.wd = this.getWebDriver(iType, capabilities);
-	}
+	protected abstract void start() throws MalformedURLException;
 
 	/**
 	 * Close the interface and perform final cleanup.
 	 *
 	 * @throws Exception
 	 */
-	public void stop() throws Exception {
-		candybean.log.info("Stopping automation interface with type: " + this.iType);
-		this.windows.clear();
-		this.iType = null;
-		if (this.wd != null) {
-			this.wd.quit();
-			this.wd = null;
-		} else candybean.log.warning("Automation interface already stopped.");
-	}
+	public abstract void stop() throws Exception;
 	
 	/**
 	 * Refreshes the interface.  If refresh is undefined, it does nothing.
@@ -220,7 +149,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void refresh() throws Exception {
-		candybean.log.info("Refreshing the interface.");
+		logger.info("Refreshing the interface.");
 		this.wd.navigate().refresh();
 	}
 
@@ -229,13 +158,7 @@ public class VInterface {
 	 * 
 	 * @throws Exception
 	 */
-	public void restart() throws Exception {
-		candybean.log.info("Restarting automation interface with type: " + this.iType);
-		if (this.wd == null) throw new Exception("Automation interface not yet started; cannot restart.");
-		Type type = this.iType;
-		this.stop();
-		this.start(type);
-	}
+	public abstract void restart() throws Exception;
 
 	/**
 	 * Load a URL in the browser window.
@@ -244,9 +167,8 @@ public class VInterface {
 	 * @throws Exception		<i>not thrown</i>
 	 */
 	public void go(String url) throws Exception {
-		candybean.log.info("Going to URL and switching to window: " + url);
+		logger.info("Going to URL and switching to window: " + url);
 		this.wd.get(url);
-//		this.wd.switchTo().window(this.wd.getWindowHandle());
 	}
 	
 	/**
@@ -257,7 +179,7 @@ public class VInterface {
 	 */
 	public String getURL() throws Exception {
 		String url = this.wd.getCurrentUrl();
-		candybean.log.info("Getting URL " + url);
+		logger.info("Getting URL " + url);
 		return url;
 	}
 
@@ -267,7 +189,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void backward() throws Exception {
-		candybean.log.info("Navigating the interface backward.");
+		logger.info("Navigating the interface backward.");
 		this.wd.navigate().back();
 	}
 
@@ -284,13 +206,12 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
-		candybean.log.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
+		logger.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
 		if (!caseSensitive) s = s.toLowerCase();
 		List<WebElement> wes = this.wd.findElements(By.xpath("//*[not(@visible='false')]"));
 		for (WebElement we : wes) {
 			String text = we.getText();
 			if (!caseSensitive) text = text.toLowerCase();
-//			System.out.println("text: " + text);
 			if (text.contains(s)) return true;
 		}
 		return false;
@@ -302,7 +223,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void focusDefault() throws Exception {
-		candybean.log.info("Focusing to default content.");
+		logger.info("Focusing to default content.");
 		this.wd.switchTo().defaultContent();
 	}
 	
@@ -313,7 +234,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void focusFrame(int index) throws Exception {
-		candybean.log.info("Focusing to frame by index: " + index);
+		logger.info("Focusing to frame by index: " + index);
 		this.wd.switchTo().frame(index);
 	}
 	
@@ -324,7 +245,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void focusFrame(String nameOrId) throws Exception {
-		candybean.log.info("Focusing to frame by name or ID: " + nameOrId);
+		logger.info("Focusing to frame by name or ID: " + nameOrId);
 		this.wd.switchTo().frame(nameOrId);
 	}
 	
@@ -335,7 +256,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void focusFrame(VControl control) throws Exception {
-		candybean.log.info("Focusing to frame by control: " + control.toString());
+		logger.info("Focusing to frame by control: " + control.toString());
 		this.wd.switchTo().frame(control.we);
 	}
 	
@@ -345,10 +266,10 @@ public class VInterface {
 	 * @throws Exception	  <i>not thrown</i>
 	 */
 	public void closeWindow() throws Exception {
-		candybean.log.info("Closing window with handle: " + windows.peek());
+		logger.info("Closing window with handle: " + windows.peek());
 		this.wd.close();
 		this.windows.pop();
-		candybean.log.info("Refocusing to previous window with handle: " + windows.peek());
+		logger.info("Refocusing to previous window with handle: " + windows.peek());
 		this.wd.switchTo().window(windows.peek().y);
 	}
 
@@ -364,7 +285,7 @@ public class VInterface {
 	 */
 	public void focusWindow(int index) throws Exception {
 		if (index == windows.peek().x.intValue()) {
-			candybean.log.warning("No focus was made because the given index matched the current index: " + index);
+			logger.warning("No focus was made because the given index matched the current index: " + index);
 		} else if (index < 0) {
 			throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 		} else {
@@ -375,7 +296,7 @@ public class VInterface {
 			} else {
 				this.wd.switchTo().window(windowHandles[index]);
 				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
-				candybean.log.info("Focused by index: " + index + " to window: " + windows.peek());
+				logger.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
 		}
 	}
@@ -394,7 +315,7 @@ public class VInterface {
 		String curTitle = this.wd.getTitle();
 		String curUrl = this.wd.getCurrentUrl();
 		if (titleOrUrl.equals(curTitle) || titleOrUrl.equals(curUrl)) {
-			candybean.log.warning("No focus was made because the given string matched the current title or URL: " + titleOrUrl);
+			logger.warning("No focus was made because the given string matched the current title or URL: " + titleOrUrl);
 		} else {
 			Set<String> windowHandlesSet = this.wd.getWindowHandles();
 			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
@@ -404,7 +325,7 @@ public class VInterface {
 				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
 					windows.push(new Pair<Integer, String>(new Integer(i), this.wd.getWindowHandle()));
-					candybean.log.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
+					logger.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
 					windowFound = true;
 				}
 				i++;
@@ -422,7 +343,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void forward() throws Exception {
-		candybean.log.info("Navigating the interface forward.");
+		logger.info("Navigating the interface forward.");
 		this.wd.navigate().forward();
 	}
 	
@@ -447,9 +368,8 @@ public class VInterface {
 	 * @throws Exception	 <i>not thrown</i>
 	 */
 	public void maximize() {
-		candybean.log.info("Maximizing window");
-//		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.wd.manage().window().maximize();//.setSize(new Dimension(screenSize.width, screenSize.height));
+		logger.info("Maximizing window");
+		this.wd.manage().window().maximize();
 	}
 
 	/**
@@ -459,7 +379,7 @@ public class VInterface {
 	 * @throws Exception	 <i>not thrown</i>
 	 */
 	public VControl getControl(VHook hook) throws Exception {
-		return new VControl(this.candybean, this, hook);
+		return new VControl(this, hook);
 	}
 
 	/**
@@ -469,7 +389,7 @@ public class VInterface {
 	 * @throws Exception	 <i>not thrown</i>
 	 */
 	public VControl getControl(VHook hook, int index) throws Exception {
-		return new VControl(this.candybean, this, hook, index);
+		return new VControl(this, hook, index);
 	}
 
 	/**
@@ -505,7 +425,7 @@ public class VInterface {
 		List<VControl> controls = new ArrayList<VControl>();
 		List<WebElement> wes = this.wd.findElements(VControl.makeBy(strategy, hook.hookString));
 		for (WebElement we : wes)
-			controls.add(new VControl(this.candybean, this, hook, we));
+			controls.add(new VControl(this, hook, we));
 		return controls;
 	}
 
@@ -527,7 +447,7 @@ public class VInterface {
 	 * @throws Exception	 <i>not thrown</i>
 	 */
 	public VSelect getSelect(VHook hook) throws Exception {
-		return new VSelect(this.candybean, this, hook);
+		return new VSelect(this, hook);
 	}
 
 	/**
@@ -541,16 +461,6 @@ public class VInterface {
 		return this.getSelect(new VHook(strategy, hook));
 	}
 	
-	
-	/**
-	 * Returns the predefined type of interface instantiated.
-	 * 
-	 * @return	The type of interface
-	 */
-	public Type getType() {
-		return this.iType;
-	}
-	
 	/**
 	 * Click &quot;OK&quot; on a modal dialog box (usually referred to
 	 * as a &quot;javascript dialog&quot;).
@@ -559,11 +469,10 @@ public class VInterface {
 	 */
 	public void acceptDialog() throws Exception {
 		try {
-			candybean.log.info("Accepting dialog.");
+			logger.info("Accepting dialog.");
 			this.wd.switchTo().alert().accept();
-//			this.wd.switchTo().defaultContent();
 		} catch(UnhandledAlertException uae) {
-			candybean.log.warning("Unhandled alert exception");
+			logger.warning("Unhandled alert exception");
 		}
 	}
 	
@@ -575,11 +484,10 @@ public class VInterface {
 	 */
 	public void dismissDialog() throws Exception {
 		try {
-			candybean.log.info("Dismissing dialog.");
+			logger.info("Dismissing dialog.");
 			this.wd.switchTo().alert().dismiss();
-//			this.wd.switchTo().defaultContent();
 		} catch(UnhandledAlertException uae) {
-			candybean.log.warning("Unhandled alert exception");
+			logger.warning("Unhandled alert exception");
 		}
 	}
 
@@ -593,14 +501,13 @@ public class VInterface {
 	public boolean isDialogVisible() {
 		try { 
 			this.wd.switchTo().alert(); 
-//			this.wd.switchTo().defaultContent();
-			candybean.log.info("Dialog present?: true.");
+			logger.info("Dialog present?: true.");
 			return true;
 		} catch(UnhandledAlertException uae) {
-			candybean.log.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored dialog...");
+			logger.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored dialog...");
 			return true;
 		} catch(NoAlertPresentException nape) {
-			candybean.log.info("Dialog present?: false.");
+			logger.info("Dialog present?: false.");
 			return false;
 		}
 	}
@@ -634,99 +541,99 @@ public class VInterface {
 		return this.getControl(hook);
 	}
 	
-	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
-		VInterface.Type iType = null;
-		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
-			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
-				iType = iTypeIter;
-				break;
-			}
-		}
-		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
-		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
-		return iType;
-	}
+//	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
+//		VInterface.Type iType = null;
+//		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
+//			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
+//				iType = iTypeIter;
+//				break;
+//			}
+//		}
+//		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
+//		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
+//		return iType;
+//	}
 	
-	private WebDriver getWebDriver(Type iType, DesiredCapabilities capabilities) throws Exception {
-        WebDriver wd = null;
-        switch (iType) {
-	        case ANDROID:
-	    		capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
-	    		capabilities.setCapability(CapabilityType.VERSION, "4.4.2");
-	    		capabilities.setCapability("device", "Android");
-	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-	            break;
-	        case IOS:
-	            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
-	            capabilities.setCapability(CapabilityType.VERSION, "6.0");
-	            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-	            break;
-	        default:
-				throw new Exception("Selenium: browser type not recognized.");
-        }
-		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
-		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-		return wd;
-		
-	}
-
-	private WebDriver getWebDriver(Type iType) throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-//        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
-        WebDriver wd = null;
-        switch (iType) {
-		case FIREFOX:
-			String profileName = this.config.getValue("browser.firefox_profile", "default");
-			File ffBinaryPath = new File(this.config.getPathValue("browser.firefox_binary"));
-			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
-//			ffProfile.setEnableNativeEvents(false);
-			FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
-			// if (System.getProperty("headless") != null) {
-			// FirefoxBinary ffBinary = new FirefoxBinary();//new
-			// File("//home//conrad//Applications//firefox-10//firefox"));
-			// ffBinary.setEnvironmentProperty("DISPLAY", ":1");
-			// webDriver = new FirefoxDriver(ffBinary, ffProfile);
-			// }
-			candybean.log.info("Instantiating Firefox with profile name: "
-					+ profileName + " and binary path: " + ffBinaryPath);
-			wd = new FirefoxDriver(ffBinary, ffProfile);
-			break;
-		case CHROME:
-			ChromeOptions chromeOptions = new ChromeOptions();
-			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
-			candybean.log.info("chromeDriverLogPath: " + chromeDriverLogPath);
-			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
-			candybean.log.info("chromeDriverPath: " + chromeDriverPath);
-			// chromeOptions.setBinary(new File(chromeDriverPath));
-			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-			candybean.log.info("Instantiating Chrome with:\n    log path:"
-					+ chromeDriverLogPath + "\n    driver path: "
-					+ chromeDriverPath);
-			wd = new ChromeDriver(chromeOptions);
-			break;
-		case IE:
-			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
-			candybean.log.info("ieDriverPath: " + ieDriverPath);
-			System.setProperty("webdriver.ie.driver", ieDriverPath);
-			capabilities = DesiredCapabilities.internetExplorer();
-			wd = new InternetExplorerDriver(capabilities);
-			break;
-		case SAFARI:
-			throw new Exception("Selenium: safari browser not yet supported.");
-
-        default:
-			throw new Exception("Selenium: browser type not recognized.");
-		}
-		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
-		if (System.getProperty("headless") == null && !iType.equals(Type.ANDROID)) {
-			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
-		}
-		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-		return wd;
-	}
+//	private WebDriver getWebDriver(Type iType, DesiredCapabilities capabilities) throws Exception {
+//        WebDriver wd = null;
+//        switch (iType) {
+//	        case ANDROID:
+//	    		capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+//	    		capabilities.setCapability(CapabilityType.VERSION, "4.4.2");
+//	    		capabilities.setCapability("device", "Android");
+//	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+//	            break;
+//	        case IOS:
+//	            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+//	            capabilities.setCapability(CapabilityType.VERSION, "6.0");
+//	            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+//	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+//	            break;
+//	        default:
+//				throw new Exception("Selenium: browser type not recognized.");
+//        }
+//		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
+//		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+//		return wd;
+//		
+//	}
+//
+//	private WebDriver getWebDriver(Type iType) throws Exception {
+//        DesiredCapabilities capabilities = new DesiredCapabilities();
+////        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
+//        WebDriver wd = null;
+//        switch (iType) {
+//		case FIREFOX:
+//			String profileName = this.config.getValue("browser.firefox_profile", "default");
+//			File ffBinaryPath = new File(this.config.getPathValue("browser.firefox_binary"));
+//			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
+////			ffProfile.setEnableNativeEvents(false);
+//			FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
+//			// if (System.getProperty("headless") != null) {
+//			// FirefoxBinary ffBinary = new FirefoxBinary();//new
+//			// File("//home//conrad//Applications//firefox-10//firefox"));
+//			// ffBinary.setEnvironmentProperty("DISPLAY", ":1");
+//			// webDriver = new FirefoxDriver(ffBinary, ffProfile);
+//			// }
+//			logger.info("Instantiating Firefox with profile name: "
+//					+ profileName + " and binary path: " + ffBinaryPath);
+//			wd = new FirefoxDriver(ffBinary, ffProfile);
+//			break;
+//		case CHROME:
+//			ChromeOptions chromeOptions = new ChromeOptions();
+//			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
+//			logger.info("chromeDriverLogPath: " + chromeDriverLogPath);
+//			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
+//			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
+//			logger.info("chromeDriverPath: " + chromeDriverPath);
+//			// chromeOptions.setBinary(new File(chromeDriverPath));
+//			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+//			logger.info("Instantiating Chrome with:\n    log path:"
+//					+ chromeDriverLogPath + "\n    driver path: "
+//					+ chromeDriverPath);
+//			wd = new ChromeDriver(chromeOptions);
+//			break;
+//		case IE:
+//			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
+//			logger.info("ieDriverPath: " + ieDriverPath);
+//			System.setProperty("webdriver.ie.driver", ieDriverPath);
+//			capabilities = DesiredCapabilities.internetExplorer();
+//			wd = new InternetExplorerDriver(capabilities);
+//			break;
+//		case SAFARI:
+//			throw new Exception("Selenium: safari browser not yet supported.");
+//
+//        default:
+//			throw new Exception("Selenium: browser type not recognized.");
+//		}
+//		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
+//		if (System.getProperty("headless") == null && !iType.equals(Type.ANDROID)) {
+//			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+//		}
+//		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+//		return wd;
+//	}
 	
 	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
 		private RemoteTouchScreen touch;
@@ -740,6 +647,24 @@ public class VInterface {
 		public TouchScreen getTouch() {
 			return touch;
 		}
+	}
+
+	public InterfaceType getType() {
+		InterfaceType type = null;
+		if(this instanceof AndroidInterface){
+			type = InterfaceType.ANDROID;
+		}else if (this instanceof AndroidInterface){
+			type = InterfaceType.CHROME;
+		}else if (this instanceof AndroidInterface){
+			type = InterfaceType.FIREFOX;
+		}else if (this instanceof AndroidInterface){
+			type = InterfaceType.IE;
+		}else if (this instanceof AndroidInterface){
+			type = InterfaceType.IOS;
+		}else if (this instanceof AndroidInterface){
+			type = InterfaceType.SAFARI;
+		}
+		return type;
 	}
 
 	// ANDROID ROBOTIUM FUNCTIONALITY

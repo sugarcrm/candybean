@@ -41,28 +41,25 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
  */
 public class VControl {
 	
-	
-	protected final Candybean voodoo;
 	protected final VInterface iface;
 	protected final VHook hook;
 	protected int index;
 	public WebElement we;
 	public Pause pause;
 	
-	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook) throws Exception {
-		this(voodoo, iface, new VHook(strategy, hook));
+	public VControl(VInterface iface, Strategy strategy, String hook) throws Exception {
+		this(iface, new VHook(strategy, hook));
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook, int index) throws Exception {
-		this(voodoo, iface, new VHook(strategy, hook), index);
+	public VControl(VInterface iface, Strategy strategy, String hook, int index) throws Exception {
+		this(iface, new VHook(strategy, hook), index);
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, VHook hook) throws Exception {
-		this(voodoo, iface, hook, 0);
+	public VControl(VInterface iface, VHook hook) throws Exception {
+		this(iface, hook, 0);
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, VHook hook, int index) throws Exception {
-			this.voodoo = voodoo;
+	public VControl(VInterface iface, VHook hook, int index) throws Exception {
 			this.iface = iface;
 			List<WebElement> wes = iface.wd.findElements(VControl.makeBy(hook));
 			if (wes.size() == 0) throw new Exception("Control not found; zero web elements returned.");
@@ -72,8 +69,7 @@ public class VControl {
 			this.index = index;
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
-		this.voodoo = voodoo;
+	public VControl(VInterface iface, VHook hook, WebElement we) throws Exception {
 		this.iface = iface;
 		this.hook = hook;
 		this.we = we;
@@ -88,14 +84,14 @@ public class VControl {
 	 *							 cannot be found
 	 */
 	public String getAttribute(String attribute) throws Exception {
-		voodoo.log.info("Selenium: getting attribute: " + attribute	+ " for control: " + this.toString());
+		iface.logger.info("Selenium: getting attribute: " + attribute	+ " for control: " + this.toString());
 		String value = we.getAttribute(attribute);
 		if (value == null) throw new Exception("Selenium: attribute does not exist.");
 		else return value;
 	}
 
 	public String getSource() throws Exception {
-		voodoo.log.info("Selenium: getting source for control: " + this.toString());
+		iface.logger.info("Selenium: getting source for control: " + this.toString());
 		return (String)((JavascriptExecutor)iface.wd).executeScript("return arguments[0].innerHTML;", this.we);
 	}
 
@@ -106,7 +102,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public String getText() throws Exception {
-		voodoo.log.info("Selenium: getting text for control: " + this.toString());
+		iface.logger.info("Selenium: getting text for control: " + this.toString());
 //		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
 		String type = we.getAttribute("type");
 		if (type != null) {
@@ -123,7 +119,7 @@ public class VControl {
 	 * @throws Exception	 if the element can not be found
 	 */
 	public void click() throws Exception {
-		voodoo.log.info("Selenium: clicking on control: " + this.toString());
+		iface.logger.info("Selenium: clicking on control: " + this.toString());
 		we.click();
 	}
 	
@@ -140,7 +136,7 @@ public class VControl {
 	 * @throws Exception
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
-		voodoo.log.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
+		iface.logger.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
 		if (!caseSensitive) s = s.toLowerCase();
 		List<WebElement> wes = this.we.findElements(By.xpath(".//*[not(@visible='false')]"));
 		wes.add(this.we);
@@ -159,7 +155,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void doubleClick() throws Exception {
-		voodoo.log.info("Selenium: double-clicking on control: " + this.toString());
+		iface.logger.info("Selenium: double-clicking on control: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.doubleClick(we).perform();
 	}
@@ -171,7 +167,7 @@ public class VControl {
 	 * @throws Exception	 if either element cannot be found
 	 */
 	public void dragNDrop(VControl dropControl)	throws Exception {
-		voodoo.log.info("Selenium: dragging control: " + this.toString() + " to control: " + dropControl.toString());
+		iface.logger.info("Selenium: dragging control: " + this.toString() + " to control: " + dropControl.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.dragAndDrop(this.we, dropControl.we).build().perform();
 	}
@@ -181,9 +177,9 @@ public class VControl {
 	}
 
 	public VControl getControl(VHook hook, int index) throws Exception {
-		voodoo.log.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
+		iface.logger.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
 		WebElement childWe = this.we.findElements(VControl.makeBy(hook)).get(index);
-		return new VControl(this.voodoo, this.iface, hook, childWe);
+		return new VControl(this.iface, hook, childWe);
 	}
 
 	public VControl getControl(Strategy strategy, String hookString) throws Exception {
@@ -196,7 +192,7 @@ public class VControl {
 
 //	@Deprecated
 //	public void pause(String attribute, String value, int timeout) throws Exception {
-//		voodoo.log.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
+//		iface.logger.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
 //				+ " to have attribute: " + attribute + " to have value: " + value);
 //		final WebElement we = this.getWebElement(this.getBy(this.hook), 0);
 //		final String vAttribute = attribute;
@@ -215,7 +211,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void hover() throws Exception {
-		voodoo.log.info("Selenium: hovering over control: " + this.toString());
+		iface.logger.info("Selenium: hovering over control: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.moveToElement(this.we).perform();
 	}
@@ -227,7 +223,7 @@ public class VControl {
 	 * @throws Exception
 	 */
 	public boolean isDisplayed() throws Exception {
-		voodoo.log.info("Selenium: determining if control is visible: " + this.toString());
+		iface.logger.info("Selenium: determining if control is visible: " + this.toString());
 		return we.isDisplayed();
 	}
 
@@ -237,7 +233,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void rightClick() throws Exception {
-		voodoo.log.info("Selenium: right-clicking control: " + this.toString());
+		iface.logger.info("Selenium: right-clicking control: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.contextClick(this.we).perform();
 	}
@@ -248,7 +244,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found or if the scroll fails
 	 */
 	public void scroll() throws Exception {
-		voodoo.log.info("Selenium: scrolling to control: " + this.toString());
+		iface.logger.info("Selenium: scrolling to control: " + this.toString());
 		int y = this.we.getLocation().y;
 		((JavascriptExecutor) this.iface.wd).executeScript("window.scrollBy(0," + y + ");");
 	}
@@ -260,7 +256,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void sendString(String input) throws Exception {
-		voodoo.log.info("Selenium: sending string: " + input + " to control: " + this.toString());
+		iface.logger.info("Selenium: sending string: " + input + " to control: " + this.toString());
 		this.we.clear();
 		
 		// Re-find the element to avoid the stale element problem.

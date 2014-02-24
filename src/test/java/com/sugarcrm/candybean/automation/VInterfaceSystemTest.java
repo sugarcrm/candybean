@@ -29,8 +29,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import com.sugarcrm.candybean.automation.VInterface.Type;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
@@ -52,7 +51,6 @@ public class VInterfaceSystemTest {
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getInterface();
-		iface.start();
 	}
 	
 //	@Ignore
@@ -96,7 +94,7 @@ public class VInterfaceSystemTest {
 		String actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
 		iface.stop();
-		iface.start(Type.FIREFOX);
+		iface = new FirefoxInterface(new DesiredCapabilities());
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
@@ -105,7 +103,7 @@ public class VInterfaceSystemTest {
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
 		iface.stop();
-		iface.start(Type.CHROME);
+		iface = new ChromeInterface(new DesiredCapabilities());
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
@@ -147,7 +145,7 @@ public class VInterfaceSystemTest {
 		assertFalse(iface.isDialogVisible());
 		
 		// Dismiss not available in Chrome
-		if (!iface.getType().equals(Type.CHROME)) {
+		if (!iface.getType().equals(InterfaceType.CHROME)) {
 			iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
 			assertTrue(iface.isDialogVisible());
 			iface.dismissDialog();
@@ -204,7 +202,7 @@ public class VInterfaceSystemTest {
 		assertEquals(expDefStr, actDefStr);
 		
 		// switch to focus by control
-		iface.focusFrame(new VControl(candybean, iface, Strategy.ID, "imgbox"));
+		iface.focusFrame(new VControl(iface, Strategy.ID, "imgbox"));
 		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
 		assertEquals(expFrmStr, actFrmStr);
 		
