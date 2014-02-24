@@ -119,14 +119,56 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>drivers</artifactId>
+									<artifactId>chromedriver_linux32</artifactId>
+									<version>2.9.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>chromedriver_win32</artifactId>
+									<version>2.9.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>chromedriver_mac32</artifactId>
+									<version>2.9.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>chromedriver_linux64</artifactId>
+									<version>2.9.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>IEDriverServer-32</artifactId>
+									<version>2.39.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>IEDriverServer-64</artifactId>
+									<version>2.39.0</version>
+									<type>zip</type>
+									<outputDirectory>${project.basedir}/lib</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.sugarcrm.candybean.binaries</groupId>
+									<artifactId>evernote_apk</artifactId>
 									<version>1.0.0</version>
 									<type>zip</type>
 									<outputDirectory>${project.basedir}/lib</outputDirectory>
 								</artifactItem>
 								<artifactItem>
 									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>apks</artifactId>
+									<artifactId>testapp_apk</artifactId>
 									<version>1.0.0</version>
 									<type>zip</type>
 									<outputDirectory>${project.basedir}/lib</outputDirectory>
@@ -262,13 +304,49 @@
 			</dependency -->
 		<dependency>
 			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>apks</artifactId>
+			<artifactId>chromedriver_linux32</artifactId>
+			<version>2.9.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>chromedriver_win32</artifactId>
+			<version>2.9.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>chromedriver_mac32</artifactId>
+			<version>2.9.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>chromedriver_linux64</artifactId>
+			<version>2.9.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>IEDriverServer-32</artifactId>
+			<version>2.39.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>IEDriverServer-64</artifactId>
+			<version>2.39.0</version>
+			<type>distribution-zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sugarcrm.candybean.binaries</groupId>
+			<artifactId>evernote_apk</artifactId>
 			<version>1.0.0</version>
 			<type>distribution-zip</type>
 		</dependency>
 		<dependency>
 			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>drivers</artifactId>
+			<artifactId>testapp_apk</artifactId>
 			<version>1.0.0</version>
 			<type>distribution-zip</type>
 		</dependency>
