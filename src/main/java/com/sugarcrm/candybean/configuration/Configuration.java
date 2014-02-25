@@ -216,6 +216,14 @@ public class Configuration {
     public void store(OutputStream out) throws IOException {
         properties.store(out, null);
     }
+    
+    /**
+     * Describes this Configuration object in string format.
+     */
+    @Override
+    public String toString() {
+        return "Configuration(" + properties.toString() + ")";
+    }
 
     /**
      * Clears the Properties object so that it contains no keys.

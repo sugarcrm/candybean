@@ -45,27 +45,27 @@ import com.thoughtworks.selenium.SeleniumException;
 public class VControl {
 	
 	
-	private final Candybean voodoo;
+	private final Candybean candybean;
 	private final VInterface iface;
 	private final VHook hook;
 	private int index;
 	private WebElement we;
 	public Pause pause;
 	
-	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook) throws CandybeanException {
-		this(voodoo, iface, new VHook(strategy, hook));
+	public VControl(Candybean candybean, VInterface iface, Strategy strategy, String hook) throws CandybeanException {
+		this(candybean, iface, new VHook(strategy, hook));
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook, int index) throws CandybeanException {
-		this(voodoo, iface, new VHook(strategy, hook), index);
+	public VControl(Candybean candybean, VInterface iface, Strategy strategy, String hook, int index) throws CandybeanException {
+		this(candybean, iface, new VHook(strategy, hook), index);
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, VHook hook) throws CandybeanException {
-		this(voodoo, iface, hook, 0);
+	public VControl(Candybean candybean, VInterface iface, VHook hook) throws CandybeanException {
+		this(candybean, iface, hook, 0);
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, VHook hook, int index) throws CandybeanException {
-			this.voodoo = voodoo;
+	public VControl(Candybean candybean, VInterface iface, VHook hook, int index) throws CandybeanException {
+			this.candybean = candybean;
 			this.iface = iface;
 			List<WebElement> wes = iface.wd.findElements(VControl.makeBy(hook));
 			if (wes.size() == 0) {
@@ -77,8 +77,8 @@ public class VControl {
 			this.setIndex(index);
 	}
 	
-	public VControl(Candybean voodoo, VInterface iface, VHook hook, WebElement we) {
-		this.voodoo = voodoo;
+	public VControl(Candybean candybean, VInterface iface, VHook hook, WebElement we) {
+		this.candybean = candybean;
 		this.iface = iface;
 		this.hook = hook;
 		this.setWe(we);
@@ -93,7 +93,7 @@ public class VControl {
 	 *							 cannot be found
 	 */
 	public String getAttribute(String attribute) throws CandybeanException {
-		getVoodoo().log.info("Selenium: getting attribute: " + attribute	+ " for control: " + this.toString());
+		Candybean.LOG.info("Selenium: getting attribute: " + attribute	+ " for control: " + this.toString());
 		String value = getWe().getAttribute(attribute);
 		if (value == null) {
 			throw new CandybeanException("Selenium: attribute " + value + "does not exist for element " + getWe().toString());
@@ -103,7 +103,7 @@ public class VControl {
 	}
 
 	public String getSource() {
-		getVoodoo().log.info("Selenium: getting source for control: " + this.toString());
+		Candybean.LOG.info("Selenium: getting source for control: " + this.toString());
 		return (String)((JavascriptExecutor)getIface().wd).executeScript("return arguments[0].innerHTML;", this.getWe());
 	}
 
@@ -113,7 +113,7 @@ public class VControl {
 	 * @return the visible text of this element
 	 */
 	public String getText() {
-		getVoodoo().log.info("Selenium: getting text for control: " + this.toString());
+		Candybean.LOG.info("Selenium: getting text for control: " + this.toString());
 //		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
 		String type = getWe().getAttribute("type");
 		if (type != null && (type.equalsIgnoreCase("button") || type.equalsIgnoreCase("input"))) {
@@ -126,7 +126,7 @@ public class VControl {
 	 * Click the element.
 	 */
 	public void click() {
-		getVoodoo().log.info("Selenium: clicking on control: " + this.toString());
+		Candybean.LOG.info("Selenium: clicking on control: " + this.toString());
 		getWe().click();
 	}
 	
@@ -142,7 +142,7 @@ public class VControl {
 	 * contains the given string
 	 */
 	public boolean contains(String s, boolean caseSensitive) {
-		getVoodoo().log.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
+		Candybean.LOG.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
 		String lowercase = s;
 		if (!caseSensitive) {
 			lowercase = s.toLowerCase();
@@ -166,7 +166,7 @@ public class VControl {
 	 * Double-click the element.
 	 */
 	public void doubleClick() {
-		getVoodoo().log.info("Selenium: double-clicking on control: " + this.toString());
+		Candybean.LOG.info("Selenium: double-clicking on control: " + this.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.doubleClick(getWe()).perform();
 	}
@@ -177,7 +177,7 @@ public class VControl {
 	 * @param dropControl  target of the drag and drop
 	 */
 	public void dragNDrop(VControl dropControl)	{
-		getVoodoo().log.info("Selenium: dragging control: " + this.toString() + " to control: " + dropControl.toString());
+		Candybean.LOG.info("Selenium: dragging control: " + this.toString() + " to control: " + dropControl.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.dragAndDrop(this.getWe(), dropControl.getWe()).build().perform();
 	}
@@ -187,7 +187,7 @@ public class VControl {
 	}
 
 	public VControl getControl(VHook hook, int index) {
-		getVoodoo().log.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
+		Candybean.LOG.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
 		WebElement childWe = this.getWe().findElements(VControl.makeBy(hook)).get(index);
 		return new VControl(this.getVoodoo(), this.getIface(), hook, childWe);
 	}
@@ -202,7 +202,7 @@ public class VControl {
 
 //	@Deprecated
 //	public void pause(String attribute, String value, int timeout) throws Exception {
-//		voodoo.log.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
+//		candybean.log.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
 //				+ " to have attribute: " + attribute + " to have value: " + value);
 //		final WebElement we = this.getWebElement(this.getBy(this.hook), 0);
 //		final String vAttribute = attribute;
@@ -220,7 +220,7 @@ public class VControl {
 	 *
 	 */
 	public void hover() {
-		getVoodoo().log.info("Selenium: hovering over control: " + this.toString());
+		Candybean.LOG.info("Selenium: hovering over control: " + this.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.moveToElement(this.getWe()).perform();
 	}
@@ -231,7 +231,7 @@ public class VControl {
 	 *
 	 */
 	public boolean isDisplayed() {
-		getVoodoo().log.info("Selenium: determining if control is visible: " + this.toString());
+		Candybean.LOG.info("Selenium: determining if control is visible: " + this.toString());
 		return getWe().isDisplayed();
 	}
 
@@ -240,7 +240,7 @@ public class VControl {
 	 *
 	 */
 	public void rightClick() {
-		getVoodoo().log.info("Selenium: right-clicking control: " + this.toString());
+		Candybean.LOG.info("Selenium: right-clicking control: " + this.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.contextClick(this.getWe()).perform();
 	}
@@ -249,7 +249,7 @@ public class VControl {
 	 * Scroll the browser window to this control.
 	 */
 	public void scroll() {
-		getVoodoo().log.info("Selenium: scrolling to control: " + this.toString());
+		Candybean.LOG.info("Selenium: scrolling to control: " + this.toString());
 		int y = this.getWe().getLocation().y;
 		((JavascriptExecutor) this.getIface().wd).executeScript("window.scrollBy(0," + y + ");");
 	}
@@ -259,7 +259,7 @@ public class VControl {
 	 * @param input  string to send
 	 */
 	public void sendString(String input) {
-		getVoodoo().log.info("Selenium: sending string: " + input + " to control: " + this.toString());
+		Candybean.LOG.info("Selenium: sending string: " + input + " to control: " + this.toString());
 		this.getWe().clear();
 		// Re-find the element to avoid the stale element problem.
 		this.setWe(getIface().wd.findElements(VControl.makeBy(getHook())).get(getIndex()));
@@ -303,7 +303,7 @@ public class VControl {
 	}
 
 	protected Candybean getVoodoo() {
-		return voodoo;
+		return candybean;
 	}
 
 	protected VInterface getIface() {

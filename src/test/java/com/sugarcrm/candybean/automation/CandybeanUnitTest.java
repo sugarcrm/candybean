@@ -42,7 +42,7 @@ public class CandybeanUnitTest {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		Candybean voodoo = Candybean.getInstance(candybeanConfig);
-		voodoo.log.info("TEST VOODOO LOG");
+		Candybean candybean = Candybean.getInstance(candybeanConfig);
+		Candybean.LOG.info("TEST VOODOO LOG");
 	}
 }
