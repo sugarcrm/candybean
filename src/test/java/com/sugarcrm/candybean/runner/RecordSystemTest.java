@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.sugarcrm.candybean.examples.AbstractTest;
@@ -34,6 +35,7 @@ public class RecordSystemTest extends AbstractTest{
 		assertEquals(amazonUrl, iface.getURL());		
 	}
 	
+	@Ignore
 	@Test
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
