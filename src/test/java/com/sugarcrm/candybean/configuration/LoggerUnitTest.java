@@ -12,9 +12,11 @@ import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
+import org.junit.Before;
 import org.junit.Test;
 
-import com.sugarcrm.candybean.examples.AbstractTest;
+import com.sugarcrm.candybean.test.AbstractTest;
 
 /**
  * Logger unit test that checks to see if the logging configuration is always reading from the default configuration file.
@@ -22,6 +24,10 @@ import com.sugarcrm.candybean.examples.AbstractTest;
  */
 public class LoggerUnitTest extends AbstractTest{
 	
+public LoggerUnitTest() throws Exception {
+		super();
+	}
+
 private Logger logger;
 
 	/**
@@ -122,6 +128,11 @@ private Logger logger;
 			counter++;
 		logReader.close();
 		return counter;
+	}
+
+	@Override
+	@Before
+	public void instantiateInterface() throws Exception {
 	}
 
 }

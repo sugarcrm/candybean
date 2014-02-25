@@ -62,7 +62,6 @@ import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
 /**

@@ -33,8 +33,9 @@ import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertTrue;
-import com.sugarcrm.candybean.examples.ITest;
-import com.sugarcrm.candybean.examples.IosTest;
+
+import com.sugarcrm.candybean.test.ITest;
+import com.sugarcrm.candybean.test.IosTest;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
@@ -44,7 +45,11 @@ import com.sugarcrm.candybean.examples.IosTest;
  */
 public class SugarIosTest extends IosTest implements ITest{
 
-    @Before
+    public SugarIosTest() throws Exception {
+		super();
+	}
+
+	@Before
     public void setUp() throws Exception {
         iface.wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }

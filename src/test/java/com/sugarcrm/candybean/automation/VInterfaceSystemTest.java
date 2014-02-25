@@ -86,7 +86,7 @@ public class VInterfaceSystemTest {
 		screenshotFile.delete();
 	}
 
-//	@Ignore
+	@Ignore
 	@Test
 	public void startStopRestartTest() throws Exception {
 		String expUrl = "https://www.google.com/";

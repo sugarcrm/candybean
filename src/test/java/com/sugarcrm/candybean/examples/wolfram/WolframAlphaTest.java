@@ -2,36 +2,28 @@ package com.sugarcrm.candybean.examples.wolfram;
 
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sugarcrm.candybean.examples.AbstractTest;
+import com.sugarcrm.candybean.test.BrowserTest;
+import com.sugarcrm.candybean.test.ITest;
 
 /**
  * Wolfram alpha test class defining any tests using the {@link Test } annotation.
  * @author Shehryar Farooq
  *
  */
-public class WolframAlphaTest extends AbstractTest{
-	
-	
+public class WolframAlphaTest extends BrowserTest implements ITest{
+
+	public WolframAlphaTest() throws Exception {
+		super();
+	}
 
 	/**
 	 * Association class containing test operations for this test.
 	 */
 	private static WolframAlpha wolfram;
-	
-	
-	/**
-	 * Any processing to do before executing the tests.
-	 * @throws Exception 
-	 */
-	@Before public void before() throws Exception{
-		wolfram = new WolframAlpha(iface);
-	};
 	
 	/**
 	 * Automated addition test that verifies Wolfram Alpha's addition capabilities
@@ -47,14 +39,16 @@ public class WolframAlphaTest extends AbstractTest{
 		}
 	}
 	
-	/**
-	 * Any processing to do after executing the tests.
-	 * @throws Exception 
-	 */
+	@Override
+	@Before
+	public void setUp() throws Exception {
+		wolfram = new WolframAlpha(iface);
+	}
+
+	@Override
 	@After
-	public void last() throws Exception{
+	public void tearDown() throws Exception {
 		iface.stop();
-	};
-	
+	}
 
 }

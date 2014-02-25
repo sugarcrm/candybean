@@ -25,7 +25,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,33 +34,20 @@ import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
@@ -82,7 +68,10 @@ public abstract class VInterface {
 	public WebDriver wd = null;
 	public final Logger logger;
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
-	
+	/**
+	 * Reference to global candybean instance
+	 */
+	public Candybean candybean;
 
 	/**
 	 * Instantiate VInterface;
@@ -95,6 +84,48 @@ public abstract class VInterface {
 			throws Exception {
 		this.capabilities = capabilities;
 		this.logger = Logger.getLogger(this.getClass().getName());
+		this.candybean = Candybean.getInstance();
+	}
+	
+
+	/**
+	 * Handle the way this interface is to be started. 
+	 * This routine must be implemented specific to the type of interface.
+	 * @throws Exception
+	 */
+	public void start() throws Exception {
+		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit_wait_seconds"));
+		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+		if (System.getProperty("headless") == null
+				&& !(this instanceof AndroidInterface)
+				&& !(this instanceof IOsInterface)) {
+			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+		}
+	}
+
+	/**
+	 * Close the interface and perform final cleanup.
+	 *
+	 * @throws Exception
+	 */
+	public void stop() throws Exception {
+		if (wd != null) {
+			wd.close();
+			wd.quit();
+			wd = null;
+		} else logger.warning("Automation interface already stopped.");
+	}
+
+	/**
+	 * Restarts the interface with the current interface type
+	 * 
+	 * @throws Exception
+	 */
+	public void restart() throws Exception {
+		if (this.wd == null) throw new Exception("Automation interface not yet started; cannot restart.");
+		this.stop();
+		this.start();
 	}
 	
 
@@ -133,15 +164,6 @@ public abstract class VInterface {
 		ImageIO.write(screenshot, "png", file);
 	}
 
-
-	protected abstract void start() throws MalformedURLException;
-
-	/**
-	 * Close the interface and perform final cleanup.
-	 *
-	 * @throws Exception
-	 */
-	public abstract void stop() throws Exception;
 	
 	/**
 	 * Refreshes the interface.  If refresh is undefined, it does nothing.
@@ -153,12 +175,6 @@ public abstract class VInterface {
 		this.wd.navigate().refresh();
 	}
 
-	/**
-	 * Restarts the interface with the current interface type
-	 * 
-	 * @throws Exception
-	 */
-	public abstract void restart() throws Exception;
 
 	/**
 	 * Load a URL in the browser window.
@@ -541,100 +557,6 @@ public abstract class VInterface {
 		return this.getControl(hook);
 	}
 	
-//	private VInterface.Type parseInterfaceType(String iTypeString) throws Exception {
-//		VInterface.Type iType = null;
-//		for (VInterface.Type iTypeIter : VInterface.Type.values()) {
-//			if (iTypeIter.name().equalsIgnoreCase(iTypeString)) {
-//				iType = iTypeIter;
-//				break;
-//			}
-//		}
-//		if (iType == Type.ANDROID) throw new Exception("Android interface type not yet implemented.");
-//		if (iType == Type.IOS) throw new Exception("iOS interface type not yet implemented.");
-//		return iType;
-//	}
-	
-//	private WebDriver getWebDriver(Type iType, DesiredCapabilities capabilities) throws Exception {
-//        WebDriver wd = null;
-//        switch (iType) {
-//	        case ANDROID:
-//	    		capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
-//	    		capabilities.setCapability(CapabilityType.VERSION, "4.4.2");
-//	    		capabilities.setCapability("device", "Android");
-//	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-//	            break;
-//	        case IOS:
-//	            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
-//	            capabilities.setCapability(CapabilityType.VERSION, "6.0");
-//	            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-//	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-//	            break;
-//	        default:
-//				throw new Exception("Selenium: browser type not recognized.");
-//        }
-//		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
-//		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-//		return wd;
-//		
-//	}
-//
-//	private WebDriver getWebDriver(Type iType) throws Exception {
-//        DesiredCapabilities capabilities = new DesiredCapabilities();
-////        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
-//        WebDriver wd = null;
-//        switch (iType) {
-//		case FIREFOX:
-//			String profileName = this.config.getValue("browser.firefox_profile", "default");
-//			File ffBinaryPath = new File(this.config.getPathValue("browser.firefox_binary"));
-//			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
-////			ffProfile.setEnableNativeEvents(false);
-//			FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
-//			// if (System.getProperty("headless") != null) {
-//			// FirefoxBinary ffBinary = new FirefoxBinary();//new
-//			// File("//home//conrad//Applications//firefox-10//firefox"));
-//			// ffBinary.setEnvironmentProperty("DISPLAY", ":1");
-//			// webDriver = new FirefoxDriver(ffBinary, ffProfile);
-//			// }
-//			logger.info("Instantiating Firefox with profile name: "
-//					+ profileName + " and binary path: " + ffBinaryPath);
-//			wd = new FirefoxDriver(ffBinary, ffProfile);
-//			break;
-//		case CHROME:
-//			ChromeOptions chromeOptions = new ChromeOptions();
-//			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
-//			logger.info("chromeDriverLogPath: " + chromeDriverLogPath);
-//			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-//			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
-//			logger.info("chromeDriverPath: " + chromeDriverPath);
-//			// chromeOptions.setBinary(new File(chromeDriverPath));
-//			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-//			logger.info("Instantiating Chrome with:\n    log path:"
-//					+ chromeDriverLogPath + "\n    driver path: "
-//					+ chromeDriverPath);
-//			wd = new ChromeDriver(chromeOptions);
-//			break;
-//		case IE:
-//			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
-//			logger.info("ieDriverPath: " + ieDriverPath);
-//			System.setProperty("webdriver.ie.driver", ieDriverPath);
-//			capabilities = DesiredCapabilities.internetExplorer();
-//			wd = new InternetExplorerDriver(capabilities);
-//			break;
-//		case SAFARI:
-//			throw new Exception("Selenium: safari browser not yet supported.");
-//
-//        default:
-//			throw new Exception("Selenium: browser type not recognized.");
-//		}
-//		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
-//		if (System.getProperty("headless") == null && !iType.equals(Type.ANDROID)) {
-//			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
-//		}
-//		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-//		return wd;
-//	}
-	
 	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
 		private RemoteTouchScreen touch;
 
@@ -649,120 +571,22 @@ public abstract class VInterface {
 		}
 	}
 
-	public InterfaceType getType() {
+	public InterfaceType getType() throws Exception {
 		InterfaceType type = null;
 		if(this instanceof AndroidInterface){
 			type = InterfaceType.ANDROID;
-		}else if (this instanceof AndroidInterface){
+		}else if (this instanceof ChromeInterface){
 			type = InterfaceType.CHROME;
-		}else if (this instanceof AndroidInterface){
+		}else if (this instanceof FirefoxInterface){
 			type = InterfaceType.FIREFOX;
-		}else if (this instanceof AndroidInterface){
+		}else if (this instanceof InternetExplorerInterface){
 			type = InterfaceType.IE;
-		}else if (this instanceof AndroidInterface){
+		}else if (this instanceof IOsInterface){
 			type = InterfaceType.IOS;
-		}else if (this instanceof AndroidInterface){
-			type = InterfaceType.SAFARI;
+		}else {
+			throw new Exception ("Interface now supported");
 		}
 		return type;
 	}
-
-	// ANDROID ROBOTIUM FUNCTIONALITY
-	//	private AndroidInterface getAndroidControl() throws Exception {
-	//		AndroidInterface vac = new AndroidInterface(this.props);
-	//		return vac;
-	//	}
-	//	
-	//	public void startApp() throws Exception {
-	//		this.vac.startApp();
-	//	}
-	//	
-	//	public void finishApp() throws Exception {
-	//		this.vac.finishApp();
-	//	}
-	//	
-	//	public void setApkPath(String aut, String messenger, String testrunner) {
-	//		this.vac.setApkPath(aut, messenger, testrunner);
-	//	}
-	//	
-	//	public void ignoreInstallAUT() throws Exception {
-	//		this.vac.ignoreInstallAUT();
-	//	}
-	//	
-	//	public void ignoreInstallMessenger() throws Exception {
-	//		this.vac.ignoreInstallMessenger();
-	//	}
-	//	
-	//	public void ignoreInstallRunner() throws Exception {
-	//		this.vac.ignoreInstallRunner();
-	//	}
-	//	
-	//	public VAControl getAControl() throws Exception{
-	//		return new VAControl(this.candybean, this);
-	//	}
-
-
-	//	/**
-	//	 * @param selectElement
-	//	 * @param actionElement
-	//	 */
-	//	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
-	//		List<WebElement> options = selectElement.getOptions();
-	//		for (WebElement option : options) {
-	//			selectElement.selectByVisibleText(option.getText());
-	//			actionElement.click();
-	//		}
-	//	}
-	//	
-	//	
-	//	/**
-	//	 * @param selectElement
-	//	 * @param actionOptionValues
-	//	 * @param actionElement
-	//	 * @throws Exception
-	//	 */
-	//	public static void optionAction(Select selectElement, Set<String> actionOptionValues, WebElement actionElement) throws Exception {
-	//		List<WebElement> allOptions = selectElement.getOptions();
-	//		HashSet<String> optionValues = new HashSet<String>();
-	//		for(WebElement option : allOptions) {
-	//			optionValues.add(option.getText());
-	////			System.out.println("Adding to options set:" + option.getText());
-	//		}
-	//		if(optionValues.containsAll(actionOptionValues)) {
-	//			for(String option : actionOptionValues) {
-	//				selectElement.selectByVisibleText(option);
-	//				actionElement.click();
-	//			}
-	//		} else throw new Exception("Specified select option unavailable...");
-	//	}
-	//	
-	//	
-	//
-	//	/**
-	//	 * @param element
-	//	 * @return
-	//	 */
-	//	public static String webElementToString(WebElement element) {
-	//		List<WebElement> childElements = element.findElements(By.xpath("*"));
-	//		String s = element.getTagName() + ":" + element.getText() + " ";
-	//		for(WebElement we : childElements) {
-	//			s += we.getTagName() + ":" + we.getText() + " ";
-	//		}
-	//		return s;
-	//	}
-	//	
-	//	
-	//	/**
-	//	 * @param nativeOptions
-	//	 * @param queryOptionNames
-	//	 * @return
-	//	 */
-	//	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
-	//		Set<String> nativeOptionNames = new HashSet<String>();
-	//		for (WebElement option : nativeOptions) {
-	//			nativeOptionNames.add(option.getText());
-	//		}
-	//		if (nativeOptionNames.containsAll(queryOptionNames) && queryOptionNames.containsAll(nativeOptionNames)) return true;
-	//		else return false;
-	//	}
+	
 }

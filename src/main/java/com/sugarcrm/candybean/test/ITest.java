@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.examples;
+package com.sugarcrm.candybean.test;
 
 import org.junit.After;
 import org.junit.Before;

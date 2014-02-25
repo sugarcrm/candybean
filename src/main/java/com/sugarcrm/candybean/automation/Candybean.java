@@ -32,6 +32,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Voodoo is the primary interface for tests to use.	It provides
@@ -94,7 +95,9 @@ public class Candybean {
 		debug = Boolean.parseBoolean(this.config.getValue("debug", "false"));
 	}
 
-	public boolean debug() { return Candybean.debug; }
+	public boolean debug() { 
+		return Candybean.debug; 
+	}
 
 	/**
 	 * Get the global Voodoo instance.
@@ -106,6 +109,30 @@ public class Candybean {
 	public static Candybean getInstance(Configuration config) throws Exception {
 		if (Candybean.instance == null) Candybean.instance = new Candybean(config); 
 		return Candybean.instance;
+	}
+	
+	/**
+	 * Get the global candybean instance
+	 * 
+	 * @return global candybean instance based on a default configuration
+	 * @throws Exception
+	 */
+	public static Candybean getInstance() throws Exception {
+		Configuration config = Candybean.getDefaultConfiguration();
+		return Candybean.getInstance(config);
+	}
+	
+	/**
+	 * @return The default configuration
+	 * @throws Exception If the default configuration file can't be found.
+	 */
+	private static Configuration getDefaultConfiguration() throws Exception {
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
+		if (candybeanConfigStr == null)
+			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
+					+ Candybean.CONFIG_FILE_NAME;
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		return candybeanConfig;
 	}
 
 	/**

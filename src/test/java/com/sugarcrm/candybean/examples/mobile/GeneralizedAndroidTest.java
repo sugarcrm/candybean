@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import com.sugarcrm.candybean.examples.AndroidTest;
-import com.sugarcrm.candybean.examples.ITest;
+import com.sugarcrm.candybean.test.AndroidTest;
+import com.sugarcrm.candybean.test.ITest;
 
 public class GeneralizedAndroidTest extends AndroidTest implements ITest{
 

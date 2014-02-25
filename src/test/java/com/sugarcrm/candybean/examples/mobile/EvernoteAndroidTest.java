@@ -15,8 +15,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
-import com.sugarcrm.candybean.examples.AndroidTest;
-import com.sugarcrm.candybean.examples.ITest;
+
+import com.sugarcrm.candybean.test.AndroidTest;
+import com.sugarcrm.candybean.test.ITest;
 
 public class EvernoteAndroidTest extends AndroidTest implements ITest{
 
