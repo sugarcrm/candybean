@@ -26,7 +26,7 @@ public class RecordSystemTest extends AbstractTest{
 	}
 	
 	@Test
-	@Record(duration = Duration.FINAL)
+	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void passedUrlTest() throws Exception {
 		String amazonUrl = "http://www.amazon.com/";
@@ -35,7 +35,7 @@ public class RecordSystemTest extends AbstractTest{
 	}
 	
 	@Test
-	@Record(duration = Duration.FINAL)
+	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void failedUrlTest() throws Exception {
 		String amazonUrl = "http://www.amazon.com/";

@@ -20,5 +20,5 @@ public @interface Record {
 	 * Returns the {@link Duration} of the recorded test.
 	 * @return The {@link Duration}
 	 */
-	Duration duration() default Duration.FINAL;
+	Duration duration() default Duration.FINAL_FAILED;
 }

@@ -57,12 +57,19 @@ public class TestRecorder extends RunListener {
 	public void testFinished(Description description) throws Exception {
 		Record record = description.getAnnotation(Record.class);
 		if (record != null) {
+			Duration duration = record.duration();
 			logger.info("Recording ended: "
 					+ description.getClassName() + "." + description.getMethodName());
 			// Stop the recording
 			stopRecording();
-			// If the test didnt fail, delete the recording.
-			if (!testFailed) {
+			// If the test failed, and user configured to record final moments, cut the recording
+			if(duration.equals(Duration.FINAL) ||
+					(duration.equals(Duration.FINAL_FAILED) && testFailed)){
+				logger.info("TODO: Cut the recording to its final few seconds");
+				//TODO: Cut the recording to final moments
+			}else if(duration.equals(Duration.FINAL_FAILED) && !testFailed){
+				logger.info("Test passed, but we are only recording failed tests, deleting recording");
+				// If the test didn't fail and we are only recording final moments of a failed test, delete the recording.
 				List<File> recordedTests = this.screenRecorder.getCreatedMovieFiles();
 				if(recordedTests.size() > 0) {
 					File createdVideoFile = recordedTests.get(recordedTests.size()-1);
