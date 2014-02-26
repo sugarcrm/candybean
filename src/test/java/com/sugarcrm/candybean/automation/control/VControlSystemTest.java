@@ -301,14 +301,21 @@ public class VControlSystemTest {
 	@Test
 	public void sendStringTest() throws Exception {
 		String searchString = "sugarcrm";
+		
+		// clear and send scenario
 		iface.go("http://www.duckduckgo.com/");
-//		iface.pause(1000);
-//		iface.interact("pause0");
 		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString(searchString);
-//		iface.interact("pause1");
 		iface.getControl(Strategy.ID, "search_button_homepage").click();
 		Assert.assertTrue(iface.getControl(Strategy.PLINK, "SugarCRM").isDisplayed());
-	}
+
+		// append scenario -- base test and append assert
+		iface.go("http://www.duckduckgo.com/");
+		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString("crm", false);
+		iface.getControl(Strategy.ID, "search_button_homepage").click();
+		iface.getControl(Strategy.ID, "search_form_input").sendString("sugar", true);
+		iface.getControl(Strategy.ID, "search_button").click();
+		Assert.assertTrue(iface.getControl(Strategy.PLINK, "SugarCRM").isDisplayed());
+}
 	
 	@After
 	public void last() throws Exception {
