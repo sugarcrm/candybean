@@ -25,6 +25,7 @@ package com.sugarcrm.candybean.automation;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.sugarcrm.candybean.configuration.Configuration;
@@ -89,6 +90,7 @@ public final class Candybean {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
 		System.setProperty("java.util.logging.config.file", Candybean.getConfigrationFilePath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
+		LogManager.getLogManager().readConfiguration();
 		LOG = Logger.getLogger(Candybean.class.getName());
 		LOG.info("Instantiating Candybean with config: " + config.toString());
 	}
