@@ -122,7 +122,7 @@ public class VInterface {
 	 * @throws InterruptedException if the underlying {@link Thread#sleep} is interrupted
 	 */
 	public void pause(long ms) throws InterruptedException {
-		Candybean.LOG.info("Pausing for " + ms + "ms via thread sleep.");
+		candybean.logger.info("Pausing for " + ms + "ms via thread sleep.");
 		Thread.sleep(ms);
 	}
 
@@ -132,7 +132,7 @@ public class VInterface {
 	 * @param message	 	String to display on the dialog box
 	 */
 	public void interact(String message) {
-		Candybean.LOG.info("Interaction via popup dialog with message: " + message);
+		candybean.logger.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
 	}
 	
@@ -144,7 +144,7 @@ public class VInterface {
 	 * @throws AWTException 
 	 */
 	public void screenshot(File file) throws IOException, AWTException {
-		Candybean.LOG.info("Taking screenshot; saving to file: " + file.toString());
+		candybean.logger.info("Taking screenshot; saving to file: " + file.toString());
 		Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		BufferedImage screenshot = (new Robot()).createScreenCapture(screen);
 		ImageIO.write(screenshot, "png", file);
@@ -157,9 +157,9 @@ public class VInterface {
 	 * @throws Exception		if type is undefined during instantiation
 	 */
 	public void start() throws Exception {
-		Candybean.LOG.info("No interface type specified; attempting to start from configuration-defined type...");
+		candybean.logger.info("No interface type specified; attempting to start from configuration-defined type...");
 		this.iType = this.parseInterfaceType(this.config.getValue("automation.interface", "chrome"));
-		Candybean.LOG.info("Configuration-defined interface type parsed as type: " + this.iType);
+		candybean.logger.info("Configuration-defined interface type parsed as type: " + this.iType);
 		this.start(this.iType);
 	}
 
@@ -170,7 +170,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void start(Type iType) throws Exception {
-		Candybean.LOG.info("Starting automation interface with type: " + iType);
+		candybean.logger.info("Starting automation interface with type: " + iType);
 //		if (iType == Type.ANDROID) {
 //			this.vac = this.getAndroidControl();
 //			this.wd = null;
@@ -193,7 +193,7 @@ public class VInterface {
 	 *
 	 */
 	public void stop() {
-		Candybean.LOG.info("Stopping automation interface with type: " + this.iType);
+		candybean.logger.info("Stopping automation interface with type: " + this.iType);
 		this.windows.clear();
 		this.iType = null;
 		if (this.wd != null) {
@@ -201,7 +201,7 @@ public class VInterface {
 			this.wd.quit();
 			this.wd = null;
 		} else {
-			Candybean.LOG.warning("Automation interface already stopped.");
+			candybean.logger.warning("Automation interface already stopped.");
 		}
 	}
 	
@@ -210,7 +210,7 @@ public class VInterface {
 	 * 
 	 */
 	public void refresh() {
-		Candybean.LOG.info("Refreshing the interface.");
+		candybean.logger.info("Refreshing the interface.");
 		this.wd.navigate().refresh();
 	}
 
@@ -220,7 +220,7 @@ public class VInterface {
 	 * @throws Exception
 	 */
 	public void restart() throws Exception {
-		Candybean.LOG.info("Restarting automation interface with type: " + this.iType);
+		candybean.logger.info("Restarting automation interface with type: " + this.iType);
 		if (this.wd == null) {
 			throw new Exception("Automation interface not yet started; cannot restart.");
 		}
@@ -235,7 +235,7 @@ public class VInterface {
 	 * @param url	the URL to be loaded by the browser
 	 */
 	public void go(String url) {
-		Candybean.LOG.info("Going to URL and switching to window: " + url);
+		candybean.logger.info("Going to URL and switching to window: " + url);
 		this.wd.get(url);
 //		this.wd.switchTo().window(this.wd.getWindowHandle());
 	}
@@ -247,7 +247,7 @@ public class VInterface {
 	 */
 	public String getURL() {
 		String url = this.wd.getCurrentUrl();
-		Candybean.LOG.info("Getting current URL " + url);
+		candybean.logger.info("Getting current URL " + url);
 		return url;
 	}
 
@@ -256,7 +256,7 @@ public class VInterface {
 	 * 
 	 */
 	public void backward() {
-		Candybean.LOG.info("Navigating the interface backward.");
+		candybean.logger.info("Navigating the interface backward.");
 		this.wd.navigate().back();
 	}
 
@@ -272,7 +272,7 @@ public class VInterface {
 	 * contains the given string
 	 */
 	public boolean contains(String s, boolean caseSensitive) {
-		Candybean.LOG.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
+		candybean.logger.info("Searching if the interface contains the following string: " + s + " with case sensitivity: " + caseSensitive);
 		if (!caseSensitive) {
 			s = s.toLowerCase();
 		}
@@ -295,7 +295,7 @@ public class VInterface {
 	 * 
 	 */
 	public void focusDefault() {
-		Candybean.LOG.info("Focusing to default content.");
+		candybean.logger.info("Focusing to default content.");
 		this.wd.switchTo().defaultContent();
 	}
 	
@@ -305,7 +305,7 @@ public class VInterface {
 	 * @param index		the serial, zero-based index of the iframe to focus
 	 */
 	public void focusFrame(int index) {
-		Candybean.LOG.info("Focusing to frame by index: " + index);
+		candybean.logger.info("Focusing to frame by index: " + index);
 		this.wd.switchTo().frame(index);
 	}
 	
@@ -315,7 +315,7 @@ public class VInterface {
 	 * @param nameOrId	the name or ID identifying the targeted IFrame
 	 */
 	public void focusFrame(String nameOrId) {
-		Candybean.LOG.info("Focusing to frame by name or ID: " + nameOrId);
+		candybean.logger.info("Focusing to frame by name or ID: " + nameOrId);
 		this.wd.switchTo().frame(nameOrId);
 	}
 	
@@ -325,7 +325,7 @@ public class VInterface {
 	 * @param control		The VControl representing a focus-targeted IFrame
 	 */
 	public void focusFrame(VControl control) {
-		Candybean.LOG.info("Focusing to frame by control: " + control.toString());
+		candybean.logger.info("Focusing to frame by control: " + control.toString());
 		this.wd.switchTo().frame(control.getWe());
 	}
 	
@@ -334,10 +334,10 @@ public class VInterface {
 	 *
 	 */
 	public void closeWindow() {
-		Candybean.LOG.info("Closing window with handle: " + windows.peek());
+		candybean.logger.info("Closing window with handle: " + windows.peek());
 		this.wd.close();
 		this.windows.pop();
-		Candybean.LOG.info("Refocusing to previous window with handle: " + windows.peek());
+		candybean.logger.info("Refocusing to previous window with handle: " + windows.peek());
 		this.wd.switchTo().window(windows.peek().getY());
 	}
 
@@ -353,7 +353,7 @@ public class VInterface {
 	 */
 	public void focusWindow(int index) throws Exception {
 		if (index == windows.peek().getX().intValue()) {
-			Candybean.LOG.warning("No focus was made because the given index matched the current index: " + index);
+			candybean.logger.warning("No focus was made because the given index matched the current index: " + index);
 		} else if (index < 0) {
 			throw new Exception("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 		} else {
@@ -364,7 +364,7 @@ public class VInterface {
 			} else {
 				this.wd.switchTo().window(windowHandles[index]);
 				windows.push(new Pair<Integer, String>(Integer.valueOf(index), this.wd.getWindowHandle()));
-				Candybean.LOG.info("Focused by index: " + index + " to window: " + windows.peek());
+				candybean.logger.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
 		}
 	}
@@ -383,7 +383,7 @@ public class VInterface {
 		String curTitle = this.wd.getTitle();
 		String curUrl = this.wd.getCurrentUrl();
 		if (titleOrUrl.equals(curTitle) || titleOrUrl.equals(curUrl)) {
-			Candybean.LOG.warning("No focus was made because the given string matched the current title or URL: " + titleOrUrl);
+			candybean.logger.warning("No focus was made because the given string matched the current title or URL: " + titleOrUrl);
 		} else {
 			Set<String> windowHandlesSet = this.wd.getWindowHandles();
 			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
@@ -393,7 +393,7 @@ public class VInterface {
 				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
 					windows.push(new Pair<Integer, String>(Integer.valueOf(i), this.wd.getWindowHandle()));
-					Candybean.LOG.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
+					candybean.logger.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
 					windowFound = true;
 				}
 				i++;
@@ -410,7 +410,7 @@ public class VInterface {
 	 * 
 	 */
 	public void forward() {
-		Candybean.LOG.info("Navigating the interface forward.");
+		candybean.logger.info("Navigating the interface forward.");
 		this.wd.navigate().forward();
 	}
 	
@@ -435,7 +435,7 @@ public class VInterface {
 	 * @throws Exception	 <i>not thrown</i>
 	 */
 	public void maximize() {
-		Candybean.LOG.info("Maximizing window");
+		candybean.logger.info("Maximizing window");
 //		java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.wd.manage().window().maximize();
 		//.setSize(new Dimension(screenSize.width, screenSize.height));
@@ -545,11 +545,11 @@ public class VInterface {
 	 */
 	public void acceptDialog() {
 		try {
-			Candybean.LOG.info("Accepting diaLOG.");
+			candybean.logger.info("Accepting diaLOG.");
 			this.wd.switchTo().alert().accept();
 //			this.wd.switchTo().defaultContent();
 		} catch(UnhandledAlertException uae) {
-			Candybean.LOG.warning("Unhandled alert exception");
+			candybean.logger.warning("Unhandled alert exception");
 		}
 	}
 	
@@ -560,11 +560,11 @@ public class VInterface {
 	 */
 	public void dismissDialog() {
 		try {
-			Candybean.LOG.info("Dismissing diaLOG.");
+			candybean.logger.info("Dismissing diaLOG.");
 			this.wd.switchTo().alert().dismiss();
 //			this.wd.switchTo().defaultContent();
 		} catch(UnhandledAlertException uae) {
-			Candybean.LOG.warning("Unhandled alert exception");
+			candybean.logger.warning("Unhandled alert exception");
 		}
 	}
 
@@ -579,13 +579,13 @@ public class VInterface {
 		try { 
 			this.wd.switchTo().alert(); 
 //			this.wd.switchTo().defaultContent();
-			Candybean.LOG.info("Dialog present?: true.");
+			candybean.logger.info("Dialog present?: true.");
 			return true;
 		} catch(UnhandledAlertException uae) {
-			Candybean.LOG.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored diaLOG...");
+			candybean.logger.info("(Unhandled alert in FF?) Dialog present?: true.  May have ignored diaLOG...");
 			return true;
 		} catch(NoAlertPresentException nape) {
-			Candybean.LOG.info("Dialog present?: false.");
+			candybean.logger.info("Dialog present?: false.");
 			return false;
 		}
 	}
@@ -652,27 +652,27 @@ public class VInterface {
 			// ffBinary.setEnvironmentProperty("DISPLAY", ":1");
 			// webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			// }
-			Candybean.LOG.info("Instantiating Firefox with profile name: "
+			candybean.logger.info("Instantiating Firefox with profile name: "
 					+ profileName + " and binary path: " + ffBinaryPath);
 			webDriver = new FirefoxDriver(ffBinary, ffProfile);
 			break;
 		case CHROME:
 			ChromeOptions chromeOptions = new ChromeOptions();
 			String chromeDriverLogPath = this.config.getPathValue("browser.chrome_driver_log_path");
-			Candybean.LOG.info("chromeDriverLogPath: " + chromeDriverLogPath);
+			candybean.logger.info("chromeDriverLogPath: " + chromeDriverLogPath);
 			chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 			String chromeDriverPath = this.config.getPathValue("browser.chrome_driver_path");
-			Candybean.LOG.info("chromeDriverPath: " + chromeDriverPath);
+			candybean.logger.info("chromeDriverPath: " + chromeDriverPath);
 			// chromeOptions.setBinary(new File(chromeDriverPath));
 			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-			Candybean.LOG.info("Instantiating Chrome with:\n    log path:"
+			candybean.logger.info("Instantiating Chrome with:\n    log path:"
 					+ chromeDriverLogPath + "\n    driver path: "
 					+ chromeDriverPath);
 			webDriver = new ChromeDriver(chromeOptions);
 			break;
 		case IE:
 			String ieDriverPath = this.config.getPathValue("browser.ie_driver_path");
-			Candybean.LOG.info("ieDriverPath: " + ieDriverPath);
+			candybean.logger.info("ieDriverPath: " + ieDriverPath);
 			System.setProperty("webdriver.ie.driver", ieDriverPath);
 			capabilities = DesiredCapabilities.internetExplorer();
 			webDriver = new InternetExplorerDriver(capabilities);

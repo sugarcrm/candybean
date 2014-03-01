@@ -12,15 +12,17 @@ import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
 import org.junit.Test;
 
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.examples.AbstractTest;
 
 /**
  * Logger unit test that checks to see if the logging configuration is always reading from the default configuration file.
  * @author Shehryar Farooq
  */
-public class LoggerUnitTest extends AbstractTest{
+public class LoggerUnitTest extends AbstractTest {
 	
 private Logger logger;
 
@@ -36,13 +38,12 @@ private Logger logger;
 		// configure the logger from.
 		System.clearProperty("java.util.logging.config.file");
 		LogManager.getLogManager().reset();
-		logger = Logger.getLogger("DefaultLogger");
-		// The default configured logger should have no file handlers, so we
+		logger = Logger.getLogger("SomeLogger");
+		// The logger should have no file handlers, so we
 		// check to see if that is the case.
 		assertEquals(logger.getHandlers().length, 0);
-		File file = new File("./log/" + LoggerUnitTest.class.getSimpleName()+".log");
-		file.delete();
-		assertTrue(!file.exists());
+		File file = new File("./log/" + LoggerUnitTest.class.getName() + ".log");
+		file.deleteOnExit();
 	}
 
 	/**
@@ -53,75 +54,88 @@ private Logger logger;
 	 */
 	@Test
 	public void cbConfiguredLogger() throws Exception {
+		String name1 = this.getClass().getSimpleName() + "1";
+		String name2 = this.getClass().getSimpleName() + "2";
+		String config1Path = Candybean.CONFIG_DIR + File.separator + name1 + ".config";
+		String config2Path = Candybean.CONFIG_DIR + File.separator + name2 + ".config";
+		String log1Path = Candybean.ROOT_DIR + File.separator + "log" + File.separator + name1 + ".log";
+		String log2Path = Candybean.ROOT_DIR + File.separator + "log" + File.separator + name2 + ".log";
+		
 		// Load the initial properties from the candybean config file
-        Properties initialProperties = new Properties();
-		initialProperties.load(new FileInputStream("./config/candybean.config"));
-		// Change the Formatter for the FileHandler to XMLFormatter
+        Properties initialProperties = candybean.getConfig().getPropertiesCopy();
+		
+		// Change the FileHandler Formatter to XMLFormatter
 		initialProperties.setProperty("java.util.logging.FileHandler.formatter", "java.util.logging.XMLFormatter");
 		initialProperties.setProperty("java.util.logging.ConsoleHandler.formatter", "java.util.logging.XMLFormatter");
-		// Create a new config file to copy the properties to
-		File firstTestConfig = new File("./config/candybean1.config");
-		firstTestConfig.createNewFile();
-		// Write the new properties to the first test config file
-		initialProperties.store(new FileOutputStream(firstTestConfig), null);
+		
+		// Create a new config file and write props to that file
+		File config1File = new File(config1Path);
+		config1File.createNewFile();
+		initialProperties.store(new FileOutputStream(config1File), null);
+
 		// Update the system property that specifies where to load the logging configuration from.
-		System.setProperty("java.util.logging.config.file", "./config/candybean1.config");
+		System.setProperty("java.util.logging.config.file", config1Path);
 		LogManager.getLogManager().readConfiguration();
 		logger = Logger.getLogger(this.getClass().getSimpleName());
-		File firstLogFile = new File("./log/FirstLogTest.log");
-		FileHandler firstFileHanler = new FileHandler("./log/FirstLogTest.log");
-		logger.addHandler(firstFileHanler);
+		
+		// Log to file and verify text
+		File log1File = new File(log1Path);
+		FileHandler firstFileHandler = new FileHandler(log1Path);
+		logger.addHandler(firstFileHandler);
 		logger.info("First logged message configured using candybean configuration file");
-		assertTrue(firstLogFile.exists());
-		assertEquals(getLinesInLogFile(firstLogFile), 14);
-		// Change the Formatter for the FileHandler to SimpleFormatter
+		assertTrue(log1File.exists());
+		assertEquals(getLinesInLogFile(log1File), 14);
+		
+		// Change the FileHandler Formatter to SimpleFormatter
 		initialProperties.setProperty("java.util.logging.FileHandler.formatter", "java.util.logging.SimpleFormatter");
 		initialProperties.setProperty("java.util.logging.ConsoleHandler.formatter", "java.util.logging.SimpleFormatter");
-		// Create a second config file to copy the properties to
-		File secondTestConfig = new File("./config/candybean2.config");
-		secondTestConfig.createNewFile();
-		// Write the new properties to the first test config file
-		initialProperties.store(new FileOutputStream(secondTestConfig), null);
+		
+		// Create a second config file and write props to that file
+		File config2File = new File(config2Path);
+		config2File.createNewFile();
+		initialProperties.store(new FileOutputStream(config2File), null);
+
 		// Update the system property that specifies where to load the logging configuration from.
-		System.setProperty("java.util.logging.config.file", "./config/candybean2.config");
+		System.setProperty("java.util.logging.config.file", config2Path);
 		LogManager.getLogManager().readConfiguration();
 		logger = Logger.getLogger(this.getClass().getSimpleName());
-		File secondLogFile = new File("./log/SecondLogTest.log");
-		FileHandler secondFileHandler = new FileHandler("./log/SecondLogTest.log");
-		logger.addHandler(secondFileHandler);
 		
+		// Log to file and verify text
+		File log2File = new File(log2Path);
+		FileHandler secondFileHandler = new FileHandler(log2Path);
+		logger.addHandler(secondFileHandler);
 		logger.info("Second logged message configured using different candybean configuration file");
-		assertTrue(secondLogFile.exists());
-		assertTrue(getLinesInLogFile(secondLogFile) < 13);
+		assertTrue(log2File.exists());
+		assertTrue(getLinesInLogFile(log2File) < 13);
 		
 		// Reset the logging config file path to the default and re-read the configuration
-		System.setProperty("java.util.logging.config.file", "./config/candybean.config");
+		System.setProperty("java.util.logging.config.file", candybean.config.configFile.getCanonicalPath());
 		LogManager logManager = LogManager.getLogManager();
 		logManager.readConfiguration();
+		
 		// Delete all created configuration and log files
-		firstTestConfig.delete();
-		firstLogFile.delete();
-		secondTestConfig.delete();
-		secondLogFile.delete();
+		config1File.delete();
+		log1File.delete();
+		config2File.delete();
+		log2File.delete();
 	}
 
 	/**
 	 * Reads a file to see how many lines it contains.
 	 * 
-	 * @param file
-	 *            The file to read
-	 * @return The number of lines in the file
-	 * @throws IOException
+	 * @param file	The file to read
+	 * @return 		The number of lines in the file
+	 * @throws 		IOException
 	 */
 	private int getLinesInLogFile(File file) throws IOException {
 		int counter = 0;
 		BufferedReader logReader = new BufferedReader(new FileReader(file));
 		@SuppressWarnings("unused")
 		String line;
-		while ((line = logReader.readLine()) != null)
+		while ((line = logReader.readLine()) != null) {
 			counter++;
+		}
 		logReader.close();
 		return counter;
 	}
-
 }

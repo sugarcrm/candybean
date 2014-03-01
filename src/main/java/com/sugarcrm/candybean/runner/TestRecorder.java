@@ -95,7 +95,7 @@ public class TestRecorder extends RunListener {
 				.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 				.getDefaultConfiguration();
 
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr == null)
 			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
 					+ Candybean.CONFIG_FILE_NAME;

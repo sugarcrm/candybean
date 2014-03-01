@@ -44,13 +44,12 @@ import com.thoughtworks.selenium.SeleniumException;
  */
 public class VControl {
 	
-	
-	private final Candybean candybean;
+	public Pause pause;
+	protected final Candybean candybean;
 	private final VInterface iface;
 	private final VHook hook;
 	private int index;
 	private WebElement we;
-	public Pause pause;
 	
 	public VControl(Candybean candybean, VInterface iface, Strategy strategy, String hook) throws CandybeanException {
 		this(candybean, iface, new VHook(strategy, hook));
@@ -93,7 +92,7 @@ public class VControl {
 	 *							 cannot be found
 	 */
 	public String getAttribute(String attribute) throws CandybeanException {
-		Candybean.LOG.info("Getting attribute: " + attribute	+ " for control: " + this.toString());
+		candybean.logger.info("Getting attribute: " + attribute	+ " for control: " + this.toString());
 		String value = getWe().getAttribute(attribute);
 		if (value == null) {
 			throw new CandybeanException("Attribute " + value + "does not exist for element " + getWe().toString());
@@ -103,7 +102,7 @@ public class VControl {
 	}
 
 	public String getSource() {
-		Candybean.LOG.info("Getting source for control: " + this.toString());
+		candybean.logger.info("Getting source for control: " + this.toString());
 		return (String)((JavascriptExecutor)getIface().wd).executeScript("return arguments[0].innerHTML;", this.getWe());
 	}
 
@@ -113,7 +112,7 @@ public class VControl {
 	 * @return the visible text of this element
 	 */
 	public String getText() {
-		Candybean.LOG.info("Getting text for control: " + this.toString());
+		candybean.logger.info("Getting text for control: " + this.toString());
 //		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
 		String type = getWe().getAttribute("type");
 		if (type != null && (type.equalsIgnoreCase("button") || type.equalsIgnoreCase("input"))) {
@@ -126,7 +125,7 @@ public class VControl {
 	 * Click the element.
 	 */
 	public void click() {
-		Candybean.LOG.info("Clicking on control: " + this.toString());
+		candybean.logger.info("Clicking on control: " + this.toString());
 		getWe().click();
 	}
 	
@@ -142,7 +141,7 @@ public class VControl {
 	 * contains the given string
 	 */
 	public boolean contains(String s, boolean caseSensitive) {
-		Candybean.LOG.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
+		candybean.logger.info("Searching if the control contains the following string: '" + s + "' with case sensitivity: " + caseSensitive);
 		String lowercase = s;
 		if (!caseSensitive) {
 			lowercase = s.toLowerCase();
@@ -166,7 +165,7 @@ public class VControl {
 	 * Double-click the element.
 	 */
 	public void doubleClick() {
-		Candybean.LOG.info("Double-clicking on control: " + this.toString());
+		candybean.logger.info("Double-clicking on control: " + this.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.doubleClick(getWe()).perform();
 	}
@@ -177,7 +176,7 @@ public class VControl {
 	 * @param dropControl  target of the drag and drop
 	 */
 	public void dragNDrop(VControl dropControl)	{
-		Candybean.LOG.info("Dragging control: " + this.toString() + " to control: " + dropControl.toString());
+		candybean.logger.info("Dragging control: " + this.toString() + " to control: " + dropControl.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.dragAndDrop(this.getWe(), dropControl.getWe()).build().perform();
 	}
@@ -187,7 +186,7 @@ public class VControl {
 	}
 
 	public VControl getControl(VHook hook, int index) {
-		Candybean.LOG.info("Getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
+		candybean.logger.info("Getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
 		WebElement childWe = this.getWe().findElements(VControl.makeBy(hook)).get(index);
 		return new VControl(this.getVoodoo(), this.getIface(), hook, childWe);
 	}
@@ -220,7 +219,7 @@ public class VControl {
 	 *
 	 */
 	public void hover() {
-		Candybean.LOG.info("Hovering over control: " + this.toString());
+		candybean.logger.info("Hovering over control: " + this.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.moveToElement(this.getWe()).perform();
 	}
@@ -231,7 +230,7 @@ public class VControl {
 	 *
 	 */
 	public boolean isDisplayed() {
-		Candybean.LOG.info("Determining if control is visible: " + this.toString());
+		candybean.logger.info("Determining if control is visible: " + this.toString());
 		return getWe().isDisplayed();
 	}
 
@@ -240,7 +239,7 @@ public class VControl {
 	 *
 	 */
 	public void rightClick() {
-		Candybean.LOG.info("Right-clicking control: " + this.toString());
+		candybean.logger.info("Right-clicking control: " + this.toString());
 		Actions action = new Actions(this.getIface().wd);
 		action.contextClick(this.getWe()).perform();
 	}
@@ -249,7 +248,7 @@ public class VControl {
 	 * Scroll the browser window to this control.
 	 */
 	public void scroll() {
-		Candybean.LOG.info("Scrolling to control: " + this.toString());
+		candybean.logger.info("Scrolling to control: " + this.toString());
 		int y = this.getWe().getLocation().y;
 		((JavascriptExecutor) this.getIface().wd).executeScript("window.scrollBy(0," + y + ");");
 	}
@@ -259,7 +258,7 @@ public class VControl {
 	 * @param input		string to send
 	 */
 	public void sendString(String input) {
-		Candybean.LOG.info("Clearing and sending string: " + input + " to control: " + this.toString());
+		candybean.logger.info("Clearing and sending string: " + input + " to control: " + this.toString());
 		this.getWe().clear();
 		// Re-find the element to avoid the stale element problem.
 		// Re-finding this *still* causes problems in getControl.getControl situations; a 
@@ -275,7 +274,7 @@ public class VControl {
 	 * @param append	if append is true, the control will be cleared first	
 	 */
 	public void sendString(String input, boolean append) {
-		Candybean.LOG.info("Clear first?: " + append + "; sending string: " + input + " to control: " + this.toString());
+		candybean.logger.info("Clear first?: " + append + "; sending string: " + input + " to control: " + this.toString());
 		if (!append) this.sendString(input);
 		else {
 			// Re-find the element to avoid the stale element problem.

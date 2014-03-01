@@ -54,8 +54,8 @@ import com.sugarcrm.candybean.automation.Candybean;
  */
 public class VRunner extends BlockJUnit4ClassRunner {
 	
-	private static final String BLOCKLIST_PATH_KEY = "blocklist";
-	private static final Logger logger = Logger.getAnonymousLogger();
+	public static final String BLOCKLIST_PATH_KEY = "blocklist";
+	private static final Logger LOGGER = Logger.getLogger(VRunner.class.getName());
 	
 	public VRunner(Class<?> klass) throws InitializationError {
 		super(klass);
@@ -72,7 +72,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 		try {
 			String blockListPathValue = System.getProperty(VRunner.BLOCKLIST_PATH_KEY);
 			if (blockListPathValue != null) {
-				logger.info("Blocklist enabled via system variable: " + VRunner.BLOCKLIST_PATH_KEY + ":" + blockListPathValue);
+				LOGGER.info("Blocklist enabled via system variable: " + VRunner.BLOCKLIST_PATH_KEY + ":" + blockListPathValue);
 				testMethods = this.removeBlockedTests(testMethods); // scrub tests for blocked tests
 			}
 			for (final FrameworkMethod method : testMethods) {
@@ -85,29 +85,29 @@ public class VRunner extends BlockJUnit4ClassRunner {
 								Class<?> c = Class.forName(vTag.tagLogicClass());
 								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), tag.getClass());
 								if ((boolean) m.invoke(null, (Object) tag)) {
-									logger.info("Adding test to execution list -- tag logic succeeds: " + method.getName());
+									LOGGER.info("Adding test to execution list -- tag logic succeeds: " + method.getName());
 									finalTestMethods.add(method);
 								}
 							}
 						} else {
 							for (String tag : vTag.tags()) {
 								if (Boolean.parseBoolean(System.getProperty(tag))) {
-									logger.info("Adding test to execution list -- sysvar tag true: " + method.getName());
+									LOGGER.info("Adding test to execution list -- sysvar tag true: " + method.getName());
 									finalTestMethods.add(method);
 								}
 							}
 						}
 					} else {
-						logger.info("Adding test to execution list -- empty tags: " + method.getName());
+						LOGGER.info("Adding test to execution list -- empty tags: " + method.getName());
 						finalTestMethods.add(method);
 					}
 				} else {
-					logger.info("Adding test to execution list -- no tags: " + method.getName());
+					LOGGER.info("Adding test to execution list -- no tags: " + method.getName());
 					finalTestMethods.add(method);
 				}
 			}
 		} catch (Exception e) {
-			logger.severe(e.getMessage());
+			LOGGER.severe(e.getMessage());
 		}
 		return finalTestMethods;
 	}
@@ -122,7 +122,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 			}
 		}
 		for (FrameworkMethod removeTest : removeTests) {
-			logger.info("Removing blocked test from execution: " + removeTest.getName());
+			LOGGER.info("Removing blocked test from execution: " + removeTest.getName());
 			tests.remove(removeTest);
 		}
 		return tests;

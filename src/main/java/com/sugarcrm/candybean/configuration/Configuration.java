@@ -42,21 +42,27 @@ import org.json.simple.parser.ParseException;
  */
 public class Configuration {
 
+	/**
+     * The tangible file associated with this object.
+     */
+    public final File configFile;
+	
     /**
-     * The .properties file associated with this configuration object.
+     * The .properties file associated with this object.
      */
     private Properties properties;
 
     /**
-     * A private logger for this configuration object.
+     * A private logger for this object.
      */
     private Logger logger;
 
     /**
-     * A Configuration object with no properties file path given. The properties initialized
+     * A Configuration object with no physical file path given. The properties initialized
      * with the default properties.
      */
     public Configuration() {
+    	this.configFile = null;
         properties = new Properties();
         this.logger = Logger.getLogger(Configuration.class.getName());
     }
@@ -66,6 +72,7 @@ public class Configuration {
      * @throws IOException 
      */
     public Configuration(File configFile) throws IOException{
+    	this.configFile = configFile;
         properties = new Properties();
         this.load(configFile);
     }

@@ -29,13 +29,13 @@ public abstract class AbstractTest {
 	protected static VInterface iface;
 
 	/**
-	 * Candybean logger
+	 * Test-specific logger
 	 */
 	protected static Logger logger;
 
 	/**
 	 * Starts the VInterface to be used for this test, and initializes the logger for this test
-	 * by adding a new FileHandler specific to this tests class.
+	 * by adding a new FileHandler specific to this test's class.
 	 * @throws Exception
 	 */
 	@Before
@@ -44,28 +44,18 @@ public abstract class AbstractTest {
 		iface = candybean.getInterface();
 		FileHandler fh = new FileHandler("./log/"
 				+ this.getClass().getSimpleName() + ".log");
-		logger = Logger.getLogger(this.getClass().getSimpleName());
+		logger = Logger.getLogger(this.getClass().getName());
 		logger.addHandler(fh);
 	}
 
-	/**
-	 * Build a VInterface based on default configuration.
-	 * 
-	 * @return The VInterface
-	 * @throws IOException 
-	 *             If default configuration files do not exist.
-	 */
-	public static Candybean configureCandybean() throws IOException{
-		Candybean candybean;
+	private static Candybean configureCandybean() throws IOException{
 		String candybeanConfigStr = System
-				.getProperty(Candybean.CONFIG_SYSTEM_PROPERTY);
+				.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr == null)
 			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
 					+ Candybean.CONFIG_FILE_NAME;
 		Configuration candybeanConfig = new Configuration(new File(
 				Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		return candybean;
+		return Candybean.getInstance(candybeanConfig);
 	}
-
 }

@@ -82,7 +82,7 @@ public class VSelect extends VControl {
 	 * @param value  text of the option to be selected
 	 */
 	public void select(String value) {
-		Candybean.LOG.info("Selenium: selecting value '" + value  +  FROM_CONTROL + this.toString());
+		candybean.logger.info("Selenium: selecting value '" + value  +  FROM_CONTROL + this.toString());
 		select.selectByVisibleText(value);
 	}
 
@@ -93,7 +93,7 @@ public class VSelect extends VControl {
      */
     public void select(int index) {
         List<WebElement> options = select.getOptions();
-        Candybean.LOG.info("Selenium: selecting value '" + options.get(index).getText() + FROM_CONTROL + this.toString());
+        candybean.logger.info("Selenium: selecting value '" + options.get(index).getText() + FROM_CONTROL + this.toString());
         select.selectByIndex(index);
     }
 
@@ -123,7 +123,7 @@ public class VSelect extends VControl {
      * @param text  text of the option to be deselected
      */
     public void deselect(String text) {
-        Candybean.LOG.info("Selenium: deselecting value '" + text + FROM_CONTROL + this.toString());
+        candybean.logger.info("Selenium: deselecting value '" + text + FROM_CONTROL + this.toString());
         select.deselectByVisibleText(text);
     }
 
@@ -134,7 +134,7 @@ public class VSelect extends VControl {
      */
     public void deselect(int index) {
         List<WebElement> options = select.getOptions();
-        Candybean.LOG.info("Selenium: deselecting value '" + options.get(index).getText()  +  FROM_CONTROL + this.toString());
+        candybean.logger.info("Selenium: deselecting value '" + options.get(index).getText()  +  FROM_CONTROL + this.toString());
         select.deselectByIndex(index);
     }
 
@@ -154,7 +154,7 @@ public class VSelect extends VControl {
      *
      */
     public void deselectAll() {
-        Candybean.LOG.info("Selenium: deselecting all values from control: " + this.toString());
+        candybean.logger.info("Selenium: deselecting all values from control: " + this.toString());
         select.deselectAll();
     }
 
@@ -203,7 +203,7 @@ public class VSelect extends VControl {
      * @return	boolean true if any options in the select element are selected
      */
     public boolean isSelected() {
-        Candybean.LOG.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
+        candybean.logger.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
         return getAllSelectedOptions().size() > 0;
     }
 

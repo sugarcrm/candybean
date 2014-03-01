@@ -23,21 +23,15 @@ package com.sugarcrm.candybean.runner;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.List;
-
-import junit.framework.Assert;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.sugarcrm.candybean.runner.VTag;
 import com.sugarcrm.candybean.runner.VRunner;
 
 @RunWith(VRunner.class)
 public class BlockListUnitTest {
-
+	
 	@Ignore
 	@Test
 	public void ignoreFail() throws Exception {
@@ -46,6 +40,11 @@ public class BlockListUnitTest {
 	
 	@Test
 	public void blockListFail() throws Exception {
+		// This test will fail unless a blocklist is defined
+		// which lists this qualified test name and blocks it 
+		// from execution: "BlockListUnitTest.blockListFail"
+		// The blocklist should be passed via system variable
+		// with key "blocklist".
 		fail();
 	}
 	

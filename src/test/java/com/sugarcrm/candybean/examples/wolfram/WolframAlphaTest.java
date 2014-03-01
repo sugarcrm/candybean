@@ -14,8 +14,6 @@ import com.sugarcrm.candybean.examples.AbstractTest;
  *
  */
 public class WolframAlphaTest extends AbstractTest{
-	
-	
 
 	/**
 	 * Association class containing test operations for this test.
@@ -54,6 +52,4 @@ public class WolframAlphaTest extends AbstractTest{
 	public static void last() throws Exception{
 		iface.stop();
 	};
-	
-
 }

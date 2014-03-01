@@ -24,15 +24,15 @@ package com.sugarcrm.candybean.automation;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 
 /**
- * Voodoo is the primary interface for tests to use.	It provides
+ * Candybean is the primary object for tests to use.  It provides
  * logging facilities and enables the loading of the appropriate
- * {@link IInterface} for use by the test's runtime.
+ * automation interface for use by the test's runtime.
  *
  * @author Conrad Warmbold
  */
@@ -41,7 +41,7 @@ public final class Candybean {
 	/**
 	 * The default name of the system property that may contain the candybean configuration file path.
 	 */
-	public static final String CONFIG_SYSTEM_PROPERTY = "candybean_config";
+	public static final String CONFIG_KEY = "config";
 	
 	/**
 	 * The default name for the configuration file used to instantiate candybean.
@@ -49,65 +49,64 @@ public final class Candybean {
 	public static final String CONFIG_FILE_NAME = "candybean.config";
 
 	/**
-	 * {@link Logger} object for use by tests.
-	 */
-	public static Logger LOG;
-
-	/**
 	 * The root directory of candybean
 	 */
-	public static File ROOT_DIR = new File(System.getProperty("user.dir")
+	public static final File ROOT_DIR = new File(System.getProperty("user.dir")
 			+ File.separator);
 
 	/**
 	 * The default test configuration directory
 	 */
-	public static File CONFIG_DIR = new File(System.getProperty("user.dir")
+	public static final File CONFIG_DIR = new File(System.getProperty("user.dir")
 			+ File.separator + "config" + File.separator);
 
 	/**
-	 * {@link Properties} object created by loading the voodoo
-	 * properties configuration file.
+	 * {@link Logger} object for use by tests.
 	 */
-	private static Configuration CONFIG;
+	public final Logger logger;
 
 	/**
-	 * The one Voodoo instance.  Created when a Voodoo instance is
+	 * {@link Configuration} object created by loading the candybean
+	 * configuration file.
+	 */
+	public final Configuration config;
+
+	/**
+	 * The singleton Candybean instance.  Created when a Candybean instance is
 	 * first called and persistent throughout the life of the tests.
 	 */
-	private static Candybean INSTANCE = null;
+	private static Candybean instance = null;
 
 
 	/**
-	 * Instantiate a Voodoo object.
+	 * Instantiate a Candybean object.
+	 * 
 	 * @throws IOException 
-	 *
 	 * @throws Exception if instantiating the logger fails
 	 */
 	private Candybean(Configuration config) throws IOException{
-		CONFIG = config;
+		this.config = config;
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
-		System.setProperty("java.util.logging.config.file", Candybean.getConfigrationFilePath());
+		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
-		LOG = Logger.getLogger(Candybean.class.getName());
-		LOG.info("Instantiating Candybean with config: " + config.toString());
+		LogManager.getLogManager().readConfiguration();
+		logger = Logger.getLogger(Candybean.class.getSimpleName());
+		logger.info("Instantiating Candybean with config: " + config.toString());
 	}
 
 	/**
-	 * Get the global Voodoo instance.
+	 * Get the global Candybean instance.
 	 *
-	 * @param props  {@link Properties} object created from voodoo.properties
-	 * @return global Voodoo instance
+	 * @param config  {@link Configuration} object created from candybean.config
+	 * @return singleton candybean instance
 	 * @throws IOException 
 	 * @throws Exception if instantiating the logger fails
 	 */
 	public static Candybean getInstance(Configuration config) throws IOException{
-		if (Candybean.INSTANCE == null) {
-			Candybean.INSTANCE = new Candybean(config); 
-		} else {
-			Candybean.LOG.info("Returning singleton Candybean with config:" + config.toString());
+		if (Candybean.instance == null) {
+			Candybean.instance = new Candybean(config); 
 		}
-		return Candybean.INSTANCE;
+		return Candybean.instance;
 	}
 
 	/**
@@ -128,17 +127,8 @@ public final class Candybean {
 	//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
 	//	}
 
-	/**
-	 * @return The complete path to the candybean configuration file in this JRE
-	 * @throws IOException
-	 */
-	public static String getConfigrationFilePath() throws IOException {
-		return CONFIG_DIR.getCanonicalPath() + File.separator
-				+ CONFIG_FILE_NAME;
-	}
-
 	public Configuration getConfig() {
-		return CONFIG;
+		return this.config;
 	}
 
 	//	private Level getLogLevel() {
@@ -151,7 +141,7 @@ public final class Candybean {
 	//		case "FINER": return Level.FINER;
 	//		case "FINEST": return Level.FINEST;
 	//		default:
-	//			LOG.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
+	//			logger.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
 	//			return Level.INFO;
 	//		}
 	//	}
