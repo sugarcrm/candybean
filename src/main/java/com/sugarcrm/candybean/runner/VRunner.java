@@ -24,12 +24,16 @@ package com.sugarcrm.candybean.runner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.Set;
 
@@ -55,9 +59,9 @@ import com.sugarcrm.candybean.automation.Candybean;
 public class VRunner extends BlockJUnit4ClassRunner {
 	
 	public static final String BLOCKLIST_PATH_KEY = "blocklist";
-	private static final Logger LOGGER = Logger.getLogger(VRunner.class.getName());
+	private static Logger logger = Logger.getLogger(VRunner.class.getSimpleName());
 	
-	public VRunner(Class<?> klass) throws InitializationError {
+	public VRunner(Class<?> klass) throws InitializationError, SecurityException, IOException {
 		super(klass);
 	}
 
@@ -72,42 +76,43 @@ public class VRunner extends BlockJUnit4ClassRunner {
 		try {
 			String blockListPathValue = System.getProperty(VRunner.BLOCKLIST_PATH_KEY);
 			if (blockListPathValue != null) {
-				LOGGER.info("Blocklist enabled via system variable: " + VRunner.BLOCKLIST_PATH_KEY + ":" + blockListPathValue);
+				logger.info("Blocklist enabled via system variable: " + VRunner.BLOCKLIST_PATH_KEY + ":" + blockListPathValue);
 				testMethods = this.removeBlockedTests(testMethods); // scrub tests for blocked tests
 			}
 			for (final FrameworkMethod method : testMethods) {
+				logger.info("method: " + method.getName());
 				final VTag vTag = method.getAnnotation(VTag.class);
 				if (vTag != null) {
 					if (vTag.tags().length != 0) {
 						if (!vTag.tagLogicClass().isEmpty() && !vTag.tagLogicMethod().isEmpty()) {
 							for (String tag : vTag.tags()) {
-//								System.out.println("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
+								logger.info("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
 								Class<?> c = Class.forName(vTag.tagLogicClass());
 								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), tag.getClass());
 								if ((boolean) m.invoke(null, (Object) tag)) {
-									LOGGER.info("Adding test to execution list -- tag logic succeeds: " + method.getName());
+									logger.info("Adding test to execution list -- tag logic succeeds: " + method.getName());
 									finalTestMethods.add(method);
 								}
 							}
 						} else {
 							for (String tag : vTag.tags()) {
 								if (Boolean.parseBoolean(System.getProperty(tag))) {
-									LOGGER.info("Adding test to execution list -- sysvar tag true: " + method.getName());
+									logger.info("Adding test to execution list -- sysvar tag true: " + method.getName());
 									finalTestMethods.add(method);
 								}
 							}
 						}
 					} else {
-						LOGGER.info("Adding test to execution list -- empty tags: " + method.getName());
+						logger.info("Adding test to execution list -- empty tags: " + method.getName());
 						finalTestMethods.add(method);
 					}
 				} else {
-					LOGGER.info("Adding test to execution list -- no tags: " + method.getName());
+					logger.info("Adding test to execution list -- no tags: " + method.getName());
 					finalTestMethods.add(method);
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.severe(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 		return finalTestMethods;
 	}
@@ -122,7 +127,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 			}
 		}
 		for (FrameworkMethod removeTest : removeTests) {
-			LOGGER.info("Removing blocked test from execution: " + removeTest.getName());
+			logger.info("Removing blocked test from execution: " + removeTest.getName());
 			tests.remove(removeTest);
 		}
 		return tests;
@@ -130,7 +135,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	
 	private Set<String> getBlockedTestNames() throws FileNotFoundException, IOException {
 		try{
-			Set<String> blockedTestNames = new HashSet();
+			Set<String> blockedTestNames = new HashSet<String>();
 			String blockListPath = System.getProperty(VRunner.BLOCKLIST_PATH_KEY, Candybean.CONFIG_DIR + File.separator + "blocklist.txt");
 			BufferedReader fileReader = new BufferedReader(new FileReader(blockListPath));
 			String blockLine;
@@ -138,6 +143,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 //				System.out.println(blockLine);
 				blockedTestNames.add(blockLine);
 			}
+			fileReader.close();
 			return blockedTestNames;
 		} catch (FileNotFoundException fnfe) {
 			throw new FileNotFoundException("The given blocklist file was not found; ensure path is correct for the system variable: " + BLOCKLIST_PATH_KEY);

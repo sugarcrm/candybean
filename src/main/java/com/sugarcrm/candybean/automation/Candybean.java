@@ -91,7 +91,7 @@ public final class Candybean {
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		LogManager.getLogManager().readConfiguration();
 		logger = Logger.getLogger(Candybean.class.getSimpleName());
-		logger.info("Instantiating Candybean with config: " + config.toString());
+		logger.config("Instantiating Candybean with config: " + config.toString());
 	}
 
 	/**

@@ -27,10 +27,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.sugarcrm.candybean.examples.AbstractTest;
 import com.sugarcrm.candybean.runner.VRunner;
 
 @RunWith(VRunner.class)
-public class BlockListUnitTest {
+public class BlockListUnitTest extends AbstractTest {
 	
 	@Ignore
 	@Test
@@ -38,13 +39,15 @@ public class BlockListUnitTest {
 		fail();
 	}
 	
+	// This test will fail unless a blocklist is defined
+	// which lists this qualified test name and blocks it 
+	// from execution: "BlockListUnitTest.blockListFail"
+	// The blocklist should be passed via system variable
+	// with key "blocklist".  Marking as ignored after 
+	// passing to prevent wasted effort.
+	@Ignore
 	@Test
 	public void blockListFail() throws Exception {
-		// This test will fail unless a blocklist is defined
-		// which lists this qualified test name and blocks it 
-		// from execution: "BlockListUnitTest.blockListFail"
-		// The blocklist should be passed via system variable
-		// with key "blocklist".
 		fail();
 	}
 	

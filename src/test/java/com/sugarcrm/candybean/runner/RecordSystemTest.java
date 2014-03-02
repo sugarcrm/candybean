@@ -19,7 +19,7 @@ import com.sugarcrm.candybean.runner.VRunner;
  *
  */
 @RunWith(VRunner.class)
-public class RecordSystemTest extends AbstractTest{
+public class RecordSystemTest extends AbstractTest {
 	
 	@Before
 	public void first() throws Exception {
