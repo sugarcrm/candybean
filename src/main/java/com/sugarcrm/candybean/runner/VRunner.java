@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.Set;
 
+import javax.xml.bind.JAXBException;
+
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -150,7 +152,15 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	 */
     @Override
     public void run(final RunNotifier notifier) {
-    	notifier.addListener(new TestRecorder());
+    	try {
+			notifier.addListener(new TestRecorder());
+		} catch (SecurityException e) {
+			logger.info("Unable to instantiate test recorder");
+		} catch (IOException e) {
+			logger.info("Unable to instantiate test recorder");
+		} catch (JAXBException e) {
+			logger.info("Unable to instantiate test recorder");
+		}
     	super.run(notifier);
     }
 }
