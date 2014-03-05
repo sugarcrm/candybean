@@ -39,14 +39,12 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -86,16 +84,15 @@ public class VInterface {
 
 	public WebDriver wd = null;
 	private Type iType = null;
-//	public final AndroidInterface vac; //vac as in candybean android control
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 
 	/**
 	 * Instantiate VInterface; Deprecated in favor of the type-less
 	 * constructor (where type is given during start or from config)
 	 *
-	 * @param candybean  {@link Candybean} object
-	 * @param config   {@link Configuration} for this test run
-	 * @param iType   {@link IInterface.Type} of interface to run
+	 * @param candybean	{@link Candybean} object
+	 * @param config	{@link Configuration} for this test run
+	 * @param iType		{@link VInterface.Type} of interface to run
 	 */
 	@Deprecated
 	public VInterface(Candybean candybean, Configuration config, Type iType) {
@@ -107,8 +104,8 @@ public class VInterface {
 	/**
 	 * Instantiate VInterface
 	 *
-	 * @param candybean  {@link Candybean} object
-	 * @param config   {@link Configuration} for this test run
+	 * @param candybean	{@link Candybean} object
+	 * @param config   	{@link Configuration} for this test run
 	 */
 	public VInterface(Candybean candybean, Configuration config) {
 		this.candybean = candybean;
@@ -118,7 +115,7 @@ public class VInterface {
 	/**
 	 * Pause the test for the specified duration.
 	 *
-	 * @param ms  duration of pause in milliseconds
+	 * @param ms	duration of pause in milliseconds
 	 * @throws InterruptedException if the underlying {@link Thread#sleep} is interrupted
 	 */
 	public void pause(long ms) throws InterruptedException {
@@ -171,15 +168,6 @@ public class VInterface {
 	 */
 	public void start(Type iType) throws Exception {
 		candybean.logger.info("Starting automation interface with type: " + iType);
-//		if (iType == Type.ANDROID) {
-//			this.vac = this.getAndroidControl();
-//			this.wd = null;
-//		}
-//		else {
-//			this.wd = this.getWebDriver(iType);
-//			this.vac = null;
-//			this.start();
-//		}
 		if (this.wd != null) {
 			throw new Exception("Automation interface already started with type: " + this.iType);
 		}
@@ -197,9 +185,12 @@ public class VInterface {
 	 */
 	public void start(Type iType, DesiredCapabilities capabilities) throws Exception {
 		candybean.logger.info("Starting automation interface with type: " + iType);
-		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
+		if (this.wd != null){
+			throw new Exception("Automation interface already started with type: " + this.iType);
+		}
 		this.iType = iType;
 		this.wd = this.getWebDriver(iType, capabilities);
+		this.windows.push(new Pair<Integer, String>(Integer.valueOf(0), this.wd.getWindowHandle()));
 	}
 
 	/**

@@ -4,6 +4,8 @@
 target/
 log/*.log
 log/*.log*
+log/*.html
+log/*.xml
 lib/*driver*
 lib/*Driver*
 lib/*.apk
