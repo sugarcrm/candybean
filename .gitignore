@@ -4,4 +4,7 @@
 target/
 log/*.log
 log/*.log*
+lib/*driver*
+lib/*Driver*
+lib/*.apk
 

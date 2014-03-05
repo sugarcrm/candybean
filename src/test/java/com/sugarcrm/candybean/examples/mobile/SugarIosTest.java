@@ -23,27 +23,20 @@ package com.sugarcrm.candybean.examples.mobile;
 
 import org.junit.*;
 
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.interactions.TouchScreen;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteTouchScreen;
-import org.openqa.selenium.interactions.touch.TouchActions;
-
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
+import com.sugarcrm.candybean.examples.ITest;
+import com.sugarcrm.candybean.examples.IosTest;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
@@ -51,70 +44,41 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Larry Cao
  */
-public class SugarIosTest {
-
-    private static WebDriver driver;
-
-    private static List<Integer> values;
-
-    private static final int MINIMUM = 0;
-    private static final int MAXIMUM = 10;
+public class SugarIosTest extends IosTest implements ITest{
 
     @Before
     public void setUp() throws Exception {
-        // set up appium
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
-        capabilities.setCapability(CapabilityType.VERSION, "6.0");
-        capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-        capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/SugarCRM.app.zip");
-        URL remoteAddress = new URL("http://127.0.0.1:4723/wd/hub");
-        driver = new SwipeableWebDriver(remoteAddress, capabilities);
-
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        values = new ArrayList<>();
+        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @After
     public void tearDown() throws Exception {
-        driver.quit();
+        wd.quit();
     }
 
     @Test
     public void testLogin() throws Exception {
-        WebElement username = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
+        WebElement username = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
         assertTrue(username.isDisplayed());
-
-        Set<String> handles = driver.getWindowHandles();
-
+        Set<String> handles = wd.getWindowHandles();
         for (String s : handles) {
             System.out.println(s);
         }
-
         if (!username.getText().equals("")) {
             username.clear();
         }
         username.sendKeys("admin");
-
-
-        WebElement password = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
-
+        WebElement password = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
         assertTrue(password.isDisplayed());
-
         password.click();
-
         password.sendKeys("asdf");
-
-        WebElement login = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
-
+        WebElement login = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
         login.click();
-
         Thread.sleep(1000000);
     }
 
     public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
         private RemoteTouchScreen touch;
-
         public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
             super(remoteAddress, desiredCapabilities);
             touch = new RemoteTouchScreen(getExecuteMethod());

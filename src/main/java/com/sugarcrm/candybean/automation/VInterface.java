@@ -187,6 +187,20 @@ public class VInterface {
 		this.wd = this.getWebDriver(iType);
 		this.windows.push(new Pair<Integer, String>(Integer.valueOf(0), this.wd.getWindowHandle()));
 	}
+	
+
+	/**
+	 * Launch and initialize an interface.
+	 * @param iType			The interface type to start automation 
+	 * @param capabilities	The desired capabilities to assign for the interface (for iOS and Android interfaces)
+	 * @throws Exception
+	 */
+	public void start(Type iType, DesiredCapabilities capabilities) throws Exception {
+		candybean.logger.info("Starting automation interface with type: " + iType);
+		if (this.wd != null) throw new Exception("Automation interface already started with type: " + this.iType);
+		this.iType = iType;
+		this.wd = this.getWebDriver(iType, capabilities);
+	}
 
 	/**
 	 * Close the interface and perform final cleanup.
@@ -634,6 +648,30 @@ public class VInterface {
 		}
 		return interfaceType;
 	}
+	
+	private WebDriver getWebDriver(Type iType, DesiredCapabilities capabilities) throws Exception {
+        WebDriver wd = null;
+        switch (iType) {
+	        case ANDROID:
+	    		capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
+	    		capabilities.setCapability(CapabilityType.VERSION, "4.4.2");
+	    		capabilities.setCapability("device", "Android");
+	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+	            break;
+	        case IOS:
+	            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
+	            capabilities.setCapability(CapabilityType.VERSION, "6.0");
+	            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+	            wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+	            break;
+	        default:
+				throw new Exception("Selenium: browser type not recognized.");
+        }
+		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
+		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+		return wd;
+		
+	}
 
 	private WebDriver getWebDriver(Type iType) throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -679,26 +717,11 @@ public class VInterface {
 			break;
 		case SAFARI:
 			throw new Exception("Selenium: safari browser not yet supported.");
-        case ANDROID:
-            capabilities = new DesiredCapabilities();
-            capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
-            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/ApiDemos-debug.apk");
-            webDriver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-            break;
-        case IOS:
-            capabilities = new DesiredCapabilities();
-            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
-            capabilities.setCapability(CapabilityType.VERSION, "6.0");
-            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
-            capabilities.setCapability("app", "https://s3.amazonaws.com/voodoo2/TestApp.zip");
-            webDriver = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-            break;
         default:
 			throw new Exception("Selenium: browser type not recognized.");
 		}
 		long implicitWait = Long.parseLong(config.getValue("perf.implicit_wait_seconds"));
-		if (System.getProperty("headless") == null) {
+		if (System.getProperty("headless") == null && !iType.equals(Type.ANDROID)) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			webDriver.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 		}
@@ -707,114 +730,16 @@ public class VInterface {
 	}
 
 	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
-        private RemoteTouchScreen touch;
+		private RemoteTouchScreen touch;
 
-        public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
-            super(remoteAddress, desiredCapabilities);
-            touch = new RemoteTouchScreen(getExecuteMethod());
-        }
+		public SwipeableWebDriver(URL remoteAddress,
+				Capabilities desiredCapabilities) {
+			super(remoteAddress, desiredCapabilities);
+			touch = new RemoteTouchScreen(getExecuteMethod());
+		}
 
-        public TouchScreen getTouch() {
-            return touch;
-        }
-    }
-
-	// ANDROID ROBOTIUM FUNCTIONALITY
-	//	private AndroidInterface getAndroidControl() throws Exception {
-	//		AndroidInterface vac = new AndroidInterface(this.props);
-	//		return vac;
-	//	}
-	//	
-	//	public void startApp() throws Exception {
-	//		this.vac.startApp();
-	//	}
-	//	
-	//	public void finishApp() throws Exception {
-	//		this.vac.finishApp();
-	//	}
-	//	
-	//	public void setApkPath(String aut, String messenger, String testrunner) {
-	//		this.vac.setApkPath(aut, messenger, testrunner);
-	//	}
-	//	
-	//	public void ignoreInstallAUT() throws Exception {
-	//		this.vac.ignoreInstallAUT();
-	//	}
-	//	
-	//	public void ignoreInstallMessenger() throws Exception {
-	//		this.vac.ignoreInstallMessenger();
-	//	}
-	//	
-	//	public void ignoreInstallRunner() throws Exception {
-	//		this.vac.ignoreInstallRunner();
-	//	}
-	//	
-	//	public VAControl getAControl() throws Exception{
-	//		return new VAControl(this.candybean, this);
-	//	}
-
-
-	//	/**
-	//	 * @param selectElement
-	//	 * @param actionElement
-	//	 */
-	//	public static void allOptionsAction(Select selectElement, WebElement actionElement) {
-	//		List<WebElement> options = selectElement.getOptions();
-	//		for (WebElement option : options) {
-	//			selectElement.selectByVisibleText(option.getText());
-	//			actionElement.click();
-	//		}
-	//	}
-	//	
-	//	
-	//	/**
-	//	 * @param selectElement
-	//	 * @param actionOptionValues
-	//	 * @param actionElement
-	//	 * @throws Exception
-	//	 */
-	//	public static void optionAction(Select selectElement, Set<String> actionOptionValues, WebElement actionElement) throws Exception {
-	//		List<WebElement> allOptions = selectElement.getOptions();
-	//		HashSet<String> optionValues = new HashSet<String>();
-	//		for(WebElement option : allOptions) {
-	//			optionValues.add(option.getText());
-	////			System.out.println("Adding to options set:" + option.getText());
-	//		}
-	//		if(optionValues.containsAll(actionOptionValues)) {
-	//			for(String option : actionOptionValues) {
-	//				selectElement.selectByVisibleText(option);
-	//				actionElement.click();
-	//			}
-	//		} else throw new Exception("Specified select option unavailable...");
-	//	}
-	//	
-	//	
-	//
-	//	/**
-	//	 * @param element
-	//	 * @return
-	//	 */
-	//	public static String webElementToString(WebElement element) {
-	//		List<WebElement> childElements = element.findElements(By.xpath("*"));
-	//		String s = element.getTagName() + ":" + element.getText() + " ";
-	//		for(WebElement we : childElements) {
-	//			s += we.getTagName() + ":" + we.getText() + " ";
-	//		}
-	//		return s;
-	//	}
-	//	
-	//	
-	//	/**
-	//	 * @param nativeOptions
-	//	 * @param queryOptionNames
-	//	 * @return
-	//	 */
-	//	public static boolean optionValuesEqual(List<WebElement> nativeOptions, Set<String> queryOptionNames) {
-	//		Set<String> nativeOptionNames = new HashSet<String>();
-	//		for (WebElement option : nativeOptions) {
-	//			nativeOptionNames.add(option.getText());
-	//		}
-	//		if (nativeOptionNames.containsAll(queryOptionNames) && queryOptionNames.containsAll(nativeOptionNames)) return true;
-	//		else return false;
-	//	}
+		public TouchScreen getTouch() {
+			return touch;
+		}
+	}
 }
