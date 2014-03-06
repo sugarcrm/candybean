@@ -31,12 +31,17 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
 import com.sugarcrm.candybean.automation.VInterface.Type;
 import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.runner.VRunner;
 import com.sugarcrm.candybean.utilities.Utils;
 
+
+@RunWith(VRunner.class)
 public class VInterfaceSystemTest {
 
 	protected static Candybean candybean;
