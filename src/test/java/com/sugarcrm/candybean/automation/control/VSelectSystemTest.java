@@ -30,19 +30,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VSelect;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.runner.VRunner;
 import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
 //import com.sugarcrm.candybean.automation.VHook;
 //import com.sugarcrm.candybean.IAutomation;
 //import com.sugarcrm.candybean.Voodoo;
-
+@RunWith(VRunner.class)
 public class VSelectSystemTest {
 	
 	protected static Candybean candybean;
