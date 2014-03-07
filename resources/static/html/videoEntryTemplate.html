@@ -1,0 +1,18 @@
+<tr>
+	<td>
+		<b>${failure.header}</b>
+		<br>
+		<br>
+		<div class="fail">${failure.stacktrace}</div>
+	</td>
+	<td>
+		<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' codebase='http://www.apple.com/qtactivex/qtplugin.cab'>
+			<param name='src' value='${failure.pathToVideo}'>
+			<param name='autoplay' value='true'>
+			<param name='type' value='video/quicktime'>
+			<embed src='${failure.pathToVideo}' autoplay='false' scale='aspect' type='video/quicktime' pluginspage='http://www.apple.com/quicktime/download/'></embed>
+		</object>
+		<br>
+		<a href='file:///${failure.pathToVideo}'>Link to recording</a>
+	</td>
+</tr>

@@ -32,10 +32,10 @@ public class RecordSystemTest extends AbstractTest {
 	public void passedUrlTest() throws Exception {
 		String amazonUrl = "http://www.amazon.com/";
 		iface.go(amazonUrl);
-		assertEquals(amazonUrl, iface.getURL());		
+		assertEquals("https://yahoo.com", iface.getURL());		
 	}
 	
-	@Ignore
+	//@Ignore
 	@Test
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")

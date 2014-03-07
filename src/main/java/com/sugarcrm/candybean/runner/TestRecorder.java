@@ -329,9 +329,6 @@ public class TestRecorder extends RunListener {
 	 * @throws IOException
 	 */
 	private void generateRecordingsReport() throws JAXBException, IOException {
-		StringBuilder builder = new StringBuilder();
-		builder.append("<h1>Failed Test Recordings</h1>");
-		builder.append("<table>");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		FailedTests failedTests;
 		try {
@@ -341,37 +338,24 @@ public class TestRecorder extends RunListener {
 			// with a clean file.
 			failedTests = new FailedTests();
 		}
-
-		for (TestFailure failure : failedTests.getFailures()) {
-			builder.append("<tr>");
-			builder.append("<td style='border: 1px solid black;'>");
-			builder.append("<b>" + failure.getTestHeader() + "</b>");
-			builder.append("<br>");
-			builder.append("<br>");
-			builder.append("<div style='color:red;'>"
-					+ HtmlEscapers.htmlEscaper().escape(failure.getTrace())
-					+ "</div>");
-			builder.append("</td>");
-			builder.append("<td style='border: 1px solid black;'>");
-			builder.append("<object classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' codebase='http://www.apple.com/qtactivex/qtplugin.cab'"
-					+ "><param name='src' value='"
-					+ failure.getPathToVideo()
-					+ "'><param name='autoplay' value='true'><param name='type' value='video/quicktime'>"
-					+ "<embed src='"
-					+ failure.getPathToVideo()
-					+ "' autoplay='false' scale='aspect' type='video/quicktime' pluginspage='http://www.apple.com/quicktime/download/'></embed></object>");
-			builder.append("<br>");
-			builder.append("<a href='file:///" + failure.getPathToVideo()
-					+ "'>Link to recording</a>");
-			builder.append("</td>");
-			builder.append("</tr>");
+		if(failedTests.getFailures().size() != 0){
+			StringBuilder entryMarkup = new StringBuilder();
+			String reportTemplate = readFile("./resources/static/html/videoRecordingTemplate.html", Charset.defaultCharset());
+			reportTemplate = reportTemplate.replace("${title}", "Failed Test Recordings");
+			String entryTemplate = readFile("./resources/static/html/videoEntryTemplate.html", Charset.defaultCharset());
+			for (TestFailure failure : failedTests.getFailures()) {
+				String entry = entryTemplate;
+				entry = entry.replace("${failure.header}", failure.getTestHeader());
+				entry = entry.replace("${failure.stacktrace}", HtmlEscapers.htmlEscaper().escape(failure.getTrace()));
+				entry = entry.replace("${failure.pathToVideo}", failure.getPathToVideo());
+				entryMarkup.append(entry);
+			}
+			reportTemplate = reportTemplate.replace("${recording.rows}", entryMarkup.toString());
+			FileWriter fstream = new FileWriter(config.getValue("testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML));
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(reportTemplate);
+			out.close();
 		}
-		builder.append("</table>");
-		FileWriter fstream = new FileWriter(config.getValue(
-				"testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML));
-		BufferedWriter out = new BufferedWriter(fstream);
-		out.write(builder.toString());
-		out.close();
 	}
 	
 	/**
