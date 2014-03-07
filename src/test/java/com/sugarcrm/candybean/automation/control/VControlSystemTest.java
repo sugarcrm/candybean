@@ -32,6 +32,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.TimeoutException;
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
@@ -39,6 +40,7 @@ import com.sugarcrm.candybean.automation.control.VControl;
 import com.sugarcrm.candybean.automation.control.VHook;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.runner.VRunner;
 import com.sugarcrm.candybean.utilities.Utils;
 
 //import com.sugarcrm.candybean.IAutomation.Strategy;
@@ -46,7 +48,7 @@ import com.sugarcrm.candybean.utilities.Utils;
 //import com.sugarcrm.candybean.IAutomation;
 //import com.sugarcrm.candybean.Candybean;
 //import static org.junit.Assert.assertEquals;
-
+@RunWith(VRunner.class)
 public class VControlSystemTest {
 	
 	protected static Candybean candybean;
