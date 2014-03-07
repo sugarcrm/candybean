@@ -1,9 +1,9 @@
-package com.sugarcrm.candybean.utilities.exception;
+package com.sugarcrm.candybean.exceptions;
 
 /**
  * Default exception to throw for Candybean related tasks.
  * 
- * @author Shehryar Farooq
+ * @author Shehryar Farooq, Conrad Warmbold
  *
  */
 public class CandybeanException extends Exception {
@@ -13,24 +13,19 @@ public class CandybeanException extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String message;
-	
 	public CandybeanException() {
 		super();
 	}
 
 	public CandybeanException(String message) {
 		super(message);
-		this.message = message;
+	}
+
+	public CandybeanException(Exception e) {
+		super(e.getMessage());
 	}
 
 	public String getMessage() {
-		return message;
+		return super.getMessage();
 	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	
 }

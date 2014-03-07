@@ -19,49 +19,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.control;
-
-import java.util.List;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.utilities.exception.CandybeanException;
+package com.sugarcrm.candybean.automation.element;
 
 /**
- * VControl is a control that represents and allows for interaction with the TABLE element.
- * Any HTML table tag on the page can be represented by a VTable.
- * @author cwarmbold
+ * Table is an element that represents and allows for enhanced interaction with
+ * a table element.
+ * 
+ * @author Conrad Warmbold
  */
-public class VTable extends VControl {
-	
-	public VTable(Candybean voodoo, VInterface iface, Strategy tableStrategy, String tableHook) throws CandybeanException {
-		super(voodoo, iface, tableStrategy, tableHook);
-	}
-	
-	public VTable(Candybean voodoo, VInterface iface, VHook tableHook) throws CandybeanException {
-		super(voodoo, iface, tableHook);
-	}
-	
-	/**
-  	 * @param tableElement
-  	 * @param rowRelativeXPathTextKey
-  	 * @param value
-  	 * @return
-  	 */
-  	public boolean containsText(String value) {
-  		List<WebElement> webElements = super.getIface().wd.findElements(By.xpath("*"));
-  		for (WebElement we : webElements) {
-  			if (we.getText().trim().equals(value)) {
-  				return true;
-  			}
-  		}
-  		return false;
-  	}
-  	
+public interface Table {
 //  	/**
 //  	 * @param table
 //  	 * @param rowRelativeXPathTextKey
@@ -83,9 +49,4 @@ public class VTable extends VControl {
 //  		}
 //  		return rowMap;
 //  	}
-	
-	@Override
-	public String toString() {
-		return "VTable(" + super.toString() + ")";
-	}
 }

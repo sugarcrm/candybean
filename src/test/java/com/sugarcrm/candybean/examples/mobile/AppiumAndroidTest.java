@@ -24,18 +24,13 @@ package com.sugarcrm.candybean.examples.mobile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -77,7 +72,6 @@ public class AppiumAndroidTest {
         // set up appium
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
-
         capabilities.setCapability(CapabilityType.VERSION, "4.2.2");
 
         capabilities.setCapability("device", "Android");
@@ -303,13 +297,14 @@ public class AppiumAndroidTest {
     @Test
     public void testSessions() throws Exception {
         HttpGet request = new HttpGet("http://localhost:4723/wd/hub/sessions");
-        HttpClient httpClient = new DefaultHttpClient();
+        DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
         JSONObject jsonObject = (JSONObject) new JSONParser().parse(EntityUtils.toString(entity));
 
         String sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
         assertEquals(sessionId, jsonObject.get("sessionId"));
+        httpClient.close();
     }
 
 //    @Test

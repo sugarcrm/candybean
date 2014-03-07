@@ -25,42 +25,38 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.control.VHook;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 
 public class Sugar {
 	
 	protected Candybean candybean;
-	protected VInterface iface;
+	protected WebDriverInterface iface;
 	protected Configuration config;
-	protected Map<String, VHook> hooks;
+	protected Map<String, Hook> hooks;
 	protected SugarUser adminUser;
 	
 	public Sugar(Candybean candybean, Configuration sugarConfig, Properties sugarHooks, SugarUser adminUser) throws Exception {
 		this.candybean = candybean;
-		this.iface = candybean.getInterface();
+		this.iface = candybean.getWebDriverInterface();
 		this.config = sugarConfig;
-		this.hooks = VHook.getHooks(sugarHooks);
+		this.hooks = Hook.getHooks(sugarHooks);
 		this.adminUser = adminUser;
 //		model = buildModel();
-	}
-	
-	public void start() throws Exception {
-		iface.start();
 	}
 	
 	public void login() throws Exception {
 		String urlBase = config.getValue("url.base", "http://localhost/ent700/");
 		iface.go(urlBase);
-		iface.widget(hooks.get("login.textfield.username")).sendString(adminUser.getBuilder().getRequiredAttributes().get("username"));
-		iface.widget(hooks.get("login.textfield.password")).sendString(adminUser.getBuilder().getRequiredAttributes().get("password"));
-		iface.widget(hooks.get("login.button.login")).click();
+		iface.getWebDriverElement(hooks.get("login.textfield.username")).sendString(adminUser.getBuilder().getRequiredAttributes().get("username"));
+		iface.getWebDriverElement(hooks.get("login.textfield.password")).sendString(adminUser.getBuilder().getRequiredAttributes().get("password"));
+		iface.getWebDriverElement(hooks.get("login.button.login")).click();
 	}
 	
 	public void logout() throws Exception {
-		iface.widget(hooks.get("main.menu.user")).click();
-		iface.widget(hooks.get("main.link.logout")).click();
+		iface.getWebDriverElement(hooks.get("main.menu.user")).click();
+		iface.getWebDriverElement(hooks.get("main.link.logout")).click();
 	}
 	
 	public void stop() throws Exception {

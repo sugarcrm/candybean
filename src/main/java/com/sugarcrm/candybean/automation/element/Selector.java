@@ -19,24 +19,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation;
+package com.sugarcrm.candybean.automation.element;
 
-import java.io.File;
+import java.util.*;
 
-import org.junit.Test;
+/**
+ * An element that represents and allows for interaction with a selector.
+ * 
+ * @author Conrad Warmbold
+ */
+public interface Selector {
 
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
-
-public class CandybeanUnitTest {
-
-	@Test
-	public void testVoodooLog() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		Candybean candybean = Candybean.getInstance(candybeanConfig);
-		assert(candybean != null);
-	}
+    public boolean isMultiSelector();
+	public void select(String value);
+    public void select(int index);
+    public void select(List<String> options);
+    public void selectAll();
+    public void deselect(String text);
+    public void deselect(int index);
+    public void deselect(List<String> options);
+    public void deselectAll();
+    public String getFirstSelectedOption();
+    public List<String> getAllSelectedOptions();
+    public List<String> getOptions();
+    public boolean isSelected();
+    public boolean isSelected(String text);
+    public boolean isSelected(int index);
+    public boolean isSelected(List<String> options);
+    public boolean isSelected(List<String> options, boolean exclusive);
 }

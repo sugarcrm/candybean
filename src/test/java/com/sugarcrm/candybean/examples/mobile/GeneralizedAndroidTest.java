@@ -2,40 +2,46 @@ package com.sugarcrm.candybean.examples.mobile;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import com.sugarcrm.candybean.examples.AndroidTest;
-import com.sugarcrm.candybean.examples.ITest;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.AndroidTest;
 
-public class GeneralizedAndroidTest extends AndroidTest implements ITest{
+public class GeneralizedAndroidTest extends AndroidTest {
+
+	public GeneralizedAndroidTest() throws IOException, Exception {
+		super();
+	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws CandybeanException {
 		iface.pause(2000);
 	}
 	
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
 	
     @Test
-    public void testActive() throws Exception {
-        WebElement text = wd.findElement(By.xpath("//textfield[1]"));
+    public void testActive() throws CandybeanException {
+        WebElement text = iface.wd.findElement(By.xpath("//textfield[1]"));
         assertTrue(text.isDisplayed());
 
-        WebElement button = wd.findElement(By.xpath("//button[1]"));
+        WebElement button = iface.wd.findElement(By.xpath("//button[1]"));
         assertTrue(button.isDisplayed());
     }
     
     @Test
-    public void testBasicAlert() throws Exception {
+    public void testBasicAlert() throws CandybeanException {
         iface.wd.findElement(By.xpath("//button[2]")).click();
-        WebElement acceptButton = wd.findElement(By.xpath("//button[1]"));
+        WebElement acceptButton = iface.wd.findElement(By.xpath("//button[1]"));
         acceptButton.click();
     }
 

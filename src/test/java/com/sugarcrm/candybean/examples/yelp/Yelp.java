@@ -24,9 +24,11 @@ package com.sugarcrm.candybean.examples.yelp;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.control.VHook;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.model.IModel;
 import com.sugarcrm.candybean.model.Model;
 import com.sugarcrm.candybean.model.Page;
@@ -35,37 +37,37 @@ public class Yelp implements IModel {
 	
 	public Model model;
 
-	private VInterface i;
-	private Map<String, VHook> hooks;
+	private WebDriverInterface i;
+	private Map<String, Hook> hooks;
 	private YelpUser defaultUser;
 	
-	public Yelp(VInterface i, Properties yelpHooks, YelpUser defaultUser) throws Exception {
+	public Yelp(WebDriverInterface i, Properties yelpHooks, YelpUser defaultUser) throws CandybeanException {
 		this.i = i;
-		hooks = VHook.getHooks(yelpHooks);
+		hooks = Hook.getHooks(yelpHooks);
 		this.defaultUser = defaultUser;
 //		model = buildModel();
 	}
 	
-	public void start() throws Exception {
+	public void start() throws CandybeanException {
 		String urlBase = "http://www.yelp.com/";
 		i.go(urlBase);
 	}
 	
-	public void login() throws Exception {
-		i.getControl(Strategy.LINK, "Log In").click();
+	public void login() throws CandybeanException {
+		i.getWebDriverElement(Strategy.LINK, "Log In").click();
 		String loginUrl = "https://www.yelp.com/login";
-		i.widget(hooks.get("login.textfield.email")).sendString(defaultUser.email());
-		i.widget(hooks.get("login.textfield.password")).sendString(defaultUser.password());
-		i.widget(hooks.get("login.button.login")).click();
+		i.getWebDriverElement(hooks.get("login.textfield.email")).sendString(defaultUser.email());
+		i.getWebDriverElement(hooks.get("login.textfield.password")).sendString(defaultUser.password());
+		i.getWebDriverElement(hooks.get("login.button.login")).click();
 	}
 	
-	public void logout() throws Exception {
+	public void logout() throws CandybeanException {
 		String mainUrlBase = "http://www.yelp.com/";
-		i.widget(hooks.get("main.link.account")).click();
-		i.widget(hooks.get("main.link.logout")).click();
+		i.getWebDriverElement(hooks.get("main.link.account")).click();
+		i.getWebDriverElement(hooks.get("main.link.logout")).click();
 	}
 	
-	public void stop() throws Exception {
+	public void stop() throws CandybeanException {
 		String finalUrl = "http://www.yelp.com/";
 	}
 	
@@ -83,7 +85,6 @@ public class Yelp implements IModel {
 	@Override
 	public void executeRandomStartPage() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 //	private Model buildModel() {

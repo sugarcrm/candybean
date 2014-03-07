@@ -45,7 +45,7 @@ import java.util.regex.Matcher;
  */
 public class Utils {
 	
-	private static Logger log = Logger.getLogger(Utils.class.getName());
+	private static Logger log = Logger.getLogger(Utils.class.getSimpleName());
 
 	/**
 	 * Executes a forked process that runs some given command string.  Prints the output of the command execution to console.
@@ -188,8 +188,8 @@ public class Utils {
 	 * @param <Y>
 	 */
 	public static class Pair<X, Y> {
-		private final X x;
-		private final Y y;
+		public final X x;
+		public final Y y;
 
 		public Pair(X x, Y y) {
 			this.x = x;
@@ -198,15 +198,7 @@ public class Utils {
 
 		@Override
 		public String toString() {
-			return "x:" + getX().toString() + ",y:" + getY().toString();
-		}
-
-		public X getX() {
-			return x;
-		}
-
-		public Y getY() {
-			return y;
+			return "x:" + this.x.toString() + ",y:" + this.y.toString();
 		}
 	}
 
@@ -220,9 +212,9 @@ public class Utils {
 	 * @param <Z>
 	 */
 	public static class Triplet<X, Y, Z> { 
-		private final X x; 
-		private final Y y; 
-		private final Z z;
+		public final X x; 
+		public final Y y; 
+		public final Z z;
 
 		public Triplet(X x, Y y, Z z) { 
 			this.x = x; 
@@ -232,20 +224,7 @@ public class Utils {
 
 		@Override
 		public String toString() {
-			return "x:" + getX().toString() + ",y:" + getY().toString() + ",z:" + getZ().toString();
-		}
-
-		public X getX() {
-			return x;
-		}
-
-		public Y getY() {
-			return y;
-		}
-
-		public Z getZ() {
-			return z;
+			return "x:" + this.x.toString() + ",y:" + this.y.toString() + ",z:" + this.z.toString();
 		}
 	}
-
 }

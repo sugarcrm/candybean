@@ -19,24 +19,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation;
+package com.sugarcrm.candybean.automation.element;
 
-import java.io.File;
+import java.util.logging.Logger;
 
-import org.junit.Test;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+public abstract class Element {
+	
+	protected final Hook hook;
+	protected int index;
+	
+	/**
+	 * A preconfigured logger instance for child elements to log messages.
+	 */
+	public static final Logger logger = Logger.getLogger(Element.class.getSimpleName());
+	
+	public Element(Hook hook, int index) {
+		this.hook = hook;
+		this.index = index;
+	}
+	
+	/**
+	 * Returns the child element specified by the given {@link Hook} and index,
+	 * that is, the element specified within the current, containing, parent
+	 * element.
+	 * 
+	 * @param hook
+	 * @param index
+	 * @return
+	 */
+	public abstract Element getElement(Hook hook, int index) throws CandybeanException;
 
-public class CandybeanUnitTest {
-
-	@Test
-	public void testVoodooLog() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		Candybean candybean = Candybean.getInstance(candybeanConfig);
-		assert(candybean != null);
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + "(hook:"
+				+ this.hook.toString() + ", index:" + this.index + ")";
 	}
 }

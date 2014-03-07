@@ -23,11 +23,9 @@ package com.sugarcrm.candybean.examples.mobile;
 
 import org.junit.*;
 
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.interactions.TouchScreen;
@@ -35,7 +33,6 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteTouchScreen;
-import org.openqa.selenium.interactions.touch.TouchActions;
 
 import java.net.URL;
 import java.util.ArrayList;

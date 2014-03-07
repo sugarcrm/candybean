@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation;
+package com.sugarcrm.candybean.automation.webdriver;
 
 import static org.junit.Assert.*;
+
 import java.io.File;
-import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,22 +32,24 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import com.sugarcrm.candybean.automation.VInterface.Type;
-import com.sugarcrm.candybean.automation.control.VControl;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
+import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
-public class VInterfaceSystemTest {
+public class WebDriverSystemTest {
 
 	protected static Candybean candybean;
-	protected static VInterface iface;
+	protected static WebDriverInterface iface;
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
-	public static void instantiateCb() throws IOException{
+	public static void instantiateCb() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
@@ -55,8 +58,7 @@ public class VInterfaceSystemTest {
 	
 	@Before
 	public void first() throws Exception {
-		iface = candybean.getInterface();
-		iface.start();
+		iface = candybean.getWebDriverInterface();
 	}
 	
 //	@Ignore
@@ -97,7 +99,7 @@ public class VInterfaceSystemTest {
 		screenshotFile.delete();
 	}
 
-//	@Ignore
+	@Ignore
 	@Test
 	public void startStopRestartTest() throws Exception {
 		String expUrl = "https://www.google.com/";
@@ -105,7 +107,7 @@ public class VInterfaceSystemTest {
 		String actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
 		iface.stop();
-		iface.start(Type.FIREFOX);
+		iface = new FirefoxInterface();
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
@@ -114,7 +116,7 @@ public class VInterfaceSystemTest {
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
 		iface.stop();
-		iface.start(Type.CHROME);
+		iface = new ChromeInterface();
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
@@ -148,7 +150,7 @@ public class VInterfaceSystemTest {
 		assertFalse(iface.isDialogVisible());
 		
 		// clicking; alert should be visible and window inactive
-		iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
 		assertTrue(iface.isDialogVisible());
 		
 		// accepting alert dialog; should be gone
@@ -156,8 +158,8 @@ public class VInterfaceSystemTest {
 		assertFalse(iface.isDialogVisible());
 		
 		// Dismiss not available in Chrome
-		if (!iface.getType().equals(Type.CHROME)) {
-			iface.getControl(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+		if (iface instanceof ChromeInterface) {
+			iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
 			assertTrue(iface.isDialogVisible());
 			iface.dismissDialog();
 			assertFalse(iface.isDialogVisible());
@@ -188,38 +190,38 @@ public class VInterfaceSystemTest {
 		String expDefStr = "The magic of iframes";
 		String expFrmStr = "http://www.littlewebhut.com/images/eightball.gif";
 		iface.go("http://www.littlewebhut.com/articles/html_iframe_example/");
-		String actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		String actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
 		assertEquals(expDefStr, actDefStr);
 		
 		// switch focus to frame by index
 		iface.focusFrame(1);
 //		System.out.println("SOURCE:\n" + iface.wd.getPageSource());
-		String actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
+		String actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
 		assertEquals(expFrmStr, actFrmStr);
 		
 		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
 		assertEquals(expDefStr, actDefStr);
 		
 		// switch focus to frame by name
 		iface.focusFrame("imgbox");
-		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
+		actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
 		assertEquals(expFrmStr, actFrmStr);
 		
 		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
 		assertEquals(expDefStr, actDefStr);
 		
 		// switch to focus by control
-		iface.focusFrame(new VControl(candybean, iface, Strategy.ID, "imgbox"));
-		actFrmStr = iface.getControl(Strategy.TAG, "img").getAttribute("src");
+		iface.focusFrame(new WebDriverElement(Strategy.ID, "imgbox", iface.wd));
+		actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
 		assertEquals(expFrmStr, actFrmStr);
 		
 		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getControl(Strategy.TAG, "h2").getText();
+		actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
 		assertEquals(expDefStr, actDefStr);
 	}
 
@@ -241,7 +243,7 @@ public class VInterfaceSystemTest {
 		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Click pops-up window titled "Tryit Editor v1.9"
-		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
+		iface.getWebDriverElement(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Verify title without switching
 		assertEquals(expWindow0Title, iface.wd.getTitle());
@@ -257,13 +259,13 @@ public class VInterfaceSystemTest {
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pop-up window titled "Tryit Editor v1.8"
-		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
+		iface.getWebDriverElement(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Navigate elsewhere and trigger popup window
 //		iface.interact("window focus before go: " + iface.wd.getWindowHandle());
 		iface.go(expWindow2URL);
 //		iface.interact("window focus after go: " + iface.wd.getWindowHandle());
-		iface.getControl(Strategy.PLINK, "this link").click();
+		iface.getWebDriverElement(Strategy.PLINK, "this link").click();
 //		iface.interact(iface.getWindowsString());
 		
 		// Verify title with (not) switching to current window by index
@@ -314,7 +316,7 @@ public class VInterfaceSystemTest {
 	@Ignore
 	@Test
 	public void getControlTest() throws Exception {
-//		this.iface.getControl(null);
+//		this.iface.getWebDriverElement(null);
 	}
 
 	@Ignore

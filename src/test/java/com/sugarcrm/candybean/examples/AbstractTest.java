@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+
 import org.junit.Before;
+
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.VInterface;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.Utils;
 
 /**
@@ -16,8 +19,7 @@ import com.sugarcrm.candybean.utilities.Utils;
  * the logger will be configured to use the candybean logging configuration and will log all test-specific messages to
  * a separate log file. 
  * 
- * @author Shehryar Farooq
- *
+ * @author Shehryar Farooq, Conrad Warmbold
  */
 public abstract class AbstractTest {
 
@@ -26,7 +28,7 @@ public abstract class AbstractTest {
 	/**
 	 * The VInterface used to conduct this test
 	 */
-	protected static VInterface iface;
+	protected static WebDriverInterface iface;
 
 	/**
 	 * Test-specific logger
@@ -39,16 +41,16 @@ public abstract class AbstractTest {
 	 * @throws Exception
 	 */
 	@Before
-	public void initialize() throws IOException{
+	public void initialize() throws IOException, CandybeanException {
 		candybean = AbstractTest.configureCandybean();
-		iface = candybean.getInterface();
+		iface = candybean.getWebDriverInterface();
 		FileHandler fh = new FileHandler("./log/"
 				+ this.getClass().getSimpleName() + ".log");
-		logger = Logger.getLogger(this.getClass().getName());
+		logger = Logger.getLogger(this.getClass().getSimpleName());
 		logger.addHandler(fh);
 	}
 
-	private static Candybean configureCandybean() throws IOException{
+	private static Candybean configureCandybean() throws IOException, CandybeanException {
 		String candybeanConfigStr = System
 				.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr == null)

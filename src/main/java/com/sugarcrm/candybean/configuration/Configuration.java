@@ -64,14 +64,14 @@ public class Configuration {
     public Configuration() {
     	this.configFile = null;
         properties = new Properties();
-        this.logger = Logger.getLogger(Configuration.class.getName());
+        this.logger = Logger.getLogger(Configuration.class.getSimpleName());
     }
 
     /**
      * @param propertiesPath
      * @throws IOException 
      */
-    public Configuration(File configFile) throws IOException{
+    public Configuration(File configFile) throws IOException {
     	this.configFile = configFile;
         properties = new Properties();
         this.load(configFile);
@@ -134,7 +134,7 @@ public class Configuration {
         return Utils.adjustPath(pathValue);
     }
 
-    public void load(File file) throws IOException{
+    public void load(File file) throws IOException {
     	try {
         	if (file == null) {
         		throw new FileNotFoundException("Given file is null.");

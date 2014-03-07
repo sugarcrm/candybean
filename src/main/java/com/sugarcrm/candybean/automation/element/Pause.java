@@ -19,24 +19,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation;
+package com.sugarcrm.candybean.automation.element;
 
-import java.io.File;
-
-import org.junit.Test;
-
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
-
-public class CandybeanUnitTest {
-
-	@Test
-	public void testVoodooLog() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		Candybean candybean = Candybean.getInstance(candybeanConfig);
-		assert(candybean != null);
-	}
+/**
+ * Utility class that provides several methods for an element to pause until an action occurs.
+ */
+public abstract class Pause {
+	
+	public abstract Element untilVisible(int timeoutMs);
 }

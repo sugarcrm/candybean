@@ -19,25 +19,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.control;
+package com.sugarcrm.candybean.automation.element;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.exception.MalformedHookException;
+import com.sugarcrm.candybean.exceptions.MalformedHookException;
 import com.thoughtworks.selenium.SeleniumException;
 
 /**
  * A mechanism to locate an element on a page using a pre-defined hook string and a {@link Strategy}.
- * A collection of {@link VHook} objects can be obtained from a properties file that contains
+ * A collection of {@link Hook} objects can be obtained from a properties file that contains
  * all the hooks. The format of a hook is as follows: <br>
  * <b>key=strategy:hook</b> <br>where they key is a uniqe key assigned to the element, the strategy is the type of strategy
  * used to locate the element, and the hook is the value used by the strategy to locate the element.
  *
  */
-public class VHook {
+public class Hook {
 	
 	public static final String HOOK_DELIMITER = ":";
 	
@@ -45,7 +45,7 @@ public class VHook {
 	private final Strategy hookStrategy;
 	private final String hookString;
 
-	public VHook(Strategy hookStrategy, String hookString) {
+	public Hook(Strategy hookStrategy, String hookString) {
 		this.hookStrategy = hookStrategy;
 		this.hookString = hookString;
 	}
@@ -57,8 +57,8 @@ public class VHook {
 	 * @return
 	 * @throws MalformedHookException 
 	 */
-	public static Map<String, VHook> getHooks(Properties hooks) throws MalformedHookException {
-		Map<String, VHook> hooksMap = new HashMap<String, VHook>();
+	public static Map<String, Hook> getHooks(Properties hooks) throws MalformedHookException {
+		Map<String, Hook> hooksMap = new HashMap<String, Hook>();
 		for(String name : hooks.stringPropertyNames()) {
 //			System.out.println("hook name: " + name);
 //			String[] strategyNHook = hooks.getProperty(name).split(HOOK_DELIMITER);
@@ -67,16 +67,16 @@ public class VHook {
 				throw new MalformedHookException(name);
 			}else {
 //				System.out.println("strategy: " + strategyNHook[0] + ", hook: " + strategyNHook[1]);
-				Strategy strategy = VHook.getStrategy(strategyNHook[0]);
+				Strategy strategy = Hook.getStrategy(strategyNHook[0]);
 				String hook = strategyNHook[1];
-				hooksMap.put(name, new VHook(strategy, hook));
+				hooksMap.put(name, new Hook(strategy, hook));
 			}
 		}
 		return hooksMap;
 	}
 	
 	/**
-	 * Returns the Voodoo-defined hook strategy based on the given string.
+	 * Returns the Candybean-defined hook strategy based on the given string.
 	 * 
 	 * @param strategy
 	 * @return

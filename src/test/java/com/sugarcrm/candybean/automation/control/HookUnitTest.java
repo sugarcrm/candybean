@@ -30,11 +30,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VHook;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 
 
-public class VHookUnitTest {
+public class HookUnitTest {
 
 	@Test
 	public void testGetHooks() {
@@ -48,17 +48,17 @@ public class VHookUnitTest {
 			String hook2Name = "hook2name";
 			Strategy hook2Strategy = Strategy.XPATH;
 			String hook2String = "hook2string";
-			hooksProps.setProperty(hook1Name, hook1Strategy + VHook.HOOK_DELIMITER + hook1String);
-			hooksProps.setProperty(hook2Name, hook2Strategy + VHook.HOOK_DELIMITER + hook2String);
+			hooksProps.setProperty(hook1Name, hook1Strategy + Hook.HOOK_DELIMITER + hook1String);
+			hooksProps.setProperty(hook2Name, hook2Strategy + Hook.HOOK_DELIMITER + hook2String);
 			hooksProps.store(new FileOutputStream(hooksFile), null);
 //			JOptionPane.showInputDialog("pause");
 
 			// Test
-			Map<String, VHook> hooksMap = VHook.getHooks(hooksProps);
-			VHook hook1 = hooksMap.get(hook1Name);
+			Map<String, Hook> hooksMap = Hook.getHooks(hooksProps);
+			Hook hook1 = hooksMap.get(hook1Name);
 			Assert.assertEquals("Test hook1 strategy doesn't match expected: " + hook1Strategy, hook1Strategy, hook1.getHookStrategy());
 			Assert.assertEquals("Test hook1 string doesn't match expected: " + hook1String, hook1String, hook1.getHookString());
-			VHook hook2 = hooksMap.get(hook2Name);
+			Hook hook2 = hooksMap.get(hook2Name);
 			Assert.assertEquals("Test hook2 strategy doesn't match expected: " + hook2Strategy, hook2Strategy, hook2.getHookStrategy());
 			Assert.assertEquals("Test hook2 string doesn't match expected: " + hook2String, hook2String, hook2.getHookString());
 
@@ -78,7 +78,7 @@ public class VHookUnitTest {
 			Strategy[] strategies = { Strategy.CSS, Strategy.ID, Strategy.NAME, Strategy.XPATH };
 			for (int i = 0; i < strategyStrings.length; i++) {
 				Strategy expectedStrategy = strategies[i];
-				Strategy actualStrategy = VHook.getStrategy(strategyStrings[i]);
+				Strategy actualStrategy = Hook.getStrategy(strategyStrings[i]);
 				Assert.assertEquals("Strategy doesn't match for given string: " + strategyStrings[i], expectedStrategy, actualStrategy);
 			}
 		} catch (Exception e) {

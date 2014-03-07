@@ -45,7 +45,6 @@ public class SugarTest {
 		Properties sugarHooks = getSugarHooks();
 		SugarUser adminUser = new SugarUserBuilder("admin", "Conrad", "cwarmbold@sugarcrm.com", "310.993.2449", "asdf").build();
 		sugar = new Sugar(candybean, sugarConfig, sugarHooks, adminUser);
-		sugar.start();
 	}
 
 //	@Ignore

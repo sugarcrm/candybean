@@ -22,17 +22,13 @@
 package com.sugarcrm.candybean.examples.mobile;
 
 import org.junit.*;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -52,6 +48,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -298,13 +295,13 @@ public class AppiumIosTest {
     @Test
     public void testSessions() throws Exception {
         HttpGet request = new HttpGet("http://localhost:4723/wd/hub/sessions");
-        HttpClient httpClient = new DefaultHttpClient();
+        DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
         JSONObject jsonObject = (JSONObject) new JSONParser().parse(EntityUtils.toString(entity));
-
         String sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
         assertEquals(sessionId, jsonObject.get("sessionId"));
+        httpClient.close();
     }
 
     @Test

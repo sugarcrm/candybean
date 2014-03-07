@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,18 +12,29 @@ import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.examples.AbstractTest;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Logger unit test that checks to see if the logging configuration is always reading from the default configuration file.
+ * 
  * @author Shehryar Farooq
  */
-public class LoggerUnitTest extends AbstractTest {
+public class LoggerUnitTest {
 	
-private Logger logger;
+	private static Candybean candybean;
+	private Logger logger = Logger.getLogger(LoggerUnitTest.class.getSimpleName());
+	
+	@BeforeClass
+	public void setUp() throws Exception {
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
+		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		candybean = Candybean.getInstance(candybeanConfig);
+	}
 
 	/**
 	 * A system test for the default configured logger.
@@ -38,11 +48,11 @@ private Logger logger;
 		// configure the logger from.
 		System.clearProperty("java.util.logging.config.file");
 		LogManager.getLogManager().reset();
-		logger = Logger.getLogger("SomeLogger");
+		this.logger = Logger.getLogger("SomeLogger");
 		// The logger should have no file handlers, so we
 		// check to see if that is the case.
-		assertEquals(logger.getHandlers().length, 0);
-		File file = new File("./log/" + LoggerUnitTest.class.getName() + ".log");
+		assertEquals(this.logger.getHandlers().length, 0);
+		File file = new File("./log/" + LoggerUnitTest.class.getSimpleName() + ".log");
 		file.deleteOnExit();
 	}
 
@@ -62,7 +72,7 @@ private Logger logger;
 		String log2Path = Candybean.ROOT_DIR + File.separator + "log" + File.separator + name2 + ".log";
 		
 		// Load the initial properties from the candybean config file
-        Properties initialProperties = candybean.getConfig().getPropertiesCopy();
+        Properties initialProperties = candybean.config.getPropertiesCopy();
 		
 		// Change the FileHandler Formatter to XMLFormatter
 		initialProperties.setProperty("java.util.logging.FileHandler.formatter", "java.util.logging.XMLFormatter");

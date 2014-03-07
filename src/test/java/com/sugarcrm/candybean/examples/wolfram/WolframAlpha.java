@@ -3,9 +3,9 @@ package com.sugarcrm.candybean.examples.wolfram;
 import java.util.List;
 
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.control.VControl;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 
 /**
  * Contains specific helper methods to conduct wolfram alpha tests.
@@ -37,15 +37,15 @@ public class WolframAlpha {
 	private static final String WOLFRAM_URL = "http://www.wolframalpha.com/";
 	
 	/**
-	 * The VInterface instance used to build automation tasks.
+	 * The interface instance used to build automation tasks.
 	 */
-	private VInterface iface;
+	private WebDriverInterface iface;
 
 	/**
 	 * Default field constructor
 	 * @param iface
 	 */
-	public WolframAlpha(VInterface iface) {
+	public WolframAlpha(WebDriverInterface iface) {
 		this.iface = iface;
 	}
 
@@ -64,9 +64,9 @@ public class WolframAlpha {
 	 * @throws Exception
 	 */
 	public void askWolfram(String input) throws Exception{
-		VControl searchBar = iface.widget(Strategy.ID, WOLFRAM_SEARCHBAR_NAME);
+		WebDriverElement searchBar = iface.getWebDriverElement(Strategy.ID, WOLFRAM_SEARCHBAR_NAME);
 		searchBar.sendString(input);
-		iface.widget(Strategy.ID, WOLFRAM_SEARCH_BTN_ID).click();
+		iface.getWebDriverElement(Strategy.ID, WOLFRAM_SEARCH_BTN_ID).click();
 	}
 	
 	/**
@@ -76,23 +76,23 @@ public class WolframAlpha {
 	 * @throws Exception 
 	 */
 	public boolean verifyAnswer(String expectedAnswer) throws Exception{
-		List<VControl> controls = iface.getControls(Strategy.XPATH, "//section[starts-with(@id, 'pod_')]");
+		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.XPATH, "//section[starts-with(@id, 'pod_')]");
 		boolean resultFound = false;
-		for(VControl control: controls){
+		for(WebDriverElement element : elements){
 			if(resultFound) break;
-			control.hover();
-			String xpath = "//section[@id='"+control.getAttribute("id")+"']//a[@class='subpod-copyablept ']";
-			VControl plainTextButton = iface.getControl(Strategy.XPATH,xpath );
+			element.hover();
+			String xpath = "//section[@id='" + element.getAttribute("id")+"']//a[@class='subpod-copyablept ']";
+			WebDriverElement plainTextButton = iface.getWebDriverElement(Strategy.XPATH,xpath );
 			plainTextButton.click();
-			List<VControl> answers = iface.getControls(Strategy.XPATH, "//div[@id='mov_sub"+control.getAttribute("id")+"_1_popup_dyn']//pre");
-			for(VControl answer : answers){
+			List<WebDriverElement> answers = iface.getWebDriverElements(Strategy.XPATH, "//div[@id='mov_sub" + element.getAttribute("id")+"_1_popup_dyn']//pre");
+			for(WebDriverElement answer : answers){
 				answer.click();
 				if(answer.getText().equals(expectedAnswer)){
 					resultFound = true;
 					break;
 				}
 			}
-			VControl closeButton = iface.getControl(Strategy.XPATH, "//div[@id='mov_sub"+control.getAttribute("id")+"_1_popup_dyn']//a[@class='close']");
+			WebDriverElement closeButton = iface.getWebDriverElement(Strategy.XPATH, "//div[@id='mov_sub" + element.getAttribute("id")+"_1_popup_dyn']//a[@class='close']");
 			closeButton.click();
 		}
 		return resultFound;

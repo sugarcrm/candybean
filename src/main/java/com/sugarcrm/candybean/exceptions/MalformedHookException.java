@@ -1,4 +1,5 @@
-package com.sugarcrm.candybean.utilities.exception;
+package com.sugarcrm.candybean.exceptions;
+
 
 /**
  * Exception thrown when a hook file is not formatted correctly.
