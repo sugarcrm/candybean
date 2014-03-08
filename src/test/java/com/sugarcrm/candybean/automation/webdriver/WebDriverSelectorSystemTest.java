@@ -25,9 +25,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -39,27 +38,19 @@ import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
-//import com.sugarcrm.candybean.IAutomation.Strategy;
-//import com.sugarcrm.candybean.automation.VHook;
-//import com.sugarcrm.candybean.IAutomation;
-//import com.sugarcrm.candybean.Voodoo;
-
 public class WebDriverSelectorSystemTest {
 	
 	protected static Candybean candybean;
 	protected static WebDriverInterface iface;
 	
 	@BeforeClass
-	public static void instantiateCb() throws Exception {
+	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-	}
-	
-	@Before
-	public void first() throws Exception {
 		iface = candybean.getWebDriverInterface();
+		iface.start();
 	}
 	
 	@Test
@@ -182,8 +173,8 @@ public class WebDriverSelectorSystemTest {
 		Assert.assertEquals(expected, actual);
 	}
 	
-	@After
-	public void last() throws Exception {
+	@AfterClass
+	public static void last() throws Exception {
 		iface.stop();
 	}
 }	

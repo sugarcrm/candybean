@@ -176,8 +176,11 @@ public final class Candybean {
 	 * @throws Exception
 	 */
 	public WebDriverInterface getWebDriverInterface() throws CandybeanException {
+		logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
 		WebDriverInterface iface = null;
-		switch (AutomationInterface.parseType(this.config.getValue("automation.interface", "chrome"))) {
+		Type configType = AutomationInterface.parseType(this.config.getValue("automation.interface", "chrome"));
+		logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + this.config.configFile.getAbsolutePath());
+		switch (configType) {
 		case FIREFOX:
 			iface = new FirefoxInterface();
 			break;

@@ -25,8 +25,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -49,16 +48,13 @@ public class WebDriverSystemTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
-	public static void instantiateCb() throws Exception {
+	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-	}
-	
-	@Before
-	public void first() throws Exception {
 		iface = candybean.getWebDriverInterface();
+		iface.start();
 	}
 	
 //	@Ignore
@@ -158,7 +154,7 @@ public class WebDriverSystemTest {
 		assertFalse(iface.isDialogVisible());
 		
 		// Dismiss not available in Chrome
-		if (iface instanceof ChromeInterface) {
+		if (!(iface instanceof ChromeInterface)) {
 			iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
 			assertTrue(iface.isDialogVisible());
 			iface.dismissDialog();
@@ -325,8 +321,8 @@ public class WebDriverSystemTest {
 //		this.iface.getSelect(null);
 	}
 
-	@After
-	public void last() throws Exception {
+	@AfterClass
+	public static void last() throws Exception {
 		iface.stop();
 	}
 }

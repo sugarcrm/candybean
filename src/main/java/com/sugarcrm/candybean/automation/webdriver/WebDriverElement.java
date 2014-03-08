@@ -80,7 +80,7 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Get the value of an attribute of the control.
+	 * Get the value of an attribute of the element.
 	 * 
 	 * @param attribute
 	 *            name of the attribute to get
@@ -90,29 +90,29 @@ public class WebDriverElement extends Element {
 	 *             found
 	 */
 	public String getAttribute(String attribute) throws CandybeanException {
-		logger.info("Selenium: getting attribute: " + attribute
-				+ " for control: " + this.toString());
+		logger.info("Getting attribute: " + attribute
+				+ " for element: " + this.toString());
 		String value = we.getAttribute(attribute);
 		if (value == null)
-			throw new CandybeanException("Selenium: attribute does not exist.");
+			throw new CandybeanException("Attribute does not exist.");
 		else
 			return value;
 	}
 
 	public String getSource() throws CandybeanException {
-		logger.info("Selenium: getting source for control: " + this.toString());
+		logger.info("Getting source for element: " + this.toString());
 		return (String) ((JavascriptExecutor) this.wd)
 				.executeScript("return arguments[0].innerHTML;", this.we);
 	}
 
 	/**
-	 * Get the visible text of this control. If the control is a button, the
+	 * Get the visible text of this element. If the element is a button, the
 	 * value is returned.
 	 * 
 	 * @return the visible text of this element
 	 */
 	public String getText() throws CandybeanException {
-		logger.info("Selenium: getting text for control: " + this.toString());
+		logger.info("Getting text for element: " + this.toString());
 		String type = this.we.getAttribute("type");
 		if (type != null
 				&& (type.equalsIgnoreCase("button") || type
@@ -126,12 +126,12 @@ public class WebDriverElement extends Element {
 	 * Click the element.
 	 */
 	public void click() throws CandybeanException {
-		logger.info("Selenium: clicking on control: " + this.toString());
+		logger.info("Clicking on element: " + this.toString());
 		we.click();
 	}
 
 	/**
-	 * Returns true if the control visibly contains the given string in any
+	 * Returns true if the element visibly contains the given string in any
 	 * non-visible=false element.
 	 * 
 	 * @param s
@@ -141,7 +141,7 @@ public class WebDriverElement extends Element {
 	 * @return Returns true if the interface visibly contains the given string
 	 */
 	public boolean contains(String s, boolean caseSensitive) {
-		logger.info("Searching if the control contains the following string: '"
+		logger.info("Searching if the element contains the following string: '"
 				+ s + "' with case sensitivity: " + caseSensitive);
 		String lowercase = s;
 		if (!caseSensitive) {
@@ -166,80 +166,80 @@ public class WebDriverElement extends Element {
 	 * Double-click the element.
 	 */
 	public void doubleClick() throws CandybeanException {
-		logger.info("Selenium: double-clicking on control: " + this.toString());
+		logger.info("Double-clicking on element: " + this.toString());
 		Actions action = new Actions(this.wd);
 		action.doubleClick(we).perform();
 	}
 
 	/**
-	 * Drag this control and drop onto another control.
+	 * Drag this element and drop onto another element.
 	 * 
 	 * @param dropControl
 	 *            target of the drag and drop
 	 */
 	public void dragNDrop(WebDriverElement dropControl)
 			throws CandybeanException {
-		logger.info("Selenium: dragging control: " + this.toString()
-				+ " to control: " + dropControl.toString());
+		logger.info("Dragging element: " + this.toString()
+				+ " to element: " + dropControl.toString());
 		Actions action = new Actions(this.wd);
 		action.dragAndDrop(this.we, dropControl.we).build().perform();
 	}
 
 	@Override
 	public Element getElement(Hook hook, int index) throws CandybeanException {
-		logger.info("Selenium: getting control: " + hook.toString()
-				+ " from control: " + this.toString() + " with index: " + index);
+		logger.info("Getting element: " + hook.toString()
+				+ " from element: " + this.toString() + " with index: " + index);
 		WebElement childWe = this.we.findElements(WebDriverElement.By(hook))
 				.get(index);
 		return new WebDriverElement(hook, index, this.wd, childWe);
 	}
 
 	/**
-	 * Hover over this control.
+	 * Hover over this element.
 	 */
 	public void hover() throws CandybeanException {
-		logger.info("Selenium: hovering over control: " + this.toString());
+		logger.info("Hovering over element: " + this.toString());
 		Actions action = new Actions(this.wd);
 		action.moveToElement(this.we).perform();
 	}
 
 	/**
-	 * Returns true if and only if the control is displayed {@link http
+	 * Returns true if and only if the element is displayed {@link http
 	 * ://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according
 	 * to Selenium}
 	 */
 	public boolean isDisplayed() throws CandybeanException {
-		logger.info("Selenium: determining if control is visible: "
+		logger.info("Determining if element is visible: "
 				+ this.toString());
 		return we.isDisplayed();
 	}
 
 	/**
-	 * Right-click this control.
+	 * Right-click this element.
 	 */
 	public void rightClick() throws CandybeanException {
-		logger.info("Selenium: right-clicking control: " + this.toString());
+		logger.info("Right-clicking element: " + this.toString());
 		Actions action = new Actions(this.wd);
 		action.contextClick(this.we).perform();
 	}
 
 	/**
-	 * Scroll the browser window to this control.
+	 * Scroll the browser window to this element.
 	 */
 	public void scroll() throws CandybeanException {
-		logger.info("Selenium: scrolling to control: " + this.toString());
+		logger.info("Scrolling to element: " + this.toString());
 		int y = this.we.getLocation().y;
 		((JavascriptExecutor) this.wd).executeScript("window.scrollBy(0," + y + ");");
 	}
 
 	/**
-	 * Clears the control and sends a string to it.
+	 * Clears the element and sends a string to it.
 	 * 
 	 * @param input
 	 *            string to send
 	 */
 	public void sendString(String input) throws CandybeanException {
-		logger.info("Selenium: sending string: " + input + " to control: "
+		logger.info("Sending string: " + input + " to element: "
 				+ this.toString());
 		this.we.clear();
 
@@ -255,18 +255,18 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Send a string to this control.
+	 * Send a string to this element.
 	 * 
 	 * @param input
 	 *            string to send
 	 * @param append
-	 *            if append is true, the control will be cleared first
+	 *            if append is true, the element will be cleared first
 	 * @throws CandybeanException
 	 */
 	public void sendString(String input, boolean append)
 			throws CandybeanException {
 		logger.info("Clear first?: " + append + "; sending string: " + input
-				+ " to control: " + this.toString());
+				+ " to element: " + this.toString());
 		if (!append)
 			this.sendString(input);
 		else {

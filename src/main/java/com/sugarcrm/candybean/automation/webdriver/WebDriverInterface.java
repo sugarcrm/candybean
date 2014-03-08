@@ -69,15 +69,10 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	public WebDriver wd = null;
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 	
-	/**
-	 * Instantiate WebDriverInterface;
-	 *
-	 * @throws CandybeanException
-	 */
-	public WebDriverInterface(Type iType) throws CandybeanException {
+	protected WebDriverInterface(Type iType) throws CandybeanException {
 		super(iType);
 	}
-
+	
 	/**
 	 * Handle the way this interface is to be started. 
 	 * This routine must be implemented specific to the type of interface.

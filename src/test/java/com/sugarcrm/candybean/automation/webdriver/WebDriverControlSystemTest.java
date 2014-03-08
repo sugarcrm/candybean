@@ -24,9 +24,8 @@ package com.sugarcrm.candybean.automation.webdriver;
 import java.io.File;
 import java.util.List;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -51,18 +50,15 @@ public class WebDriverControlSystemTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
-	public static void instantiateCb() throws Exception {
+	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty("candybean_config");
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
+		iface = candybean.getWebDriverInterface();
+		iface.start();
 	}
 	
-	@Before
-	public void first() throws Exception {
-		iface = candybean.getWebDriverInterface();
-	}
-
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://sfbay.craigslist.org/";
@@ -311,8 +307,8 @@ public class WebDriverControlSystemTest {
 		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
 }
 	
-	@After
-	public void last() throws Exception {
+	@AfterClass
+	public static void last() throws Exception {
 		iface.stop();
 	}
 }	

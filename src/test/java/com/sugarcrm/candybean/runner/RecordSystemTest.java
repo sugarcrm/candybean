@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -23,8 +23,8 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Show-cases the ability to record failing tests using {@link Record} annotation.
+ * 
  * @author Shehryar Farooq
- *
  */
 @RunWith(VRunner.class)
 public class RecordSystemTest {
@@ -41,6 +41,8 @@ public class RecordSystemTest {
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
+		iface = candybean.getWebDriverInterface();
+		iface.start();
 	}
 	
 	@Test
@@ -64,8 +66,8 @@ public class RecordSystemTest {
 		assertEquals(iface.getURL(), amazonUrl);		
 	}
 
-	@After
-	public void last() throws Exception {
+	@AfterClass
+	public static void after() throws Exception {
 		iface.stop();
 	}
 }

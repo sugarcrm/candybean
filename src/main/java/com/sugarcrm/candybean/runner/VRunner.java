@@ -78,13 +78,13 @@ public class VRunner extends BlockJUnit4ClassRunner {
 				testMethods = this.removeBlockedTests(testMethods); // scrub tests for blocked tests
 			}
 			for (final FrameworkMethod method : testMethods) {
-				logger.info("method: " + method.getName());
+				logger.finer("method: " + method.getName());
 				final VTag vTag = method.getAnnotation(VTag.class);
 				if (vTag != null) {
 					if (vTag.tags().length != 0) {
 						if (!vTag.tagLogicClass().isEmpty() && !vTag.tagLogicMethod().isEmpty()) {
 							for (String tag : vTag.tags()) {
-								logger.info("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
+								logger.finer("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
 								Class<?> c = Class.forName(vTag.tagLogicClass());
 								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), tag.getClass());
 								if ((boolean) m.invoke(null, (Object) tag)) {
