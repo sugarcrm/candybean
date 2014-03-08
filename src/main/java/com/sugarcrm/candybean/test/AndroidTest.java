@@ -3,6 +3,7 @@ package com.sugarcrm.candybean.test;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Before;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -12,7 +13,7 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * 
  * @author Shehryar Farooq
  */
-public class AndroidTest extends MobileTest {
+public abstract class AndroidTest extends MobileTest {
 	
 	/**
 	 * The desired capabilities requested for the SwipeableWebDriver
@@ -27,17 +28,10 @@ public class AndroidTest extends MobileTest {
 	}
 
 	@Override
-	public void instantiateInterface() throws CandybeanException {
-		// TODO Auto-generated method stub
-	}
+	@Before
+	public abstract void setUp() throws CandybeanException;
 
 	@Override
-	public void setUp() throws CandybeanException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void tearDown() throws CandybeanException {
-		// TODO Auto-generated method stub
-	}
+	@Before
+	public abstract void tearDown() throws CandybeanException;
 }

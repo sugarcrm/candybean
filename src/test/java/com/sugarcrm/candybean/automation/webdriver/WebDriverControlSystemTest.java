@@ -21,43 +21,29 @@
  */
 package com.sugarcrm.candybean.automation.webdriver;
 
-import java.io.File;
 import java.util.List;
-
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
-
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
-import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-public class WebDriverControlSystemTest {
-	
-	protected static Candybean candybean;
-	protected static WebDriverInterface iface;
+public class WebDriverControlSystemTest extends BrowserTest{
 		
+	public WebDriverControlSystemTest() throws Exception {
+		super();
+	}
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
-	@BeforeClass
-	public static void first() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getWebDriverInterface();
-		iface.start();
-	}
 	
 	@Test
 	public void getAttributeTest() throws Exception {
@@ -83,8 +69,8 @@ public class WebDriverControlSystemTest {
 	public void getControlsTest() throws Exception{
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
-		List<WebDriverElement> controls = iface.getWebDriverElements(Strategy.CLASS,"topnav");
-		Assert.assertEquals(controls.size(),14);
+		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"topnav");
+		Assert.assertEquals(elements.size(),14);
 	}
 	
 	@Test
@@ -109,11 +95,11 @@ public class WebDriverControlSystemTest {
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
-		boolean actCaseSensPos = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
-		boolean actCaseSensNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("google developers", true); //false
-		boolean actNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("goggle devs", false); //false
-		boolean negFalse = iface.getWebDriverElement(Strategy.ID, "gc-topnav").contains("Google Developers", false); //false
-		boolean negTrue = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", false); //true
+		boolean actCaseSensPos = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", true); // true
+		boolean actCaseSensNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("google developers", true); // false
+		boolean actNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("goggle devs", false); // false
+		boolean negFalse = iface.getWebDriverElement(Strategy.CLASS, "ph-section").contains("Google Developers", false); // false
+		boolean negTrue = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", false); // true
 		Assert.assertEquals(true, actCaseSensPos);
 		Assert.assertEquals(false, actCaseSensNeg);
 		Assert.assertEquals(false, actNeg);
@@ -126,7 +112,7 @@ public class WebDriverControlSystemTest {
 	public void doubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
-		//Checkbox control
+		//Checkbox element
 		WebDriverElement checkboxControl = iface.getWebDriverElement(Strategy.NAME, "vehicle");
 		// DoubleClick on a Checkbox
 		checkboxControl.scroll();
@@ -274,16 +260,16 @@ public class WebDriverControlSystemTest {
 //        candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
 
         // Checking getAttributeValue()
-        WebDriverElement control = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
-		String actText = control.getAttribute("type");
+        WebDriverElement element = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+		String actText = element.getAttribute("type");
         String expText = "text";
         Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
 
-		String actSize = control.getAttribute("size");
+		String actSize = element.getAttribute("size");
         String expSize = "20";
         Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
 
-		String actName = control.getAttribute("name");
+		String actName = element.getAttribute("name");
         String expName = "firstname";
         Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
     }
@@ -305,10 +291,17 @@ public class WebDriverControlSystemTest {
 		iface.getWebDriverElement(Strategy.ID, "search_form_input").sendString("sugar", true);
 		iface.getWebDriverElement(Strategy.ID, "search_button").click();
 		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
-}
-	
-	@AfterClass
-	public static void last() throws Exception {
+	}
+
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@Override
+	@After
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
 }	

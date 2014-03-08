@@ -31,8 +31,10 @@ public class FirefoxInterface extends WebDriverInterface {
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
 		super.wd.close();
+		super.stop();
 	}
 
+	@Override
 	public void restart() throws CandybeanException {
 		logger.info("Restarting automation interface with type: " + super.iType);
 		this.stop();

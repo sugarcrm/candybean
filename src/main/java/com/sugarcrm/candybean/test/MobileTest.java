@@ -2,10 +2,8 @@ package com.sugarcrm.candybean.test;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
-
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -18,11 +16,11 @@ public abstract class MobileTest extends WebDriverTest {
 		super();
 		this.config = new Configuration(new File(Candybean.CONFIG_DIR + File.separator + "capabilities.config"));
 	}
-	
-	@Override
+
 	@BeforeClass
-	public void instantiateInterface() throws CandybeanException {
-		iface = Candybean.getInstance().getWebDriverInterface();
+	public static void instantiateInterface() throws CandybeanException {
+		candybean = Candybean.getInstance();
+		iface = candybean.getWebDriverInterface();
 	}
 
 	@Override

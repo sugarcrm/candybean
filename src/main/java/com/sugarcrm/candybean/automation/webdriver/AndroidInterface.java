@@ -33,6 +33,7 @@ public class AndroidInterface extends WebDriverInterface {
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
 		super.wd.close();
+		super.stop();
 	}
 
 	public void restart() throws CandybeanException {

@@ -35,6 +35,7 @@ public class ChromeInterface extends WebDriverInterface {
 		super.stop();
 	}
 
+	@Override
 	public void restart() throws CandybeanException {
 		logger.info("Restarting automation interface with type: " + super.iType);
 		this.stop();

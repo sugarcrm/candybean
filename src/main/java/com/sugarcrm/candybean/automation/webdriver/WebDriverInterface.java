@@ -103,6 +103,14 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	}
 	
 	/**
+	 * @throws CandybeanException
+	 */
+	public void restart() throws CandybeanException {
+		this.stop();
+		this.start();
+	}
+	
+	/**
 	 * Display a modal dialog box to the test user.
 	 *
 	 * @param message	 	String to display on the dialog box
