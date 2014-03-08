@@ -91,11 +91,6 @@ public abstract class AutomationInterface {
 	}
 	
 	/**
-	 * A convenience method for stopping, then starting an interface.
-	 */
-	public abstract void restart() throws CandybeanException;
-	
-	/**
 	 * Starts the interface in a type-specific way and prepares for automation.
 	 */
 	public abstract void start() throws CandybeanException;

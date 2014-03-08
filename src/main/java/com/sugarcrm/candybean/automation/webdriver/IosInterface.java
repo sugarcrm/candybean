@@ -26,6 +26,7 @@ public class IosInterface extends WebDriverInterface {
 		} catch (MalformedURLException mue) {
 			throw new CandybeanException(mue);
 		}
+        super.start(); // requires wd to be instantiated first
 	}
 
 	@Override
@@ -34,7 +35,6 @@ public class IosInterface extends WebDriverInterface {
 		super.wd.close();
 	}
 
-	@Override
 	public void restart() throws CandybeanException {
 		logger.info("Restarting automation interface with type: " + super.iType);
 		this.stop();

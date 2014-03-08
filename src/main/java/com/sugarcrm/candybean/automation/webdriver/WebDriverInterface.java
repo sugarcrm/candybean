@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -42,6 +43,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.TouchScreen;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
@@ -79,17 +81,27 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * 
 	 * @throws CandybeanException
 	 */
-//	public void start() throws CandybeanException {
-//		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit_wait_seconds"));
-//		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-//		if (System.getProperty("headless") == null
-//				&& !(this instanceof AndroidInterface)
-//				&& !(this instanceof IOsInterface)) {
-//			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
-//		}
-//	}
-
+	@Override
+	public void start() throws CandybeanException {
+		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit_wait_seconds"));
+		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
+		if (System.getProperty("headless") == null
+				&& !(this instanceof AndroidInterface)
+				&& !(this instanceof IosInterface)) {
+			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+		}
+		this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
+	}
+	
+	/**
+	 * @throws CandybeanException
+	 */
+	@Override
+	public void stop() throws CandybeanException {
+		this.windows.clear();
+	}
+	
 	/**
 	 * Display a modal dialog box to the test user.
 	 *
@@ -155,7 +167,6 @@ public abstract class WebDriverInterface extends AutomationInterface {
 
 	/**
 	 * Navigates the interface backward.  If backward is undefined, it does nothing.
-	 * 
 	 */
 	public void backward() throws CandybeanException {
 		logger.info("Navigating the interface backward.");
