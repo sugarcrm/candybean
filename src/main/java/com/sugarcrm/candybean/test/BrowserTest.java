@@ -1,5 +1,6 @@
 package com.sugarcrm.candybean.test;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
@@ -12,17 +13,23 @@ public abstract class BrowserTest extends WebDriverTest {
 		super();
 	}
 
-	@Override
 	@BeforeClass
-	public void instantiateInterface() throws CandybeanException {
-		iface = Candybean.getInstance().getWebDriverInterface();
+	public static void instantiateInterface() throws CandybeanException {
+		candybean = Candybean.getInstance();
+		iface = candybean.getWebDriverInterface();
 	}
 
+	/**
+	 * Do anything before running the test, such as starting the iface
+	 */
 	@Override
 	@Before
 	public abstract void setUp() throws CandybeanException;
 
+	/**
+	 * Do anything after running the test, such as stopping the iface
+	 */
 	@Override
-	@Before
+	@After
 	public abstract void tearDown() throws CandybeanException;
 }

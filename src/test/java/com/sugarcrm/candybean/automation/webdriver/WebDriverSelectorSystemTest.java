@@ -21,38 +21,24 @@
  */
 package com.sugarcrm.candybean.automation.webdriver;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
-
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverSelector;
-import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-public class WebDriverSelectorSystemTest {
+public class WebDriverSelectorSystemTest extends BrowserTest{
 	
-	protected static Candybean candybean;
-	protected static WebDriverInterface iface;
-	
-	@BeforeClass
-	public static void first() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getWebDriverInterface();
-		iface.start();
+	public WebDriverSelectorSystemTest() throws Exception {
+		super();
 	}
-	
+
 	@Test
 	public void selectTest() throws Exception {
 		String option = "Sep";
@@ -172,9 +158,16 @@ public class WebDriverSelectorSystemTest {
 		// 3. Verify that actual value is the expected value
 		Assert.assertEquals(expected, actual);
 	}
-	
-	@AfterClass
-	public static void last() throws Exception {
+
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@Override
+	@After
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
 }	

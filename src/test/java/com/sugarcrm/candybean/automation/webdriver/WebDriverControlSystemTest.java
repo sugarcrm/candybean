@@ -21,43 +21,29 @@
  */
 package com.sugarcrm.candybean.automation.webdriver;
 
-import java.io.File;
 import java.util.List;
-
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
-
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
-import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-public class WebDriverControlSystemTest {
-	
-	protected static Candybean candybean;
-	protected static WebDriverInterface iface;
+public class WebDriverControlSystemTest extends BrowserTest{
 		
+	public WebDriverControlSystemTest() throws Exception {
+		super();
+	}
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
-	@BeforeClass
-	public static void first() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getWebDriverInterface();
-		iface.start();
-	}
 	
 	@Test
 	public void getAttributeTest() throws Exception {
@@ -305,10 +291,17 @@ public class WebDriverControlSystemTest {
 		iface.getWebDriverElement(Strategy.ID, "search_form_input").sendString("sugar", true);
 		iface.getWebDriverElement(Strategy.ID, "search_button").click();
 		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
-}
-	
-	@AfterClass
-	public static void last() throws Exception {
+	}
+
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@Override
+	@After
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
 }	

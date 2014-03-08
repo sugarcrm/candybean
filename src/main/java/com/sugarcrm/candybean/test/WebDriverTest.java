@@ -19,17 +19,17 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * 
  * @author Shehryar Farooq, Conrad Warmbold
  */
-public abstract class WebDriverTest extends AbstractTest {
+public abstract class WebDriverTest {
 
 	/**
 	 * Candybean used to conduct this test
 	 */
-	protected Candybean candybean;
+	protected static Candybean candybean;
 	
 	/**
 	 * AutomationInterface used to automate actions
 	 */
-	protected WebDriverInterface iface;
+	protected static WebDriverInterface iface;
 	
 	/**
 	 * Test-specific logger
@@ -52,12 +52,6 @@ public abstract class WebDriverTest extends AbstractTest {
 		logger = Logger.getLogger(WebDriverTest.class.getSimpleName());
 		logger.addHandler(fh);
 	}
-	
-	/**
-	 * @throws CandybeanException 
-	 */
-	@BeforeClass
-	public abstract void instantiateInterface() throws CandybeanException;
 
 	/**
 	 * @throws CandybeanException 

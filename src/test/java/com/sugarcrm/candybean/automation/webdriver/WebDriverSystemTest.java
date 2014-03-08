@@ -22,40 +22,29 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
 import static org.junit.Assert.*;
-
 import java.io.File;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
 import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-public class WebDriverSystemTest {
-
-	protected static Candybean candybean;
-	protected static WebDriverInterface iface;
+public class WebDriverSystemTest extends BrowserTest{
 	
+	public WebDriverSystemTest() throws Exception {
+		super();
+	}
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
-	@BeforeClass
-	public static void first() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getWebDriverInterface();
-		iface.start();
-	}
 	
 //	@Ignore
 	@Test
@@ -321,8 +310,16 @@ public class WebDriverSystemTest {
 //		this.iface.getSelect(null);
 	}
 
-	@AfterClass
-	public static void last() throws Exception {
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@Override
+	@After
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
+
 }
