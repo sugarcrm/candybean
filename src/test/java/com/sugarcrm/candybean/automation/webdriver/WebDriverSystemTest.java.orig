@@ -37,11 +37,19 @@ import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.test.BrowserTest;
 
+<<<<<<< HEAD
 public class WebDriverSystemTest extends BrowserTest{
+=======
+public class WebDriverSystemTest extends BrowserTest {
+	
+	public WebDriverSystemTest() throws Exception {
+		super();
+	}
+>>>>>>> 1abce999d20c573015b9bc70861a6bc898413d6e
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-	
+
 //	@Ignore
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {

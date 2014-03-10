@@ -2,32 +2,36 @@ package com.sugarcrm.candybean.test;
 
 import java.io.File;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public abstract class MobileTest extends WebDriverTest {
+public class MobileTest extends WebDriverTest {
 	
+	/**
+	 * The configuration containing the parameters to configure this desired capabilities
+	 */
 	protected Configuration config;
+	
+	/**
+	 * The type of mobile test
+	 */
+	protected Type type;
+	
+	/**
+	 * The desired capabilities requested for the SwipeableWebDriver
+	 */
+	protected DesiredCapabilities capabilities = new DesiredCapabilities();
 
-	public MobileTest() throws IOException, CandybeanException {
+	public MobileTest(Type type) {
 		super();
-		this.config = new Configuration(new File(Candybean.CONFIG_DIR + File.separator + "capabilities.config"));
+		this.type = type;
+		try {
+			this.config = new Configuration(new File(Candybean.CONFIG_DIR + File.separator + "capabilities.config"));
+		} catch (IOException e) {
+			logger.severe("Unable to find config/capabilities.config file required for mobile test execution");
+			logger.severe(e.getMessage());
+		}
 	}
-
-	@BeforeClass
-	public static void instantiateInterface() throws CandybeanException {
-		candybean = Candybean.getInstance();
-		iface = candybean.getWebDriverInterface();
-	}
-
-	@Override
-	@Before
-	public abstract void setUp() throws CandybeanException;
-
-	@Override
-	@Before
-	public abstract void tearDown() throws CandybeanException;
 }

@@ -23,10 +23,12 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.sugarcrm.candybean.automation.webdriver.WebDriverSelector;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
@@ -34,6 +36,14 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.test.BrowserTest;
 
 public class WebDriverSelectorSystemTest extends BrowserTest {
+<<<<<<< HEAD
+=======
+	
+	public WebDriverSelectorSystemTest() throws Exception {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+>>>>>>> 1abce999d20c573015b9bc70861a6bc898413d6e
 
 	@Test
 	public void selectTest() throws Exception {

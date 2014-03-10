@@ -9,15 +9,17 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 public class AndroidInterface extends WebDriverInterface {
+	
+	protected DesiredCapabilities capabilities;
 
-	public AndroidInterface() throws CandybeanException {
+	public AndroidInterface(DesiredCapabilities capabilities) throws CandybeanException {
 		super(Type.ANDROID);
+		this.capabilities = capabilities;
 	}
 
 	@Override
 	public void start() throws CandybeanException {
 		logger.info("Starting automation interface with type: " + this.iType);
-		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
 		capabilities.setCapability(CapabilityType.VERSION, "4.4.2");
 		capabilities.setCapability("device", "Android");

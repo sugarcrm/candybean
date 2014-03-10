@@ -36,11 +36,7 @@ import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.test.BrowserTest;
 
-public class WebDriverControlSystemTest extends BrowserTest{
-		
-	public WebDriverControlSystemTest() throws Exception {
-		super();
-	}
+public class WebDriverControlSystemTest extends BrowserTest {
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();

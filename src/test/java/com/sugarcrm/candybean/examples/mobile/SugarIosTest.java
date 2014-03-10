@@ -48,12 +48,9 @@ import com.sugarcrm.candybean.test.IosTest;
  */
 public class SugarIosTest extends IosTest {
 
-    public SugarIosTest() throws CandybeanException, IOException {
-		super();
-	}
-
 	@Before
     public void setUp() throws CandybeanException {
+		iface.start();
         iface.wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 

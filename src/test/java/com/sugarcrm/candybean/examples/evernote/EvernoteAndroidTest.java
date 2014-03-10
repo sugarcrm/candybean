@@ -1,13 +1,10 @@
 package com.sugarcrm.candybean.examples.evernote;
 
 import static org.junit.Assert.*;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,18 +19,14 @@ import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
-
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.test.AndroidTest;
 
 public class EvernoteAndroidTest extends AndroidTest {
-
-	public EvernoteAndroidTest() throws IOException, Exception {
-		super();
-	}
-
+	
 	@Before
 	public void setUp() throws CandybeanException {
+		iface.start();
 		iface.pause(3000);
 		login();
 		closeWelcomeOverlay();
@@ -266,4 +259,5 @@ public class EvernoteAndroidTest extends AndroidTest {
 			return touch;
 		}
 	}
+
 }

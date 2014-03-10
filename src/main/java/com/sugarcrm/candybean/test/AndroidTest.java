@@ -1,11 +1,9 @@
 package com.sugarcrm.candybean.test;
 
 import java.io.File;
-import java.io.IOException;
-
+import org.junit.After;
 import org.junit.Before;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
@@ -15,23 +13,22 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  */
 public abstract class AndroidTest extends MobileTest {
 	
-	/**
-	 * The desired capabilities requested for the SwipeableWebDriver
-	 */
-	protected DesiredCapabilities capabilities = new DesiredCapabilities();
-	
-	public AndroidTest() throws IOException, Exception {
+	public AndroidTest() {
+		super(Type.ANDROID);
 		String className = this.getClass().getSimpleName();
 		capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
 		capabilities.setCapability("app-package", config.getValue(className + ".app-package"));
 		capabilities.setCapability("app-activity", config.getValue(className + ".app-activity"));
+		try {
+			iface = candybean.getWebDriverInterface(type, capabilities);
+		} catch (CandybeanException e) {
+			logger.severe(e.getMessage());
+		}
 	}
 
-	@Override
 	@Before
 	public abstract void setUp() throws CandybeanException;
 
-	@Override
-	@Before
+	@After
 	public abstract void tearDown() throws CandybeanException;
 }
