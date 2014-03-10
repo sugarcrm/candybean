@@ -100,6 +100,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	@Override
 	public void stop() throws CandybeanException {
 		this.windows.clear();
+		this.wd.quit();
 	}
 	
 	/**
