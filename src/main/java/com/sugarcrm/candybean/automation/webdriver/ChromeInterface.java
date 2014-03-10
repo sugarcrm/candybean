@@ -25,12 +25,14 @@ public class ChromeInterface extends WebDriverInterface {
 				+ chromeDriverLogPath + "\n    driver path: "
 				+ chromeDriverPath);
 		super.wd = new ChromeDriver(chromeOptions);
+		super.start(); // requires wd to be instantiated first
 	}
 	
 	@Override
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
 		super.wd.close();
+		super.stop();
 	}
 
 	@Override

@@ -44,7 +44,6 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 public class Adhoc {
 	
-	protected static File relResourcesDir;
 	protected static Candybean candybean;
 	protected static WebDriverInterface iface;
 		
@@ -53,15 +52,12 @@ public class Adhoc {
 
 	@BeforeClass
 	public static void first() throws Exception {
-		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
-				"src" + File.separator +
-				"test" + File.separator + 
-				"resources" + File.separator);
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
+		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 		iface = candybean.getWebDriverInterface();
+		iface.start();
 	}
 
 	@Ignore

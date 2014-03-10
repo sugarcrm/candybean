@@ -24,12 +24,14 @@ public class FirefoxInterface extends WebDriverInterface {
 		logger.info("Instantiating Firefox with profile name: "
 				+ profileName + " and binary path: " + ffBinaryPath);
 		super.wd = new FirefoxDriver(ffBinary, ffProfile);
+		super.start(); // requires wd to be instantiated first
 	}
 
 	@Override
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
 		super.wd.close();
+		super.stop();
 	}
 
 	@Override

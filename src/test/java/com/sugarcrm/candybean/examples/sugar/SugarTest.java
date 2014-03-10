@@ -61,7 +61,7 @@ public class SugarTest {
 	}
 	
 	private static Candybean getCandybean() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr == null) {
 			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		}

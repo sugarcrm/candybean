@@ -65,8 +65,8 @@ public class WebDriverControlSystemTest extends BrowserTest {
 	public void getControlsTest() throws Exception{
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
-		List<WebDriverElement> controls = iface.getWebDriverElements(Strategy.CLASS,"topnav");
-		Assert.assertEquals(controls.size(),14);
+		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"topnav");
+		Assert.assertEquals(elements.size(),14);
 	}
 	
 	@Test
@@ -91,11 +91,11 @@ public class WebDriverControlSystemTest extends BrowserTest {
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
-		boolean actCaseSensPos = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
-		boolean actCaseSensNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("google developers", true); //false
-		boolean actNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("goggle devs", false); //false
-		boolean negFalse = iface.getWebDriverElement(Strategy.ID, "gc-topnav").contains("Google Developers", false); //false
-		boolean negTrue = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", false); //true
+		boolean actCaseSensPos = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", true); // true
+		boolean actCaseSensNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("google developers", true); // false
+		boolean actNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("goggle devs", false); // false
+		boolean negFalse = iface.getWebDriverElement(Strategy.CLASS, "ph-section").contains("Google Developers", false); // false
+		boolean negTrue = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", false); // true
 		Assert.assertEquals(true, actCaseSensPos);
 		Assert.assertEquals(false, actCaseSensNeg);
 		Assert.assertEquals(false, actNeg);
@@ -108,7 +108,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 	public void doubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
-		//Checkbox control
+		//Checkbox element
 		WebDriverElement checkboxControl = iface.getWebDriverElement(Strategy.NAME, "vehicle");
 		// DoubleClick on a Checkbox
 		checkboxControl.scroll();
@@ -256,16 +256,16 @@ public class WebDriverControlSystemTest extends BrowserTest {
 //        candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
 
         // Checking getAttributeValue()
-        WebDriverElement control = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
-		String actText = control.getAttribute("type");
+        WebDriverElement element = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+		String actText = element.getAttribute("type");
         String expText = "text";
         Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
 
-		String actSize = control.getAttribute("size");
+		String actSize = element.getAttribute("size");
         String expSize = "20";
         Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
 
-		String actName = control.getAttribute("name");
+		String actName = element.getAttribute("name");
         String expName = "firstname";
         Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
     }

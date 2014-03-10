@@ -19,12 +19,14 @@ public class InternetExplorerInterface extends WebDriverInterface {
 		System.setProperty("webdriver.ie.driver", ieDriverPath);
 		capabilities = DesiredCapabilities.internetExplorer();
 		super.wd = new InternetExplorerDriver(capabilities);
+        super.start(); // requires wd to be instantiated first
 	}
 	
 	@Override
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
 		super.wd.close();
+		super.stop();
 	}
 
 	@Override

@@ -28,15 +28,16 @@ public class AndroidInterface extends WebDriverInterface {
 		} catch (MalformedURLException mue) {
 			throw new CandybeanException(mue);
 		}
+        super.start(); // requires wd to be instantiated first
 	}
 
 	@Override
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
 		super.wd.close();
+		super.stop();
 	}
 
-	@Override
 	public void restart() throws CandybeanException {
 		logger.info("Restarting automation interface with type: " + super.iType);
 		this.stop();
