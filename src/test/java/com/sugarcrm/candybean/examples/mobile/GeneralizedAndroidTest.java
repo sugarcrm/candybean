@@ -1,9 +1,6 @@
 package com.sugarcrm.candybean.examples.mobile;
 
 import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,12 +12,10 @@ import com.sugarcrm.candybean.test.AndroidTest;
 
 public class GeneralizedAndroidTest extends AndroidTest {
 
-	public GeneralizedAndroidTest() throws IOException, Exception {
-		super();
-	}
 
 	@Before
 	public void setUp() throws CandybeanException {
+		iface.start();
 		iface.pause(2000);
 	}
 	

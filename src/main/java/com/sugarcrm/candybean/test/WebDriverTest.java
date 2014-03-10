@@ -1,12 +1,8 @@
 package com.sugarcrm.candybean.test;
 
+import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -41,27 +37,19 @@ public abstract class WebDriverTest {
 	 * 
 	 * @throws Exception 
 	 */
-	public WebDriverTest() throws CandybeanException {
-		FileHandler fh;
+	public WebDriverTest() {
+		logger = Logger.getLogger(this.getClass().getSimpleName());
 		try {
-			fh = new FileHandler("./log/"
-					+ this.getClass().getSimpleName() + ".log");
-		} catch (Exception e) {
-			throw new CandybeanException(e);
+			FileHandler fh = new FileHandler("./log/" + this.getClass().getSimpleName() + ".log");
+			logger = Logger.getLogger(WebDriverTest.class.getSimpleName());
+			logger.addHandler(fh);
+			candybean = Candybean.getInstance();
+		} catch (SecurityException e) {
+			logger.severe("Unable to instantiate candybean with test specific logger");
+		} catch (IOException e) {
+			logger.severe("Unable to read/write to file " + "./log/" + this.getClass().getSimpleName() + ".log");
+		} catch (CandybeanException e) {
+			logger.severe("Unable to instantiate candybean using default configuration settings");
 		}
-		logger = Logger.getLogger(WebDriverTest.class.getSimpleName());
-		logger.addHandler(fh);
 	}
-
-	/**
-	 * @throws CandybeanException 
-	 */
-	@Before
-	public abstract void setUp() throws CandybeanException;
-	
-	/**
-	 * @throws CandybeanException 
-	 */
-	@After
-	public abstract void tearDown() throws CandybeanException;
 }

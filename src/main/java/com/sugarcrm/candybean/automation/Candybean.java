@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.webdriver.AndroidInterface;
 import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
@@ -158,11 +160,11 @@ public final class Candybean {
 		case SAFARI:
 			throw new CandybeanException("Selenium: SAFARI interface type not yet supported");
 		case ANDROID:
-			iface = new AndroidInterface();
-			break;
+			throw new CandybeanException("Android interface cannot be instantiated without desired capabilities, please instantiate the interface" +
+								"using getWebDriverInterface(Type type, DesiredCapabilities capabilities)");
 		case IOS:
-			iface = new IosInterface();
-			break;	
+			throw new CandybeanException("IOS interface cannot be instantiated without desired capabilities, please instantiate the interface" +
+					"using getWebDriverInterface(Type type, DesiredCapabilities capabilities)");
 		default:
 			throw new CandybeanException("WebDriver automation interface type not recognized: " + iface);
 		}
@@ -193,13 +195,28 @@ public final class Candybean {
 		case SAFARI:
 			throw new CandybeanException("Selenium: SAFARI interface type not yet supported");
 		case ANDROID:
-			iface = new AndroidInterface();
-			break;
+			throw new CandybeanException("Android interface cannot be instantiated without desired capabilities, please instantiate the interface" +
+								"using getWebDriverInterface(Type type, DesiredCapabilities capabilities)");
 		case IOS:
-			iface = new IosInterface();
-			break;	
+			throw new CandybeanException("IOS interface cannot be instantiated without desired capabilities, please instantiate the interface" +
+					"using getWebDriverInterface(Type type, DesiredCapabilities capabilities)");
 		default:
 			throw new CandybeanException("WebDriver automation interface type not recognized: " + iface);
+		}
+		return iface;
+	}
+	
+	public WebDriverInterface getWebDriverInterface(Type type, DesiredCapabilities capabilities) throws CandybeanException {
+		WebDriverInterface iface = null;
+		switch (type) {
+			case ANDROID:
+				iface = new AndroidInterface(capabilities);
+				break;
+			case IOS:
+				iface = new IosInterface(capabilities);
+				break;	
+			default:
+				throw new CandybeanException("WebDriver automation interface type not recognized: " + type);
 		}
 		return iface;
 	}
@@ -224,4 +241,6 @@ public final class Candybean {
 		LogManager.getLogManager().readConfiguration();		
 		return Logger.getLogger(Candybean.class.getSimpleName());
 	}
+
+
 }

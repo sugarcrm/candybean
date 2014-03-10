@@ -9,15 +9,17 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 public class IosInterface extends WebDriverInterface {
+	
+	protected DesiredCapabilities capabilities;
 
-	public IosInterface() throws CandybeanException {
+	public IosInterface(DesiredCapabilities capabilities) throws CandybeanException {
 		super(Type.IOS);
+		this.capabilities = capabilities;
 	}
 
 	@Override
 	public void start() throws CandybeanException {
 		logger.info("Starting automation interface with type: " + super.iType);
-		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
         capabilities.setCapability(CapabilityType.VERSION, "6.0");
         capabilities.setCapability(CapabilityType.PLATFORM, "Mac");

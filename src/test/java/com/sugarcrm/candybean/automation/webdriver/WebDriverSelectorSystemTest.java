@@ -33,11 +33,7 @@ import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.test.BrowserTest;
 
-public class WebDriverSelectorSystemTest extends BrowserTest{
-	
-	public WebDriverSelectorSystemTest() throws Exception {
-		super();
-	}
+public class WebDriverSelectorSystemTest extends BrowserTest {
 
 	@Test
 	public void selectTest() throws Exception {
