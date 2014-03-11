@@ -1,33 +1,32 @@
 package com.sugarcrm.candybean.examples.mobile;
 
 import static org.junit.Assert.*;
-
-import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.HasTouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
+import org.openqa.selenium.remote.RemoteTouchScreen;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
-
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.test.AndroidTest;
 
 public class EvernoteAndroidTest extends AndroidTest {
-
-	public EvernoteAndroidTest() throws IOException, Exception {
-		super();
-	}
-
+	
 	@Before
 	public void setUp() throws CandybeanException {
+		iface.start();
 		iface.pause(3000);
 		login();
 		closeWelcomeOverlay();
@@ -37,7 +36,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 	public void tearDown() throws CandybeanException {
 		iface.wd.quit();
 	}
-
+	
 	@Test
 	public void openNotes() throws CandybeanException {
 		openUsersMenu();
@@ -46,7 +45,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 		notesAction.click();
 		iface.pause(3000);
 	}
-
+	
 	@Test
 	public void newNote() throws CandybeanException {
 		openUsersMenu();
@@ -85,7 +84,8 @@ public class EvernoteAndroidTest extends AndroidTest {
 			values.put("element", ((RemoteWebElement) note).getId());
 			((JavascriptExecutor) iface.wd).executeScript("mobile: longClick", values);
 			iface.pause(1000);
-			WebElement footer = ((RemoteWebElement) iface.wd).findElementById("com.evernote:id/efab_menu_footer");
+			WebElement footer = ((RemoteWebDriver) iface.wd)
+					.findElementById("com.evernote:id/efab_menu_footer");
 			List<WebElement> footerItems = footer.findElements(By
 					.className("android.widget.ImageButton"));
 			WebElement moreOptions = footerItems.get(footerItems.size() - 1);
@@ -134,7 +134,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 		}
 	}
 	
-	private boolean overlayExists() {
+	private boolean overlayExists(){
 		try {
 			WebElement welcomeOverlay = iface.wd.findElement(By.id("com.evernote:id/fd_layout"));
 			return welcomeOverlay.isDisplayed();
@@ -143,7 +143,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 		}
 	}
 	
-	private boolean isLeftMenuOpen() {
+	private boolean isLeftMenuOpen(){
 		try {
 			WebElement header = iface.wd.findElement(By.id("com.evernote:id/efab_menu_hdr"));
 			List<WebElement> children = header.findElements(By.xpath("android.widget.LinearLayout"));
@@ -152,7 +152,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 			return false;
 		}
 	}
-	
+
 	public void closeWelcomeOverlay() throws CandybeanException {
 		if(overlayExists()){
 			try {
@@ -194,14 +194,12 @@ public class EvernoteAndroidTest extends AndroidTest {
 		iface.pause(1000);
 	}
 	
-
 	public void closeConfirmation(boolean option) throws CandybeanException {
 		WebElement confirmation = iface.wd.findElement(By
 				.id(option ? "android:id/button1" : "android:id/button2"));
 		confirmation.click();
 		iface.pause(1000);
 	}
-
 
 	public String getFooterTitleText() {
 		WebElement startingElement = iface.wd.findElement(By
@@ -247,7 +245,19 @@ public class EvernoteAndroidTest extends AndroidTest {
 		}
 	}
 
+	public class SwipeableWebDriver extends RemoteWebDriver implements
+			HasTouchScreen {
+		private RemoteTouchScreen touch;
 
+		public SwipeableWebDriver(URL remoteAddress,
+				Capabilities desiredCapabilities) {
+			super(remoteAddress, desiredCapabilities);
+			touch = new RemoteTouchScreen(getExecuteMethod());
+		}
+
+		public TouchScreen getTouch() {
+			return touch;
+		}
+	}
 
 }
-
