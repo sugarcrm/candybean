@@ -94,9 +94,10 @@ public class TestRecorder extends RunListener {
 		context = JAXBContext.newInstance(FailedTests.class);
 		String candybeanConfigStr = System
 				.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null)
+		if (candybeanConfigStr == null) {
 			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath()
 					+ File.separator + Candybean.CONFIG_FILE_NAME;
+		}
 		config = new Configuration(new File(
 				Utils.adjustPath(candybeanConfigStr)));
 		xmlFile = new File(config.getValue("testResultsXMLPath",

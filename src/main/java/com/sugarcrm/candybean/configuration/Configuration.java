@@ -143,7 +143,6 @@ public class Configuration {
         	}
         } catch (FileNotFoundException e) {
             // get file name using substring of adjustedPath that starts after the last /
-            logger.warning(file.getCanonicalPath() + " not found.\n");
             logger.severe(e.getMessage());
         } catch (IOException e) {
             logger.warning("Unable to load " + file.getCanonicalPath() + ".\n");
