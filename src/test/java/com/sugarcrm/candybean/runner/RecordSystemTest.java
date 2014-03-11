@@ -36,7 +36,7 @@ public class RecordSystemTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
-	public static void instantiateCb() throws Exception {
+	public static void first() throws Exception {
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
@@ -67,7 +67,7 @@ public class RecordSystemTest {
 	}
 
 	@AfterClass
-	public static void after() throws Exception {
+	public static void last() throws Exception {
 		iface.stop();
 	}
 }
