@@ -27,12 +27,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.sugarcrm.candybean.examples.AbstractTest;
 import com.sugarcrm.candybean.runner.VRunner;
 
 @RunWith(VRunner.class)
-public class BlockListUnitTest extends AbstractTest {
+public class BlockListUnitTest {
 	
+	// To verify VRunner @Ignore doesn't break
 	@Ignore
 	@Test
 	public void ignoreFail() throws Exception {
@@ -51,6 +51,7 @@ public class BlockListUnitTest extends AbstractTest {
 		fail();
 	}
 	
+	// To ensure VRunner @Test doesn't break
 	@Test
 	public void pass() throws Exception {
 		assertTrue(true);

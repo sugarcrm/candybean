@@ -39,7 +39,7 @@ import au.com.bytecode.opencsv.CSVParser;
 
 public class CSV extends DataSource {
 	
-	private Logger log = Logger.getLogger(CSV.class.getName());
+	private Logger log = Logger.getLogger(CSV.class.getSimpleName());
 	private static final long serialVersionUID = 1L;
 	private List<String> keys = null;
 	private CSVParser parser = null;

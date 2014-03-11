@@ -21,17 +21,17 @@
  */
 package com.sugarcrm.candybean.examples.yelp;
 
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.model.Model;
 
 public class YelpHooks {
 	
-	private VInterface i;
+	private WebDriverInterface i;
 	private YelpUser user;
 	private Model model;
 	
-	public YelpHooks(VInterface i, YelpUser user) {
+	public YelpHooks(WebDriverInterface i, YelpUser user) {
 		this.i = i;
 		this.user = user;
 	}
@@ -42,17 +42,17 @@ public class YelpHooks {
 	}
 	
 	public void login() throws Exception {
-		this.i.getControl(Strategy.LINK, "Log In").click();
+		this.i.getWebDriverElement(Strategy.LINK, "Log In").click();
 		String loginUrl = "https://www.yelp.com/login";
-		this.i.widget(Strategy.NAME, "email").sendString(user.email());
-		this.i.widget(Strategy.NAME, "password").sendString(user.password());
-		this.i.widget(Strategy.NAME, "action_submit").click();
+		this.i.getWebDriverElement(Strategy.NAME, "email").sendString(user.email());
+		this.i.getWebDriverElement(Strategy.NAME, "password").sendString(user.password());
+		this.i.getWebDriverElement(Strategy.NAME, "action_submit").click();
 	}
 	
 	public void logout() throws Exception {
 		String mainUrlBase = "http://www.yelp.com/";
-		this.i.widget(Strategy.ID, "topbar-account-link").click();
-		this.i.widget(Strategy.LINK, "Log Out").click();
+		this.i.getWebDriverElement(Strategy.ID, "topbar-account-link").click();
+		this.i.getWebDriverElement(Strategy.LINK, "Log Out").click();
 	}
 	
 	public void stop() throws Exception {

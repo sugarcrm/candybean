@@ -22,7 +22,6 @@
 package com.sugarcrm.candybean.examples.mobile;
 
 import org.junit.*;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.HasTouchScreen;
@@ -30,13 +29,16 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteTouchScreen;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
-import com.sugarcrm.candybean.examples.ITest;
-import com.sugarcrm.candybean.examples.IosTest;
+
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.IosTest;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
@@ -44,23 +46,24 @@ import com.sugarcrm.candybean.examples.IosTest;
  *
  * @author Larry Cao
  */
-public class SugarIosTest extends IosTest implements ITest{
+public class SugarIosTest extends IosTest {
 
-    @Before
-    public void setUp() throws Exception {
-        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	@Before
+    public void setUp() throws CandybeanException {
+		iface.start();
+        iface.wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @After
-    public void tearDown() throws Exception {
-        wd.quit();
+    public void tearDown() throws CandybeanException {
+        iface.wd.quit();
     }
 
     @Test
-    public void testLogin() throws Exception {
-        WebElement username = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
+    public void testLogin() throws CandybeanException {
+        WebElement username = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
         assertTrue(username.isDisplayed());
-        Set<String> handles = wd.getWindowHandles();
+        Set<String> handles = iface.wd.getWindowHandles();
         for (String s : handles) {
             System.out.println(s);
         }
@@ -68,13 +71,13 @@ public class SugarIosTest extends IosTest implements ITest{
             username.clear();
         }
         username.sendKeys("admin");
-        WebElement password = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
+        WebElement password = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/secure[1]"));
         assertTrue(password.isDisplayed());
         password.click();
         password.sendKeys("asdf");
-        WebElement login = wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
+        WebElement login = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
         login.click();
-        Thread.sleep(1000000);
+        iface.pause(1000000);
     }
 
     public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {

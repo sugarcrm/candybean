@@ -19,61 +19,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.control;
+package com.sugarcrm.candybean.automation.webdriver;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.utilities.exception.CandybeanException;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 import java.util.*;
 
 /**
- * VSelect is a control that represents and allows for interaction with the SELECT element.
+ * An element that represents and allows for interaction with the SELECT element.
  * Any HTML select tag on the page can be represented by a VSelect.
- * @author cwarmbold
+ * 
+ * @author Conrad Warmbold
  */
 
-public class VSelect extends VControl {
-
-    private static final String FROM_CONTROL = "' from control: ";
+public class WebDriverSelector extends WebDriverElement {
 
 	private Select select;
-
-    private boolean isMultiple;
-
-	/**
-	 * Instantiate a VSelect object.
-	 *
-	 * @param candybean	  {@link Candybean} object for this run
-	 * @param iface	  {@link VInterface} for this run
-	 * @param strategy  {@link Strategy} used to search for element
-	 * @param hook		  value of strategy to search for
-	 * @throws CandybeanException hook does not grab a SELECT
-	 */
-	public VSelect(Candybean candybean, VInterface iface, Strategy strategy, String hook) throws CandybeanException {
-		this(candybean, iface, new VHook(strategy, hook));
-	}
+    private boolean isMultiSelector;
 
 	/**
-	 * Instantiate a VSelect object.
-	 *
-	 * @param candybean	{@link Candybean} object for this run
-	 * @param iface	{@link VInterface} for this run
-	 * @param hook		{@link VHook} used to search for this element
-	 * @throws CandybeanException hook does not grab a SELECT
+	 * @param hook
+	 * @param wd
+	 * @throws CandybeanException 
 	 */
-	public VSelect(Candybean candybean, VInterface iface, VHook hook) throws CandybeanException {
-		super(candybean, iface, hook);
-        select = new Select(super.getWe());
-        isMultiple = select.isMultiple();
+	public WebDriverSelector(Hook hook, WebDriver wd) throws CandybeanException {
+		super(hook, wd);
+        this.select = new Select(super.we);
+        this.isMultiSelector = select.isMultiple();
 	}
 
-    public boolean isMultiple() {
-        return isMultiple;
+    public boolean isMultiSelector() {
+        return this.isMultiSelector;
     }
 
 	/**
@@ -82,8 +63,8 @@ public class VSelect extends VControl {
 	 * @param value  text of the option to be selected
 	 */
 	public void select(String value) {
-		candybean.logger.info("Selenium: selecting value '" + value  +  FROM_CONTROL + this.toString());
-		select.selectByVisibleText(value);
+		logger.info("Selecting value '" + value  +  "' from selector: " + this.toString());
+		this.select.selectByVisibleText(value);
 	}
 
     /**
@@ -93,7 +74,7 @@ public class VSelect extends VControl {
      */
     public void select(int index) {
         List<WebElement> options = select.getOptions();
-        candybean.logger.info("Selenium: selecting value '" + options.get(index).getText() + FROM_CONTROL + this.toString());
+        logger.info("Selecting value '" + options.get(index).getText() + "' from selector: " + this.toString());
         select.selectByIndex(index);
     }
 
@@ -123,7 +104,7 @@ public class VSelect extends VControl {
      * @param text  text of the option to be deselected
      */
     public void deselect(String text) {
-        candybean.logger.info("Selenium: deselecting value '" + text + FROM_CONTROL + this.toString());
+    	logger.info("Deselecting value '" + text + "' from element: " + this.toString());
         select.deselectByVisibleText(text);
     }
 
@@ -134,7 +115,7 @@ public class VSelect extends VControl {
      */
     public void deselect(int index) {
         List<WebElement> options = select.getOptions();
-        candybean.logger.info("Selenium: deselecting value '" + options.get(index).getText()  +  FROM_CONTROL + this.toString());
+        logger.info("Deselecting value '" + options.get(index).getText()  +  "' from element: " + this.toString());
         select.deselectByIndex(index);
     }
 
@@ -151,21 +132,20 @@ public class VSelect extends VControl {
 
     /**
      * Deselect all options.
-     *
      */
     public void deselectAll() {
-        candybean.logger.info("Selenium: deselecting all values from control: " + this.toString());
+    	logger.info("Deselecting all values from element: " + this.toString());
         select.deselectAll();
     }
 
     /**
      * Get the text of the first selected option.
      *
-     * @return text of the first selected option in this select
-     * (or the currently selected option in a normal select)
+     * @return text of the first selected option in this selector
+     * (or the currently selected option in a single selector)
      */
     public String getFirstSelectedOption() {
-
+    	logger.info("Returning first selecting values from element: " + this.toString());
         return select.getFirstSelectedOption().getText();
     }
 
@@ -203,7 +183,7 @@ public class VSelect extends VControl {
      * @return	boolean true if any options in the select element are selected
      */
     public boolean isSelected() {
-        candybean.logger.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
+    	logger.info("Selenium: returns true if an option is selected: " + this.toString() + " is selected");
         return getAllSelectedOptions().size() > 0;
     }
 
@@ -257,6 +237,6 @@ public class VSelect extends VControl {
 
 	@Override
 	public String toString() {
-		return "VSelect(" + super.toString() + ")";
+		return this.getClass().getSimpleName() + "(" + super.toString() + ")";
 	}
 }

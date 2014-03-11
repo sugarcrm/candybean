@@ -45,7 +45,6 @@ public class SugarTest {
 		Properties sugarHooks = getSugarHooks();
 		SugarUser adminUser = new SugarUserBuilder("admin", "Conrad", "cwarmbold@sugarcrm.com", "310.993.2449", "asdf").build();
 		sugar = new Sugar(candybean, sugarConfig, sugarHooks, adminUser);
-		sugar.start();
 	}
 
 //	@Ignore
@@ -62,7 +61,7 @@ public class SugarTest {
 	}
 	
 	private static Candybean getCandybean() throws Exception {
-		String candybeanConfigStr = System.getProperty("candybean_config");
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr == null) {
 			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		}

@@ -2,27 +2,46 @@ package com.sugarcrm.candybean.runner;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
+import java.io.File;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import com.sugarcrm.candybean.examples.AbstractTest;
+
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.runner.Duration;
 import com.sugarcrm.candybean.runner.Record;
 import com.sugarcrm.candybean.runner.VTag;
 import com.sugarcrm.candybean.runner.VRunner;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Show-cases the ability to record failing tests using {@link Record} annotation.
+ * 
  * @author Shehryar Farooq
- *
  */
 @RunWith(VRunner.class)
-public class RecordSystemTest extends AbstractTest {
+public class RecordSystemTest {
 	
-	@Before
-	public void first() throws Exception {
+	protected static Candybean candybean;
+	protected static WebDriverInterface iface;
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
+	@BeforeClass
+	public static void first() throws Exception {
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
+		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		candybean = Candybean.getInstance(candybeanConfig);
+		iface = candybean.getWebDriverInterface();
 		iface.start();
 	}
 	
@@ -46,12 +65,9 @@ public class RecordSystemTest extends AbstractTest {
 		iface.go(yahooUrl);
 		assertEquals(iface.getURL(), amazonUrl);		
 	}
-	
 
-	@After
-	public void last() throws Exception {
+	@AfterClass
+	public static void last() throws Exception {
 		iface.stop();
 	}
-	
-
 }

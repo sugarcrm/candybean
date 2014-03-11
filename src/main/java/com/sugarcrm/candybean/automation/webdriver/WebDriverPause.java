@@ -19,29 +19,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.control;
+package com.sugarcrm.candybean.automation.webdriver;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.sugarcrm.candybean.automation.element.Pause;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+
 /**
- * Utility class that provides several methods for a VControl to pause until an action occurs.
+ * Utility class that provides several methods for an element to pause until an
+ * action occurs.
  */
-public class Pause {
-	
-	private VControl c;
-	
-	public Pause(VControl c) {
-		this.c = c;
+public class WebDriverPause extends Pause {
+
+	private WebDriverElement wde;
+
+	public WebDriverPause(WebDriverElement wde) {
+		this.wde = wde;
+	}
+
+	@Override
+	public WebDriverElement untilVisible(int timeoutMs) {
+		(new WebDriverWait(this.wde.wd, timeoutMs)).until(ExpectedConditions
+				.visibilityOf(this.wde.we));
+		return this.wde;
 	}
 	
-	public VControl untilTextPresent(String text, int timeout) {
-		(new WebDriverWait(this.c.getIface().wd, timeout)).until(ExpectedConditions.textToBePresentInElement(this.c.getBy(), text));
-		return this.c;
-	}
-	
-	public VControl untilVisible(int timeoutms) {
-		(new WebDriverWait(this.c.getIface().wd, timeoutms)).until(ExpectedConditions.visibilityOf(this.c.getWe()));
-		return this.c;
+	public WebDriverElement untilTextPresent(String text, int timeout) 
+			throws CandybeanException {
+		(new WebDriverWait(this.wde.wd, timeout)).until(ExpectedConditions
+				.textToBePresentInElement(this.wde.getBy(), text));
+		return this.wde;
 	}
 }

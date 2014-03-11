@@ -27,14 +27,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
-
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.openqa.selenium.TimeoutException;
 
-import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
@@ -46,24 +44,19 @@ import com.sugarcrm.candybean.utilities.Utils;
 
 public class Adhoc {
 	
-	protected static File relResourcesDir;
 	protected static Candybean candybean;
-	protected static VInterface iface;
+	protected static WebDriverInterface iface;
 		
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
 	public static void first() throws Exception {
-		relResourcesDir = new File(System.getProperty("user.dir") + File.separator + 
-				"src" + File.separator +
-				"test" + File.separator + 
-				"resources" + File.separator);
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = relResourcesDir.getCanonicalPath() + File.separator + "candybean.config";
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
+		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getInterface();
+		iface = candybean.getWebDriverInterface();
 		iface.start();
 	}
 
@@ -71,20 +64,20 @@ public class Adhoc {
 	@Test
 	public void dragNDropTest() throws Exception {
 		iface.go("http://honey-b/pro700/");
-		iface.getControl(Strategy.NAME, "username").sendString("admin");
-		iface.getControl(Strategy.NAME, "password").sendString("asdf");
-		iface.getControl(Strategy.NAME, "login_button").click();
+		iface.getWebDriverElement(Strategy.NAME, "username").sendString("admin");
+		iface.getWebDriverElement(Strategy.NAME, "password").sendString("asdf");
+		iface.getWebDriverElement(Strategy.NAME, "login_button").click();
 		iface.go("http://honey-b/pro700/#bwc/index.php?module=ModuleBuilder&action=index&type=studio");
 		iface.pause(8000);
 		iface.focusFrame("bwc-frame");
-		iface.getControl(Strategy.PLINK, "Accounts").click();
+		iface.getWebDriverElement(Strategy.PLINK, "Accounts").click();
 		iface.pause(1000);
-		iface.getControl(Strategy.PLINK, "Layouts").click();
+		iface.getWebDriverElement(Strategy.PLINK, "Layouts").click();
 		iface.pause(1000);
-		iface.getControl(Strategy.PLINK, "Record View").click();
+		iface.getWebDriverElement(Strategy.PLINK, "Record View").click();
 		iface.pause(1000);
 		iface.interact("pause...");
-		iface.getControl(Strategy.ID, "le_label_1").dragNDrop(iface.getControl(Strategy.ID, "21"));
+		iface.getWebDriverElement(Strategy.ID, "le_label_1").dragNDrop(iface.getWebDriverElement(Strategy.ID, "21"));
 		iface.interact("pause...");
 		iface.focusDefault();
 	}

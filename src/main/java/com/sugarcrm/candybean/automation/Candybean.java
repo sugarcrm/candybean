@@ -21,13 +21,23 @@
  */
 package com.sugarcrm.candybean.automation;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.webdriver.AndroidInterface;
+import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
+import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
+import com.sugarcrm.candybean.automation.webdriver.InternetExplorerInterface;
+import com.sugarcrm.candybean.automation.webdriver.IosInterface;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.utilities.Utils;
 
 /**
  * Candybean is the primary object for tests to use.  It provides
@@ -61,11 +71,6 @@ public final class Candybean {
 			+ File.separator + "config" + File.separator);
 
 	/**
-	 * {@link Logger} object for use by tests.
-	 */
-	public final Logger logger;
-
-	/**
 	 * {@link Configuration} object created by loading the candybean
 	 * configuration file.
 	 */
@@ -77,72 +82,143 @@ public final class Candybean {
 	 */
 	private static Candybean instance = null;
 
+	/**
+	 * {@link Logger} object for use by Candybean.
+	 */
+	private final Logger logger;
 
 	/**
-	 * Instantiate a Candybean object.
+	 * Instantiates a Candybean object.
 	 * 
-	 * @throws IOException 
 	 * @throws Exception if instantiating the logger fails
 	 */
-	private Candybean(Configuration config) throws IOException{
-		this.config = config;
-		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
-		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
-		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
-		LogManager.getLogManager().readConfiguration();
-		logger = Logger.getLogger(Candybean.class.getSimpleName());
-		logger.config("Instantiating Candybean with config: " + config.toString());
+	private Candybean(Configuration config) throws CandybeanException {
+		try {
+			this.config = config;
+			logger = this.getLogger();
+			logger.config("Instantiating Candybean with config: " + config.toString());
+		} catch (Exception e) {
+			throw new CandybeanException(e);
+		}
 	}
 
 	/**
-	 * Get the global Candybean instance.
+	 * Gets the global Candybean instance.
 	 *
 	 * @param config  {@link Configuration} object created from candybean.config
 	 * @return singleton candybean instance
 	 * @throws IOException 
 	 * @throws Exception if instantiating the logger fails
 	 */
-	public static Candybean getInstance(Configuration config) throws IOException{
+	public static Candybean getInstance(Configuration config) throws CandybeanException {
 		if (Candybean.instance == null) {
 			Candybean.instance = new Candybean(config); 
 		}
 		return Candybean.instance;
 	}
-
+	
 	/**
-	 * Get an {@link VInterface} for use by a test.
-	 *
-	 * @return a new {@link VInterface}
+	 * Get the global candybean instance
+	 * 
+	 * @return global candybean instance based on a default configuration
 	 * @throws Exception
 	 */
-	public VInterface getInterface() {
-		return new VInterface(this, this.getConfig());
+	public static Candybean getInstance() throws CandybeanException {
+		Configuration config = Candybean.getDefaultConfiguration();
+		return Candybean.getInstance(config);
+	}
+	
+	/**
+	 * Instantiates a generalized automation interface given the type
+	 * 
+	 * @return AutomationInterface
+	 * @throws Exception
+	 */
+	@Deprecated
+	public AutomationInterface getInterface() throws Exception {
+		throw new Exception("There are no non-webdriver automation interfaces currently defined.");
+	}
+	
+	/**
+	 * Instantiates an interface given the type
+	 * 
+	 * @return WebDriverInterface
+	 * @throws Exception
+	 */
+	public WebDriverInterface getWebDriverInterface() throws CandybeanException {
+		logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
+		Type configType = AutomationInterface.parseType(this.config.getValue("automation.interface", "chrome"));
+		logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + this.config.configFile.getAbsolutePath());
+		return this.getWebDriverInterface(configType);
+	}
+	
+	/**
+	 * Instantiates an interface given the type
+	 * 
+	 * @return WebDriverInterface
+	 * @throws Exception
+	 */
+	public WebDriverInterface getWebDriverInterface(Type type) throws CandybeanException {
+		switch (type) {
+		case ANDROID:
+			throw new CandybeanException(
+					"Android interface cannot be instantiated without desired capabilities; please instantiate the interface"
+							+ "using getWebDriverInterface(Type, DesiredCapabilities)");
+		case IOS:
+			throw new CandybeanException(
+					"iOS interface cannot be instantiated without desired capabilities; please instantiate the interface"
+							+ "using getWebDriverInterface(Type, DesiredCapabilities)");
+		default:
+			return this.getWebDriverInterface(type, null);
+		}
+	}
+	
+	public WebDriverInterface getWebDriverInterface(Type type, DesiredCapabilities capabilities) throws CandybeanException {
+		WebDriverInterface iface = null;
+		switch (type) {
+		case FIREFOX:
+			iface = new FirefoxInterface();
+			break;
+		case CHROME:
+			iface = new ChromeInterface();
+			break;
+		case IE:
+			iface = new InternetExplorerInterface();
+			break;
+		case SAFARI:
+			throw new CandybeanException("Selenium: SAFARI interface type not yet supported");
+		case ANDROID:
+			iface = new AndroidInterface(capabilities);
+			break;
+		case IOS:
+			iface = new IosInterface(capabilities);
+			break;	
+		default:
+			throw new CandybeanException("WebDriver automation interface type not recognized: " + type);
+		}
+		return iface;
+	}
+	
+	private static Configuration getDefaultConfiguration() throws CandybeanException {
+		try {
+			String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
+			if (candybeanConfigStr == null) {
+				candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
+						+ Candybean.CONFIG_FILE_NAME;
+			}
+			return new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+		} catch (IOException ioe) {
+			throw new CandybeanException(ioe);
+		}
 	}
 
-	//	public long getPageLoadTimeout() {
-	//		return Long.parseLong(props.getString("perf.page_load_timeout"));
-	//	}
-
-	//	public String getTime() {
-	//		return Utils.pretruncate("" + (new Date()).getTime(), 6);
-	//	}
-
-	public Configuration getConfig() {
-		return this.config;
+	private Logger getLogger() throws Exception {
+		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
+		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
+		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
+		LogManager.getLogManager().readConfiguration();		
+		return Logger.getLogger(Candybean.class.getSimpleName());
 	}
 
-	//	private Level getLogLevel() {
-	//		String logLevel = Utils.getCascadingPropertyValue(props, "INFO", ".level");
-	//		switch(logLevel) {
-	//		case "SEVERE": return Level.SEVERE;
-	//		case "WARNING": return Level.WARNING;
-	//		case "INFO": return Level.INFO;
-	//		case "FINE": return Level.FINE;
-	//		case "FINER": return Level.FINER;
-	//		case "FINEST": return Level.FINEST;
-	//		default:
-	//			logger.warning("Configured system.log_level not recognized; defaulting to Level.INFO");
-	//			return Level.INFO;
-	//		}
-	//	}
+
 }

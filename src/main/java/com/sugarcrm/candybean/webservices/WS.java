@@ -36,7 +36,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -45,7 +44,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -54,7 +52,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class WS {
 	
-	private static Logger log = Logger.getLogger(WS.class.getName());
+	private static Logger log = Logger.getLogger(WS.class.getSimpleName());
 	
 	public enum TYPE { JSON, XML };
 	public enum OP { DELETE, GET, POST, PUT };
@@ -134,7 +132,7 @@ public class WS {
 		
 		request.setHeaders(hdrs);
 		
-		HttpClient httpClient = new DefaultHttpClient();
+		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpResponse execute = null;
         try {
 			execute = httpClient.execute(request);
@@ -156,7 +154,7 @@ public class WS {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> mapParse = (Map<String, Object>) parse;
-
+		httpClient.close();
 		return mapParse;
 	}
 	
@@ -195,7 +193,7 @@ public class WS {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> mapParse = (Map<String, Object>) parse;
-
+		defaultHttpClient.close();
 		return mapParse;
 	}
 	

@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 
 /**
  * @author Conrad Warmbold
- *
  */
 public class Test {
 	

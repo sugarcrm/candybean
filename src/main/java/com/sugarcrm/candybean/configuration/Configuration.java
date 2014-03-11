@@ -64,14 +64,14 @@ public class Configuration {
     public Configuration() {
     	this.configFile = null;
         properties = new Properties();
-        this.logger = Logger.getLogger(Configuration.class.getName());
+        this.logger = Logger.getLogger(Configuration.class.getSimpleName());
     }
 
     /**
      * @param propertiesPath
      * @throws IOException 
      */
-    public Configuration(File configFile) throws IOException{
+    public Configuration(File configFile) throws IOException {
     	this.configFile = configFile;
         properties = new Properties();
         this.load(configFile);
@@ -134,7 +134,7 @@ public class Configuration {
         return Utils.adjustPath(pathValue);
     }
 
-    public void load(File file) throws IOException{
+    public void load(File file) throws IOException {
     	try {
         	if (file == null) {
         		throw new FileNotFoundException("Given file is null.");
@@ -143,7 +143,6 @@ public class Configuration {
         	}
         } catch (FileNotFoundException e) {
             // get file name using substring of adjustedPath that starts after the last /
-            logger.warning(file.getCanonicalPath() + " not found.\n");
             logger.severe(e.getMessage());
         } catch (IOException e) {
             logger.warning("Unable to load " + file.getCanonicalPath() + ".\n");

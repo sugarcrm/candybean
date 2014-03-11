@@ -19,72 +19,44 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.control;
+package com.sugarcrm.candybean.automation.webdriver;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.TimeoutException;
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VControl;
-import com.sugarcrm.candybean.automation.control.VHook;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-//import com.sugarcrm.candybean.IAutomation.Strategy;
-//import com.sugarcrm.candybean.automation.VHook;
-//import com.sugarcrm.candybean.IAutomation;
-//import com.sugarcrm.candybean.Candybean;
-//import static org.junit.Assert.assertEquals;
+public class WebDriverControlSystemTest extends BrowserTest {
 
-public class VControlSystemTest {
-	
-	protected static Candybean candybean;
-	protected static VInterface iface;
-		
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
-	@BeforeClass
-	public static void instantiateCb() throws IOException{
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-	}
 	
-	@Before
-	public void first() throws Exception {
-		iface = candybean.getInterface();
-		iface.start();
-	}
-
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://sfbay.craigslist.org/";
 		iface.go(w3Url);
-		String actAltValue = iface.getControl(Strategy.ID, "container").getAttribute("summary");
+		String actAltValue = iface.getWebDriverElement(Strategy.ID, "container").getAttribute("summary");
 		String expAltValue = "page";
 		Assert.assertEquals(expAltValue, actAltValue);
 	}
 	
 	@Test
-	public void getControlTest() throws Exception {
+	public void getElementTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		String expH2 = "HTML Introduction";
 		iface.go(w3Url);
-		iface.getControl(Strategy.ID, "leftcolumn").getControl(Strategy.TAG, "a", 1).click();
-		VControl h1Control = iface.getControl(Strategy.TAG, "h1");
+		((WebDriverElement) iface.getWebDriverElement(Strategy.ID, "leftcolumn").getElement(new Hook(Strategy.TAG, "a"), 1)).click();
+		WebDriverElement h1Control = iface.getWebDriverElement(Strategy.TAG, "h1");
 		String actH2 = h1Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
 	}
@@ -93,8 +65,8 @@ public class VControlSystemTest {
 	public void getControlsTest() throws Exception{
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
-		List<VControl> controls = iface.getControls(Strategy.CLASS,"topnav");
-		Assert.assertEquals(controls.size(),14);
+		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"topnav");
+		Assert.assertEquals(elements.size(),14);
 	}
 	
 	@Test
@@ -102,16 +74,16 @@ public class VControlSystemTest {
 		String w3Url = "http://www.w3schools.com/html/default.asp";
 		iface.go(w3Url);
 		String expChapterText = "W3Schools Home";
-		String actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"main\"]/div[2]/div[1]/a").getText().substring(2);
+		String actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"main\"]/div[2]/div[1]/a").getText().substring(2);
 		Assert.assertEquals(expChapterText, actChapterText);
 		w3Url = "http://www.echoecho.com/htmlforms12.htm";
 		iface.go(w3Url);
-		actChapterText = iface.getControl(Strategy.NAME, "shorttext").getText(); // input type button
+		actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
 		expChapterText = "Hit Me!";
 		Assert.assertEquals(expChapterText, actChapterText);
 		w3Url = "http://www.developphp.com/view_lesson.php?v=576";
 		iface.go(w3Url);
-		actChapterText = iface.getControl(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
+		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
 		expChapterText = "Generic Button";
 		Assert.assertEquals(expChapterText, actChapterText);
 	}
@@ -119,11 +91,11 @@ public class VControlSystemTest {
 	@Test
 	public void containsTest() throws Exception {
 		iface.go("https://code.google.com/");
-		boolean actCaseSensPos = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
-		boolean actCaseSensNeg = iface.getControl(Strategy.ID, "gc-footer").contains("google developers", true); //false
-		boolean actNeg = iface.getControl(Strategy.ID, "gc-footer").contains("goggle devs", false); //false
-		boolean negFalse = iface.getControl(Strategy.ID, "gc-topnav").contains("Google Developers", false); //false
-		boolean negTrue = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", false); //true
+		boolean actCaseSensPos = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", true); // true
+		boolean actCaseSensNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("google developers", true); // false
+		boolean actNeg = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("goggle devs", false); // false
+		boolean negFalse = iface.getWebDriverElement(Strategy.CLASS, "ph-section").contains("Google Developers", false); // false
+		boolean negTrue = iface.getWebDriverElement(Strategy.ID, "gc-footer").contains("Google Developers", false); // true
 		Assert.assertEquals(true, actCaseSensPos);
 		Assert.assertEquals(false, actCaseSensNeg);
 		Assert.assertEquals(false, actNeg);
@@ -136,8 +108,8 @@ public class VControlSystemTest {
 	public void doubleClickTest() throws Exception {
 		String w3Url = "http://www.w3schools.com/html/html_forms.asp";
 		iface.go(w3Url);
-		//Checkbox control
-		VControl checkboxControl = iface.getControl(Strategy.NAME, "vehicle");
+		//Checkbox element
+		WebDriverElement checkboxControl = iface.getWebDriverElement(Strategy.NAME, "vehicle");
 		// DoubleClick on a Checkbox
 		checkboxControl.scroll();
 		iface.pause(2000);
@@ -157,8 +129,8 @@ public class VControlSystemTest {
 		String w3Url = "http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=6&ved=0CDoQFjAF&url=http%3A%2F%2Ftool-man.org%2Fexamples%2Fsorting.html&ei=nBGLUKi8CcGmigLah4CADg&usg=AFQjCNGL-HryUxMBRKn9gEM0F1xE_NNNyQ";
 		iface.go(w3Url);
 		iface.pause(2000);
-		VControl imgControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/ul[2]/li"));
-		VControl targetControl = iface.getControl(new VHook(Strategy.XPATH, "/html/body/ul[2]/li[2]"));
+		WebDriverElement imgControl = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/ul[2]/li"));
+		WebDriverElement targetControl = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/ul[2]/li[2]"));
    		imgControl.dragNDrop(targetControl);
         iface.pause(3000);  // pause for manual inspection
 
@@ -194,10 +166,10 @@ public class VControlSystemTest {
 		long endTime = 0;
 		iface.go("http://fvsch.com/code/transition-fade/test5.html");
 		iface.pause(timeout);
-		VControl textControl = iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/div/div");
+		WebDriverElement textControl = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"test\"]/div/div");
 		Assert.assertFalse(textControl.isDisplayed());
 		iface.pause(timeout);
-		iface.getControl(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
+		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
 		startTime = System.currentTimeMillis();
 		textControl.pause.untilVisible(timeout);
 		endTime = System.currentTimeMillis();
@@ -210,7 +182,7 @@ public class VControlSystemTest {
 		long startTime = 0;
 		long endTime = 0;
 		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
-		VControl hideControl = iface.getControl(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
+		WebDriverElement hideControl = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
 		startTime = System.currentTimeMillis();
 		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
@@ -239,17 +211,17 @@ public class VControlSystemTest {
 		int timeout = 1000;
 		iface.go("http://sfbay.craigslist.org/");
 		iface.pause(timeout);
-		VControl searchField;
+		WebDriverElement searchField;
 //		if (iface.getType().equals(Type.IE)) 
-//			searchField = iface.getControl(Strategy.NAME, "q");
+//			searchField = iface.getWebDriverElement(Strategy.NAME, "q");
 //		else
-			searchField = iface.getControl(Strategy.ID, "query");
+			searchField = iface.getWebDriverElement(Strategy.ID, "query");
 		Assert.assertTrue(searchField.isDisplayed());
-		VControl hiddenInput;
+		WebDriverElement hiddenInput;
 //		if (iface.getType().equals(Type.IE))
-//			hiddenInput = iface.getControl(Strategy.NAME, "site");
+//			hiddenInput = iface.getWebDriverElement(Strategy.NAME, "site");
 //		else
-			hiddenInput = iface.getControl(Strategy.NAME, "areaID");
+			hiddenInput = iface.getWebDriverElement(Strategy.NAME, "areaID");
 		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
 
@@ -274,7 +246,7 @@ public class VControlSystemTest {
         // Checking checkbox select
         String w3Url = "http://www.w3schools.com/html/html_forms.asp";
         iface.go(w3Url);
-        VSelect select = iface.getSelect(new VHook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
+        WebDriverSelector select = iface.getSelect(new Hook(Strategy.XPATH, "//*[@id=\"main\"]/form[4]"));
         Assert.assertEquals("Control should not be selected -- selected: " + select.isSelected(0), select.isSelected(0), false);
         select.select("I have a bike");
         Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
@@ -284,16 +256,16 @@ public class VControlSystemTest {
 //        candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
 
         // Checking getAttributeValue()
-		VControl control = iface.getControl(new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
-		String actText = control.getAttribute("type");
+        WebDriverElement element = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
+		String actText = element.getAttribute("type");
         String expText = "text";
         Assert.assertEquals("Expected value for the type attribute should match: " + expText, expText, actText);
 
-		String actSize = control.getAttribute("size");
+		String actSize = element.getAttribute("size");
         String expSize = "20";
         Assert.assertEquals("Expected value for the size attribute should match: " + expSize, expSize, actSize);
 
-		String actName = control.getAttribute("name");
+		String actName = element.getAttribute("name");
         String expName = "firstname";
         Assert.assertEquals("Expected value for the name attribute should match: " + expName, expName, actName);
     }
@@ -304,21 +276,28 @@ public class VControlSystemTest {
 		
 		// clear and send scenario
 		iface.go("http://www.duckduckgo.com/");
-		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString(searchString);
-		iface.getControl(Strategy.ID, "search_button_homepage").click();
-		Assert.assertTrue(iface.getControl(Strategy.PLINK, "SugarCRM").isDisplayed());
+		iface.getWebDriverElement(Strategy.ID, "search_form_input_homepage").sendString(searchString);
+		iface.getWebDriverElement(Strategy.ID, "search_button_homepage").click();
+		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
 
 		// append scenario -- base test and append assert
 		iface.go("http://www.duckduckgo.com/");
-		iface.getControl(Strategy.ID, "search_form_input_homepage").sendString("crm", false);
-		iface.getControl(Strategy.ID, "search_button_homepage").click();
-		iface.getControl(Strategy.ID, "search_form_input").sendString("sugar", true);
-		iface.getControl(Strategy.ID, "search_button").click();
-		Assert.assertTrue(iface.getControl(Strategy.PLINK, "SugarCRM").isDisplayed());
-}
-	
+		iface.getWebDriverElement(Strategy.ID, "search_form_input_homepage").sendString("crm", false);
+		iface.getWebDriverElement(Strategy.ID, "search_button_homepage").click();
+		iface.getWebDriverElement(Strategy.ID, "search_form_input").sendString("sugar", true);
+		iface.getWebDriverElement(Strategy.ID, "search_button").click();
+		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
+	}
+
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@Override
 	@After
-	public void last() throws Exception {
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
 }	

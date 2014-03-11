@@ -23,36 +23,27 @@ package com.sugarcrm.candybean.examples.yelp;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
-import org.junit.AfterClass;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.examples.AbstractTest;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-public class YelpTest extends AbstractTest {
+public class YelpTest extends BrowserTest {
 
 	/**
 	 * Contains methods for yelp test
 	 */
 	private static Yelp yelp;
 
-	@Before
-	public void first() throws Exception {
-		String yelpHooksStr = System.getProperty("yelp_hooks");
-		if (yelpHooksStr == null) {
-			yelpHooksStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
-					+ "yelp.hooks";
-		}
-		Properties yelpHooks = new Properties();
-		yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));
-		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
-				"cwarmbold@sugarcrm.com", "Sugar123!").build();
-		yelp = new Yelp(iface, yelpHooks, user);
-		iface.start();
-		yelp.start();
+	public YelpTest() throws Exception {
+		super();
 	}
 
 	@Test
@@ -67,9 +58,35 @@ public class YelpTest extends AbstractTest {
 		yelp.run(timeout_in_minutes);
 	}
 
-	@AfterClass
-	public static void last() throws Exception {
-		yelp.stop();
-		candybean.getInterface().stop();
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		String yelpHooksStr = System.getProperty("yelp_hooks");
+		if (yelpHooksStr == null) {
+			try {
+				yelpHooksStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
+						+ "yelp.hooks";
+			} catch (IOException ioe) {
+				throw new CandybeanException(ioe);
+			}
+		}
+		Properties yelpHooks = new Properties();
+		try {
+			yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));
+		} catch (Exception e) {
+			throw new CandybeanException(e);
+		}
+		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
+				"cwarmbold@sugarcrm.com", "Sugar123!").build();
+		yelp = new Yelp(iface, yelpHooks, user);
+		yelp.start();
 	}
+
+	@Override
+	@After
+	public void tearDown() throws CandybeanException {
+		yelp.stop();
+		iface.stop();
+	}
+
 }

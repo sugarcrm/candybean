@@ -19,56 +19,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.control;
+package com.sugarcrm.candybean.automation.webdriver;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import com.sugarcrm.candybean.automation.VInterface;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.control.VHook;
-import com.sugarcrm.candybean.automation.control.VSelect;
-import com.sugarcrm.candybean.automation.control.VHook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.utilities.Utils;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverSelector;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.test.BrowserTest;
 
-//import com.sugarcrm.candybean.IAutomation.Strategy;
-//import com.sugarcrm.candybean.automation.VHook;
-//import com.sugarcrm.candybean.IAutomation;
-//import com.sugarcrm.candybean.Voodoo;
+public class WebDriverSelectorSystemTest extends BrowserTest {
 
-public class VSelectSystemTest {
-	
-	protected static Candybean candybean;
-	protected static VInterface iface;
-	
-	@BeforeClass
-	public static void instantiateCb() throws IOException{
-		String candybeanConfigStr = System.getProperty("candybean_config");
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		candybean = Candybean.getInstance(candybeanConfig);
-	}
-	
-	@Before
-	public void first() throws Exception {
-		iface = candybean.getInterface();
-		iface.start();
-	}
-	
 	@Test
 	public void selectTest() throws Exception {
 		String option = "Sep";
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect select = new VSelect(candybean, iface, new VHook(Strategy.ID, "month"));
+		WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.ID, "month"), iface.wd);
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		select.select(option);
 		// 3. Verify that 'Sep' was actually selected
@@ -81,9 +54,9 @@ public class VSelectSystemTest {
     public void selectMultipleTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
-        Assert.assertTrue(select.isMultiple());
+        Assert.assertTrue(select.isMultiSelector());
 
         ArrayList<String> options = new ArrayList<>();
         options.add("Cheese");
@@ -101,7 +74,7 @@ public class VSelectSystemTest {
     public void selectAllTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
 
@@ -114,7 +87,7 @@ public class VSelectSystemTest {
     public void deselectTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         select.select("Ham");
 
@@ -129,7 +102,7 @@ public class VSelectSystemTest {
     public void deselectMultiple() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         select.selectAll();
 
@@ -152,7 +125,7 @@ public class VSelectSystemTest {
     public void deselectAllTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        VSelect select = new VSelect(candybean, iface, new VHook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"));
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
 
@@ -175,15 +148,22 @@ public class VSelectSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		VSelect select = iface.getSelect(new VHook(Strategy.ID, "month"));
+		WebDriverSelector select = iface.getSelect(new Hook(Strategy.ID, "month"));
 		// 2. Get the current option from the drop-down list
 		actual = select.getFirstSelectedOption();
 		// 3. Verify that actual value is the expected value
 		Assert.assertEquals(expected, actual);
 	}
-	
+
+	@Override
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@Override
 	@After
-	public void last() throws Exception {
+	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
 }	

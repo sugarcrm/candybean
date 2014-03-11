@@ -39,11 +39,7 @@ import com.sugarcrm.candybean.datasource.DataSource;
 import com.sugarcrm.candybean.datasource.FieldSet;
 import com.sugarcrm.candybean.datasource.DataAdapterFactory.DataAdapterType;
 
-/**
- *
- *
- */
-public class CsvDataAdapterSystemTest {
+public class CsvDataAdapterUnitTest {
 	private static MyConfiguration myConfiguration;
 	private static String testDataDir = "testData";
 

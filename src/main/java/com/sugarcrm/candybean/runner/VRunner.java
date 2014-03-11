@@ -24,16 +24,12 @@ package com.sugarcrm.candybean.runner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
-import java.util.logging.FileHandler;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.Set;
 
@@ -82,13 +78,13 @@ public class VRunner extends BlockJUnit4ClassRunner {
 				testMethods = this.removeBlockedTests(testMethods); // scrub tests for blocked tests
 			}
 			for (final FrameworkMethod method : testMethods) {
-				logger.info("method: " + method.getName());
+				logger.finer("method: " + method.getName());
 				final VTag vTag = method.getAnnotation(VTag.class);
 				if (vTag != null) {
 					if (vTag.tags().length != 0) {
 						if (!vTag.tagLogicClass().isEmpty() && !vTag.tagLogicMethod().isEmpty()) {
 							for (String tag : vTag.tags()) {
-								logger.info("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
+								logger.finer("method:" + method.getName() + ", tag:" + tag + ", logic class:" + vTag.tagLogicClass() + ", logic method:" + vTag.tagLogicMethod());
 								Class<?> c = Class.forName(vTag.tagLogicClass());
 								Method m = c.getDeclaredMethod(vTag.tagLogicMethod(), tag.getClass());
 								if ((boolean) m.invoke(null, (Object) tag)) {
