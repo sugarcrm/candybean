@@ -26,6 +26,7 @@ Some project features planned for Candybean:
 * Failure/error non-blocking: option to continue executing tests upon error/failure
 * Resource consolidating: pre-execution resource scan for consolidated allocation
 * Supports 'smart' waits (WIP definition)
+* Supports video recording of tests
 * Configurable with ease/overridable via CLI
 * Randomized testing: Supports randomized/stress testing
 * Open-source:
@@ -46,7 +47,7 @@ This is a list of components that collectively fall under Candybean:
 * Results: an encapsulation of test result parsing and illustrative/presentation functionality
 * Runner: an annotation-based orchestration object that executes identified methods for test execution
 * Test: a utilities package with test-specific helper functionality
-* Utilities: contains generic helper functionality
+* Utilities: contains generic helper functionality and reporting functionality
 * Web Services: contains request-building and response-parsing functionality
 
 Installation
@@ -97,6 +98,15 @@ java.util.logging.FileHandler.level = INFO
 #logging format
 java.util.logging.SimpleFormatter.format = [%1$tm-%1$td-%1$tY %1$tk:%1$tM:%1$tS:%1$tL] %2$s %4$s: %5$s %6$s %n
 
+# Monte Media Library Recorder Settings
+video.format=video/quicktime
+video.format.frameRate=15
+video.directory=./log
+video.encoding=rle 
+video.compression=Animation
+maxFileSize=512000
+maxRecordingTime=120000
+
 ```
 
 Writing tests
@@ -107,12 +117,19 @@ with Maven already, <a href="http://www.tutorialspoint.com/maven/maven_overview.
 Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
 a Candybean interface from the configuration file) and begins testing through 
 the interface defined in the configuration.
+
+The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of candybean
+that will make a video recording of the test execution. This feature can be configured in the candybean configuration file.
+
+The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms
+
 ```
 import com.sugarcrm.candybean;
 import org.junit.AfterClass;
 import org.junit.Test;
 import com.sugarcrm.candybean.test.AbstractTest;
 
+@RunWith(VRunner.class)
 public class CandybeanTest extends AbstractTest{
 	
 	@Test
@@ -125,6 +142,19 @@ public class CandybeanTest extends AbstractTest{
 		... perform other assertions
 		... perform other logging
 		... use other candybean features		
+	}
+	
+	@Test
+	@Record(duration = Duration.FINAL_FAILED)
+	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
+	public void recordingTest() throws Exception {
+		String amazonUrl = "http://www.amazon.com/";
+		iface.go(amazonUrl);
+		assertEquals(amazonUrl, iface.getURL());	
+		... do other things
+		... perform other assertions
+		... perform other logging
+		... use other candybean features			
 	}
 	
 	@AfterClass
