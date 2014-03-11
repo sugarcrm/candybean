@@ -3,37 +3,34 @@ package com.sugarcrm.candybean.test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class AppiumProcess extends Thread{
 	
-	private String command;
+	private List<String> commands;
 	
 	private Logger logger;
 	
-	public AppiumProcess(String command, Logger logger) {
-		this.command = command;
+	public AppiumProcess(List<String> commands, Logger logger) {
+		this.commands = commands;
 		this.logger = logger;
 	}
 
 	@Override
 	public void run() {
-		Process cmdProc;
-		try {
-			cmdProc = Runtime.getRuntime().exec(command);
-			BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(cmdProc.getInputStream()));
-			String line;
-			while ((line = stdoutReader.readLine()) != null) {
-			   logger.info(line);
+		
+        try {
+			ProcessBuilder pb = new ProcessBuilder(commands);
+			pb.redirectErrorStream(true);
+			Process p = pb.start();
+			BufferedReader stream = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String str;
+			while ((str = stream.readLine()) != null) {
+				logger.info(str);
 			}
-
-			BufferedReader stderrReader = new BufferedReader(new InputStreamReader(cmdProc.getErrorStream()));
-			String line2;
-			while ((line2 = stderrReader.readLine()) != null) {
-				logger.severe(line2);
-			}
-		} catch (IOException e1) {
-			logger.severe("Error message:");
+		} catch (IOException e) {
+			logger.severe(e.getMessage());
 			logger.severe("Unable to start appium automatically, please start appiums erver manually!");
 		}
 		super.run();
