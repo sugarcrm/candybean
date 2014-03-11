@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.datasource.DataAdapter;
@@ -38,7 +39,9 @@ import com.sugarcrm.candybean.datasource.DataAdapterFactory;
 import com.sugarcrm.candybean.datasource.DataSource;
 import com.sugarcrm.candybean.datasource.FieldSet;
 import com.sugarcrm.candybean.datasource.DataAdapterFactory.DataAdapterType;
+import com.sugarcrm.candybean.runner.VRunner;
 
+@RunWith(VRunner.class)
 public class CsvDataAdapterUnitTest {
 	private static MyConfiguration myConfiguration;
 	private static String testDataDir = "testData";

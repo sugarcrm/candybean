@@ -6,13 +6,24 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.maven.plugins.surefire.report.ReportTestCase;
+import org.apache.maven.plugins.surefire.report.ReportTestSuite;
+import org.apache.maven.plugins.surefire.report.SurefireReportParser;
+import org.apache.maven.reporting.MavenReportException;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
@@ -54,11 +65,6 @@ public class TestRecorder extends RunListener {
 	private Logger logger;
 
 	/**
-	 * Logger for report generation
-	 */
-	private Logger reportLogger;
-
-	/**
 	 * The last failed test
 	 */
 	private Failure failure;
@@ -88,6 +94,16 @@ public class TestRecorder extends RunListener {
 	 * results
 	 */
 	private static final String FAILED_RECORDING_REPORT_HTML = "./log/FailedRecordingReport.html";
+
+	/**
+	 * The default file location of the surefire results directory
+	 */
+	private static final String SUREFIRE_RESULTS_DIRECTORY = "./target/surefire-reports";
+	
+	/**
+	 * The default path of where the candybean test results report will be generated
+	 */
+	private static final String CANDYBEAN_REPORT_PATH = "./log/candybeanTestResults.html";
 
 	public TestRecorder() throws SecurityException, IOException, JAXBException {
 		super();
@@ -209,6 +225,111 @@ public class TestRecorder extends RunListener {
 
 	@Override
 	public void testRunFinished(Result result) throws Exception {
+		generateRecordingsReport();
+		generateTestResultsReport();
+		super.testRunFinished(result);
+	}
+
+	/**
+	 * Generates the custom candybean report for all test results
+	 * @throws MavenReportException
+	 * @throws IOException
+	 */
+	private void generateTestResultsReport() throws MavenReportException, IOException {
+		File reportsDirectory = new File(config.getValue("surefireResultsDirectory",SUREFIRE_RESULTS_DIRECTORY));
+		if(reportsDirectory.exists()){
+			List<File> reportsDirectories = new ArrayList<File>();
+			reportsDirectories.add(reportsDirectory);
+			SurefireReportParser report = new SurefireReportParser( reportsDirectories, Locale.ENGLISH );
+			List<ReportTestSuite> suites = report.parseXMLReportFiles();
+			Map<String, String> summary = report.getSummary(suites);
+			Map<String, List<ReportTestSuite>> packages = report.getSuitesGroupByPackage(suites);
+			String baseTemplate = readFile("./resources/static/html/testResultsTemplate.html", Charset.defaultCharset());
+			baseTemplate = baseTemplate.replace("${summary.tests}", summary.get("totalTests"));
+			baseTemplate = baseTemplate.replace("${summary.errors}", summary.get("totalErrors"));
+			baseTemplate = baseTemplate.replace("${summary.failures}", summary.get("totalFailures"));
+			baseTemplate = baseTemplate.replace("${summary.skipped}", summary.get("totalSkipped"));
+			baseTemplate = baseTemplate.replace("${summary.success}", summary.get("totalPercentage"));
+			baseTemplate = baseTemplate.replace("${summary.time}", summary.get("totalElapsedTime"));
+			StringBuilder packageMarkup = new StringBuilder();
+			String packageTemplate = readFile("./resources/static/html/packageTemplate.html", Charset.defaultCharset());
+			for(String pkg: packages.keySet()){
+				String pkgTemplate = packageTemplate;
+				List<ReportTestSuite> packageSuites = packages.get(pkg);
+				Map<String, String> summaryForPackage = report.getSummary(packageSuites);
+				pkgTemplate = pkgTemplate.replace("${packageCollapseId}", pkg.replace(".", ""));
+				pkgTemplate = pkgTemplate.replace("${package}", pkg);
+				pkgTemplate = pkgTemplate.replace("${package.tests}", summaryForPackage.get("totalTests"));
+				pkgTemplate = pkgTemplate.replace("${package.errors}", summaryForPackage.get("totalErrors"));
+				pkgTemplate = pkgTemplate.replace("${package.failures}", summaryForPackage.get("totalFailures"));
+				pkgTemplate = pkgTemplate.replace("${package.skipped}", summaryForPackage.get("totalSkipped"));
+				pkgTemplate = pkgTemplate.replace("${package.success}", summaryForPackage.get("totalPercentage"));
+				pkgTemplate = pkgTemplate.replace("${package.time}", summaryForPackage.get("totalElapsedTime"));
+				StringBuilder classMarkup = new StringBuilder();
+				String classTemplate = readFile("./resources/static/html/classTemplate.html", Charset.defaultCharset());
+				for(ReportTestSuite testSuite: packageSuites){
+					String clsTemplate = classTemplate;
+					String className = testSuite.getName();
+					int numberOfTests = testSuite.getNumberOfTests();
+					int numberOfErrors = testSuite.getNumberOfErrors();
+					int numberOfFailures = testSuite.getNumberOfFailures();
+					int numberOfSkipped = testSuite.getNumberOfSkipped();
+					clsTemplate = clsTemplate.replace("${classCollapseId}", className);
+					clsTemplate = clsTemplate.replace("${class}", className);
+					clsTemplate = clsTemplate.replace("${class.tests}", String.valueOf(testSuite.getNumberOfTests()));
+					clsTemplate = clsTemplate.replace("${class.errors}", String.valueOf(testSuite.getNumberOfErrors()));
+					clsTemplate = clsTemplate.replace("${class.failures}", String.valueOf(testSuite.getNumberOfFailures()));
+					clsTemplate = clsTemplate.replace("${class.skipped}", String.valueOf(testSuite.getNumberOfSkipped()));
+					clsTemplate = clsTemplate.replace("${class.success}", String.valueOf(report.computePercentage(numberOfTests, numberOfErrors, numberOfFailures, numberOfSkipped)));
+					clsTemplate = clsTemplate.replace("${class.time}", String.valueOf(testSuite.getTimeElapsed()));
+					StringBuilder testMarkup = new StringBuilder();
+					String testTemplate = readFile("./resources/static/html/testTemplate.html", Charset.defaultCharset());
+					for(ReportTestCase testCase: testSuite.getTestCases()){
+						String tstTemplate = testTemplate;
+						Map<String, Object> result = testCase.getFailure();
+						if(result == null){
+							tstTemplate = tstTemplate.replace("${test.result}", "Success");
+							tstTemplate = tstTemplate.replace("${result}", "pass");
+						}else if(result.get("type").equals("skipped")){
+							tstTemplate = tstTemplate.replace("${test.result}", "Skipped");
+							tstTemplate = tstTemplate.replace("${result}", "skip");
+						}else{
+							tstTemplate = tstTemplate.replace("${test.result}", "Failed!");
+							tstTemplate = tstTemplate.replace("${result}", "fail");
+						}
+						tstTemplate = tstTemplate.replace("${test.name}", testCase.getName());
+						float time = testCase.getTime();
+						if(time == 0){
+							tstTemplate = tstTemplate.replace("${test.runtime}", "Did not run");
+						}else{
+							tstTemplate = tstTemplate.replace("${test.runtime}", String.valueOf(testCase.getTime()));
+						}
+						testMarkup.append(tstTemplate);
+					}
+					clsTemplate = clsTemplate.replace("${testMarkup}", testMarkup.toString());
+					classMarkup.append(clsTemplate);
+				}
+				pkgTemplate = pkgTemplate.replace("${classMarkup}", classMarkup.toString());
+				packageMarkup.append(pkgTemplate);
+			}
+			baseTemplate = baseTemplate.replace("${packageMarkup}", packageMarkup.toString());
+			FileWriter fstream = new FileWriter(config.getValue(
+					"testResultsReportPath", CANDYBEAN_REPORT_PATH));
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(baseTemplate);
+			out.close();
+		}else{
+			logger.warning("No surefire XML reports found in the surefire results directory, skipping html report generation");
+			return;
+		}
+	}
+
+	/**
+	 * Generates candybean report of all failing test with recordings
+	 * @throws JAXBException
+	 * @throws IOException
+	 */
+	private void generateRecordingsReport() throws JAXBException, IOException {
 		StringBuilder builder = new StringBuilder();
 		builder.append("<h1>Failed Test Recordings</h1>");
 		builder.append("<table>");
@@ -252,7 +373,18 @@ public class TestRecorder extends RunListener {
 		BufferedWriter out = new BufferedWriter(fstream);
 		out.write(builder.toString());
 		out.close();
-		super.testRunFinished(result);
+	}
+	
+	/**
+	 * Reads the contents of a file
+	 * @param path Path to file
+	 * @param encoding Encoding of the file
+	 * @return The contents of the file
+	 * @throws IOException
+	 */
+	private String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
 }
 
