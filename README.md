@@ -1,8 +1,10 @@
 Candybean
 =========
-Candybean came about while acknowledging that many automation engineers tend to start from scratch on developing an automation framework for a new role.  And because automation is virtually always in place to support testing, these developed frameworks often are implemented similarly.  That said, if you do compare frameworks from one company to another, from one engineer to another, there tends to be certain features that are done better in one that may not be in another and vice versa.  Candybean's goal is to provide a baseline test-specific automation framework taking the best practices from across engineers and companies.  In doing so, we aim to establish a collaborative project that can be iteratively improved and reused from organization to organization and project to project.
+The Candybean project came about while acknowledging that many automation engineers tend to start from scratch on developing an automation framework for a new role.  And because automation is virtually always in place to support testing, these developed frameworks often are implemented similarly.  That said, if you do compare frameworks from one company to another, from one engineer to another, there tends to be certain features that are done better in one that may not be in another and vice versa.  Candybean's goal is to provide a baseline test-specific automation framework taking the best practices from across engineers and companies.  In doing so, we aim to establish a collaborative project that can be iteratively improved and reused from organization to organization and project to project.
 
 There are two audiences this documentation is meant to support: users and potential developer-contributors.  Both audiences can learn more about how to use the project below, but potential developer-contributors can additionally benefit from visiting the [Developer Documentation] (DEVELOPERS.md).
+
+See our [FAQ](#faq) or [Quickstart](#quickstart) sections for more high-level information.
 
 Summary
 -------
@@ -177,6 +179,16 @@ Executing tests
 Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
 located correctly in a standardized directory structure and/or naming them using certain 
 conventions.  For more information, review the <a href="http://maven.apache.org/surefire/maven-surefire-plugin/">Maven Surefire Plugin</a>.
+
+<a name="faq"></a>
+Frequently asked questions
+--------------------------
+WIP 
+
+<a name="quickstart"></a>
+Quickstart
+----------
+WIP
 
 Additional tools
 ----------------
