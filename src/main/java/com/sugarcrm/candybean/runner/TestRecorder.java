@@ -105,6 +105,14 @@ public class TestRecorder extends RunListener {
 	 */
 	private static final String CANDYBEAN_REPORT_PATH = "./log/candybeanTestResults.html";
 
+	private static final String TEST_TEMPLATE_PATH = "./resources/html/testTemplate.html";
+
+	private static final String CLASS_TEMPLATE_PATH = "./resources/html/classTemplate.html";
+
+	private static final String PACKAGE_TEMPLATE_PATH = "./resources/html/packageTemplate.html";
+
+	private static final String TEST_RESULTS_TEMPLATE_PATH = "./resources/html/testResultsTemplate.html";
+
 	public TestRecorder() throws SecurityException, IOException, JAXBException {
 		super();
 		context = JAXBContext.newInstance(FailedTests.class);
@@ -244,7 +252,7 @@ public class TestRecorder extends RunListener {
 			List<ReportTestSuite> suites = report.parseXMLReportFiles();
 			Map<String, String> summary = report.getSummary(suites);
 			Map<String, List<ReportTestSuite>> packages = report.getSuitesGroupByPackage(suites);
-			String baseTemplate = readFile("./resources/html/testResultsTemplate.html", Charset.defaultCharset());
+			String baseTemplate = readFile(TEST_RESULTS_TEMPLATE_PATH, Charset.defaultCharset());
 			baseTemplate = baseTemplate.replace("${summary.tests}", summary.get("totalTests"));
 			baseTemplate = baseTemplate.replace("${summary.errors}", summary.get("totalErrors"));
 			baseTemplate = baseTemplate.replace("${summary.failures}", summary.get("totalFailures"));
@@ -252,7 +260,7 @@ public class TestRecorder extends RunListener {
 			baseTemplate = baseTemplate.replace("${summary.success}", summary.get("totalPercentage"));
 			baseTemplate = baseTemplate.replace("${summary.time}", summary.get("totalElapsedTime"));
 			StringBuilder packageMarkup = new StringBuilder();
-			String packageTemplate = readFile("./resources/html/packageTemplate.html", Charset.defaultCharset());
+			String packageTemplate = readFile(PACKAGE_TEMPLATE_PATH, Charset.defaultCharset());
 			for(String pkg: packages.keySet()){
 				String pkgTemplate = packageTemplate;
 				List<ReportTestSuite> packageSuites = packages.get(pkg);
@@ -266,7 +274,7 @@ public class TestRecorder extends RunListener {
 				pkgTemplate = pkgTemplate.replace("${package.success}", summaryForPackage.get("totalPercentage"));
 				pkgTemplate = pkgTemplate.replace("${package.time}", summaryForPackage.get("totalElapsedTime"));
 				StringBuilder classMarkup = new StringBuilder();
-				String classTemplate = readFile("./resources/html/classTemplate.html", Charset.defaultCharset());
+				String classTemplate = readFile(CLASS_TEMPLATE_PATH, Charset.defaultCharset());
 				for(ReportTestSuite testSuite: packageSuites){
 					String clsTemplate = classTemplate;
 					String className = testSuite.getName();
@@ -283,7 +291,7 @@ public class TestRecorder extends RunListener {
 					clsTemplate = clsTemplate.replace("${class.success}", String.valueOf(report.computePercentage(numberOfTests, numberOfErrors, numberOfFailures, numberOfSkipped)));
 					clsTemplate = clsTemplate.replace("${class.time}", String.valueOf(testSuite.getTimeElapsed()));
 					StringBuilder testMarkup = new StringBuilder();
-					String testTemplate = readFile("./resources/html/html/testTemplate.html", Charset.defaultCharset());
+					String testTemplate = readFile(TEST_TEMPLATE_PATH, Charset.defaultCharset());
 					for(ReportTestCase testCase: testSuite.getTestCases()){
 						String tstTemplate = testTemplate;
 						Map<String, Object> result = testCase.getFailure();
