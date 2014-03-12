@@ -1,12 +1,8 @@
 Candybean
 =========
-Candybean came about while acknowledging that many automation engineers tend to start from scratch on developing an automation framework for a new role.  And because automation is virtually always in place to support testing, these developed frameworks often are implemented similarly.  That said, if you do compare frameworks from one company to another, from one engineer to another, there tends to be certain features that are done better in one that may not be in another and vice versa.  Candybean's goal is to provide a baseline test-specific automation framework taking the best practices from across engineers and companies.  In doing so, we aim to establish a collaborative project that can be iteratively improved and reused from organization to organization and project to project.
+Candybean is SugarCRM's next generation automation and testing framework.  It is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batches, mobile variants, plain-language testing, and web service testing.
 
-There are two audiences this documentation is meant to support: users and potential developer-contributors.  Both audiences can learn more about how to use the project below, but potential developer-contributors can additionally benefit from visiting the [Developer Documentation] (DEVELOPERS.md).
-
-Summary
--------
-Candybean is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batching, and mobile, plain-language, & web service testing.
+[Javadoc API Documentation](http://sugarcrm.github.io/candybean/doc/index.html)
 
 Features
 --------
@@ -53,10 +49,6 @@ This is a list of components that collectively fall under Candybean:
 * Test: a utilities package with test-specific helper functionality
 * Utilities: contains generic helper functionality and reporting functionality
 * Web Services: contains request-building and response-parsing functionality
-
-API Documentation
------------------
-[Javadoc API Documentation](http://sugarcrm.github.io/candybean/doc/index.html)
 
 Installation
 ------------
