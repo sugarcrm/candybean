@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
@@ -45,7 +46,8 @@ public class EvernoteAndroidTest extends AndroidTest {
 		notesAction.click();
 		iface.pause(3000);
 	}
-	
+
+	@Ignore
 	@Test
 	public void newNote() throws CandybeanException {
 		openUsersMenu();
@@ -73,6 +75,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 		iface.pause(2000);
 	}
 
+	@Ignore
 	@Test
 	public void deleteAllNotes() throws CandybeanException {
 		openNotes();
@@ -104,6 +107,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 		assertEquals(iface.wd.findElements(By.id("com.evernote:id/title")).size(), 0);
 	}
 
+	@Ignore
 	@Test
 	public void openNotebookFromShortcut() throws CandybeanException {
 		openShortcutsMenu();
@@ -113,6 +117,7 @@ public class EvernoteAndroidTest extends AndroidTest {
 		iface.pause(1000);
 	}
 
+	@Ignore
 	@Test
 	public void signOut() throws CandybeanException {
 		openUsersMenu();
