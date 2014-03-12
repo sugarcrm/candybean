@@ -1,6 +1,6 @@
 Candybean
 =========
-The Candybean project came about while acknowledging that many automation engineers tend to start from scratch on developing an automation framework for a new role.  And because automation is virtually always in place to support testing, these developed frameworks virtually always take on similar structure and functionality.  That said, if you do compare frameworks, you're sure to find certain features implemented better in one particular version and vice versa.  Candybean's goal is to gather these best-in-class features and provide a baseline test-specific automation framework on which to iterate further.  In doing so, we aim to establish an open-source, collaborative project that can be reused from organization to organization and project to project.
+The Candybean project started while acknowledging that many automation engineers have developed their own frameworks from scratch, and because automation often serves testing within organizations, these frameworks often have very similar structure and functionality.  That said, if you compare frameworks, you're sure to find certain features implemented better in one particular version than another and vice versa.  Candybean's goal is to gather these best-in-class features and provide a baseline test-specific automation framework on which to iterate further.  In doing so, we aim to establish an open-source, collaborative project that can become an industry standard.  For an explicit listing of further Candybean goals and features, see the [Features section](#features) below.
 
 There are two audiences this documentation is meant to support: users and potential developer-contributors.  Both audiences can learn more about how to use the project below, but potential developer-contributors can additionally benefit from visiting the [Developer Documentation] (DEVELOPERS.md).
 
@@ -10,6 +10,7 @@ Summary
 -------
 Candybean is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batching, and mobile, plain-language, & web service testing.
 
+<a name="features"></a>
 Features
 --------
 Some project features planned for Candybean:
