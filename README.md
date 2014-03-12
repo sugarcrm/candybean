@@ -1,6 +1,8 @@
 Candybean
 =========
-The Candybean project started while acknowledging that many engineers have developed their own automation frameworks from scratch, and because automation is often designed to support software testing, these frameworks have very similar structure and functionality.  That said, if you compare frameworks, you'll find features that are implemented more robustly in some versions than others.  Candybean's goal is to gather these best-in-class features, approach automation abstractly, and provide a baseline _test-specific_ automation framework.  In doing so, we aim to establish an open-source, collaborative project that can become an industry standard on which to iterate further.  For an explicit listing of Candybean goals and features, see the [Features section](#features) below.
+The Candybean project started while acknowledging that many engineers have developed their own automation frameworks from scratch, and because automation is often designed to support software testing, these frameworks have very similar structure and functionality.  That said, some frameworks have better features than others.  Candybean's goal is to gather these best-in-class features, approach automation abstractly, and provide a baseline _test-specific_ automation framework.  In doing so, we aim to establish an open-source, collaborative project that can become an industry standard on which to iterate further.
+
+For an explicit listing of Candybean goals and features, see the [Features section](#features) below.
 
 There are two audiences this documentation is meant to support: users and contributors (developers).  Both audiences can learn more about how to use the project by reading further, but project contributors can additionally benefit from visiting the [Developer Documentation] (DEVELOPERS.md).
 
