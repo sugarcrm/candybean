@@ -29,15 +29,17 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.TimeoutException;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.runner.VRunner;
 import com.sugarcrm.candybean.test.BrowserTest;
 
+@RunWith(VRunner.class)
 public class WebDriverControlSystemTest extends BrowserTest {
-
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	

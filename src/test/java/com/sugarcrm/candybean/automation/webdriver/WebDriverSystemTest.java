@@ -30,13 +30,17 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
 import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.runner.VRunner;
 import com.sugarcrm.candybean.test.BrowserTest;
 
+@RunWith(VRunner.class)
 public class WebDriverSystemTest extends BrowserTest{
 
 	@Rule

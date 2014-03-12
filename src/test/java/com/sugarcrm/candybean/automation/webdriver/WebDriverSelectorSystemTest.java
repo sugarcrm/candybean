@@ -27,12 +27,16 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.sugarcrm.candybean.automation.webdriver.WebDriverSelector;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.runner.VRunner;
 import com.sugarcrm.candybean.test.BrowserTest;
 
+@RunWith(VRunner.class)
 public class WebDriverSelectorSystemTest extends BrowserTest {
 
 	@Test
