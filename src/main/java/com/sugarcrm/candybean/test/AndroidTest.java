@@ -1,17 +1,11 @@
 package com.sugarcrm.candybean.test;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
-
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
@@ -23,49 +17,33 @@ public abstract class AndroidTest extends MobileTest {
 	
 	public AndroidTest() {
 		super(Type.ANDROID);
-		
+		boolean automateAppium = Boolean.parseBoolean(candybean.config.getValue("appium.automate"));
 		try {
-			List<String> appiumStartupCommands = new ArrayList<String>();
-			appiumStartupCommands.add("/usr/local/bin/appium");
-			appiumStartupCommands.add("-a");
-			appiumStartupCommands.add("127.0.0.1");
-			appiumStartupCommands.add("-p");
-			appiumStartupCommands.add("4723");
-			appiumStartupCommands.add("--device-ready-timeout");
-			appiumStartupCommands.add("300");
-	
-			//List<String> envSetupCommands = new ArrayList<String>();
-			//envSetupCommands.add("/bin/bash");
-			//envSetupCommands.add(Candybean.CONFIG_DIR.getCanonicalPath()+File.separator+"env_install.sh");
+			if(automateAppium) {
+				List<String> appiumStartupCommands = new ArrayList<String>();
+				appiumStartupCommands.add(candybean.config.getValue("appium.path"));
+				appiumStartupCommands.add("-a");
+				appiumStartupCommands.add(candybean.config.getValue("appium.ip"));
+				appiumStartupCommands.add("-p");
+				appiumStartupCommands.add(candybean.config.getValue("appium.port"));
+				
+				List<String> avdCommands = new ArrayList<String>();
+				avdCommands.add(candybean.config.getValue("avd.emulator.path"));
+				avdCommands.add("-avd");
+				avdCommands.add(candybean.config.getValue("avd.emulator.name"));
+				
+				AppiumProcess avdProcess = new AppiumProcess(avdCommands, logger);
+				avdProcess.start();
 			
-			///AppiumProcess envSetupProcess = new AppiumProcess(envSetupCommands, logger);
-			//envSetupProcess.start();
-			
-			List<String> avdCommands = new ArrayList<String>();
-			avdCommands.add("/usr/local/adt/sdk/tools/emulator");
-			avdCommands.add("-avd");
-			avdCommands.add("tester");
-			
-			//AppiumProcess appiumProcess = new AppiumProcess(appiumStartupCommands, logger);
-			//appiumProcess.start();
-			
-			
-//			try {
-//				Thread.sleep(5000);
-//			} catch (InterruptedException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-
-			//AppiumProcess avdProcess = new AppiumProcess(avdCommands, logger);
-			//avdProcess.start();
-		
-//			try {
-//				Thread.sleep(5000);
-//			} catch (InterruptedException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
+				try {
+					Thread.sleep(Long.parseLong(candybean.config.getValue("avd.device.timeout")));
+				} catch (InterruptedException e1) {
+					logger.warning("Unable to wait for emulator to start up");
+				}
+				
+				AppiumProcess appiumProcess = new AppiumProcess(appiumStartupCommands, logger);
+				appiumProcess.start();
+			}
 			String className = this.getClass().getSimpleName();
 			capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
 			capabilities.setCapability("app-package", config.getValue(className + ".app-package"));

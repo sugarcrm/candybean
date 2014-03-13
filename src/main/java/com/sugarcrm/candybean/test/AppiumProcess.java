@@ -19,7 +19,6 @@ public class AppiumProcess extends Thread{
 
 	@Override
 	public void run() {
-		
         try {
 			ProcessBuilder pb = new ProcessBuilder(commands);
 			pb.redirectErrorStream(true);
@@ -27,7 +26,7 @@ public class AppiumProcess extends Thread{
 			BufferedReader stream = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String str;
 			while ((str = stream.readLine()) != null) {
-				System.out.println(str);
+				logger.info(str);
 			}
 		} catch (IOException e) {
 			logger.severe(e.getMessage());
