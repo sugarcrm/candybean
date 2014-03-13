@@ -36,8 +36,9 @@ public class EvernoteAndroidTest extends AndroidTest {
 	@After
 	public void tearDown() throws CandybeanException {
 		iface.wd.quit();
-	}
+	} 
 	
+	@Ignore
 	@Test
 	public void openNotes() throws CandybeanException {
 		openUsersMenu();
@@ -47,7 +48,6 @@ public class EvernoteAndroidTest extends AndroidTest {
 		iface.pause(3000);
 	}
 
-	@Ignore
 	@Test
 	public void newNote() throws CandybeanException {
 		openUsersMenu();

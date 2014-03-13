@@ -27,7 +27,7 @@ public class AppiumProcess extends Thread{
 			BufferedReader stream = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String str;
 			while ((str = stream.readLine()) != null) {
-				logger.info(str);
+				System.out.println(str);
 			}
 		} catch (IOException e) {
 			logger.severe(e.getMessage());
