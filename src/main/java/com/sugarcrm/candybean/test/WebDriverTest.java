@@ -38,17 +38,16 @@ public abstract class WebDriverTest {
 	 * @throws Exception 
 	 */
 	public WebDriverTest() {
-		logger = Logger.getLogger(this.getClass().getSimpleName());
 		try {
-			FileHandler fh = new FileHandler("./log/" + this.getClass().getSimpleName() + ".log");
-			logger = Logger.getLogger(WebDriverTest.class.getSimpleName());
-			logger.addHandler(fh);
 			candybean = Candybean.getInstance();
-		} catch (SecurityException e) {
-			logger.severe("Unable to instantiate candybean with test specific logger");
+			FileHandler fh = new FileHandler("./log/" + this.getClass().getSimpleName() + ".log");
+			logger = Logger.getLogger(Candybean.class.getSimpleName());
+			logger.addHandler(fh);
 		} catch (IOException e) {
+			logger = Logger.getLogger(Candybean.class.getSimpleName());
 			logger.severe("Unable to read/write to file " + "./log/" + this.getClass().getSimpleName() + ".log");
 		} catch (CandybeanException e) {
+			logger = Logger.getLogger(Candybean.class.getSimpleName());
 			logger.severe("Unable to instantiate candybean using default configuration settings");
 		}
 	}

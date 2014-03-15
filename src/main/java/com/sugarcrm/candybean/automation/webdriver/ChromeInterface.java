@@ -1,5 +1,8 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
+import java.io.File;
+
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -19,13 +22,20 @@ public class ChromeInterface extends WebDriverInterface {
 		chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
 		String chromeDriverPath = candybean.config.getPathValue("browser.chrome_driver_path");
 		logger.info("chromeDriverPath: " + chromeDriverPath);
-		// chromeOptions.setBinary(new File(chromeDriverPath));
-		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-		logger.info("Instantiating Chrome with:\n    log path:"
-				+ chromeDriverLogPath + "\n    driver path: "
-				+ chromeDriverPath);
-		super.wd = new ChromeDriver(chromeOptions);
-		super.start(); // requires wd to be instantiated first
+		if(StringUtils.isEmpty(chromeDriverPath) || !new File(chromeDriverPath).exists()){
+			String error = "Unable to find chrome browser driver from the specified location ("+chromeDriverPath+")  in the configuration file! \n"
+					+ "Please add a configuration to the candybean config file for key \"browser.chrome_driver_path\" "
+					+ "that indicates the absolute or relative location the driver.";
+			logger.severe(error);
+			throw new CandybeanException(error);
+		}else{
+			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+			logger.info("Instantiating Chrome with:\n    log path:"
+					+ chromeDriverLogPath + "\n    driver path: "
+					+ chromeDriverPath);
+			super.wd = new ChromeDriver(chromeOptions);
+			super.start(); // requires wd to be instantiated first
+		}
 	}
 	
 	@Override
