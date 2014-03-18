@@ -216,6 +216,7 @@ public final class Candybean {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
 		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
+		LogManager.getLogManager().reset();
 		LogManager.getLogManager().readConfiguration();		
 		return Logger.getLogger(Candybean.class.getSimpleName());
 	}

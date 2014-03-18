@@ -42,6 +42,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
  * Custom JUnit test runner class. When a test is annotated to use this runner,
@@ -57,7 +58,7 @@ import com.sugarcrm.candybean.automation.Candybean;
 public class VRunner extends BlockJUnit4ClassRunner {
 	
 	public static final String BLOCKLIST_PATH_KEY = "blocklist";
-	private static Logger logger = Logger.getLogger(VRunner.class.getSimpleName());
+	private static Logger logger;
 	
 	public VRunner(Class<?> klass) throws InitializationError, SecurityException, IOException {
 		super(klass);
@@ -66,6 +67,15 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	// TODO add validation/error checking, flexibility in provided class/method name, etc.
 	@Override
 	protected List<FrameworkMethod> computeTestMethods() {
+		/*
+		 * We must always use the candybean configured logger, so we attempt 
+		 * to instantiate candybean to retreive its named logger first
+		 */
+		try {
+			logger = Logger.getLogger(Candybean.getInstance().getClass().getSimpleName());
+		} catch (CandybeanException e) {
+			logger = Logger.getLogger(VRunner.class.getSimpleName());
+		}
 		List<FrameworkMethod> testMethods = getTestClass().getAnnotatedMethods(Test.class);
         if (testMethods == null || testMethods.size() == 0) {
         	return testMethods;
