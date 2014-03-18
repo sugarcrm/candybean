@@ -31,7 +31,6 @@ Components
 ----------
 Candybean is a collection of components that fosters test automation.  Below is a list of components for the project:
 
-This is a list of components that collectively fall under Candybean:
 * Automation: contains functionality that automates application interaction
 * Element: contains functionality that encapsulates and automates component/element; applications contains elements
 * Configuration: an extension of the native Java Properties object with configuration-file-specific functionality
