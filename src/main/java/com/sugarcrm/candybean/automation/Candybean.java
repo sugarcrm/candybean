@@ -25,15 +25,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-
 import org.openqa.selenium.remote.DesiredCapabilities;
-
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.webdriver.AndroidInterface;
 import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
 import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.automation.webdriver.InternetExplorerInterface;
 import com.sugarcrm.candybean.automation.webdriver.IosInterface;
+import com.sugarcrm.candybean.automation.webdriver.SaucelabsInterface;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -146,10 +145,15 @@ public final class Candybean {
 	 * @throws Exception
 	 */
 	public WebDriverInterface getWebDriverInterface() throws CandybeanException {
-		logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
-		Type configType = AutomationInterface.parseType(this.config.getValue("automation.interface", "chrome"));
-		logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + this.config.configFile.getAbsolutePath());
-		return this.getWebDriverInterface(configType);
+		if(Boolean.parseBoolean(config.getValue("saucelabs.enabled"))){
+			logger.info("Saucelabs was enabled by the user, using saucelabs to carry out the tests");
+			return new SaucelabsInterface(AutomationInterface.parseType(config.getValue("saucelabs.browser")));
+		}else{
+			logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
+			Type configType = AutomationInterface.parseType(this.config.getValue("automation.interface", "chrome"));
+			logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + this.config.configFile.getAbsolutePath());
+			return this.getWebDriverInterface(configType);
+		}
 	}
 	
 	/**
