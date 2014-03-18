@@ -44,10 +44,6 @@ This is a list of components that collectively fall under Candybean:
 * Utilities: contains generic helper functionality
 * Web Services: contains request-building and response-parsing functionality
 
-API Documentation
------------------
-[Javadoc API Documentation](http://sugarcrm.github.io/candybean/doc/index.html)
-
 Executing tests
 ---------------
 Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
@@ -91,17 +87,14 @@ If not already familiar, review the basics of Maven to better understand depende
 <a name="tests"></a>
 Writing tests
 -------------
-Candybean recommends the use of <a href="http://maven.apache.org/">Maven</a>!  So if you're not familiar 
-with Maven already, <a href="http://www.tutorialspoint.com/maven/maven_overview.htm">try this link for an overview.</a>   
-
 Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
 a Candybean interface from the configuration file) and begins testing through 
 the interface defined in the configuration.
 
-The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of candybean
-that will make a video recording of the test execution. This feature can be configured in the candybean configuration file.
+The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of Candybean
+that will make a video recording of the test execution. This feature can be configured in the Candybean configuration file.
 
-The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms
+The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms.
 
 ```
 import com.sugarcrm.candybean;
@@ -143,6 +136,8 @@ public class CandybeanTest extends AbstractTest {
 	}
 }
 ```
+
+Refer to [Candybean's API Documentation](http://sugarcrm.github.io/candybean/doc/index.html) for further feature usage.
 
 <a name="config"></a>
 Configuration
