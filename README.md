@@ -44,17 +44,6 @@ This is a list of components that collectively fall under Candybean:
 * Utilities: contains generic helper functionality
 * Web Services: contains request-building and response-parsing functionality
 
-Executing tests
----------------
-Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
-located correctly in a standardized directory structure and/or naming them using certain 
-conventions.  For more information, review the <a href="http://maven.apache.org/surefire/maven-surefire-plugin/">Maven Surefire Plugin</a>.
-
-<a name="faq"></a>
-Frequently asked questions
---------------------------
-WIP 
-
 <a name="quickstart"></a>
 Quickstart
 ----------
@@ -189,6 +178,11 @@ video.compression=Animation
 maxFileSize=512000
 maxRecordingTime=120000
 ```
+
+<a name="faq"></a>
+Frequently asked questions
+--------------------------
+WIP 
 
 Additional tools
 ----------------
