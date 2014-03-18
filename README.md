@@ -47,6 +47,7 @@ Candybean is a collection of components that fosters test automation.  Below is 
 Quickstart
 ----------
 Writing automated tests with Candybean is as quick as these handful of steps:
+
 1. [Install Candybean prequisites](#prereqs)
 2. Create a Maven project; add Candybean to your new test project as a dependency: 
 ```
