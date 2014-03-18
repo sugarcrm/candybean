@@ -8,69 +8,143 @@ There are two audiences this documentation is meant to support: users and contri
 
 See our [FAQ](#faq) or [Quickstart](#quickstart) sections for quick high-level information and installation.
 
-Summary
--------
-Candybean is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batching, and mobile, plain-language, & web service testing.
-
 <a name="features"></a>
 Features
 --------
-Some project features planned for Candybean:
-* HTML 5 support (Sugar 7): supports HTML 5 elements
-* Support Java-based tests/calls: executes Java-based test scripts
-* Mobile support: tests run on web or mobile
-* Abstraction from dependent technologies:
-** Supports multiple, independent reporting options (e.g. XML, HTML)
-** Supports multiple automation frameworks
-** Data-driven resource agnostic (e.g. DB, XML, JSON)
-* Independent from project-specific parameters:
-** Supports product objectification, thus platform-independent
-** Product independent (no Sugar-specific references)
-* Self-testing:
-** Verify element hooks are valid before running tests
-** Verify abstract element behavior (fields, menus, etc.)
-** Unit and system tested
-* Script-style logging: make debugging readable, easier and fully configurable
-* Tag-based execution: define tag logic determining which methods execute
-* Failure/error non-blocking: option to continue executing tests upon error/failure
-* Resource consolidating: pre-execution resource scan for consolidated allocation
-* Supports 'smart' waits (WIP definition)
-* Supports video recording of tests
-* Configurable with ease/overridable via CLI
-* Randomized testing: Supports randomized/stress testing
-* Open-source:
-** JavaDoc/API with usage details, examples, best practices
-** Externally-facing site with installation documentation
-** Code examples
-* Best practice, OOP-organized code for ease of maintenance
-* Easy to install (GUI installer or minimal configuration)
+Here is an unordered list of planned project features Candybean:
+* Automation interface abstraction: the project is extensible across underlying automation libraries like Selenium and AutoIt
+* HTML5 support: supports the latest elements & attributes and provides additional automation functionality for common elements
+* Java-based testing: allows testers to write tests in Java and have the support of an IDE and easily-learned, ubiquitous language
+* Mobile support: tests can be queued to run on both iOS and Android devices
+* Customizable results/reporting: test results are parsed to output custom HTML with video
+* Data-driven: test input is extensible to support a variety of formats (e.g. DB, XML, JSON)
+* Script-style logging: makes debugging easier and fully configurable
+* Tag-based execution: provides another grouping mechanism for batching & executing tests
+* Parallel support: several options for supporting a batch of tests across available resources & platforms
+* Fully configurable: a single configuration runs Candybean and changes environment values based on exection platform 
+* Randomized testing: supports randomized/stress testing via a page object modeling-style convention 
+* JavaDoc & API documentation: includes usage details, examples, and best practices
+* Easy to install: as Maven dependency, forked source, JAR, or GUI installer
+* Unit and system tested
 
 Components
 ----------
+Candybean is a collection of components that fosters test automation.  Below is a list of components for the project:
+
 This is a list of components that collectively fall under Candybean:
 * Automation: contains functionality that automates application interaction
+* Element: contains functionality that encapsulates and automates component/element; applications contains elements
 * Configuration: an extension of the native Java Properties object with configuration-file-specific functionality
 * Data Source: an abstracted data source object with iterative and key-value behavior for data-driven testing
 * Examples: example automated test projects that highlight Candybean's features
-* Model: test target abstraction framework for automated testing
+* Model: an extension of the page object model, this module seeks to abstracts framework extending the notion of page object models for automated testing
 * Results: an encapsulation of test result parsing and illustrative/presentation functionality
 * Runner: an annotation-based orchestration object that executes identified methods for test execution
 * Test: a utilities package with test-specific helper functionality
-* Utilities: contains generic helper functionality and reporting functionality
+* Utilities: contains generic helper functionality
 * Web Services: contains request-building and response-parsing functionality
 
 API Documentation
 -----------------
 [Javadoc API Documentation](http://sugarcrm.github.io/candybean/doc/index.html)
 
-Installation
-------------
-Install and configure the following dependencies:
-* <a href="http://git-scm.com/downloads">Git (clone your fork)</a>
+Executing tests
+---------------
+Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
+located correctly in a standardized directory structure and/or naming them using certain 
+conventions.  For more information, review the <a href="http://maven.apache.org/surefire/maven-surefire-plugin/">Maven Surefire Plugin</a>.
+
+<a name="faq"></a>
+Frequently asked questions
+--------------------------
+WIP 
+
+<a name="quickstart"></a>
+Quickstart
+----------
+Writing automated tests with Candybean is as quick as these handful of steps:
+1. [Install Candybean prequisites](#prereqs)
+2. Create a Maven project; add Candybean to your new test project as a dependency: 
+```
+<dependency>
+    <groupId>com.sugarcrm</groupId>
+    <artifactId>candybean</artifactId>
+    <version>1.1.1</version>
+</dependency>
+```
+3. [Write a test file](#tests)
+4. [Configure Candybean](#config) 
+5. Execute your test(s) using the [Maven Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/)
+
+<a name="prereqs"></a>
+Installation prerequisites
+--------------------------
 * <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE 7 JDK</a>
-* <a href="https://www.google.com/intl/en/chrome/browser/">Chrome (default browser)</a>
 * <a href="http://maven.apache.org/download.html">Maven 3 (recommended build management)</a>
 
+Once Maven is installed, it will detect and automatically install further Candybean prerequisites.
+
+If not already familiar, review the basics of Maven to better understand dependency management and execution:
+* [Maven in 5 minutes](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+* [Maven overview](http://www.tutorialspoint.com/maven/maven_overview.htm)
+
+<a name="tests"></a>
+Writing tests
+-------------
+Candybean recommends the use of <a href="http://maven.apache.org/">Maven</a>!  So if you're not familiar 
+with Maven already, <a href="http://www.tutorialspoint.com/maven/maven_overview.htm">try this link for an overview.</a>   
+
+Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
+a Candybean interface from the configuration file) and begins testing through 
+the interface defined in the configuration.
+
+The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of candybean
+that will make a video recording of the test execution. This feature can be configured in the candybean configuration file.
+
+The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms
+
+```
+import com.sugarcrm.candybean;
+import org.junit.AfterClass;
+import org.junit.Test;
+import com.sugarcrm.candybean.test.AbstractTest;
+
+@RunWith(VRunner.class)
+public class CandybeanTest extends AbstractTest {
+	
+	@Test
+	public void backwardForwardRefreshTest() throws Exception {
+		logger.log("Bringing up craigslist.com for an apartment search!");
+		candybean.getInterface().start();
+		candybean.getInterface().go("http://www.craigslist.com/");
+		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
+		... do other things
+		... perform other assertions
+		... perform other logging
+		... use other candybean features		
+	}
+	
+	@Test
+	@Record(duration = Duration.FINAL_FAILED)
+	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
+	public void recordingTest() throws Exception {
+		String amazonUrl = "http://www.amazon.com/";
+		iface.go(amazonUrl);
+		assertEquals(amazonUrl, iface.getURL());	
+		... do other things
+		... perform other assertions
+		... perform other logging
+		... use other candybean features			
+	}
+	
+	@AfterClass
+	public static void last() throws Exception {
+		candybean.getInterface().stop();
+	}
+}
+```
+
+<a name="config"></a>
 Configuration
 -------------
 Candybean's git repo includes a git submodule at '/config' referencing SugarCRM's private repo.  Out 
@@ -81,7 +155,7 @@ The following key-value keys should be defined in a configuration file used to i
 By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory, but
 a path can also be specified from the command line or a system variable 'candybean_config'.
 ```
-#specifies the type of autmation interface
+#specifies the type of automation interface
 automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
 
 #browser specific profiles and driver paths
@@ -119,79 +193,7 @@ video.encoding=rle
 video.compression=Animation
 maxFileSize=512000
 maxRecordingTime=120000
-
 ```
-
-Writing tests
--------------
-Candybean recommends the use of <a href="http://maven.apache.org/">Maven</a>!  So if you're not familiar 
-with Maven already, <a href="http://www.tutorialspoint.com/maven/maven_overview.htm">try this link for an overview.</a>   
-
-Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
-a Candybean interface from the configuration file) and begins testing through 
-the interface defined in the configuration.
-
-The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of candybean
-that will make a video recording of the test execution. This feature can be configured in the candybean configuration file.
-
-The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms
-
-```
-import com.sugarcrm.candybean;
-import org.junit.AfterClass;
-import org.junit.Test;
-import com.sugarcrm.candybean.test.AbstractTest;
-
-@RunWith(VRunner.class)
-public class CandybeanTest extends AbstractTest{
-	
-	@Test
-	public void backwardForwardRefreshTest() throws Exception {
-		logger.log("Bringing up craigslist.com for an apartment search!");
-		candybean.getInterface().start();
-		candybean.getInterface().go("http://www.craigslist.com/");
-		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
-		... do other things
-		... perform other assertions
-		... perform other logging
-		... use other candybean features		
-	}
-	
-	@Test
-	@Record(duration = Duration.FINAL_FAILED)
-	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
-	public void recordingTest() throws Exception {
-		String amazonUrl = "http://www.amazon.com/";
-		iface.go(amazonUrl);
-		assertEquals(amazonUrl, iface.getURL());	
-		... do other things
-		... perform other assertions
-		... perform other logging
-		... use other candybean features			
-	}
-	
-	@AfterClass
-	public static void last() throws Exception {
-		candybean.getInterface().stop();
-	}
-}
-```
-
-Executing tests
----------------
-Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
-located correctly in a standardized directory structure and/or naming them using certain 
-conventions.  For more information, review the <a href="http://maven.apache.org/surefire/maven-surefire-plugin/">Maven Surefire Plugin</a>.
-
-<a name="faq"></a>
-Frequently asked questions
---------------------------
-WIP 
-
-<a name="quickstart"></a>
-Quickstart
-----------
-WIP
 
 Additional tools
 ----------------
@@ -202,6 +204,7 @@ Core contributors
 -----------------
 * Conrad Warmbold (<a href="https://github.com/cradbold">@cradbold</a>)
 * Soon Han (<a href="https://github.com/hans-sugarcrm">@hans-sugarcrm</a>)
+* Shehryar Farooq (<a href="https://github.com/Ownageful">@Ownageful</a>)
 * Larry Cao (<a href="https://github.com/sqwerl">@sqwerl</a>)
 * Jason Lin (<a href="https://github.com/Raydians">@Raydians</a>)
 * Wilson Li (<a href="https://github.com/wli-sugarcrm">@wli-sugarcrm</a>)
