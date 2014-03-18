@@ -29,7 +29,7 @@ Here is an unordered list of planned project features Candybean:
 
 Components
 ----------
-Candybean is a collection of components that fosters test automation.  Below is a list of components for the project:
+Candybean is a collection of components that fosters test automation.  Below is a list of those components:
 
 * Automation: contains functionality that automates application interaction
 * Element: contains functionality that encapsulates and automates component/element; applications contains elements
