@@ -48,8 +48,8 @@ Quickstart
 ----------
 Writing automated tests with Candybean is as quick as these handful of steps:
 
-1. [Install Candybean prequisites](#prereqs)
-2. Create a Maven project; add Candybean to your new test project as a dependency: 
+* [Install Candybean prequisites](#prereqs)
+* Create a Maven project; add Candybean to your new test project as a dependency: 
 ```
 <dependency>
     <groupId>com.sugarcrm</groupId>
@@ -57,9 +57,9 @@ Writing automated tests with Candybean is as quick as these handful of steps:
     <version>1.1.1</version>
 </dependency>
 ```
-3. [Write a test file](#tests)
-4. [Configure Candybean](#config) 
-5. Execute your test(s) using the [Maven Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/)
+* [Write a test file](#tests)
+* [Configure Candybean](#config) 
+* Execute your test(s) using the [Maven Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/)
 
 <a name="prereqs"></a>
 Installation prerequisites
