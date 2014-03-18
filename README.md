@@ -49,7 +49,7 @@ Quickstart
 Writing automated tests with Candybean is as quick as these handful of steps:
 
 * [Install Candybean prequisites](#prereqs)
-* Create a Maven project; add Candybean to your new test project as a dependency: 
+* Create a Maven project; add Candybean to your new test project's [POM](https://maven.apache.org/pom.html) as a dependency: 
 ```
 <dependency>
     <groupId>com.sugarcrm</groupId>
