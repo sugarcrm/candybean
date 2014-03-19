@@ -39,7 +39,6 @@ public abstract class WebDriverTest {
 	 * @throws Exception 
 	 */
 	public WebDriverTest() {
-		logger = Logger.getLogger(this.getClass().getSimpleName());
 		try {
 			candybean = Candybean.getInstance();
 			logger = Logger.getLogger(Candybean.class.getSimpleName());
@@ -49,8 +48,10 @@ public abstract class WebDriverTest {
 				logger.addHandler(fh);
 			}
 		} catch (IOException e) {
+			logger = Logger.getLogger(Candybean.class.getSimpleName());
 			logger.severe("Unable to read/write to file " + "./log/" + this.getClass().getSimpleName() + ".log");
 		} catch (CandybeanException e) {
+			logger = Logger.getLogger(Candybean.class.getSimpleName());
 			logger.severe("Unable to instantiate candybean using default configuration settings");
 		}
 	}

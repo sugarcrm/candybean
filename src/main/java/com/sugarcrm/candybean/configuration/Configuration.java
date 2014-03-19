@@ -74,6 +74,7 @@ public class Configuration {
     public Configuration(File configFile) throws IOException {
     	this.configFile = configFile;
         properties = new Properties();
+        this.logger = Logger.getLogger(Configuration.class.getSimpleName());
         this.load(configFile);
     }
 
