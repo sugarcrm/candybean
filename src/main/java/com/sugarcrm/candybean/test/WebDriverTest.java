@@ -26,7 +26,7 @@ public abstract class WebDriverTest {
 	/**
 	 * AutomationInterface used to automate actions
 	 */
-	protected static WebDriverInterface iface;
+	protected WebDriverInterface iface;
 	
 	/**
 	 * Test-specific logger

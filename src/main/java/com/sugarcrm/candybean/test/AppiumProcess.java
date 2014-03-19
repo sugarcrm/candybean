@@ -30,7 +30,7 @@ public class AppiumProcess extends Thread{
 			}
 		} catch (IOException e) {
 			logger.severe(e.getMessage());
-			logger.severe("Unable to start appium automatically, please start appiums erver manually!");
+			logger.severe("Unable to start appium automatically, please start appium server manually!");
 		}
 		super.run();
 	}

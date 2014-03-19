@@ -48,7 +48,7 @@ public abstract class AndroidTest extends MobileTest {
 			capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
 			capabilities.setCapability("app-package", config.getValue(className + ".app-package"));
 			capabilities.setCapability("app-activity", config.getValue(className + ".app-activity"));
-			iface = candybean.getWebDriverInterface(type, capabilities);
+			super.iface = candybean.getWebDriverInterface(super.type, capabilities);
 		} catch (Exception e) {
 			logger.severe(e.getMessage());
 		}
