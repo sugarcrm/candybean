@@ -27,7 +27,7 @@ public class IosInterface extends WebDriverInterface {
 			super.wd = new SwipeableWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 		} catch (MalformedURLException mue) {
 			throw new CandybeanException(mue);
-		}
+		} 
         super.start(); // requires wd to be instantiated first
 	}
 

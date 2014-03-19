@@ -38,7 +38,7 @@ public abstract class AutomationInterface {
 	/**
 	 * A preconfigured logger instance for child interfaces to log messages.
 	 */
-	protected static final Logger logger = Logger.getLogger(AutomationInterface.class.getSimpleName());
+	protected static Logger logger;
 	
 	/**
 	 * Reference to global candybean instance.
@@ -52,6 +52,7 @@ public abstract class AutomationInterface {
 	
 	public AutomationInterface(Type iType) throws CandybeanException {
 		this.candybean = Candybean.getInstance();
+		logger = Logger.getLogger(Candybean.class.getSimpleName());
 		this.iType = iType;
 	}
 	
