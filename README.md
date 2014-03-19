@@ -182,7 +182,8 @@ maxRecordingTime=120000
 <a name="faq"></a>
 Frequently asked questions (FAQ)
 --------------------------------
-1. How is Candybean different from Selenium? 
+* How is Candybean different from Selenium?
+* _asdf asdf asdf_
 
 Additional tools
 ----------------
