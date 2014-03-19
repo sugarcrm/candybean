@@ -1,15 +1,10 @@
 package com.sugarcrm.candybean.test;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
-
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
@@ -22,27 +17,39 @@ public abstract class AndroidTest extends MobileTest {
 	
 	public AndroidTest() {
 		super(Type.ANDROID);
-		List<String> commands = new ArrayList<String>();
-		commands.add("/usr/local/bin/appium");
-		commands.add("-a");
-		commands.add("127.0.0.1");
-		commands.add("-p");
-		commands.add("4723");
-		AppiumProcess appiumProcess = new AppiumProcess(commands, logger);
-		appiumProcess.start();
+		boolean automateAppium = Boolean.parseBoolean(candybean.config.getValue("appium.automate"));
 		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		String className = this.getClass().getSimpleName();
-		capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
-		capabilities.setCapability("app-package", config.getValue(className + ".app-package"));
-		capabilities.setCapability("app-activity", config.getValue(className + ".app-activity"));
-		try {
+			if(automateAppium) {
+				List<String> appiumStartupCommands = new ArrayList<String>();
+				appiumStartupCommands.add(candybean.config.getValue("appium.path"));
+				appiumStartupCommands.add("-a");
+				appiumStartupCommands.add(candybean.config.getValue("appium.ip"));
+				appiumStartupCommands.add("-p");
+				appiumStartupCommands.add(candybean.config.getValue("appium.port"));
+				
+				List<String> avdCommands = new ArrayList<String>();
+				avdCommands.add(candybean.config.getValue("avd.emulator.path"));
+				avdCommands.add("-avd");
+				avdCommands.add(candybean.config.getValue("avd.emulator.name"));
+				
+				AppiumProcess avdProcess = new AppiumProcess(avdCommands, logger);
+				avdProcess.start();
+			
+				try {
+					Thread.sleep(Long.parseLong(candybean.config.getValue("avd.device.timeout")));
+				} catch (InterruptedException e1) {
+					logger.warning("Unable to wait for emulator to start up");
+				}
+				
+				AppiumProcess appiumProcess = new AppiumProcess(appiumStartupCommands, logger);
+				appiumProcess.start();
+			}
+			String className = this.getClass().getSimpleName();
+			capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
+			capabilities.setCapability("app-package", config.getValue(className + ".app-package"));
+			capabilities.setCapability("app-activity", config.getValue(className + ".app-activity"));
 			iface = candybean.getWebDriverInterface(type, capabilities);
-		} catch (CandybeanException e) {
+		} catch (Exception e) {
 			logger.severe(e.getMessage());
 		}
 	}

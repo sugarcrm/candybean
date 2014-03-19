@@ -19,7 +19,6 @@ public class AppiumProcess extends Thread{
 
 	@Override
 	public void run() {
-		
         try {
 			ProcessBuilder pb = new ProcessBuilder(commands);
 			pb.redirectErrorStream(true);
