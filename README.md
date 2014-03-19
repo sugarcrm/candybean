@@ -183,12 +183,15 @@ maxRecordingTime=120000
 Frequently asked questions (FAQ)
 --------------------------------
 * How is Candybean different from Selenium?
-* _asdf asdf asdf_
+* How do I execute my test?
 
-Additional tools
-----------------
-We find the following tools useful for development with Candybean:
-* <a href="http://developer.android.com/tools/testing/testing_ui.html#uianalysis">UIAutomatorViewer</a> for android devices. Useful UI analysis tool when writing mobile automation tests.
+Things we like
+--------------
+This is a list of additional tools and things we like for automation, testing, etc.
+
+We like this stuff:
+* [Eclipse](https://www.eclipse.org/)
+* [UIAutomatorViewer](http://developer.android.com/tools/testing/testing_ui.html#uianalysis) for android devices. Useful UI analysis tool when writing mobile automation tests.
 
 Core contributors
 -----------------
