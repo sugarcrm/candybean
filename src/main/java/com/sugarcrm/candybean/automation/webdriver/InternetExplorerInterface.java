@@ -1,5 +1,8 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
+import java.io.File;
+
+import org.apache.maven.surefire.shade.org.apache.maven.shared.utils.StringUtils;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -15,11 +18,19 @@ public class InternetExplorerInterface extends WebDriverInterface {
 	public void start() throws CandybeanException {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		String ieDriverPath = candybean.config.getPathValue("browser.ie_driver_path");
-		logger.info("ieDriverPath: " + ieDriverPath);
-		System.setProperty("webdriver.ie.driver", ieDriverPath);
-		capabilities = DesiredCapabilities.internetExplorer();
-		super.wd = new InternetExplorerDriver(capabilities);
-        super.start(); // requires wd to be instantiated first
+		if(StringUtils.isEmpty(ieDriverPath) || !new File(ieDriverPath).exists()){
+			String error = "Unable to find internet explorer driver from the specified location("+ieDriverPath+") in the configuration file! \n"
+					+ "Please add a configuration to the candybean config file for key \"browser.ie_driver_path\" "
+					+ "that indicates the absolute location the driver.";
+			logger.severe(error);
+			throw new CandybeanException(error);
+		}else{
+			logger.info("ieDriverPath: " + ieDriverPath);
+			System.setProperty("webdriver.ie.driver", ieDriverPath);
+			capabilities = DesiredCapabilities.internetExplorer();
+			super.wd = new InternetExplorerDriver(capabilities);
+	        super.start(); // requires wd to be instantiated first
+		}
 	}
 	
 	@Override

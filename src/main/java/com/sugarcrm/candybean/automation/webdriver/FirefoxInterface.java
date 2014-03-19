@@ -19,12 +19,20 @@ public class FirefoxInterface extends WebDriverInterface {
 	public void start() throws CandybeanException {
 		String profileName = candybean.config.getValue("browser.firefox_profile", "default");
 		File ffBinaryPath = new File(candybean.config.getPathValue("browser.firefox_binary"));
-		FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
-		FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
-		logger.info("Instantiating Firefox with profile name: "
-				+ profileName + " and binary path: " + ffBinaryPath);
-		super.wd = new FirefoxDriver(ffBinary, ffProfile);
-		super.start(); // requires wd to be instantiated first
+		if(!ffBinaryPath.exists()){
+			String error = "Unable to find firefox browser driver from the specified location in the configuration file! \n"
+					+ "Please add a configuration to the candybean config file for key \"browser.firefox_binary\" that"
+					+ "indicates the location of the binary.";
+			logger.severe(error);
+			throw new CandybeanException(error);
+		} else {
+			FirefoxProfile ffProfile = (new ProfilesIni()).getProfile(profileName);
+			FirefoxBinary ffBinary = new FirefoxBinary(ffBinaryPath);
+			logger.info("Instantiating Firefox with profile name: "
+					+ profileName + " and binary path: " + ffBinaryPath);
+			super.wd = new FirefoxDriver(ffBinary, ffProfile);
+			super.start(); // requires wd to be instantiated first
+		}
 	}
 
 	@Override
