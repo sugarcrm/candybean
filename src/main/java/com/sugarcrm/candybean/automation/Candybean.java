@@ -51,7 +51,7 @@ public final class Candybean {
 	/**
 	 * The default name of the system property that may contain the candybean configuration file path.
 	 */
-	public static final String CONFIG_KEY = "config";
+	public static final String CONFIG_KEY = "cbconfig";
 	
 	/**
 	 * The default name for the configuration file used to instantiate candybean.
@@ -216,6 +216,7 @@ public final class Candybean {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
 		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
+		LogManager.getLogManager().reset();
 		LogManager.getLogManager().readConfiguration();		
 		return Logger.getLogger(Candybean.class.getSimpleName());
 	}
