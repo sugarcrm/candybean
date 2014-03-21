@@ -184,5 +184,5 @@ Things we like
 This is a list of additional tools and things we like for automation, testing, etc.
 
 We like this stuff:
-* [Eclipse](https://www.eclipse.org/)
+* [Eclipse](https://www.eclipse.org/) - as standard an IDE as any; recently added git integration improvements
 * [UIAutomatorViewer](http://developer.android.com/tools/testing/testing_ui.html#uianalysis) for android devices. Useful UI analysis tool when writing mobile automation tests.
