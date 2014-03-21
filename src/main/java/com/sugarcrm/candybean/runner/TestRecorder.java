@@ -365,6 +365,9 @@ public class TestRecorder extends RunListener {
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(reportTemplate);
 			out.close();
+		}else{
+			xmlFile.delete();
+			new File(config.getValue("testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML)).delete();
 		}
 	}
 	
