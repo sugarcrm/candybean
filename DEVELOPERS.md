@@ -12,6 +12,12 @@ Setup
 To file bugs or features requests, etc. against the project, [submit issues here](https://github.com/sugarcrm/candybean/issues?state=open).
 
 Refer to our [wiki](https://github.com/sugarcrm/candybean/wiki/Candybean) for more information as well.
+
+Project tests
+-------------
+Unit tests are encourage for all functionality that has no 3rd party dependencies.  These tests are executed by default in the Maven test phase and are delimited by the naming convention of "*UnitTest.java".
+
+System tests are encouraged for all functionality taht requires 3rd party dependency -- e.g. the use of Selenium or Chrome as a browser.  These tests are executed using the '-Psystem' Maven profile designation and are delimited by the naming convention of "*SystemTest.java".
  
 Core contributors
 -----------------

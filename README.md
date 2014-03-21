@@ -57,9 +57,9 @@ Writing automated tests with Candybean is as quick as these handful of steps:
     <version>1.1.1</version>
 </dependency>
 ```
-* [Write a test file](#tests)
+* [Write your test(s)](#tests)
 * [Configure Candybean](#config) 
-* [Execute your test(s)!](#execute)
+* [Execute your test(s)](#execute)
 
 <a name="prereqs"></a>
 Installation prerequisites
@@ -184,10 +184,15 @@ Executing your tests
 --------------------
 Generally speaking, tests can be/are executed using the [Maven Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/).  So if your tests make use of the [Maven standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) and your tests are configured for either [JUnit](http://maven.apache.org/surefire/maven-surefire-plugin/examples/junit.html) or [TestNG](http://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html), the following should command should trigger test execution:
 ```
-> mvn clean test -Dcbconfig=candybean.config
+> mvn clean test -Dcbconfig=./candybean.config
 ```
-
 Note, though Candybean has default configuration settings, any practical use of the Candybean project will at least require some custom Candybean configuration, thus specifying the location of your Candybean configuration file is required.
+
+Other things you can do:
+Specify a testcase and test for execution:
+```
+> mvn clean test -Dcbconfig=./candybean.config -Dtest=MyTestCase#MyTest
+```
 
 Things we like
 --------------
