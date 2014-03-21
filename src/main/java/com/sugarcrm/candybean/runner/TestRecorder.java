@@ -177,7 +177,9 @@ public class TestRecorder extends RunListener {
 				failedTest.setTestHeader(failure.getTestHeader());
 				failedTest.setTrace(failure.getTrace());
 				failedTest.setFailMessage(failure.getMessage());
-				failedTests.getFailures().add(failedTest);
+				if(!failedTests.getFailures().containsKey(createdVideoFile.getCanonicalPath())){
+					failedTests.getFailures().put(createdVideoFile.getCanonicalPath(),failedTest);
+				}
 				Marshaller marshal = context.createMarshaller();
 				marshal.marshal(failedTests, xmlFile);
 			}
@@ -352,7 +354,8 @@ public class TestRecorder extends RunListener {
 			String reportTemplate = readFile("./resources/html/videoRecordingTemplate.html", Charset.defaultCharset());
 			reportTemplate = reportTemplate.replace("${title}", "Failed Test Recordings");
 			String entryTemplate = readFile("./resources/html/videoEntryTemplate.html", Charset.defaultCharset());
-			for (TestFailure failure : failedTests.getFailures()) {
+			for (String videoPath : failedTests.getFailures().keySet()) {
+				TestFailure failure = failedTests.getFailures().get(videoPath);
 				String entry = entryTemplate;
 				entry = entry.replace("${failure.header}", failure.getTestHeader());
 				entry = entry.replace("${failure.stacktrace}", HtmlEscapers.htmlEscaper().escape(failure.getTrace()));
