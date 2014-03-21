@@ -189,7 +189,7 @@ Generally speaking, tests can be/are executed using the [Maven Surefire Plugin](
 Note, though Candybean has default configuration settings, any practical use of the Candybean project will at least require some custom Candybean configuration, thus specifying the location of your Candybean configuration file is required.
 
 Other things you can do:
-Specify a testcase and test for execution:
+Specify a testcase and/or test for execution:
 ```
 > mvn clean test -Dcbconfig=./candybean.config -Dtest=MyTestCase#MyTest
 ```
