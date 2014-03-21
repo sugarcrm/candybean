@@ -72,19 +72,19 @@ a path can also be specified from the command line or a system variable 'candybe
 automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
 
 #browser specific profiles and driver paths
-browser.firefox_binary = {\
+browser.firefox.binary = {\
 	"linux": "/path/to/firefox/binary/in/linux", \
 	"mac": "/path/to/firefox/binary/on/mac", \
 	"windows": "c:/path/to/firefox/binary/in/windows"}
-browser.firefox_profile = default
-browser.chrome_driver_path = {\
+browser.firefox.profile = default
+browser.chrome.driver.path = {\
 	"linux": "/path/to/chrome/driver/in/linux", \
 	"mac": "/path/to/chrome/driver/on/mac", \
 	"windows": "/path/to/chrome/driver/in/windows"}
-browser.chrome_driver_log_path = /path/to/chromedriver/log
-browser.ie_driver_path = /path/to/ie/driver
-perf.page_load_timeout = /page/load/in/seconds
-perf.implicit_wait_seconds = /passive/wait/in/seconds
+browser.chrome.driver.log.path = /path/to/chromedriver/log
+browser.ie.driver.path = /path/to/ie/driver
+perf.page.load.timeout = /page/load/in/seconds
+perf.implicit.wait.seconds = /passive/wait/in/seconds
 
 #candybean logger configuration
 handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler

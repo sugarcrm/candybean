@@ -17,10 +17,10 @@ public class InternetExplorerInterface extends WebDriverInterface {
 	@Override
 	public void start() throws CandybeanException {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		String ieDriverPath = candybean.config.getPathValue("browser.ie_driver_path");
+		String ieDriverPath = candybean.config.getPathValue("browser.ie.driver.path");
 		if(StringUtils.isEmpty(ieDriverPath) || !new File(ieDriverPath).exists()){
 			String error = "Unable to find internet explorer driver from the specified location("+ieDriverPath+") in the configuration file! \n"
-					+ "Please add a configuration to the candybean config file for key \"browser.ie_driver_path\" "
+					+ "Please add a configuration to the candybean config file for key \"browser.ie.driver.path\" "
 					+ "that indicates the absolute location the driver.";
 			logger.severe(error);
 			throw new CandybeanException(error);

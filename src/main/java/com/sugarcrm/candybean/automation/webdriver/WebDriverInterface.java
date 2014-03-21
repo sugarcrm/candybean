@@ -83,7 +83,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	@Override
 	public void start() throws CandybeanException {
-		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit_wait_seconds"));
+		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds"));
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		if (System.getProperty("headless") == null
 				&& !(this instanceof AndroidInterface)
