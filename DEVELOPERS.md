@@ -4,144 +4,23 @@ There are two audiences this documentation is meant to support: users and contri
 
 This documentation is meant for project contributors (developers).  For more, general information on Candybean and how to get it configured and running quickly, see the project's [README](README.md). 
 
-Installation
-------------
-See the <a href="README.md#prereqs">installation prerequisites for preliminary installs.</a>
+Setup
+-----
+1. See the <a href="README.md#prereqs">installation prerequisites for preliminary installs.</a>
+2. Additionally, [install git](http://git-scm.com/book/en/Getting-Started-Installing-Git) and [fork & clone the Candybean project](https://help.github.com/articles/fork-a-repo) from the [Candybean Github page](https://github.com/sugarcrm/candybean). 
+3. Make sure SugarCRM legal has received a copy of your signed [Contribution Agreement](SugarCRMCA-Candybean.doc)
+4. At this point, you're ready to make code changes; to deliver them back to the project, [submit a pull request](https://help.github.com/articles/using-pull-requests). 
 
-Additionally, [install git](http://git-scm.com/book/en/Getting-Started-Installing-Git) and [fork the Candybean project](https://help.github.com/articles/fork-a-repo) from the [Candybean Github page](https://github.com/sugarcrm/candybean). 
+To file bugs or features requests, etc. against the project, [submit issues here](https://github.com/sugarcrm/candybean/issues?state=open).
 
-Installation prerequisites
---------------------------
-* <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE 7 JDK</a>
-* <a href="http://maven.apache.org/download.html">Maven 3 (recommended build management)</a>
-
-Once Maven is installed, it will detect and automatically install further Candybean prerequisites.
-
-If not already familiar, review the basics of Maven to better understand dependency management and execution:
-* [Maven in 5 minutes](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
-* [Maven overview](http://www.tutorialspoint.com/maven/maven_overview.htm)
-
-Configuration
--------------
-Candybean's git repo includes a git submodule at '/config' referencing SugarCRM's private repo.  Out 
-of the box, Candybean will look for its configuration file in this directory, which should either be 
-explicitly defined or overridden via command line or system variable.
-
-The following key-value keys should be defined in a configuration file used to instantiate Candybean.
-By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory, but
-a path can also be specified from the command line or a system variable 'candybean_config'.
-```
-#specifies the type of autmation interface
-automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
-
-#browser specific profiles and driver paths
-browser.firefox_binary = {\
-	"linux": "/path/to/firefox/binary/in/linux", \
-	"mac": "/path/to/firefox/binary/on/mac", \
-	"windows": "c:/path/to/firefox/binary/in/windows"}
-browser.firefox_profile = default
-browser.chrome_driver_path = {\
-	"linux": "/path/to/chrome/driver/in/linux", \
-	"mac": "/path/to/chrome/driver/on/mac", \
-	"windows": "/path/to/chrome/driver/in/windows"}
-browser.chrome_driver_log_path = /path/to/chromedriver/log
-browser.ie_driver_path = /path/to/ie/driver
-perf.page_load_timeout = /page/load/in/seconds
-perf.implicit_wait_seconds = /passive/wait/in/seconds
-
-#candybean logger configuration
-handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
-
-#file logging
-java.util.logging.FileHandler.limit = 50000
-java.util.logging.FileHandler.count = 1
-java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
-java.util.logging.FileHandler.level = INFO
-
-#logging format
-java.util.logging.SimpleFormatter.format = [%1$tm-%1$td-%1$tY %1$tk:%1$tM:%1$tS:%1$tL] %2$s %4$s: %5$s %6$s %n
-
-# Monte Media Library Recorder Settings
-video.format=video/quicktime
-video.format.frameRate=15
-video.directory=./log
-video.encoding=rle 
-video.compression=Animation
-maxFileSize=512000
-maxRecordingTime=120000
-
-```
-
-Writing tests
--------------
-Candybean recommends the use of <a href="http://maven.apache.org/">Maven</a>!  So if you're not familiar 
-with Maven already, <a href="http://www.tutorialspoint.com/maven/maven_overview.htm">try this link for an overview.</a>   
-
-Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
-a Candybean interface from the configuration file) and begins testing through 
-the interface defined in the configuration.
-
-The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of candybean
-that will make a video recording of the test execution. This feature can be configured in the candybean configuration file.
-
-The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms
-
-```
-import com.sugarcrm.candybean;
-import org.junit.AfterClass;
-import org.junit.Test;
-import com.sugarcrm.candybean.test.AbstractTest;
-
-@RunWith(VRunner.class)
-public class CandybeanTest extends AbstractTest{
-	
-	@Test
-	public void backwardForwardRefreshTest() throws Exception {
-		logger.log("Bringing up craigslist.com for an apartment search!");
-		candybean.getInterface().start();
-		candybean.getInterface().go("http://www.craigslist.com/");
-		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
-		... do other things
-		... perform other assertions
-		... perform other logging
-		... use other candybean features		
-	}
-	
-	@Test
-	@Record(duration = Duration.FINAL_FAILED)
-	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
-	public void recordingTest() throws Exception {
-		String amazonUrl = "http://www.amazon.com/";
-		iface.go(amazonUrl);
-		assertEquals(amazonUrl, iface.getURL());	
-		... do other things
-		... perform other assertions
-		... perform other logging
-		... use other candybean features			
-	}
-	
-	@AfterClass
-	public static void last() throws Exception {
-		candybean.getInterface().stop();
-	}
-}
-```
-
-Executing tests
----------------
-Because Candybean recommends Maven, executing your tests is as simple as making sure they're 
-located correctly in a standardized directory structure and/or naming them using certain 
-conventions.  For more information, review the <a href="http://maven.apache.org/surefire/maven-surefire-plugin/">Maven Surefire Plugin</a>.
-
-Additional tools
-----------------
-We find the following tools useful for development with Candybean:
-* <a href="http://developer.android.com/tools/testing/testing_ui.html#uianalysis">UIAutomatorViewer</a> for android devices. Useful UI analysis tool when writing mobile automation tests.
+Refer to our [wiki](https://github.com/sugarcrm/candybean/wiki/Candybean) for more information as well.
+ 
 
 Core contributors
 -----------------
 * Conrad Warmbold (<a href="https://github.com/cradbold">@cradbold</a>)
 * Soon Han (<a href="https://github.com/hans-sugarcrm">@hans-sugarcrm</a>)
+* Shehryar Farooq (<a href="https://github.com/Ownageful">@Ownageful</a>)
 * Larry Cao (<a href="https://github.com/sqwerl">@sqwerl</a>)
 * Jason Lin (<a href="https://github.com/Raydians">@Raydians</a>)
 * Wilson Li (<a href="https://github.com/wli-sugarcrm">@wli-sugarcrm</a>)

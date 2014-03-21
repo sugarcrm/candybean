@@ -6,7 +6,7 @@ For an explicit listing of Candybean goals and features, see the [Features secti
 
 There are two audiences this documentation is meant to support: users and contributors (developers).  Both audiences can learn more about how to use the project by reading further, but project contributors can additionally benefit from visiting the [Developer Documentation](DEVELOPERS.md).
 
-See our [FAQ](#faq) or [Quickstart](#quickstart) sections for quick high-level information and installation.
+See our [wiki](https://github.com/sugarcrm/candybean/wiki/Candybean), [FAQ](https://github.com/sugarcrm/candybean/wiki/FAQ) or [Quickstart](#quickstart) sections for quick high-level information and installation.
 
 <a name="features"></a>
 Features
@@ -179,12 +179,6 @@ maxFileSize=512000
 maxRecordingTime=120000
 ```
 
-<a name="faq"></a>
-Frequently asked questions (FAQ)
---------------------------------
-* How is Candybean different from Selenium?
-* How do I execute my test?
-
 Things we like
 --------------
 This is a list of additional tools and things we like for automation, testing, etc.
@@ -192,12 +186,3 @@ This is a list of additional tools and things we like for automation, testing, e
 We like this stuff:
 * [Eclipse](https://www.eclipse.org/)
 * [UIAutomatorViewer](http://developer.android.com/tools/testing/testing_ui.html#uianalysis) for android devices. Useful UI analysis tool when writing mobile automation tests.
-
-Core contributors
------------------
-* Conrad Warmbold (<a href="https://github.com/cradbold">@cradbold</a>)
-* Soon Han (<a href="https://github.com/hans-sugarcrm">@hans-sugarcrm</a>)
-* Shehryar Farooq (<a href="https://github.com/Ownageful">@Ownageful</a>)
-* Larry Cao (<a href="https://github.com/sqwerl">@sqwerl</a>)
-* Jason Lin (<a href="https://github.com/Raydians">@Raydians</a>)
-* Wilson Li (<a href="https://github.com/wli-sugarcrm">@wli-sugarcrm</a>)
