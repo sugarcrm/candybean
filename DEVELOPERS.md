@@ -6,7 +6,7 @@ This documentation is meant for project contributors (developers).  For more, ge
 
 Installation
 ------------
-(test link)[README.md#prereqs]
+<a href="README.md#prereqs">test link</a>
 
 Installation prerequisites
 --------------------------
