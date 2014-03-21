@@ -4,7 +4,7 @@ The Candybean project started while acknowledging that many engineers have devel
 
 For an explicit listing of Candybean goals and features, see the [Features section](#features) below.
 
-There are two audiences this documentation is meant to support: users and contributors (developers).  Both audiences can learn more about how to use the project by reading further, but project contributors can additionally benefit from visiting the [Developer Documentation] (DEVELOPERS.md).
+There are two audiences this documentation is meant to support: users and contributors (developers).  Both audiences can learn more about how to use the project by reading further, but project contributors can additionally benefit from visiting the [Developer Documentation](DEVELOPERS.md).
 
 See our [FAQ](#faq) or [Quickstart](#quickstart) sections for quick high-level information and installation.
 

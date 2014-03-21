@@ -1,62 +1,23 @@
-Candybean
-=========
-Candybean is SugarCRM's next generation automation and testing framework.  It is a collection of components that fosters test automation, execution configuration, data abstraction, results illustration, tag-based execution, top-down and bottom-up batches, mobile variants, plain-language testing, and web service testing.
+CONTRIBUTING TO CANDYBEAN
+=========================
+There are two audiences this documentation is meant to support: users and contributors (developers).  Both audiences can learn more about how to use the project by reading further, but project contributors can additionally benefit from visiting the [Developer Documentation] (DEVELOPERS.md).
 
-[Javadoc API Documentation](http://sugarcrm.github.io/candybean/doc/index.html)
-
-Features
---------
-Some project features planned for Candybean:
-* HTML 5 support (Sugar 7): supports HTML 5 elements
-* Support Java-based tests/calls: executes Java-based test scripts
-* Mobile support: tests run on web or mobile
-* Abstraction from dependent technologies:
-** Supports multiple, independent reporting options (e.g. XML, HTML)
-** Supports multiple automation frameworks
-** Data-driven resource agnostic (e.g. DB, XML, JSON)
-* Independent from project-specific parameters:
-** Supports product objectification, thus platform-independent
-** Product independent (no Sugar-specific references)
-* Self-testing:
-** Verify element hooks are valid before running tests
-** Verify abstract element behavior (fields, menus, etc.)
-** Unit and system tested
-* Script-style logging: make debugging readable, easier and fully configurable
-* Tag-based execution: define tag logic determining which methods execute
-* Failure/error non-blocking: option to continue executing tests upon error/failure
-* Resource consolidating: pre-execution resource scan for consolidated allocation
-* Supports 'smart' waits (WIP definition)
-* Supports video recording of tests
-* Configurable with ease/overridable via CLI
-* Randomized testing: Supports randomized/stress testing
-* Open-source:
-** JavaDoc/API with usage details, examples, best practices
-** Externally-facing site with installation documentation
-** Code examples
-* Best practice, OOP-organized code for ease of maintenance
-* Easy to install (GUI installer or minimal configuration)
-
-Components
-----------
-This is a list of components that collectively fall under Candybean:
-* Automation: contains functionality that automates application interaction
-* Configuration: an extension of the native Java Properties object with configuration-file-specific functionality
-* Data Source: an abstracted data source object with iterative and key-value behavior for data-driven testing
-* Examples: example automated test projects that highlight Candybean's features
-* Model: test target abstraction framework for automated testing
-* Results: an encapsulation of test result parsing and illustrative/presentation functionality
-* Runner: an annotation-based orchestration object that executes identified methods for test execution
-* Test: a utilities package with test-specific helper functionality
-* Utilities: contains generic helper functionality and reporting functionality
-* Web Services: contains request-building and response-parsing functionality
+This documentation is meant for project contributors (developers).  For more, general information on Candybean and how to get it configured and running quickly, see the project's [README](README.md). 
 
 Installation
 ------------
-Install and configure the following dependencies:
-* <a href="http://git-scm.com/downloads">Git (clone your fork)</a>
+(test link)[README.md#prereqs]
+
+Installation prerequisites
+--------------------------
 * <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE 7 JDK</a>
-* <a href="https://www.google.com/intl/en/chrome/browser/">Chrome (default browser)</a>
 * <a href="http://maven.apache.org/download.html">Maven 3 (recommended build management)</a>
+
+Once Maven is installed, it will detect and automatically install further Candybean prerequisites.
+
+If not already familiar, review the basics of Maven to better understand dependency management and execution:
+* [Maven in 5 minutes](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+* [Maven overview](http://www.tutorialspoint.com/maven/maven_overview.htm)
 
 Configuration
 -------------
