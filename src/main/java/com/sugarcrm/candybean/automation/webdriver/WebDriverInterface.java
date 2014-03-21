@@ -443,11 +443,25 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		try {
 			logger.info("Accepting dialog.");
 			this.wd.switchTo().alert().accept();
+			this.waitForAlertDismissal();
 		} catch(UnhandledAlertException uae) {
 			logger.warning("Unhandled alert exception");
 		}
 	}
 	
+	/**
+	 * Waits for an alert to be dismissed
+	 * The use of a while loop is not recommended, use this method with caution
+	 */
+	private void waitForAlertDismissal() {
+		//Any better way to do this?
+		while(true){
+			if(!isDialogVisible()){
+				break;
+			}
+		}
+	}
+
 	/**
 	 * Dismisses a modal dialog box (usually referred to
 	 * as a &quot;javascript dialog&quot;).
@@ -457,6 +471,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		try {
 			logger.info("Dismissing dialog.");
 			this.wd.switchTo().alert().dismiss();
+			this.waitForAlertDismissal();
 		} catch(UnhandledAlertException uae) {
 			logger.warning("Unhandled alert exception");
 		}
