@@ -8,7 +8,7 @@ Setup
 -----
 1. See the <a href="README.md#prereqs">installation prerequisites for preliminary installs.</a>
 2. Additionally, [install git](http://git-scm.com/book/en/Getting-Started-Installing-Git) and [fork & clone the Candybean project](https://help.github.com/articles/fork-a-repo) from the [Candybean Github page](https://github.com/sugarcrm/candybean). 
-3. Make sure SugarCRM legal has received a copy of your signed [Contribution Agreement](SugarCRMCA-Candybean.doc)
+3. Make sure SugarCRM legal has received a copy of your signed [Contribution Agreement](https://github.com/sugarcrm/candybean/raw/cb-186/SugarCRMCA-Candybean.doc)
 4. At this point, you're ready to make code changes; to deliver them back to the project, [submit a pull request](https://help.github.com/articles/using-pull-requests). 
 
 To file bugs or features requests, etc. against the project, [submit issues here](https://github.com/sugarcrm/candybean/issues?state=open).
