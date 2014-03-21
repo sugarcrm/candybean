@@ -6,7 +6,9 @@ This documentation is meant for project contributors (developers).  For more, ge
 
 Installation
 ------------
-<a href="README.md#prereqs">test link</a>
+See the <a href="README.md#prereqs">installation prerequisites for preliminary installs.</a>
+
+Additionally, [install git](http://git-scm.com/book/en/Getting-Started-Installing-Git) and [fork the Candybean project](https://help.github.com/articles/fork-a-repo) from the [Candybean Github page](https://github.com/sugarcrm/candybean). 
 
 Installation prerequisites
 --------------------------
