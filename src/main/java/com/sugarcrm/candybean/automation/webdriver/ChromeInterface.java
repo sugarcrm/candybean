@@ -17,14 +17,14 @@ public class ChromeInterface extends WebDriverInterface {
 	@Override
 	public void start() throws CandybeanException {
 		ChromeOptions chromeOptions = new ChromeOptions();
-		String chromeDriverLogPath = candybean.config.getPathValue("browser.chrome_driver_log_path");
+		String chromeDriverLogPath = candybean.config.getPathValue("browser.chrome.driver.log.path");
 		logger.info("chromeDriverLogPath: " + chromeDriverLogPath);
 		chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
-		String chromeDriverPath = candybean.config.getPathValue("browser.chrome_driver_path");
+		String chromeDriverPath = candybean.config.getPathValue("browser.chrome.driver.path");
 		logger.info("chromeDriverPath: " + chromeDriverPath);
 		if(StringUtils.isEmpty(chromeDriverPath) || !new File(chromeDriverPath).exists()){
 			String error = "Unable to find chrome browser driver from the specified location ("+chromeDriverPath+")  in the configuration file! \n"
-					+ "Please add a configuration to the candybean config file for key \"browser.chrome_driver_path\" "
+					+ "Please add a configuration to the candybean config file for key \"browser.chrome.driver.path\" "
 					+ "that indicates the absolute or relative location the driver.";
 			logger.severe(error);
 			throw new CandybeanException(error);

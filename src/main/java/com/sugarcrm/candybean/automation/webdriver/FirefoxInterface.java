@@ -17,11 +17,11 @@ public class FirefoxInterface extends WebDriverInterface {
 
 	@Override
 	public void start() throws CandybeanException {
-		String profileName = candybean.config.getValue("browser.firefox_profile", "default");
-		File ffBinaryPath = new File(candybean.config.getPathValue("browser.firefox_binary"));
+		String profileName = candybean.config.getValue("browser.firefox.profile", "default");
+		File ffBinaryPath = new File(candybean.config.getPathValue("browser.firefox.binary"));
 		if(!ffBinaryPath.exists()){
 			String error = "Unable to find firefox browser driver from the specified location in the configuration file! \n"
-					+ "Please add a configuration to the candybean config file for key \"browser.firefox_binary\" that"
+					+ "Please add a configuration to the candybean config file for key \"browser.firefox.binary\" that"
 					+ "indicates the location of the binary.";
 			logger.severe(error);
 			throw new CandybeanException(error);
