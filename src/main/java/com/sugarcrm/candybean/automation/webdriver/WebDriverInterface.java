@@ -454,12 +454,29 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * The use of a while loop is not recommended, use this method with caution
 	 */
 	private void waitForAlertDismissal() {
-		//Any better way to do this?
+		long timeout = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds", "20"));
+		logger.info("Waiting for alert to be dismissed, timeout in "+timeout+" seconds.");
+		long startTime = System.currentTimeMillis();
 		while(true){
 			if(!isDialogVisible()){
+				logger.info("Wait for alert dismissal successful, alert was dismissed");
+				break;
+			}else if(waitForTimeout(startTime, timeout)){
+				logger.info("Waiting for alert to be dismissed timed out, continuing");
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Determines whether a timeout has occurred since the start time
+	 * @param startTime The start time in milliseconds
+	 * @param timeout The time in seconds for timeout
+	 * @return
+	 */
+	private boolean waitForTimeout(long startTime, long timeout) {
+		long timePassed = (System.currentTimeMillis() - startTime) / 1000;
+		return timePassed > timeout;
 	}
 
 	/**
