@@ -190,16 +190,52 @@ maxRecordingTime=120000
 <a name="execute"></a>
 Executing your tests
 --------------------
-Generally speaking, tests can be/are executed using the [Maven Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/).  So if your tests make use of the [Maven standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) and your tests are configured for either [JUnit](http://maven.apache.org/surefire/maven-surefire-plugin/examples/junit.html) or [TestNG](http://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html), the following command should trigger test execution:
+Generally speaking, tests can be/are executed using the [Maven Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/).  So 
+if your tests make use of the [Maven standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) and 
+your tests are configured for either [JUnit](http://maven.apache.org/surefire/maven-surefire-plugin/examples/junit.html) or 
+[TestNG](http://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html), the following command should trigger test execution:
 ```
 > mvn clean test -Dcbconfig=./candybean.config
 ```
-Note, though Candybean has default configuration settings, any practical use of the Candybean project will at least require some custom Candybean configuration, thus specifying the location of your Candybean configuration file is required.
+Note, though Candybean has default configuration settings, any practical use of the Candybean 
+project will at least require some custom Candybean configuration, thus specifying the 
+location of your Candybean configuration file is required.
 
 Other things you can do:
 Specify a testcase and/or test for execution:
 ```
 > mvn clean test -Dcbconfig=./candybean.config -Dtest=MyTestCase#MyTest
+```
+Specify a configured [maven profile](http://maven.apache.org/guides/introduction/introduction-to-profiles.html) with [surefire plugin inclusion/exclusion](http://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html)for execution:
+```
+<project>
+	...
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/*IntegrationTest.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*UnitTest.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	<profiles>
+	...
+</project>
+```
+```
+> mvn clean test -Dcbconfig=./candybean.config -Pintegration
 ```
 
 Things we like
