@@ -57,9 +57,9 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		String craigsUrl = "http://sfbay.craigslist.org/";
 		String expH2 = "san francisco";
 		iface.go(craigsUrl);
-		WebDriverElement header = ((WebDriverElement) iface.getWebDriverElement(Strategy.ID, "topban"));
+		WebDriverElement header = iface.getWebDriverElement(Strategy.ID, "topban");
 		((WebDriverElement) header.getElement(new Hook(Strategy.TAG, "a"), 1)).click();
-		header = ((WebDriverElement) iface.getWebDriverElement(Strategy.ID, "topban"));
+		header = iface.getWebDriverElement(Strategy.ID, "topban");
 		WebDriverElement h2Control = ((WebDriverElement) header.getElement(new Hook(Strategy.TAG, "h2"), 0));
 		String actH2 = h2Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
@@ -79,7 +79,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		String craigsUrl = "http://sfbay.craigslist.org/";
 		iface.go(craigsUrl);
 		String banner = "craigslist";
-		WebDriverElement bannerDiv = ((WebDriverElement) iface.getWebDriverElement(Strategy.ID, "logo"));
+		WebDriverElement bannerDiv = iface.getWebDriverElement(Strategy.ID, "logo");
 		WebDriverElement bannerLogo = ((WebDriverElement) bannerDiv.getElement(new Hook(Strategy.TAG, "a"), 0));
 		String bannerText = bannerLogo.getText();
 		Assert.assertEquals(bannerText,banner);
@@ -87,7 +87,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		String meanUrl = "http://www.mean.io/";
 		iface.go(meanUrl);
 		String banner1 = "The Friendly";
-		WebDriverElement bannerElement = ((WebDriverElement) iface.getWebDriverElement(Strategy.CLASS, "banner-top-title"));
+		WebDriverElement bannerElement = iface.getWebDriverElement(Strategy.CLASS, "banner-top-title");
 		String bannerElementText = bannerElement.getText();
 		Assert.assertTrue(bannerElementText.contains(banner1));
 		//Third test
