@@ -65,8 +65,8 @@ Writing automated tests with Candybean is as quick as these handful of steps:
     <version>1.1.1</version>
 </dependency>
 ```
-* [Write your test(s)](#tests)
 * [Configure Candybean](#config) 
+* [Write your test(s)](#tests)
 * [Execute your test(s)](#execute)
 
 <a name="prereqs"></a>
@@ -80,6 +80,57 @@ Once Maven is installed, it will detect and automatically install further Candyb
 If not already familiar, review the basics of Maven to better understand dependency management and execution:
 * [Maven in 5 minutes](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
 * [Maven overview](http://www.tutorialspoint.com/maven/maven_overview.htm)
+
+<a name="config"></a>
+Configuration
+-------------
+Candybean's git repo includes a git submodule at '/config' referencing SugarCRM's private repo.  Out 
+of the box, Candybean will look for its configuration file in this directory, which should either be 
+explicitly defined or overridden via command line or system variable.
+
+The following key-value keys should be defined in a configuration file used to instantiate Candybean.
+By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory, but
+a path can also be specified from the command line or a system variable 'candybean_config'.
+```
+# specifies the type of automation interface
+automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
+
+# browser specific profiles and driver paths
+browser.firefox.binary = {\
+	"linux": "/path/to/firefox/binary/in/linux", \
+	"mac": "/path/to/firefox/binary/on/mac", \
+	"windows": "c:/path/to/firefox/binary/in/windows"}
+browser.firefox.profile = default
+browser.chrome.driver.path = {\
+	"linux": "/path/to/chrome/driver/in/linux", \
+	"mac": "/path/to/chrome/driver/on/mac", \
+	"windows": "/path/to/chrome/driver/in/windows"}
+browser.chrome.driver.log.path = /path/to/chromedriver/log
+browser.ie.driver.path = /path/to/ie/driver
+perf.page.load.timeout = /page/load/in/seconds
+perf.implicit.wait.seconds = /passive/wait/in/seconds
+
+# logger configuration
+handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
+
+# file logging
+java.util.logging.FileHandler.limit = 50000
+java.util.logging.FileHandler.count = 1
+java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.level = INFO
+
+# logging format
+java.util.logging.SimpleFormatter.format = [%1$tm-%1$td-%1$tY %1$tk:%1$tM:%1$tS:%1$tL] %2$s %4$s: %5$s %6$s %n
+
+# Monte Media Library Recorder Settings
+video.format=video/quicktime
+video.format.frameRate=15
+video.directory=./log
+video.encoding=rle 
+video.compression=Animation
+maxFileSize=512000
+maxRecordingTime=120000
+```
 
 <a name="tests"></a>
 Writing tests
@@ -136,57 +187,6 @@ public class CandybeanTest extends AbstractTest {
 
 Refer to [Candybean's API Documentation](http://sugarcrm.github.io/candybean/doc/index.html) for further feature usage.
 
-<a name="config"></a>
-Configuration
--------------
-Candybean's git repo includes a git submodule at '/config' referencing SugarCRM's private repo.  Out 
-of the box, Candybean will look for its configuration file in this directory, which should either be 
-explicitly defined or overridden via command line or system variable.
-
-The following key-value keys should be defined in a configuration file used to instantiate Candybean.
-By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory, but
-a path can also be specified from the command line or a system variable 'candybean_config'.
-```
-# specifies the type of automation interface
-automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
-
-# browser specific profiles and driver paths
-browser.firefox.binary = {\
-	"linux": "/path/to/firefox/binary/in/linux", \
-	"mac": "/path/to/firefox/binary/on/mac", \
-	"windows": "c:/path/to/firefox/binary/in/windows"}
-browser.firefox.profile = default
-browser.chrome.driver.path = {\
-	"linux": "/path/to/chrome/driver/in/linux", \
-	"mac": "/path/to/chrome/driver/on/mac", \
-	"windows": "/path/to/chrome/driver/in/windows"}
-browser.chrome.driver.log.path = /path/to/chromedriver/log
-browser.ie.driver.path = /path/to/ie/driver
-perf.page.load.timeout = /page/load/in/seconds
-perf.implicit.wait.seconds = /passive/wait/in/seconds
-
-# logger configuration
-handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
-
-# file logging
-java.util.logging.FileHandler.limit = 50000
-java.util.logging.FileHandler.count = 1
-java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
-java.util.logging.FileHandler.level = INFO
-
-# logging format
-java.util.logging.SimpleFormatter.format = [%1$tm-%1$td-%1$tY %1$tk:%1$tM:%1$tS:%1$tL] %2$s %4$s: %5$s %6$s %n
-
-# Monte Media Library Recorder Settings
-video.format=video/quicktime
-video.format.frameRate=15
-video.directory=./log
-video.encoding=rle 
-video.compression=Animation
-maxFileSize=512000
-maxRecordingTime=120000
-```
-
 <a name="execute"></a>
 Executing your tests
 --------------------
@@ -201,12 +201,12 @@ Note, though Candybean has default configuration settings, any practical use of 
 project will at least require some custom Candybean configuration, thus specifying the 
 location of your Candybean configuration file is required.
 
-Other things you can do:
+Other things you can do:</br></br>
 Specify a testcase and/or test for execution:
 ```
 > mvn clean test -Dcbconfig=./candybean.config -Dtest=MyTestCase#MyTest
 ```
-Specify a configured [maven profile](http://maven.apache.org/guides/introduction/introduction-to-profiles.html) with [surefire plugin inclusion/exclusion](http://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html)for execution:
+Specify a configured [maven profile](http://maven.apache.org/guides/introduction/introduction-to-profiles.html) with [surefire plugin inclusion/exclusion](http://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) for execution:
 ```
 <project>
 	...
@@ -237,6 +237,10 @@ Specify a configured [maven profile](http://maven.apache.org/guides/introduction
 ```
 > mvn clean test -Dcbconfig=./candybean.config -Pintegration
 ```
+(TestNG) Specify [suite XML files from CLI](http://stackoverflow.com/questions/11397315/how-to-parametrize-in-maven-surefire-plugin-which-testng-suites-to-run/13829933#13829933):
+```
+> mvn clean test -Dcbconfig=./candybean.config -DsuiteFile=test1.xml,test2.xml
+``` 
 
 Things we like
 --------------
