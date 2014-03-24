@@ -54,7 +54,7 @@ public class RecordSystemTest {
 		assertEquals(amazonUrl, iface.getURL());		
 	}
 	
-	//@Ignore
+	@Ignore
 	@Test
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
