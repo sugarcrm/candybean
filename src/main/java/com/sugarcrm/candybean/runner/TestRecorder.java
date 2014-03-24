@@ -87,13 +87,13 @@ public class TestRecorder extends RunListener {
 	/**
 	 * The default file location to store test results in XML
 	 */
-	private static final String FAILED_TEST_RESULTS_XML = "./log/failedTestResults.xml";
+	private static final String FAILED_TEST_RESULTS_XML = "./target/candybean-reports/results/failedTestResults.xml";
 
 	/**
 	 * The default file location to create the html report of the failed test
 	 * results
 	 */
-	private static final String FAILED_RECORDING_REPORT_HTML = "./log/FailedRecordingReport.html";
+	private static final String FAILED_RECORDING_REPORT_HTML = "./target/candybean-reports/reports/FailedRecordingReport.html";
 
 	/**
 	 * The default file location of the surefire results directory
@@ -103,7 +103,7 @@ public class TestRecorder extends RunListener {
 	/**
 	 * The default path of where the candybean test results report will be generated
 	 */
-	private static final String CANDYBEAN_REPORT_PATH = "./log/candybeanTestResults.html";
+	private static final String CANDYBEAN_REPORT_PATH = "./target/candybean-reports/reports/CandybeanTestResults.html";
 
 	private static final String TEST_TEMPLATE_PATH = "./resources/html/testTemplate.html";
 
@@ -124,10 +124,7 @@ public class TestRecorder extends RunListener {
 		}
 		config = new Configuration(new File(
 				Utils.adjustPath(candybeanConfigStr)));
-		xmlFile = new File(config.getValue("testResultsXMLPath",
-				FAILED_TEST_RESULTS_XML));
-		xmlFile.delete();
-		xmlFile.createNewFile();
+		xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML));
 	}
 
 	@Override
@@ -177,7 +174,9 @@ public class TestRecorder extends RunListener {
 				failedTest.setTestHeader(failure.getTestHeader());
 				failedTest.setTrace(failure.getTrace());
 				failedTest.setFailMessage(failure.getMessage());
-				failedTests.getFailures().add(failedTest);
+				if(!failedTests.getFailures().containsKey(createdVideoFile.getCanonicalPath())){
+					failedTests.getFailures().put(createdVideoFile.getCanonicalPath(),failedTest);
+				}
 				Marshaller marshal = context.createMarshaller();
 				marshal.marshal(failedTests, xmlFile);
 			}
@@ -321,8 +320,8 @@ public class TestRecorder extends RunListener {
 				packageMarkup.append(pkgTemplate);
 			}
 			baseTemplate = baseTemplate.replace("${packageMarkup}", packageMarkup.toString());
-			FileWriter fstream = new FileWriter(config.getValue(
-					"testResultsReportPath", CANDYBEAN_REPORT_PATH));
+			FileWriter fstream = new FileWriter(createFile(config.getValue(
+					"testResultsReportPath", CANDYBEAN_REPORT_PATH)));
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(baseTemplate);
 			out.close();
@@ -352,7 +351,8 @@ public class TestRecorder extends RunListener {
 			String reportTemplate = readFile("./resources/html/videoRecordingTemplate.html", Charset.defaultCharset());
 			reportTemplate = reportTemplate.replace("${title}", "Failed Test Recordings");
 			String entryTemplate = readFile("./resources/html/videoEntryTemplate.html", Charset.defaultCharset());
-			for (TestFailure failure : failedTests.getFailures()) {
+			for (String videoPath : failedTests.getFailures().keySet()) {
+				TestFailure failure = failedTests.getFailures().get(videoPath);
 				String entry = entryTemplate;
 				entry = entry.replace("${failure.header}", failure.getTestHeader());
 				entry = entry.replace("${failure.stacktrace}", HtmlEscapers.htmlEscaper().escape(failure.getTrace()));
@@ -360,10 +360,14 @@ public class TestRecorder extends RunListener {
 				entryMarkup.append(entry);
 			}
 			reportTemplate = reportTemplate.replace("${recording.rows}", entryMarkup.toString());
-			FileWriter fstream = new FileWriter(config.getValue("testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML));
+			String pathToRecordingReport = config.getValue("testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML);
+			FileWriter fstream = new FileWriter(createFile(pathToRecordingReport));
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(reportTemplate);
 			out.close();
+		}else{
+			xmlFile.delete();
+			new File(config.getValue("testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML)).delete();
 		}
 	}
 	
@@ -378,5 +382,22 @@ public class TestRecorder extends RunListener {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
+	
+	/**
+	 * Creates a file at the given path
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	private File createFile(String path) throws IOException{
+		File f = new File(path);
+		if (!f.getParentFile().exists()) {
+			f.getParentFile().mkdirs();
+		}
+		f.delete();
+		f.createNewFile();
+		return f;
+	}
+	
 }
 

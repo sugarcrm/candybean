@@ -51,8 +51,8 @@ public class SpecializedScreenRecorder extends ScreenRecorder {
 				EncodingKey, "black", FrameRateKey, Rational.valueOf(30)), null);
 		this.name = name;
 		this.config = config;
-		//this.setMaxFileSize(Long.parseLong(config.getValue("maxFileSize",MAX_SIZE_DEFAULT_KB)));
-		//this.setMaxRecordingTime(Long.parseLong(config.getValue("maxRecordingTime",MAX_DURATION_DEFAULT_MS)));
+		this.setMaxFileSize(Long.parseLong(config.getValue("maxFileSize",MAX_SIZE_DEFAULT_KB)));
+		this.setMaxRecordingTime(Long.parseLong(config.getValue("maxRecordingTime",MAX_DURATION_DEFAULT_MS)));
 	}
 
 	public SpecializedScreenRecorder(GraphicsConfiguration cfg,

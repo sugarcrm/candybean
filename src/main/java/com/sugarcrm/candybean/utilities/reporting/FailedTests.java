@@ -1,20 +1,20 @@
 package com.sugarcrm.candybean.utilities.reporting;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class FailedTests {
 	
-	private List<TestFailure> failures = new ArrayList<TestFailure>();
+	private Map<String,TestFailure> failures = new HashMap<String,TestFailure>();
 
-	public List<TestFailure> getFailures() {
+	public Map<String, TestFailure> getFailures() {
 		return failures;
 	}
 
-	public void setFailures(List<TestFailure> failures) {
+	public void setFailures(Map<String, TestFailure> failures) {
 		this.failures = failures;
 	}
 
