@@ -33,6 +33,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
 import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
@@ -213,14 +214,14 @@ public class WebDriverSystemTest extends BrowserTest{
 //	@Ignore
 	@Test
 	public void focusWindowTest() throws Exception {
-		String expWindow0Title = "HTML Examples";
-		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
-		String expWindow1Title = "Tryit Editor v1.9";
-		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro";
-		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial";
-		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
-		String expWindow3Title = "Popup Window - HTML Code Tutorial";
-		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
+		String expWindow0Title = "EchoEcho.Com Tools - Tools";
+		String expWindow0URL = "http://www.echoecho.com/toolpopupgenerator.htm";
+		String expWindow1Title = "Yahoo";
+		String expWindow1URL = "https://www.yahoo.com/";
+		String expWindow2Title = "Popup Windows : Example - JavaScript Tutorial - EchoEcho.Com - Beginners best choice!";
+		String expWindow2URL = "http://www.echoecho.com/jswindows03.htm";
+		String expWindow3Title = "Yahoo";
+		String expWindow3URL = "https://www.yahoo.com/";
 		
 		iface.go(expWindow0URL);
 	
@@ -228,7 +229,7 @@ public class WebDriverSystemTest extends BrowserTest{
 		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Click pops-up window titled "Tryit Editor v1.9"
-		iface.getWebDriverElement(Strategy.PLINK, "A very simple HTML document").click();
+		iface.getWebDriverElement(Strategy.NAME, "B1").click();
 		
 		// Verify title without switching
 		assertEquals(expWindow0Title, iface.wd.getTitle());
@@ -236,26 +237,16 @@ public class WebDriverSystemTest extends BrowserTest{
 		// Verify title with switching
 		iface.focusWindow(1);
 		assertEquals(expWindow1Title, iface.wd.getTitle());
-//		iface.interact(iface.getWindowsString());
 		
-		// Close window which should auto-focus to previous window; verify title
-		iface.closeWindow();
+		// Verify title with switching
+		iface.focusWindow(0);
 		assertEquals(expWindow0Title, iface.wd.getTitle());
-//		iface.interact(iface.getWindowsString());
-		
-		// Click pop-up window titled "Tryit Editor v1.8"
-		iface.getWebDriverElement(Strategy.PLINK, "A very simple HTML document").click();
 		
 		// Navigate elsewhere and trigger popup window
-//		iface.interact("window focus before go: " + iface.wd.getWindowHandle());
 		iface.go(expWindow2URL);
 //		iface.interact("window focus after go: " + iface.wd.getWindowHandle());
-		iface.getWebDriverElement(Strategy.PLINK, "this link").click();
-//		iface.interact(iface.getWindowsString());
-		
-		// Verify title with (not) switching to current window by index
-		iface.focusWindow(0);
 		assertEquals(expWindow2Title, iface.wd.getTitle());
+		((WebDriverElement)iface.getWebDriverElement(Strategy.CLASS, "main").getElement(new Hook(Strategy.TAG, "a"), 0)).click();
 //		iface.interact(iface.getWindowsString());
 				
 		// Verify URL with switching to window by title
@@ -265,7 +256,7 @@ public class WebDriverSystemTest extends BrowserTest{
 //		iface.interact(iface.getWindowsString());
 		
 		// Verify URL with switching to window by URL
-		iface.focusWindow(expWindow3URL);
+		iface.focusWindow(2);
 		assertEquals(expWindow3Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 		

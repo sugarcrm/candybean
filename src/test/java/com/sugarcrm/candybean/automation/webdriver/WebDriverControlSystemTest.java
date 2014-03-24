@@ -54,37 +54,51 @@ public class WebDriverControlSystemTest extends BrowserTest {
 	
 	@Test
 	public void getElementTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/html/default.asp";
-		String expH2 = "HTML Introduction";
-		iface.go(w3Url);
-		((WebDriverElement) iface.getWebDriverElement(Strategy.ID, "leftcolumn").getElement(new Hook(Strategy.TAG, "a"), 1)).click();
-		WebDriverElement h1Control = iface.getWebDriverElement(Strategy.TAG, "h1");
-		String actH2 = h1Control.getText().trim();
+		String craigsUrl = "http://sfbay.craigslist.org/";
+		String expH2 = "san francisco";
+		iface.go(craigsUrl);
+		WebDriverElement header = iface.getWebDriverElement(Strategy.ID, "topban");
+		((WebDriverElement) header.getElement(new Hook(Strategy.TAG, "a"), 1)).click();
+		header = iface.getWebDriverElement(Strategy.ID, "topban");
+		WebDriverElement h2Control = ((WebDriverElement) header.getElement(new Hook(Strategy.TAG, "h2"), 0));
+		String actH2 = h2Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
 	}
 	
 	@Test
 	public void getControlsTest() throws Exception{
-		String w3Url = "http://www.w3schools.com/html/default.asp";
-		iface.go(w3Url);
-		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"topnav");
-		Assert.assertEquals(elements.size(),14);
+		String craigsUrl = "http://sfbay.craigslist.org/";
+		iface.go(craigsUrl);
+		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"ban");
+		Assert.assertEquals(elements.size(),15);
 	}
 	
 	@Test
 	public void getTextTest() throws Exception {
-		String w3Url = "http://www.w3schools.com/html/default.asp";
-		iface.go(w3Url);
-		String expChapterText = "W3Schools Home";
-		String actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"main\"]/div[2]/div[1]/a").getText().substring(2);
+		//First test
+		String craigsUrl = "http://sfbay.craigslist.org/";
+		iface.go(craigsUrl);
+		String banner = "craigslist";
+		WebDriverElement bannerDiv = iface.getWebDriverElement(Strategy.ID, "logo");
+		WebDriverElement bannerLogo = ((WebDriverElement) bannerDiv.getElement(new Hook(Strategy.TAG, "a"), 0));
+		String bannerText = bannerLogo.getText();
+		Assert.assertEquals(bannerText,banner);
+		//Second test
+		String meanUrl = "http://www.mean.io/";
+		iface.go(meanUrl);
+		String banner1 = "The Friendly";
+		WebDriverElement bannerElement = iface.getWebDriverElement(Strategy.CLASS, "banner-top-title");
+		String bannerElementText = bannerElement.getText();
+		Assert.assertTrue(bannerElementText.contains(banner1));
+		//Third test
+		String url = "http://www.echoecho.com/htmlforms12.htm";
+		iface.go(url);
+		String actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
+		String expChapterText = "Hit Me!";
 		Assert.assertEquals(expChapterText, actChapterText);
-		w3Url = "http://www.echoecho.com/htmlforms12.htm";
-		iface.go(w3Url);
-		actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
-		expChapterText = "Hit Me!";
-		Assert.assertEquals(expChapterText, actChapterText);
-		w3Url = "http://www.developphp.com/view_lesson.php?v=576";
-		iface.go(w3Url);
+		//Fourth test
+		url = "http://www.developphp.com/view_lesson.php?v=576";
+		iface.go(url);
 		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
 		expChapterText = "Generic Button";
 		Assert.assertEquals(expChapterText, actChapterText);
@@ -105,6 +119,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		Assert.assertEquals(true, negTrue);
 	}
 
+	@Ignore
 	@Test
 	// Can be verified by looking at the website checkbox (Double click is performed 3 times)
 	public void doubleClickTest() throws Exception {
@@ -183,28 +198,28 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		long timeout = 10;
 		long startTime = 0;
 		long endTime = 0;
-		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
-		WebDriverElement hideControl = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"imgbox2\"]/input");
-		startTime = System.currentTimeMillis();
-		hideControl.pause.untilVisible((int)timeout);
-		endTime = System.currentTimeMillis();
-		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < timeout);
-		hideControl.click();
+		iface.go("http://lab.alexcican.com/hide_show_div/");
+		WebDriverElement hideContainer = iface.getWebDriverElement(Strategy.CLASS, "subscribe");
+		WebDriverElement hideControl = ((WebDriverElement) hideContainer.getElement(new Hook(Strategy.TAG, "div"), 0));;
+		Assert.assertTrue(hideControl.isDisplayed());
+		hideControl.hover();
 		startTime = System.currentTimeMillis();
 		thrown.expect(TimeoutException.class);
 		hideControl.pause.untilVisible((int)timeout);
 		endTime = System.currentTimeMillis();
+		iface.pause(1000);
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") >= timeout);
-		
-		// until text present
-		iface.go("http://fvsch.com/code/transition-fade/test5.html");
+		Assert.assertTrue(!hideControl.isDisplayed());
 	}
 
-	@Ignore
 	@Test
 	public void hoverTest() throws Exception {
-//		hover();
-//		hover(int index);
+		iface.go("http://lab.alexcican.com/hide_show_div/");
+		WebDriverElement hideContainer = iface.getWebDriverElement(Strategy.CLASS, "subscribe");
+		WebDriverElement hideControl = ((WebDriverElement) hideContainer.getElement(new Hook(Strategy.TAG, "div"), 0));;
+		Assert.assertTrue(hideControl.isDisplayed());
+		hideControl.hover();
+		Assert.assertTrue(!hideControl.isDisplayed());
 	}
 	
 	@Ignore
