@@ -195,31 +195,27 @@ public class WebDriverControlSystemTest extends BrowserTest {
 
 	@Test
 	public void pauseUntilVisibleTest() throws Exception {
-		long timeout = 10;
-		long startTime = 0;
-		long endTime = 0;
-		iface.go("http://lab.alexcican.com/hide_show_div/");
-		WebDriverElement hideContainer = iface.getWebDriverElement(Strategy.CLASS, "subscribe");
-		WebDriverElement hideControl = ((WebDriverElement) hideContainer.getElement(new Hook(Strategy.TAG, "div"), 0));;
-		Assert.assertTrue(hideControl.isDisplayed());
-		hideControl.hover();
-		startTime = System.currentTimeMillis();
+		long timeoutMs = 4000;
+		iface.go("http://www.jquery4u.com/function-demos/delay/");
+		WebDriverElement delayText = iface.getWebDriverElement(new Hook(Strategy.ID, "delay"));
+		// checking assumptions -- text is not displayed
+		Assert.assertFalse(delayText.isDisplayed());
+		iface.getWebDriverElement(Strategy.ID, "delay-demobtn").click();
+		delayText.pause.untilVisible((int)timeoutMs);
+		Assert.assertTrue(delayText.isDisplayed());
+		iface.pause(3000); // text is displayed for 1.5 seconds -- double it just in case
+		Assert.assertFalse(delayText.isDisplayed());
 		thrown.expect(TimeoutException.class);
-		hideControl.pause.untilVisible((int)timeout);
-		endTime = System.currentTimeMillis();
-		iface.pause(1000);
-		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") >= timeout);
-		Assert.assertTrue(!hideControl.isDisplayed());
+		delayText.pause.untilVisible((int)timeoutMs); // this one should timeout
 	}
 
 	@Test
 	public void hoverTest() throws Exception {
-		iface.go("http://lab.alexcican.com/hide_show_div/");
-		WebDriverElement hideContainer = iface.getWebDriverElement(Strategy.CLASS, "subscribe");
-		WebDriverElement hideControl = ((WebDriverElement) hideContainer.getElement(new Hook(Strategy.TAG, "div"), 0));;
-		Assert.assertTrue(hideControl.isDisplayed());
-		hideControl.hover();
-		Assert.assertTrue(!hideControl.isDisplayed());
+		iface.go("http://www.dynamicdrive.com/style/csslibrary/item/css-popup-image-viewer/");
+		WebDriverElement image = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"middlecolumn\"]/p[5]/a[2]/span/img");
+		Assert.assertFalse(image.isDisplayed());
+		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"middlecolumn\"]/p[5]/a[2]/img").hover();
+		Assert.assertTrue(image.isDisplayed());
 	}
 	
 	@Ignore
