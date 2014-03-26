@@ -211,12 +211,11 @@ public class WebDriverControlSystemTest extends BrowserTest {
 
 	@Test
 	public void hoverTest() throws Exception {
-		iface.go("http://lab.alexcican.com/hide_show_div/");
-		WebDriverElement hideContainer = iface.getWebDriverElement(Strategy.CLASS, "subscribe");
-		WebDriverElement hideControl = ((WebDriverElement) hideContainer.getElement(new Hook(Strategy.TAG, "div"), 0));;
-		Assert.assertTrue(hideControl.isDisplayed());
-		hideControl.hover();
-		Assert.assertTrue(!hideControl.isDisplayed());
+		iface.go("http://www.dynamicdrive.com/style/csslibrary/item/css-popup-image-viewer/");
+		WebDriverElement image = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"middlecolumn\"]/p[5]/a[2]/span/img");
+		Assert.assertFalse(image.isDisplayed());
+		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"middlecolumn\"]/p[5]/a[2]/img").hover();
+		Assert.assertTrue(image.isDisplayed());
 	}
 	
 	@Ignore
