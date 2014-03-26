@@ -42,7 +42,7 @@ public class WebDriverPause extends Pause {
 
 	@Override
 	public WebDriverElement untilVisible(int timeoutMs) {
-		(new WebDriverWait(this.wde.wd, timeoutMs)).until(ExpectedConditions
+		(new WebDriverWait(this.wde.wd, timeoutMs / 1000)).until(ExpectedConditions
 				.visibilityOf(this.wde.we));
 		return this.wde;
 	}
