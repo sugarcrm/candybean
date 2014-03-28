@@ -144,7 +144,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	private Set<String> getBlockedTestNames() throws FileNotFoundException, IOException {
 		try{
 			Set<String> blockedTestNames = new HashSet<String>();
-			String blockListPath = System.getProperty(VRunner.BLOCKLIST_PATH_KEY, Candybean.CONFIG_DIR + File.separator + "blocklist.txt");
+			String blockListPath = System.getProperty(VRunner.BLOCKLIST_PATH_KEY, Candybean.ROOT_DIR + File.separator + "blocklist.txt");
 			BufferedReader fileReader = new BufferedReader(new FileReader(blockListPath));
 			String blockLine;
 			while ((blockLine = fileReader.readLine()) != null) {

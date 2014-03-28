@@ -30,8 +30,7 @@ public class LoggerUnitTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
 	}
@@ -66,8 +65,8 @@ public class LoggerUnitTest {
 	public void cbConfiguredLogger() throws Exception {
 		String name1 = this.getClass().getSimpleName() + "1";
 		String name2 = this.getClass().getSimpleName() + "2";
-		String config1Path = Candybean.CONFIG_DIR + File.separator + name1 + ".config";
-		String config2Path = Candybean.CONFIG_DIR + File.separator + name2 + ".config";
+		String config1Path = Candybean.ROOT_DIR + File.separator + name1 + ".config";
+		String config2Path = Candybean.ROOT_DIR + File.separator + name2 + ".config";
 		String log1Path = Candybean.ROOT_DIR + File.separator + "log" + File.separator + name1 + ".log";
 		String log2Path = Candybean.ROOT_DIR + File.separator + "log" + File.separator + name2 + ".log";
 		

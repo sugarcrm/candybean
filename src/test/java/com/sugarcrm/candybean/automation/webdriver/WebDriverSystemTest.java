@@ -77,7 +77,7 @@ public class WebDriverSystemTest extends BrowserTest{
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
-		File screenshotFile = new File(Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "screenshot.png");
+		File screenshotFile = new File(Candybean.ROOT_DIR + File.separator + "screenshot.png");
 		String url = "https://www.google.com/";
 		iface.go(url);
 		iface.screenshot(screenshotFile);

@@ -54,21 +54,15 @@ public final class Candybean {
 	public static final String CONFIG_KEY = "cbconfig";
 	
 	/**
-	 * The default name for the configuration file used to instantiate candybean.
-	 */
-	public static final String CONFIG_FILE_NAME = "candybean.config";
-
-	/**
 	 * The root directory of candybean
 	 */
 	public static final File ROOT_DIR = new File(System.getProperty("user.dir")
 			+ File.separator);
 
 	/**
-	 * The default test configuration directory
+	 * The default configuration file name to instantiate candybean.
 	 */
-	public static final File CONFIG_DIR = new File(System.getProperty("user.dir")
-			+ File.separator + "config" + File.separator);
+	public static final String DEFAULT_CONFIG_FILE = ROOT_DIR + File.separator + "candybean.config";
 
 	/**
 	 * {@link Configuration} object created by loading the candybean
@@ -201,11 +195,7 @@ public final class Candybean {
 	
 	private static Configuration getDefaultConfiguration() throws CandybeanException {
 		try {
-			String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-			if (candybeanConfigStr == null) {
-				candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
-						+ Candybean.CONFIG_FILE_NAME;
-			}
+			String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 			return new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		} catch (IOException ioe) {
 			throw new CandybeanException(ioe);
