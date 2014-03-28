@@ -53,11 +53,21 @@ public class TestRecorder extends RunListener {
 	 * details of the recorded files such as location and name.
 	 */
 	private SpecializedScreenRecorder screenRecorder;
+	
+	/**
+	 * Singleton TestRecorder instance
+	 */
+	private static TestRecorder testRecorder;
 
 	/**
 	 * Failed state of the current test
 	 */
 	private boolean testFailed = false;
+	
+	/**
+	 * Recording state
+	 */
+	private boolean recordInProgress = false;
 
 	/**
 	 * Logger of the current test class
@@ -113,7 +123,7 @@ public class TestRecorder extends RunListener {
 
 	private static final String TEST_RESULTS_TEMPLATE_PATH = "./resources/html/testResultsTemplate.html";
 
-	public TestRecorder() throws SecurityException, IOException, JAXBException {
+	private TestRecorder() throws SecurityException, IOException, JAXBException {
 		super();
 		context = JAXBContext.newInstance(FailedTests.class);
 		String candybeanConfigStr = System
@@ -124,7 +134,14 @@ public class TestRecorder extends RunListener {
 		}
 		config = new Configuration(new File(
 				Utils.adjustPath(candybeanConfigStr)));
-		xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML));
+		xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML), false);
+	}
+	
+	public static TestRecorder getInstance() throws SecurityException, IOException, JAXBException{
+		if(testRecorder == null){
+			testRecorder = new TestRecorder();
+		}
+		return testRecorder;
 	}
 
 	@Override
@@ -134,23 +151,29 @@ public class TestRecorder extends RunListener {
 		this.testFailed = false;
 		// Check to see if this test is annotated with Record
 		if (record != null) {
-			logger.info("Recording started: " + description.getClassName()
-					+ "." + description.getMethodName());
-			// Start the recording
-			startRecording(description.getClassName() + "-"
-					+ description.getMethodName());
+			if(!recordInProgress){
+				logger.info("Recording started: " + description.getClassName()
+						+ "." + description.getMethodName());
+				// Start the recording
+				startRecording(description.getClassName() + "-"
+						+ description.getMethodName());
+				recordInProgress = true;
+			}else{
+				logger.info("Record already in progress");
+			}
 		}
 	}
 
 	@Override
 	public void testFinished(Description description) throws Exception {
 		Record record = description.getAnnotation(Record.class);
-		if (record != null) {
+		if (record != null && recordInProgress) {
 			Duration duration = record.duration();
 			logger.info("Recording ended: " + description.getClassName() + "."
 					+ description.getMethodName());
 			// Stop the recording
 			stopRecording();
+			recordInProgress = false;
 			// Last recorded test
 			List<File> recordedTests = this.screenRecorder
 					.getCreatedMovieFiles();
@@ -321,7 +344,7 @@ public class TestRecorder extends RunListener {
 			}
 			baseTemplate = baseTemplate.replace("${packageMarkup}", packageMarkup.toString());
 			FileWriter fstream = new FileWriter(createFile(config.getValue(
-					"testResultsReportPath", CANDYBEAN_REPORT_PATH)));
+					"testResultsReportPath", CANDYBEAN_REPORT_PATH), true));
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(baseTemplate);
 			out.close();
@@ -361,7 +384,7 @@ public class TestRecorder extends RunListener {
 			}
 			reportTemplate = reportTemplate.replace("${recording.rows}", entryMarkup.toString());
 			String pathToRecordingReport = config.getValue("testResultsHtmlPath", FAILED_RECORDING_REPORT_HTML);
-			FileWriter fstream = new FileWriter(createFile(pathToRecordingReport));
+			FileWriter fstream = new FileWriter(createFile(pathToRecordingReport, true));
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(reportTemplate);
 			out.close();
@@ -389,13 +412,19 @@ public class TestRecorder extends RunListener {
 	 * @return
 	 * @throws IOException
 	 */
-	private File createFile(String path) throws IOException{
+	private File createFile(String path, boolean replace) throws IOException{
 		File f = new File(path);
 		if (!f.getParentFile().exists()) {
 			f.getParentFile().mkdirs();
 		}
-		f.delete();
-		f.createNewFile();
+		if (f.exists()) {
+			if (replace) {
+				f.delete();
+				f.createNewFile();
+			}
+		} else {
+			f.createNewFile();
+		}
 		return f;
 	}
 	
