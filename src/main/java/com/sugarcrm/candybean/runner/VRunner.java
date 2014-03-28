@@ -165,7 +165,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
     @Override
     public void run(final RunNotifier notifier) {
     	try {
-			notifier.addListener(new TestRecorder());
+			notifier.addFirstListener(TestRecorder.getInstance());
 		} catch (SecurityException e) {
 			logger.info("Unable to instantiate test recorder");
 		} catch (IOException e) {
