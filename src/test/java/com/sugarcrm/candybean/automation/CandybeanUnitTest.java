@@ -32,9 +32,8 @@ import com.sugarcrm.candybean.utilities.Utils;
 public class CandybeanUnitTest {
 
 	@Test
-	public void testVoodooLog() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
+	public void testCandybeanLog() throws Exception {
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		Candybean candybean = Candybean.getInstance(candybeanConfig);
 		assert(candybean != null);

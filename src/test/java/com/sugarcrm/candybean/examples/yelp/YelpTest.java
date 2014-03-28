@@ -61,15 +61,7 @@ public class YelpTest extends BrowserTest {
 	@Override
 	@Before
 	public void setUp() throws CandybeanException {
-		String yelpHooksStr = System.getProperty("yelp_hooks");
-		if (yelpHooksStr == null) {
-			try {
-				yelpHooksStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
-						+ "yelp.hooks";
-			} catch (IOException ioe) {
-				throw new CandybeanException(ioe);
-			}
-		}
+		String yelpHooksStr = System.getProperty("yelp.hooks", Candybean.ROOT_DIR + File.separator + "yelp.hooks");
 		Properties yelpHooks = new Properties();
 		try {
 			yelpHooks.load(new FileInputStream(new File(yelpHooksStr)));

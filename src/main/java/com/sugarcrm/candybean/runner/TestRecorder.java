@@ -15,11 +15,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
+
 import org.apache.maven.plugins.surefire.report.ReportTestCase;
 import org.apache.maven.plugins.surefire.report.ReportTestSuite;
 import org.apache.maven.plugins.surefire.report.SurefireReportParser;
@@ -30,6 +32,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.monte.screenrecorder.ScreenRecorder;
+
 import com.google.common.html.HtmlEscapers;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
@@ -116,14 +119,8 @@ public class TestRecorder extends RunListener {
 	public TestRecorder() throws SecurityException, IOException, JAXBException {
 		super();
 		context = JAXBContext.newInstance(FailedTests.class);
-		String candybeanConfigStr = System
-				.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) {
-			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath()
-					+ File.separator + Candybean.CONFIG_FILE_NAME;
-		}
-		config = new Configuration(new File(
-				Utils.adjustPath(candybeanConfigStr)));
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
+		config = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML));
 	}
 

@@ -32,14 +32,12 @@ import com.sugarcrm.candybean.utilities.Utils;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
 import com.sugarcrm.candybean.utilities.Utils.Triplet;
 
-
 public class UtilsUnitTest {
 
 	@Test
 	public void testGetCascadingPropertyValue() {
 		try {
-			String propsFilePath = Candybean.CONFIG_DIR + File.separator + "testutils.properties";
-//			System.out.println("Props file path: " + propsFilePath);
+			String propsFilePath = Candybean.ROOT_DIR + File.separator + "testutils.props";
 			String propKey = "key";
 			String propSysKey = "syskey";
 			String propConfigVal = "configvalue";
@@ -53,18 +51,13 @@ public class UtilsUnitTest {
 			voodooConfig.setValue(propKey, propConfigVal);
 			voodooConfig.setValue(propSysKey, propConfigVal);
 			System.setProperty(propSysKey, propSysVal);
-//			voodooConfig.store(new FileOutputStream(propsFile), null);
-			//			JOptionPane.showInputDialog("pause");
 
 			// Test
 			String actualDefaultVal = voodooConfig.getValue("NULL", propDefaultVal);
-			//			System.out.println("actualDefaultVal: " + actualDefaultVal);
 			Assert.assertEquals("Expected default value.", propDefaultVal, actualDefaultVal);
 			String actualConfigVal = voodooConfig.getValue(propKey, propDefaultVal);
-			//			System.out.println("actualConfigVal: " + actualConfigVal);
 			Assert.assertEquals("Expected configuration value.", propConfigVal, actualConfigVal);
 			String actualSysVal = voodooConfig.getValue(propSysKey, propDefaultVal);
-			//			System.out.println("actualSysVal: " + actualSysVal);
 			Assert.assertEquals("Expected system value.", propSysVal, actualSysVal);
 
 			// Resource cleanup
@@ -75,7 +68,6 @@ public class UtilsUnitTest {
 			Assert.fail("Exception caught.");
 		}
 	}
-
 
 	@Test
 	public void testPretruncate() {
