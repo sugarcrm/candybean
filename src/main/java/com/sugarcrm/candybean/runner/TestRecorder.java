@@ -256,7 +256,7 @@ public class TestRecorder extends RunListener {
 	 * @throws JAXBException 
 	 */
 	private void generateTestResultsReport() throws MavenReportException, IOException, JAXBException {
-		File reportsDirectory = new File(config.getValue("surefireResultsDirectory",SUREFIRE_RESULTS_DIRECTORY));
+		File reportsDirectory = new File(config.getValue("surefireResultsDirectory", SUREFIRE_RESULTS_DIRECTORY));
 		if(reportsDirectory.exists()){
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			FailedTests failedTestList;
@@ -276,7 +276,6 @@ public class TestRecorder extends RunListener {
 			String baseTemplate = readFile(TEST_RESULTS_TEMPLATE_PATH, Charset.defaultCharset());
 			
 			baseTemplate = baseTemplate.replace("${title}", config.getValue("testResultsReport.title", ""));
-			
 			baseTemplate = baseTemplate.replace("${summary.tests}", summary.get("totalTests"));
 			baseTemplate = baseTemplate.replace("${summary.errors}", summary.get("totalErrors"));
 			baseTemplate = baseTemplate.replace("${summary.failures}", summary.get("totalFailures"));
