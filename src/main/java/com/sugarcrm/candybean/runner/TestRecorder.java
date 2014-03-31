@@ -286,8 +286,8 @@ public class TestRecorder extends RunListener {
 			baseTemplate = baseTemplate.replace("${summary.errors}", summary.get("totalErrors"));
 			baseTemplate = baseTemplate.replace("${summary.failures}", summary.get("totalFailures"));
 			baseTemplate = baseTemplate.replace("${summary.skipped}", summary.get("totalSkipped"));
-			baseTemplate = baseTemplate.replace("${summary.success}", summary.get("totalPercentage"));
-			baseTemplate = baseTemplate.replace("${summary.time}", summary.get("totalElapsedTime"));
+			baseTemplate = baseTemplate.replace("${summary.success}", summary.get("totalPercentage")+"%");
+			baseTemplate = baseTemplate.replace("${summary.time}",  Utils.calculateTime(Float.parseFloat(summary.get("totalElapsedTime"))));
 			baseTemplate = baseTemplate.replace("${testsPerPage}", config.getValue("testResultsReport.testsPerPage"));
 			StringBuilder packageMarkup = new StringBuilder();
 			StringBuilder packageTableMarkup = new StringBuilder();
@@ -297,6 +297,7 @@ public class TestRecorder extends RunListener {
 			String packageTableTemplate = readFile(PACKAGE_TABLE_TEMPLATE_PATH, Charset.defaultCharset());
 			String dataTableInitTempalte = readFile(DATA_TABLE_INIT_TEMPLATE_PATH, Charset.defaultCharset());
 			String entryTemplate = readFile("./resources/html/videoEntryTemplate.html", Charset.defaultCharset());
+			String entryFailTemplate = readFile("./resources/html/failedEntryTemplate.html", Charset.defaultCharset());
 			StringBuilder completeClassTableMarkup = new StringBuilder();
 			StringBuilder completeClassMarkup = new StringBuilder();
 			StringBuilder completeFailedTestPillsMarkup = new StringBuilder();
@@ -317,8 +318,8 @@ public class TestRecorder extends RunListener {
 				pkgTableTemplate = pkgTableTemplate.replace("${package.errors}", summaryForPackage.get("totalErrors"));
 				pkgTableTemplate = pkgTableTemplate.replace("${package.failures}", summaryForPackage.get("totalFailures"));
 				pkgTableTemplate = pkgTableTemplate.replace("${package.skipped}", summaryForPackage.get("totalSkipped"));
-				pkgTableTemplate = pkgTableTemplate.replace("${package.success}", summaryForPackage.get("totalPercentage"));
-				pkgTableTemplate = pkgTableTemplate.replace("${package.time}", summaryForPackage.get("totalElapsedTime"));
+				pkgTableTemplate = pkgTableTemplate.replace("${package.success}", summaryForPackage.get("totalPercentage")+"%");
+				pkgTableTemplate = pkgTableTemplate.replace("${package.time}", Utils.calculateTime(Float.parseFloat((summaryForPackage.get("totalElapsedTime")))));
 				
 				pkgTemplate = pkgTemplate.replace("${packageId}", pkg.replace(".", ""));
 				pkgTemplate = pkgTemplate.replace("${package.name}", pkg);
@@ -345,8 +346,8 @@ public class TestRecorder extends RunListener {
 					clsTableTemplate = clsTableTemplate.replace("${package.errors}", String.valueOf(testSuite.getNumberOfErrors()));
 					clsTableTemplate = clsTableTemplate.replace("${package.failures}", String.valueOf(testSuite.getNumberOfFailures()));
 					clsTableTemplate = clsTableTemplate.replace("${package.skipped}", String.valueOf(testSuite.getNumberOfSkipped()));
-					clsTableTemplate = clsTableTemplate.replace("${package.success}", String.valueOf(report.computePercentage(numberOfTests, numberOfErrors, numberOfFailures, numberOfSkipped)));
-					clsTableTemplate = clsTableTemplate.replace("${package.time}", String.valueOf(testSuite.getTimeElapsed()));
+					clsTableTemplate = clsTableTemplate.replace("${package.success}", String.valueOf(report.computePercentage(numberOfTests, numberOfErrors, numberOfFailures, numberOfSkipped))+"%");
+					clsTableTemplate = clsTableTemplate.replace("${package.time}", Utils.calculateTime(testSuite.getTimeElapsed()));
 					
 					clsTemplate = clsTemplate.replace("${packageId}", testSuite.getFullClassName().replace(".", ""));
 					clsTemplate = clsTemplate.replace("${package.name}", testSuite.getName());
@@ -379,7 +380,7 @@ public class TestRecorder extends RunListener {
 						if(time == 0){
 							tstTemplate = tstTemplate.replace("${test.runtime}", "Did not run");
 						}else{
-							tstTemplate = tstTemplate.replace("${test.runtime}", String.valueOf(testCase.getTime()));
+							tstTemplate = tstTemplate.replace("${test.runtime}", Utils.calculateTime(testSuite.getTimeElapsed()));
 						}
 						testMarkup.append(tstTemplate);
 						listItemTemplate = listItemTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());
@@ -393,6 +394,14 @@ public class TestRecorder extends RunListener {
 								entryVideoTemplate = entryVideoTemplate.replace("${failure.stacktrace}", videoInformation.getTrace());
 								entryVideoTemplate = entryVideoTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());
 								completeFailedTestContentMarkup.append(entryVideoTemplate);
+							}else{
+								//Video for this failed test was not recorded
+								String entryFailureTemplate = entryFailTemplate;
+								entryFailureTemplate = entryFailureTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());
+								entryFailureTemplate = entryFailureTemplate.replace("${failure.exception}", testCase.getFailure().get("type").toString());
+								entryFailureTemplate = entryFailureTemplate.replace("${failure.message}", testCase.getFailure().get("message").toString());
+								entryFailureTemplate = entryFailureTemplate.replace("${failure.detail}", testCase.getFailure().get("detail").toString());
+								completeFailedTestContentMarkup.append(entryFailureTemplate);
 							}
 							
 							completeFailedTestPillsMarkup.append(listItemTemplate);

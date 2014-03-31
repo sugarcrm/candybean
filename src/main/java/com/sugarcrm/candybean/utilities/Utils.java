@@ -33,6 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
@@ -157,6 +158,25 @@ public class Utils {
 		Class.forName("com.mysql.jdbc.Driver");
 		return DriverManager.getConnection("jdbc:mysql://" + dbServer + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8", dbUser, dbPass);
 	}
+	
+	/**
+	 * Returns a string representation of elapsed time from seconds to days:hr:min:s
+	 * @param seconds The number of seconds
+	 * @return
+	 */
+	public static String calculateTime(float seconds) {
+		double partialSeconds =  (double) (seconds - ((int)seconds));
+		int milliseconds = (int) (partialSeconds * 1000);
+		long secs = (long)seconds;
+		int day = (int) TimeUnit.SECONDS.toDays(secs);
+		long hours = TimeUnit.SECONDS.toHours(secs) - (day * 24);
+		long minute = TimeUnit.SECONDS.toMinutes(secs)
+				- (TimeUnit.SECONDS.toHours(secs) * 60);
+		long second = TimeUnit.SECONDS.toSeconds(secs)
+				- (TimeUnit.SECONDS.toMinutes(secs) * 60);
+		return day + "days " + hours + "hr " + minute + "min " + second + "s " + milliseconds + "ms";
+    }
+	
 
     /**
      * Utility function to get the current operating system.
