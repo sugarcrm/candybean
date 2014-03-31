@@ -121,13 +121,13 @@ public class TestRecorder extends RunListener {
 
 	private TestRecorder() throws SecurityException, IOException, JAXBException {
 		super();
-		context = JAXBContext.newInstance(FailedTests.class);
+		this.context = JAXBContext.newInstance(FailedTests.class);
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
-		config = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
-		xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML), false);
+		this.config = new Configuration(new File(candybeanConfigStr));
+		this.xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML), false);
 	}
 	
-	public static TestRecorder getInstance() throws SecurityException, IOException, JAXBException{
+	public static TestRecorder getInstance() throws SecurityException, IOException, JAXBException {
 		if(testRecorder == null) {
 			testRecorder = new TestRecorder();
 		}

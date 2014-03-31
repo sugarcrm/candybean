@@ -56,8 +56,7 @@ public final class Candybean {
 	/**
 	 * The root directory of candybean
 	 */
-	public static final File ROOT_DIR = new File(System.getProperty("user.dir")
-			+ File.separator);
+	public static final File ROOT_DIR = new File(System.getProperty("user.dir") + File.separator);
 
 	/**
 	 * The default configuration file name to instantiate candybean.
