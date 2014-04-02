@@ -23,7 +23,6 @@ package com.sugarcrm.candybean.examples.sugar;
 
 import java.util.Map;
 import java.util.Properties;
-
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
@@ -39,7 +38,7 @@ public class Sugar {
 	
 	public Sugar(Candybean candybean, Configuration sugarConfig, Properties sugarHooks, SugarUser adminUser) throws Exception {
 		this.candybean = candybean;
-		this.iface = candybean.getWebDriverInterface();
+		this.iface = candybean.getAIB(Sugar.class).build();
 		this.config = sugarConfig;
 		this.hooks = Hook.getHooks(sugarHooks);
 		this.adminUser = adminUser;

@@ -23,27 +23,33 @@ package com.sugarcrm.candybean.examples.yelp;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
-
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.test.BrowserTest;
 
-public class YelpTest extends BrowserTest {
+public class YelpTest {
 
 	/**
 	 * Contains methods for yelp test
 	 */
 	private static Yelp yelp;
+	
+	public static WebDriverInterface iface;
 
-	public YelpTest() throws Exception {
-		super();
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(YelpTest.class);
+		builder.setType(Type.CHROME);
+		iface = builder.build();
 	}
 
 	@Test
@@ -58,7 +64,6 @@ public class YelpTest extends BrowserTest {
 		yelp.run(timeout_in_minutes);
 	}
 
-	@Override
 	@Before
 	public void setUp() throws CandybeanException {
 		String yelpHooksStr = System.getProperty("yelp.hooks", Candybean.ROOT_DIR + File.separator + "yelp.hooks");
@@ -70,11 +75,11 @@ public class YelpTest extends BrowserTest {
 		}
 		YelpUser user = new YelpUserBuilder("Sugar", "Stevens", "95014",
 				"cwarmbold@sugarcrm.com", "Sugar123!").build();
+		iface.start();
 		yelp = new Yelp(iface, yelpHooks, user);
 		yelp.start();
 	}
 
-	@Override
 	@After
 	public void tearDown() throws CandybeanException {
 		yelp.stop();

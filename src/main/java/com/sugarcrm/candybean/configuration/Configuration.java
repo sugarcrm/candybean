@@ -213,6 +213,10 @@ public class Configuration {
             logger.severe(e.getMessage());
         }
     }
+    
+    public boolean hasKey(String key){
+    	return properties.containsKey(key);
+    }
 
     /**
      * Writes the property list from the Properties table to the output stream in a format suitable for loading into

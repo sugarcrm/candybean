@@ -33,6 +33,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.utilities.CandybeanLogger;
 import com.sugarcrm.candybean.utilities.SpecializedScreenRecorder;
 import com.sugarcrm.candybean.utilities.Utils;
 import com.sugarcrm.candybean.utilities.reporting.FailedTests;
@@ -121,6 +122,7 @@ public class TestRecorder extends RunListener {
 
 	private TestRecorder() throws SecurityException, IOException, JAXBException {
 		super();
+		logger = Logger.getLogger(Candybean.class.getSimpleName());
 		this.context = JAXBContext.newInstance(FailedTests.class);
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		this.config = new Configuration(new File(candybeanConfigStr));
@@ -137,7 +139,6 @@ public class TestRecorder extends RunListener {
 	@Override
 	public void testStarted(Description description) throws Exception {
 		Record record = description.getAnnotation(Record.class);
-		logger = Logger.getLogger(description.getTestClass().getSimpleName());
 		this.testFailed = false;
 		// Check to see if this test is annotated with Record
 		if (record != null) {
