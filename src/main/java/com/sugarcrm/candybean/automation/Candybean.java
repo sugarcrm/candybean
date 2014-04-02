@@ -25,18 +25,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.AndroidInterface;
-import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
-import com.sugarcrm.candybean.automation.webdriver.InternetExplorerInterface;
-import com.sugarcrm.candybean.automation.webdriver.IosInterface;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.utilities.CandybeanLogger;
 import com.sugarcrm.candybean.utilities.Utils;
 
 /**
@@ -89,10 +80,73 @@ public final class Candybean {
 		try {
 			this.config = config;
 			logger = this.getLogger();
+			LogManager.getLogManager().addLogger(logger);
 			logger.config("Instantiating Candybean with config: " + config.toString());
 		} catch (Exception e) {
 			throw new CandybeanException(e);
 		}
+	}
+	
+	/**
+	 * Returns an InterfaceBuilder responsible for creating an interface for the test class.
+	 * @param cls The test class that required the interface builder.
+	 * @return An interface builder specific to the test class.
+	 */
+	public AutomationInterfaceBuilder getAutomationInterfaceBuilder(Class<?> cls) {
+		return new AutomationInterfaceBuilder(cls);
+	}
+
+	
+	/**
+	 * Returns an InterfaceBuilder responsible for creating an interface for the test class.
+	 * If the user does not specify a test class, candybean will attempt to find the calling class using
+	 * a slightly hacky way (by reading the stack trace)
+	 * @return An interface builder specific to the test class.
+	 */
+	public AutomationInterfaceBuilder getAIB(Class<?> cls) {
+		return new AutomationInterfaceBuilder(cls);
+	}
+	
+	/**
+	 * Returns an InterfaceBuilder responsible for creating an interface for the test class, without a passed
+	 * Reference to the calling class.
+	 * If the user does not specify a test class, candybean will attempt to find the calling class using
+	 * an undesired way (by reading the stack trace). The use of this method is <b>not</b> recommended,
+	 * as it is an expensive operation.
+	 * @return An interface builder specific to the test class.
+	 * @throws CandybeanException 
+	 */
+	
+	public AutomationInterfaceBuilder getAutomationInterfaceBuilder() throws CandybeanException {
+		return getAutomationInterfaceBuilder(getCallingClass(2));
+	}
+	
+	/**
+	 * Returns an InterfaceBuilder responsible for creating an interface for the test class, without a passed
+	 * Reference to the calling class.
+	 * If the user does not specify a test class, candybean will attempt to find the calling class using
+	 * an undesired way (by reading the stack trace). The use of this method is <b>not</b> recommended,
+	 * as it is an expensive operation.
+	 * @return An interface builder specific to the test class.
+	 * @throws CandybeanException 
+	 */
+	public AutomationInterfaceBuilder getAIB() throws CandybeanException {
+		return getAIB(getCallingClass(2));
+	}
+	
+	/*
+	 * Gets the calling class from a stack trace. Used strictly to get the calling class
+	 * when creating a builder object.
+	 */
+	private Class<?> getCallingClass(int stackTracePosition) throws CandybeanException{
+		String className = new Throwable().getStackTrace()[stackTracePosition].getClassName();
+		Class<?> cls;
+		try {
+			cls = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			throw new CandybeanException(e);
+		}
+		return cls;
 	}
 
 	/**
@@ -132,66 +186,6 @@ public final class Candybean {
 		throw new Exception("There are no non-webdriver automation interfaces currently defined.");
 	}
 	
-	/**
-	 * Instantiates an interface given the type
-	 * 
-	 * @return WebDriverInterface
-	 * @throws Exception
-	 */
-	public WebDriverInterface getWebDriverInterface() throws CandybeanException {
-		logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
-		Type configType = AutomationInterface.parseType(this.config.getValue("automation.interface", "chrome"));
-		logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + this.config.configFile.getAbsolutePath());
-		return this.getWebDriverInterface(configType);
-	}
-	
-	/**
-	 * Instantiates an interface given the type
-	 * 
-	 * @return WebDriverInterface
-	 * @throws Exception
-	 */
-	public WebDriverInterface getWebDriverInterface(Type type) throws CandybeanException {
-		switch (type) {
-		case ANDROID:
-			throw new CandybeanException(
-					"Android interface cannot be instantiated without desired capabilities; please instantiate the interface"
-							+ "using getWebDriverInterface(Type, DesiredCapabilities)");
-		case IOS:
-			throw new CandybeanException(
-					"iOS interface cannot be instantiated without desired capabilities; please instantiate the interface"
-							+ "using getWebDriverInterface(Type, DesiredCapabilities)");
-		default:
-			return this.getWebDriverInterface(type, null);
-		}
-	}
-	
-	public WebDriverInterface getWebDriverInterface(Type type, DesiredCapabilities capabilities) throws CandybeanException {
-		WebDriverInterface iface = null;
-		switch (type) {
-		case FIREFOX:
-			iface = new FirefoxInterface();
-			break;
-		case CHROME:
-			iface = new ChromeInterface();
-			break;
-		case IE:
-			iface = new InternetExplorerInterface();
-			break;
-		case SAFARI:
-			throw new CandybeanException("Selenium: SAFARI interface type not yet supported");
-		case ANDROID:
-			iface = new AndroidInterface(capabilities);
-			break;
-		case IOS:
-			iface = new IosInterface(capabilities);
-			break;	
-		default:
-			throw new CandybeanException("WebDriver automation interface type not recognized: " + type);
-		}
-		return iface;
-	}
-	
 	private static Configuration getDefaultConfiguration() throws CandybeanException {
 		try {
 			String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
@@ -201,13 +195,13 @@ public final class Candybean {
 		}
 	}
 
-	private Logger getLogger() throws Exception {
+	private CandybeanLogger getLogger() throws Exception {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
 		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
 		LogManager.getLogManager().reset();
-		LogManager.getLogManager().readConfiguration();		
-		return Logger.getLogger(Candybean.class.getSimpleName());
+		LogManager.getLogManager().readConfiguration();
+		return new CandybeanLogger(this.getClass().getSimpleName());
 	}
 
 

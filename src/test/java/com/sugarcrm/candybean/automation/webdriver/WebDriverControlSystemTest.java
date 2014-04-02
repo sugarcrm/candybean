@@ -25,24 +25,49 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.TimeoutException;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
-import com.sugarcrm.candybean.test.BrowserTest;
 
 @RunWith(VRunner.class)
-public class WebDriverControlSystemTest extends BrowserTest {
+public class WebDriverControlSystemTest {
+	
+	public static WebDriverInterface iface;
+	
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverControlSystemTest.class);
+		builder.setType(Type.CHROME);
+		iface = builder.build();
+	}
+	
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@After
+	public void tearDown() throws CandybeanException {
+		iface.stop();
+	}
+	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
+
 	@Test
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://sfbay.craigslist.org/";
@@ -51,6 +76,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		String expAltValue = "page";
 		Assert.assertEquals(expAltValue, actAltValue);
 	}
+	
 	
 	@Test
 	public void getElementTest() throws Exception {
@@ -64,7 +90,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		String actH2 = h2Control.getText().trim();
 		Assert.assertEquals(expH2, actH2);
 	}
-	
+
 	@Test
 	public void getControlsTest() throws Exception{
 		String craigsUrl = "http://sfbay.craigslist.org/";
@@ -72,7 +98,7 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"ban");
 		Assert.assertEquals(elements.size(),15);
 	}
-	
+
 	@Test
 	public void getTextTest() throws Exception {
 		//First test
@@ -302,15 +328,4 @@ public class WebDriverControlSystemTest extends BrowserTest {
 		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
 	}
 
-	@Override
-	@Before
-	public void setUp() throws CandybeanException {
-		iface.start();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws CandybeanException {
-		iface.stop();
-	}
 }	

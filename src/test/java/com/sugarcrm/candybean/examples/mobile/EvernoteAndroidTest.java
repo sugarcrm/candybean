@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -20,10 +21,23 @@ import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.test.AndroidTest;
 
-public class EvernoteAndroidTest extends AndroidTest {
+public class EvernoteAndroidTest {
+
+	public static WebDriverInterface iface;
+
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(EvernoteAndroidTest.class);
+		builder.setType(Type.ANDROID);
+		iface = builder.build();
+	}
 	
 	@Before
 	public void setUp() throws CandybeanException {
@@ -32,12 +46,12 @@ public class EvernoteAndroidTest extends AndroidTest {
 		login();
 		closeWelcomeOverlay();
 	}
-
+	
 	@After
 	public void tearDown() throws CandybeanException {
-		iface.wd.quit();
-	} 
-	
+		iface.stop();
+	}
+
 	@Ignore
 	@Test
 	public void openNotes() throws CandybeanException {
