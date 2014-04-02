@@ -3,16 +3,28 @@ package com.sugarcrm.candybean.examples.mobile;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.test.AndroidTest;
 
-public class GeneralizedAndroidTest extends AndroidTest {
+public class GeneralizedAndroidTest {
 
+	public static WebDriverInterface iface;
 
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(GeneralizedAndroidTest.class);
+		builder.setType(Type.ANDROID);
+		iface = builder.build();
+	}
+	
 	@Before
 	public void setUp() throws CandybeanException {
 		iface.start();

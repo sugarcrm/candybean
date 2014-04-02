@@ -180,11 +180,13 @@ public class AutomationInterfaceBuilder {
 					capabilities.setCapability("app-activity", candybean.config.getValue(testClassName + ".app-activity"));
 					iface = new AndroidInterface(capabilities);
 				}else {
-					throw new CandybeanException("Builder was unable to create an Android Interface from the provided settings in the builder, or \n" +
+					String message = "Builder was unable to create an Android Interface from the provided settings in the builder, or \n" +
 							"from the configuration file. If creating an android interface using the builder, the variables appPath, appPackage, \n " +
 							"appActivity must all be set. If you want the builder to create the interface from the configuration file, please ensure that \n" +
 							"the keys " + testClassName + ".app"  + ", " + testClassName + ".app-package" + ", and " + testClassName + ".app-activity" + " have \n" +
-							"all been configured.");
+							"all been configured.";
+					logger.severe(message);
+					throw new CandybeanException(message);
 				}
 			}
 			break;
@@ -202,10 +204,12 @@ public class AutomationInterfaceBuilder {
 					capabilities.setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
 					iface = new IosInterface(capabilities);
 				}else {
-					throw new CandybeanException("Builder was unable to create an IOS Interface from the provided settings in the builder, or \n" +
+					String message = "Builder was unable to create an IOS Interface from the provided settings in the builder, or \n" +
 							"from the configuration file. If creating an IOS interface using the builder, the variable appPath \n " +
 							"must be set. If you want the builder to create the interface from the configuration file, please ensure that \n" +
-							"the key " + testClassName + ".app"  + " has been configured.");
+							"the key " + testClassName + ".app"  + " has been configured.";
+					logger.severe(message);
+					throw new CandybeanException(message);
 				}
 			}
 			break;	

@@ -13,10 +13,9 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * 
  * @author Shehryar Farooq
  */
-public abstract class AndroidTest extends MobileTest {
+public class AndroidTest  {
 	
 	public AndroidTest() {
-		super(Type.ANDROID);
 //		boolean automateAppium = Boolean.parseBoolean(candybean.config.getValue("appium.automate"));
 //		try {
 //			if(automateAppium) {
@@ -53,10 +52,4 @@ public abstract class AndroidTest extends MobileTest {
 //			logger.severe(e.getMessage());
 //		}
 	}
-
-	@Before
-	public abstract void setUp() throws CandybeanException;
-
-	@After
-	public abstract void tearDown() throws CandybeanException;
 }

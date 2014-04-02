@@ -24,21 +24,14 @@ package com.sugarcrm.candybean.examples.mobile;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.HasTouchScreen;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.interactions.TouchScreen;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteTouchScreen;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import static org.junit.Assert.assertTrue;
-
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.test.IosTest;
 
 /**
  * Simple <a href="https://github.com/appium/appium">Appium</a> test which runs against an Appium server deployed
@@ -46,18 +39,28 @@ import com.sugarcrm.candybean.test.IosTest;
  *
  * @author Larry Cao
  */
-public class SugarIosTest extends IosTest {
+public class SugarIosTest {
+	
+	public static WebDriverInterface iface;
 
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(SugarIosTest.class);
+		builder.setType(Type.IOS);
+		iface = builder.build();
+	}
+	
 	@Before
-    public void setUp() throws CandybeanException {
+	public void setUp() throws CandybeanException {
 		iface.start();
         iface.wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    }
-
-    @After
-    public void tearDown() throws CandybeanException {
-        iface.wd.quit();
-    }
+	}
+	
+	@After
+	public void tearDown() throws CandybeanException {
+		iface.stop();
+	}
 
     @Test
     public void testLogin() throws CandybeanException {
@@ -78,17 +81,5 @@ public class SugarIosTest extends IosTest {
         WebElement login = iface.wd.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/link[1]"));
         login.click();
         iface.pause(1000000);
-    }
-
-    public static class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
-        private RemoteTouchScreen touch;
-        public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
-            super(remoteAddress, desiredCapabilities);
-            touch = new RemoteTouchScreen(getExecuteMethod());
-        }
-
-        public TouchScreen getTouch() {
-            return touch;
-        }
     }
 }
