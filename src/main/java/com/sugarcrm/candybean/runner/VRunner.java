@@ -43,6 +43,7 @@ import org.junit.runners.model.InitializationError;
 
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
+import com.sugarcrm.candybean.utilities.CandybeanLogger;
 
 /**
  * Custom JUnit test runner class. When a test is annotated to use this runner,
@@ -73,6 +74,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 		 */
 		try {
 			logger = Logger.getLogger(Candybean.getInstance().getClass().getSimpleName());
+			((CandybeanLogger)logger).removeAllHandlers();
 		} catch (CandybeanException e) {
 			logger = Logger.getLogger(VRunner.class.getSimpleName());
 		}

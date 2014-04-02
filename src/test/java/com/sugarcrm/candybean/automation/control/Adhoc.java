@@ -55,7 +55,7 @@ public class Adhoc {
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getWebDriverInterface();
+		iface = candybean.getAIB(Adhoc.class).build();
 		iface.start();
 	}
 

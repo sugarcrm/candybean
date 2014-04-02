@@ -26,19 +26,42 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverSelector;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
-import com.sugarcrm.candybean.test.BrowserTest;
 
 @RunWith(VRunner.class)
-public class WebDriverSelectorSystemTest extends BrowserTest {
+public class WebDriverSelectorSystemTest {
 
+	public static WebDriverInterface iface;
+	
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverSelectorSystemTest.class);
+		builder.setType(Type.CHROME);
+		iface = builder.build();
+	}
+	
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@After
+	public void tearDown() throws CandybeanException {
+		iface.stop();
+	}
+	
 	@Test
 	public void selectTest() throws Exception {
 		String option = "Sep";
@@ -144,7 +167,7 @@ public class WebDriverSelectorSystemTest extends BrowserTest {
 
         Assert.assertFalse(select.isSelected());
     }
-	
+
 	@Test
 	public void getSelectedTest() throws Exception {
 		String actual;
@@ -159,15 +182,4 @@ public class WebDriverSelectorSystemTest extends BrowserTest {
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Override
-	@Before
-	public void setUp() throws CandybeanException {
-		iface.start();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws CandybeanException {
-		iface.stop();
-	}
 }	

@@ -17,13 +17,13 @@ public abstract class IosTest extends MobileTest {
 	
 	public IosTest() {
 		super(Type.IOS);
-		String className = this.getClass().getSimpleName();
-		capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
-		try {
-			iface = candybean.getWebDriverInterface(type, capabilities);
-		} catch (CandybeanException e) {
-			logger.severe(e.getMessage());
-		}
+//		String className = this.getClass().getSimpleName();
+//		capabilities.setCapability("app", new File(config.getValue(className + ".app")).getAbsolutePath());
+//		try {
+//			iface = candybean.getWebDriverInterface(type, capabilities);
+//		} catch (CandybeanException e) {
+//			logger.severe(e.getMessage());
+//		}
 	}
 	
 	@Before

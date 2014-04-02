@@ -7,11 +7,11 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
 public abstract class BrowserTest extends WebDriverTest {
 
 	public BrowserTest() {
-		try {
-			iface = candybean.getWebDriverInterface();
-		} catch (CandybeanException e) {
-			logger.severe(e.getMessage());
-		}
+//		try {
+//			iface = candybean.getWebDriverInterface();
+//		} catch (CandybeanException e) {
+//			logger.severe(e.getMessage());
+//		}
 	}
 
 	/**

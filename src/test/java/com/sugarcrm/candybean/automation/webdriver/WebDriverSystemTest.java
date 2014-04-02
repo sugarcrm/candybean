@@ -23,27 +23,47 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import static org.junit.Assert.*;
 import java.io.File;
-
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
 import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
-import com.sugarcrm.candybean.test.BrowserTest;
 
 @RunWith(VRunner.class)
-public class WebDriverSystemTest extends BrowserTest{
+public class WebDriverSystemTest {
 
+	public static WebDriverInterface iface;
+	
+	@BeforeClass
+	public static void beforeClass() throws CandybeanException{
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverSystemTest.class);
+		builder.setType(Type.CHROME);
+		iface = builder.build();
+	}
+	
+	@Before
+	public void setUp() throws CandybeanException {
+		iface.start();
+	}
+
+	@After
+	public void tearDown() throws CandybeanException {
+		iface.stop();
+	}
+	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
@@ -73,7 +93,7 @@ public class WebDriverSystemTest extends BrowserTest{
 		iface.pause(2000);
 		assertEquals(url3, iface.getURL());		
 	}
-	
+
 //	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
@@ -299,18 +319,6 @@ public class WebDriverSystemTest extends BrowserTest{
 	@Test
 	public void getSelectTest() throws Exception {
 //		this.iface.getSelect(null);
-	}
-
-	@Override
-	@Before
-	public void setUp() throws CandybeanException {
-		iface.start();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws CandybeanException {
-		iface.stop();
 	}
 
 }
