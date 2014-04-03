@@ -8,9 +8,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class ChromeInterface extends WebDriverInterface {
+public class ChromeAutoface extends WebDriverAutoface {
 
-	public ChromeInterface() throws CandybeanException {
+	public ChromeAutoface() throws CandybeanException {
 		super(Type.CHROME);
 	}
 

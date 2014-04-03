@@ -31,7 +31,7 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * where the fit in the existing automation hierarchy.
  * 
  */
-public abstract class AutomationInterface {
+public abstract class Autoface {
 	
 	public enum Type { CHROME, FIREFOX, IE, SAFARI, ANDROID, IOS }
 	
@@ -50,7 +50,7 @@ public abstract class AutomationInterface {
 	 */
 	protected final Type iType;
 	
-	public AutomationInterface(Type iType) throws CandybeanException {
+	public Autoface(Type iType) throws CandybeanException {
 		this.candybean = Candybean.getInstance();
 		logger = Logger.getLogger(Candybean.class.getSimpleName());
 		this.iType = iType;

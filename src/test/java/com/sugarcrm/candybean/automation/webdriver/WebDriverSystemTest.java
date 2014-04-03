@@ -31,25 +31,25 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.Autoface.Type;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
+import com.sugarcrm.candybean.automation.webdriver.ChromeAutoface;
+import com.sugarcrm.candybean.automation.webdriver.FirefoxAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
 
 @RunWith(VRunner.class)
 public class WebDriverSystemTest {
 
-	public static WebDriverInterface iface;
+	public static WebDriverAutoface iface;
 	
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverSystemTest.class);
+		AutofaceBuilder builder = candybean.getAutofaceBuilder(WebDriverSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
 	}
@@ -113,7 +113,7 @@ public class WebDriverSystemTest {
 		String actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
 		iface.stop();
-		iface = new FirefoxInterface();
+		iface = new FirefoxAutoface();
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
@@ -122,7 +122,7 @@ public class WebDriverSystemTest {
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
 		iface.stop();
-		iface = new ChromeInterface();
+		iface = new ChromeAutoface();
 		iface.go(expUrl);
 		actUrl = iface.getURL();
 		assertEquals(expUrl, actUrl);
@@ -164,7 +164,7 @@ public class WebDriverSystemTest {
 		assertFalse(iface.isDialogVisible());
 		
 		// Dismiss not available in Chrome
-		if (!(iface instanceof ChromeInterface)) {
+		if (!(iface instanceof ChromeAutoface)) {
 			iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
 			assertTrue(iface.isDialogVisible());
 			iface.dismissDialog();

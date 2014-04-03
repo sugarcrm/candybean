@@ -30,9 +30,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
@@ -45,7 +46,7 @@ import com.sugarcrm.candybean.utilities.Utils;
 public class Adhoc {
 	
 	protected static Candybean candybean;
-	protected static WebDriverInterface iface;
+	protected static WebDriverAutoface iface;
 		
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -55,7 +56,24 @@ public class Adhoc {
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getAIB(Adhoc.class).build();
+		AutofaceBuilder builder = null;
+		long deltaTime = 0;
+		for (int i = 0; i < 10000; i++) {
+			long startTime = System.currentTimeMillis();
+			builder = candybean.getAutofaceBuilder(Adhoc.class);
+			long endTime = System.currentTimeMillis();
+			deltaTime += endTime - startTime;
+		}
+		System.out.println("*** calling class delta time: " + deltaTime);
+		deltaTime = 0;
+		for (int i = 0; i < 10000; i++) {
+			long startTime = System.currentTimeMillis();
+			builder = candybean.getAutofaceBuilder();
+			long endTime = System.currentTimeMillis();
+			deltaTime += endTime - startTime;
+		}
+		System.out.println("*** stack trace delta time: " + deltaTime);
+		iface = builder.build();
 		iface.start();
 	}
 

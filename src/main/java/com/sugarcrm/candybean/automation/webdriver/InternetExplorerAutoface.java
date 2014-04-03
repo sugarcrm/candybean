@@ -8,9 +8,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class InternetExplorerInterface extends WebDriverInterface {
+public class InternetExplorerAutoface extends WebDriverAutoface {
 
-	public InternetExplorerInterface() throws CandybeanException {
+	public InternetExplorerAutoface() throws CandybeanException {
 		super(Type.IE);
 	}
 

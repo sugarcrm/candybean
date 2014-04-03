@@ -11,11 +11,11 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class AndroidInterface extends WebDriverInterface {
+public class AndroidAutoface extends WebDriverAutoface {
 
 	protected DesiredCapabilities capabilities;
 
-	public AndroidInterface(DesiredCapabilities capabilities)
+	public AndroidAutoface(DesiredCapabilities capabilities)
 			throws CandybeanException {
 		super(Type.ANDROID);
 		this.capabilities = capabilities;

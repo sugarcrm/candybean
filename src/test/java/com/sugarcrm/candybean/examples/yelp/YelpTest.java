@@ -28,10 +28,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.Autoface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
@@ -42,12 +42,12 @@ public class YelpTest {
 	 */
 	private static Yelp yelp;
 	
-	public static WebDriverInterface iface;
+	public static WebDriverAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutomationInterfaceBuilder builder = candybean.getAIB(YelpTest.class);
+		AutofaceBuilder builder = candybean.getAutofaceBuilder(YelpTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
 	}

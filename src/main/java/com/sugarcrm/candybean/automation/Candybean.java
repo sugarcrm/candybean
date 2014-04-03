@@ -31,28 +31,31 @@ import com.sugarcrm.candybean.utilities.CandybeanLogger;
 import com.sugarcrm.candybean.utilities.Utils;
 
 /**
- * Candybean is the primary object for tests to use.  It provides
- * logging facilities and enables the loading of the appropriate
- * automation interface for use by the test's runtime.
- *
+ * Candybean is the primary object for tests to use. It provides logging
+ * facilities and enables the loading of the appropriate automation interface
+ * for use by the test's runtime.
+ * 
  * @author Conrad Warmbold
  */
 public final class Candybean {
-	
+
 	/**
-	 * The default name of the system property that may contain the candybean configuration file path.
+	 * The default name of the system property that may contain the candybean
+	 * configuration file path.
 	 */
 	public static final String CONFIG_KEY = "cbconfig";
-	
+
 	/**
 	 * The root directory of candybean
 	 */
-	public static final File ROOT_DIR = new File(System.getProperty("user.dir") + File.separator);
+	public static final File ROOT_DIR = new File(System.getProperty("user.dir")
+			+ File.separator);
 
 	/**
 	 * The default configuration file name to instantiate candybean.
 	 */
-	public static final String DEFAULT_CONFIG_FILE = ROOT_DIR + File.separator + "candybean.config";
+	public static final String DEFAULT_CONFIG_FILE = ROOT_DIR + File.separator
+			+ "candybean.config";
 
 	/**
 	 * {@link Configuration} object created by loading the candybean
@@ -61,7 +64,7 @@ public final class Candybean {
 	public final Configuration config;
 
 	/**
-	 * The singleton Candybean instance.  Created when a Candybean instance is
+	 * The singleton Candybean instance. Created when a Candybean instance is
 	 * first called and persistent throughout the life of the tests.
 	 */
 	private static Candybean instance = null;
@@ -74,72 +77,51 @@ public final class Candybean {
 	/**
 	 * Instantiates a Candybean object.
 	 * 
-	 * @throws Exception if instantiating the logger fails
+	 * @throws Exception
+	 *             if instantiating the logger fails
 	 */
 	private Candybean(Configuration config) throws CandybeanException {
 		try {
 			this.config = config;
 			logger = this.getLogger();
 			LogManager.getLogManager().addLogger(logger);
-			logger.config("Instantiating Candybean with config: " + config.toString());
+			logger.config("Instantiating Candybean with config: "
+					+ config.toString());
 		} catch (Exception e) {
 			throw new CandybeanException(e);
 		}
 	}
-	
+
 	/**
-	 * Returns an InterfaceBuilder responsible for creating an interface for the test class.
-	 * @param cls The test class that required the interface builder.
-	 * @return An interface builder specific to the test class.
+	 * Returns an {@link AutofaceBuilder} responsible for creating an automation
+	 * interface for the test class, without a passed reference to the calling
+	 * class.
+	 * 
+	 * @return An automation interface builder specific to the test class.
+	 * @throws CandybeanException
 	 */
-	public AutomationInterfaceBuilder getAutomationInterfaceBuilder(Class<?> cls) {
-		return new AutomationInterfaceBuilder(cls);
+	public AutofaceBuilder getAutofaceBuilder() throws CandybeanException {
+		return this.getAutofaceBuilder(getCallingClass(2));
 	}
 
-	
 	/**
-	 * Returns an InterfaceBuilder responsible for creating an interface for the test class.
-	 * If the user does not specify a test class, candybean will attempt to find the calling class using
-	 * a slightly hacky way (by reading the stack trace)
-	 * @return An interface builder specific to the test class.
+	 * Returns an AutofaceBuilder responsible for creating an automation
+	 * interface for the test class.
+	 * 
+	 * @return An automation interface builder specific to the test class.
 	 */
-	public AutomationInterfaceBuilder getAIB(Class<?> cls) {
-		return new AutomationInterfaceBuilder(cls);
+	public AutofaceBuilder getAutofaceBuilder(Class<?> cls) throws CandybeanException {
+		return new AutofaceBuilder(cls);
 	}
-	
-	/**
-	 * Returns an InterfaceBuilder responsible for creating an interface for the test class, without a passed
-	 * Reference to the calling class.
-	 * If the user does not specify a test class, candybean will attempt to find the calling class using
-	 * an undesired way (by reading the stack trace). The use of this method is <b>not</b> recommended,
-	 * as it is an expensive operation.
-	 * @return An interface builder specific to the test class.
-	 * @throws CandybeanException 
-	 */
-	
-	public AutomationInterfaceBuilder getAutomationInterfaceBuilder() throws CandybeanException {
-		return getAutomationInterfaceBuilder(getCallingClass(2));
-	}
-	
-	/**
-	 * Returns an InterfaceBuilder responsible for creating an interface for the test class, without a passed
-	 * Reference to the calling class.
-	 * If the user does not specify a test class, candybean will attempt to find the calling class using
-	 * an undesired way (by reading the stack trace). The use of this method is <b>not</b> recommended,
-	 * as it is an expensive operation.
-	 * @return An interface builder specific to the test class.
-	 * @throws CandybeanException 
-	 */
-	public AutomationInterfaceBuilder getAIB() throws CandybeanException {
-		return getAIB(getCallingClass(2));
-	}
-	
+
 	/*
-	 * Gets the calling class from a stack trace. Used strictly to get the calling class
-	 * when creating a builder object.
+	 * Gets the calling class from a stack trace. Used strictly to get the
+	 * calling class when creating a builder object.
 	 */
-	private Class<?> getCallingClass(int stackTracePosition) throws CandybeanException{
-		String className = new Throwable().getStackTrace()[stackTracePosition].getClassName();
+	private Class<?> getCallingClass(int stackTracePosition)
+			throws CandybeanException {
+		String className = new Throwable().getStackTrace()[stackTracePosition]
+				.getClassName();
 		Class<?> cls;
 		try {
 			cls = Class.forName(className);
@@ -151,19 +133,22 @@ public final class Candybean {
 
 	/**
 	 * Gets the global Candybean instance.
-	 *
-	 * @param config  {@link Configuration} object created from candybean.config
+	 * 
+	 * @param config
+	 *            {@link Configuration} object created from candybean.config
 	 * @return singleton candybean instance
-	 * @throws IOException 
-	 * @throws Exception if instantiating the logger fails
+	 * @throws IOException
+	 * @throws Exception
+	 *             if instantiating the logger fails
 	 */
-	public static Candybean getInstance(Configuration config) throws CandybeanException {
+	public static Candybean getInstance(Configuration config)
+			throws CandybeanException {
 		if (Candybean.instance == null) {
-			Candybean.instance = new Candybean(config); 
+			Candybean.instance = new Candybean(config);
 		}
 		return Candybean.instance;
 	}
-	
+
 	/**
 	 * Get the global candybean instance
 	 * 
@@ -174,7 +159,7 @@ public final class Candybean {
 		Configuration config = Candybean.getDefaultConfiguration();
 		return Candybean.getInstance(config);
 	}
-	
+
 	/**
 	 * Instantiates a generalized automation interface given the type
 	 * 
@@ -182,27 +167,33 @@ public final class Candybean {
 	 * @throws Exception
 	 */
 	@Deprecated
-	public AutomationInterface getInterface() throws Exception {
-		throw new Exception("There are no non-webdriver automation interfaces currently defined.");
+	public Autoface getInterface() throws Exception {
+		throw new Exception(
+				"There are no non-webdriver automation interfaces currently defined.");
 	}
-	
-	private static Configuration getDefaultConfiguration() throws CandybeanException {
+
+	private static Configuration getDefaultConfiguration()
+			throws CandybeanException {
 		try {
-			String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
-			return new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+			String candybeanConfigStr = System.getProperty(
+					Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
+			return new Configuration(new File(
+					Utils.adjustPath(candybeanConfigStr)));
 		} catch (IOException ioe) {
 			throw new CandybeanException(ioe);
 		}
 	}
 
 	private CandybeanLogger getLogger() throws Exception {
-		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
-		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
-		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
+		// Add a system property so that LogManager loads the specified logging
+		// configuration file before getting logger.
+		System.setProperty("java.util.logging.config.file",
+				this.config.configFile.getCanonicalPath());
+		// Gets the logger based the configuration file specified at
+		// 'java.util.logging.config.file'
 		LogManager.getLogManager().reset();
 		LogManager.getLogManager().readConfiguration();
 		return new CandybeanLogger(this.getClass().getSimpleName());
 	}
-
 
 }

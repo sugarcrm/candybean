@@ -9,9 +9,9 @@ import org.openqa.selenium.firefox.internal.ProfilesIni;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class FirefoxInterface extends WebDriverInterface {
+public class FirefoxAutoface extends WebDriverAutoface {
 
-	public FirefoxInterface() throws CandybeanException {
+	public FirefoxAutoface() throws CandybeanException {
 		super(Type.FIREFOX);
 	}
 

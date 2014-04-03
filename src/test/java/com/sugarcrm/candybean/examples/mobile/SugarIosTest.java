@@ -27,10 +27,10 @@ import org.openqa.selenium.WebElement;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertTrue;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.Autoface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
@@ -41,12 +41,12 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  */
 public class SugarIosTest {
 	
-	public static WebDriverInterface iface;
+	public static WebDriverAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutomationInterfaceBuilder builder = candybean.getAIB(SugarIosTest.class);
+		AutofaceBuilder builder = candybean.getAutofaceBuilder(SugarIosTest.class);
 		builder.setType(Type.IOS);
 		iface = builder.build();
 	}

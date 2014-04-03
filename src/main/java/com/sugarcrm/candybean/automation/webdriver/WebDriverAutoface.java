@@ -51,7 +51,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import com.sugarcrm.candybean.automation.AutomationInterface;
+import com.sugarcrm.candybean.automation.Autoface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Element;
 import com.sugarcrm.candybean.automation.element.Hook;
@@ -62,16 +62,16 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
 /**
  * Drives the creation of multi-platform automation tests by providing a resourceful API
  * containing several helper methods to write automation tests. The {@link Candybean} configuration
- * will build a {@link WebDriverInterface} based on the platform specified in the configuration. An appropriate platform-specific
+ * will build a {@link WebDriverAutoface} based on the platform specified in the configuration. An appropriate platform-specific
  * driver is instantiated for use to write tests.
  *
  */
-public abstract class WebDriverInterface extends AutomationInterface {
+public abstract class WebDriverAutoface extends Autoface {
 	
 	public WebDriver wd = null;
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 	
-	protected WebDriverInterface(Type iType) throws CandybeanException {
+	protected WebDriverAutoface(Type iType) throws CandybeanException {
 		super(iType);
 	}
 	
@@ -86,8 +86,8 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds"));
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		if (System.getProperty("headless") == null
-				&& !(this instanceof AndroidInterface)
-				&& !(this instanceof IosInterface)) {
+				&& !(this instanceof AndroidAutoface)
+				&& !(this instanceof IosAutoface)) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 			this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));

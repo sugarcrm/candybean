@@ -8,11 +8,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class IosInterface extends WebDriverInterface {
+public class IosAutoface extends WebDriverAutoface {
 	
 	protected DesiredCapabilities capabilities;
 
-	public IosInterface(DesiredCapabilities capabilities) throws CandybeanException {
+	public IosAutoface(DesiredCapabilities capabilities) throws CandybeanException {
 		super(Type.IOS);
 		this.capabilities = capabilities;
 	}

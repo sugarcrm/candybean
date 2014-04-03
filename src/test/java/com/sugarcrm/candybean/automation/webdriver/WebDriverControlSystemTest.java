@@ -32,9 +32,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.TimeoutException;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.Autoface.Type;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
@@ -44,12 +44,12 @@ import com.sugarcrm.candybean.runner.VRunner;
 @RunWith(VRunner.class)
 public class WebDriverControlSystemTest {
 	
-	public static WebDriverInterface iface;
+	public static WebDriverAutoface iface;
 	
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverControlSystemTest.class);
+		AutofaceBuilder builder = candybean.getAutofaceBuilder(WebDriverControlSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
 	}

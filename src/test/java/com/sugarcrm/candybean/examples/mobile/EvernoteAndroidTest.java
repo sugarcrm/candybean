@@ -21,20 +21,20 @@ import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.Autoface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 public class EvernoteAndroidTest {
 
-	public static WebDriverInterface iface;
+	public static WebDriverAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutomationInterfaceBuilder builder = candybean.getAIB(EvernoteAndroidTest.class);
+		AutofaceBuilder builder = candybean.getAutofaceBuilder(EvernoteAndroidTest.class);
 		builder.setType(Type.ANDROID);
 		iface = builder.build();
 	}

@@ -13,7 +13,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.runner.Duration;
 import com.sugarcrm.candybean.runner.Record;
@@ -30,7 +30,7 @@ import com.sugarcrm.candybean.utilities.Utils;
 public class RecordSystemTest {
 	
 	protected static Candybean candybean;
-	protected static WebDriverInterface iface;
+	protected static WebDriverAutoface iface;
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -40,7 +40,7 @@ public class RecordSystemTest {
 		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		candybean = Candybean.getInstance(candybeanConfig);
-		iface = candybean.getAIB(RecordSystemTest.class).build();
+		iface = candybean.getAutofaceBuilder(RecordSystemTest.class).build();
 		iface.start();
 	}
 	

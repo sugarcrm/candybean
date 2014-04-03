@@ -5,10 +5,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.Autoface.Type;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
@@ -22,12 +22,12 @@ public class WolframAlphaTest {
 	 */
 	private static WolframAlpha wolfram;
 	
-	public static WebDriverInterface iface;
+	public static WebDriverAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutomationInterfaceBuilder builder = candybean.getAIB(WolframAlphaTest.class);
+		AutofaceBuilder builder = candybean.getAutofaceBuilder(WolframAlphaTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
 	}

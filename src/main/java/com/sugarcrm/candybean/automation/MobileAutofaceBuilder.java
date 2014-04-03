@@ -6,18 +6,18 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.AndroidInterface;
-import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
-import com.sugarcrm.candybean.automation.webdriver.InternetExplorerInterface;
-import com.sugarcrm.candybean.automation.webdriver.IosInterface;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.Autoface.Type;
+import com.sugarcrm.candybean.automation.webdriver.AndroidAutoface;
+import com.sugarcrm.candybean.automation.webdriver.ChromeAutoface;
+import com.sugarcrm.candybean.automation.webdriver.FirefoxAutoface;
+import com.sugarcrm.candybean.automation.webdriver.InternetExplorerAutoface;
+import com.sugarcrm.candybean.automation.webdriver.IosAutoface;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.CandybeanLogger;
 
-public class AutomationInterfaceBuilder {
+public class MobileAutofaceBuilder {
 
 	/*
 	 * The type of interface that the user wants to build.
@@ -57,7 +57,7 @@ public class AutomationInterfaceBuilder {
 	/**
 	 * @param cls Typically the test class which uses this interface builder
 	 */
-	public AutomationInterfaceBuilder(Class<?> cls) {
+	public MobileAutofaceBuilder(Class<?> cls) {
 		this.cls = cls;
 	}
 
@@ -112,8 +112,8 @@ public class AutomationInterfaceBuilder {
 	 * </table>
 	 * @return
 	 */
-	public WebDriverInterface build() throws CandybeanException{
-		WebDriverInterface iface = null;
+	public WebDriverAutoface build() throws CandybeanException{
+		WebDriverAutoface iface = null;
 		candybean = Candybean.getInstance();
 		CandybeanLogger cbLogger;
 		try {
@@ -138,27 +138,27 @@ public class AutomationInterfaceBuilder {
 	 * @return WebDriverInterface
 	 * @throws Exception
 	 */
-	private WebDriverInterface getWebDriverInterface() throws CandybeanException {
+	private WebDriverAutoface getWebDriverInterface() throws CandybeanException {
 		logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
-		Type configType = AutomationInterface.parseType(candybean.config.getValue("automation.interface", "chrome"));
+		Type configType = Autoface.parseType(candybean.config.getValue("automation.interface", "chrome"));
 		logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + candybean.config.configFile.getAbsolutePath());
 		return this.getWebDriverInterface(configType);
 	}
 
 	
-	private WebDriverInterface getWebDriverInterface(Type type) throws CandybeanException {
-		WebDriverInterface iface = null;
+	private WebDriverAutoface getWebDriverInterface(Type type) throws CandybeanException {
+		WebDriverAutoface iface = null;
 		DesiredCapabilities capabilities;
 		String testClassName = cls.getSimpleName();
 		switch (type) {
 		case FIREFOX:
-			iface = new FirefoxInterface();
+			iface = new FirefoxAutoface();
 			break;
 		case CHROME:
-			iface = new ChromeInterface();
+			iface = new ChromeAutoface();
 			break;
 		case IE:
-			iface = new InternetExplorerInterface();
+			iface = new InternetExplorerAutoface();
 			break;
 		case SAFARI:
 			throw new CandybeanException("Selenium: SAFARI interface type not yet supported");
@@ -168,7 +168,7 @@ public class AutomationInterfaceBuilder {
 				capabilities.setCapability("app", appPath);
 				capabilities.setCapability("app-package", appPackage);
 				capabilities.setCapability("app-activity", appActivity);
-				iface = new AndroidInterface(capabilities);
+				iface = new AndroidAutoface(capabilities);
 			}else {
 				logger.info("Builder was not fully configured to create an Android interface. \n" +
 						"The variables appPath, appPackage, appActivity must all be set to create an android interface. \n" +
@@ -178,7 +178,7 @@ public class AutomationInterfaceBuilder {
 					capabilities.setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
 					capabilities.setCapability("app-package", candybean.config.getValue(testClassName + ".app-package"));
 					capabilities.setCapability("app-activity", candybean.config.getValue(testClassName + ".app-activity"));
-					iface = new AndroidInterface(capabilities);
+					iface = new AndroidAutoface(capabilities);
 				}else {
 					String message = "Builder was unable to create an Android Interface from the provided settings in the builder, or \n" +
 							"from the configuration file. If creating an android interface using the builder, the variables appPath, appPackage, \n " +
@@ -194,7 +194,7 @@ public class AutomationInterfaceBuilder {
 			if(isIOSFullyConfigured(true)) {
 				capabilities = new DesiredCapabilities();
 				capabilities.setCapability("app", appPath);
-				iface = new IosInterface(capabilities);
+				iface = new IosAutoface(capabilities);
 			}else {
 				logger.info("Builder was not fully configured to create an IOS interface. \n" +
 						"The variable appPath must be set to create an ios interface. \n" +
@@ -202,7 +202,7 @@ public class AutomationInterfaceBuilder {
 				if(isIOSFullyConfigured(false)){
 					capabilities = new DesiredCapabilities();
 					capabilities.setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
-					iface = new IosInterface(capabilities);
+					iface = new IosAutoface(capabilities);
 				}else {
 					String message = "Builder was unable to create an IOS Interface from the provided settings in the builder, or \n" +
 							"from the configuration file. If creating an IOS interface using the builder, the variable appPath \n " +

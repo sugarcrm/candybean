@@ -5,7 +5,7 @@ import java.util.List;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
 
 /**
  * Contains specific helper methods to conduct wolfram alpha tests.
@@ -39,13 +39,13 @@ public class WolframAlpha {
 	/**
 	 * The interface instance used to build automation tasks.
 	 */
-	private WebDriverInterface iface;
+	private WebDriverAutoface iface;
 
 	/**
 	 * Default field constructor
 	 * @param iface
 	 */
-	public WolframAlpha(WebDriverInterface iface) {
+	public WolframAlpha(WebDriverAutoface iface) {
 		this.iface = iface;
 	}
 
