@@ -89,9 +89,9 @@ public abstract class WebDriverInterface extends AutomationInterface {
 				&& !(this instanceof AndroidInterface)
 				&& !(this instanceof IosInterface)
 				&& !System.getProperty("os.name").contains("mac")) {
-			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
-			this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
+			//java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			//wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
+			//this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
 		}
 	}
 	
