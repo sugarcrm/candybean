@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,7 +37,7 @@ import java.util.*;
  * @author Conrad Warmbold
  */
 
-public class WebDriverSelector extends WebDriverElement {
+public class SeleniumSelector extends SeleniumElement {
 
 	private Select select;
     private boolean isMultiSelector;
@@ -47,7 +47,7 @@ public class WebDriverSelector extends WebDriverElement {
 	 * @param wd
 	 * @throws CandybeanException 
 	 */
-	public WebDriverSelector(Hook hook, WebDriver wd) throws CandybeanException {
+	public SeleniumSelector(Hook hook, WebDriver wd) throws CandybeanException {
 		super(hook, wd);
         this.select = new Select(super.we);
         this.isMultiSelector = select.isMultiple();

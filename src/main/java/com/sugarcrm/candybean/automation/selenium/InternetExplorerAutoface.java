@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import java.io.File;
 
@@ -8,7 +8,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class InternetExplorerAutoface extends WebDriverAutoface {
+public class InternetExplorerAutoface extends SeleniumBrowserAutoface {
 
 	public InternetExplorerAutoface() throws CandybeanException {
 		super(Type.IE);

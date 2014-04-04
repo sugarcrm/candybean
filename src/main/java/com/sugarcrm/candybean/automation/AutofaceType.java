@@ -21,17 +21,4 @@
  */
 package com.sugarcrm.candybean.automation;
 
-import com.sugarcrm.candybean.exceptions.CandybeanException;
-
-public abstract class Autoface {
-	
-	/**
-	 * Starts the autoface in a type-specific way and prepares for automation.
-	 */
-	public abstract void start() throws CandybeanException;
-
-	/**
-	 * Stops the autoface and performs any type-specific cleanup.
-	 */
-	public abstract void stop() throws CandybeanException;
-}
+public enum AutofaceType {}

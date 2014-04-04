@@ -19,35 +19,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sugarcrm.candybean.automation.element.Pause;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
+import com.sugarcrm.candybean.automation.selenium.SeleniumElement;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
  * Utility class that provides several methods for an element to pause until an
  * action occurs.
  */
-public class WebDriverPause extends Pause {
+public class SeleniumPause extends Pause {
 
-	private WebDriverElement wde;
+	private SeleniumElement wde;
 
-	public WebDriverPause(WebDriverElement wde) {
+	public SeleniumPause(SeleniumElement wde) {
 		this.wde = wde;
 	}
 
 	@Override
-	public WebDriverElement untilVisible(int timeoutMs) {
+	public SeleniumElement untilVisible(int timeoutMs) {
 		(new WebDriverWait(this.wde.wd, timeoutMs / 1000)).until(ExpectedConditions
 				.visibilityOf(this.wde.we));
 		return this.wde;
 	}
 	
-	public WebDriverElement untilTextPresent(String text, int timeout) 
+	public SeleniumElement untilTextPresent(String text, int timeout) 
 			throws CandybeanException {
 		(new WebDriverWait(this.wde.wd, timeout)).until(ExpectedConditions
 				.textToBePresentInElement(this.wde.getBy(), text));

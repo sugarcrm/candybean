@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumElement;
 
 /**
  * Contains specific helper methods to conduct wolfram alpha tests.
@@ -39,13 +39,13 @@ public class WolframAlpha {
 	/**
 	 * The interface instance used to build automation tasks.
 	 */
-	private WebDriverAutoface iface;
+	private SeleniumBrowserAutoface iface;
 
 	/**
 	 * Default field constructor
 	 * @param iface
 	 */
-	public WolframAlpha(WebDriverAutoface iface) {
+	public WolframAlpha(SeleniumBrowserAutoface iface) {
 		this.iface = iface;
 	}
 
@@ -64,7 +64,7 @@ public class WolframAlpha {
 	 * @throws Exception
 	 */
 	public void askWolfram(String input) throws Exception{
-		WebDriverElement searchBar = iface.getWebDriverElement(Strategy.ID, WOLFRAM_SEARCHBAR_NAME);
+		SeleniumElement searchBar = iface.getWebDriverElement(Strategy.ID, WOLFRAM_SEARCHBAR_NAME);
 		searchBar.sendString(input);
 		iface.getWebDriverElement(Strategy.ID, WOLFRAM_SEARCH_BTN_ID).click();
 	}
@@ -76,23 +76,23 @@ public class WolframAlpha {
 	 * @throws Exception 
 	 */
 	public boolean verifyAnswer(String expectedAnswer) throws Exception{
-		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.XPATH, "//section[starts-with(@id, 'pod_')]");
+		List<SeleniumElement> elements = iface.getWebDriverElements(Strategy.XPATH, "//section[starts-with(@id, 'pod_')]");
 		boolean resultFound = false;
-		for(WebDriverElement element : elements){
+		for(SeleniumElement element : elements){
 			if(resultFound) break;
 			element.hover();
 			String xpath = "//section[@id='" + element.getAttribute("id")+"']//a[@class='subpod-copyablept ']";
-			WebDriverElement plainTextButton = iface.getWebDriverElement(Strategy.XPATH,xpath );
+			SeleniumElement plainTextButton = iface.getWebDriverElement(Strategy.XPATH,xpath );
 			plainTextButton.click();
-			List<WebDriverElement> answers = iface.getWebDriverElements(Strategy.XPATH, "//div[@id='mov_sub" + element.getAttribute("id")+"_1_popup_dyn']//pre");
-			for(WebDriverElement answer : answers){
+			List<SeleniumElement> answers = iface.getWebDriverElements(Strategy.XPATH, "//div[@id='mov_sub" + element.getAttribute("id")+"_1_popup_dyn']//pre");
+			for(SeleniumElement answer : answers){
 				answer.click();
 				if(answer.getText().equals(expectedAnswer)){
 					resultFound = true;
 					break;
 				}
 			}
-			WebDriverElement closeButton = iface.getWebDriverElement(Strategy.XPATH, "//div[@id='mov_sub" + element.getAttribute("id")+"_1_popup_dyn']//a[@class='close']");
+			SeleniumElement closeButton = iface.getWebDriverElement(Strategy.XPATH, "//div[@id='mov_sub" + element.getAttribute("id")+"_1_popup_dyn']//a[@class='close']");
 			closeButton.click();
 		}
 		return resultFound;

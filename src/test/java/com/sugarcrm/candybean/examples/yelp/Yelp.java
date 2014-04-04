@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -37,11 +37,11 @@ public class Yelp implements IModel {
 	
 	public Model model;
 
-	private WebDriverAutoface i;
+	private SeleniumBrowserAutoface i;
 	private Map<String, Hook> hooks;
 	private YelpUser defaultUser;
 	
-	public Yelp(WebDriverAutoface i, Properties yelpHooks, YelpUser defaultUser) throws CandybeanException {
+	public Yelp(SeleniumBrowserAutoface i, Properties yelpHooks, YelpUser defaultUser) throws CandybeanException {
 		this.i = i;
 		hooks = Hook.getHooks(yelpHooks);
 		this.defaultUser = defaultUser;

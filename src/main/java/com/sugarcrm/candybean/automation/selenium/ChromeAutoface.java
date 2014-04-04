@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import java.io.File;
 
@@ -8,7 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class ChromeAutoface extends WebDriverAutoface {
+public class ChromeAutoface extends SeleniumBrowserAutoface {
 
 	public ChromeAutoface() throws CandybeanException {
 		super(Type.CHROME);

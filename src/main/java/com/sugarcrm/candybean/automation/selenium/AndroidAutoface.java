@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,7 +11,7 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class AndroidAutoface extends WebDriverAutoface {
+public class AndroidAutoface extends SeleniumBrowserAutoface {
 
 	protected DesiredCapabilities capabilities;
 

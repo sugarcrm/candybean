@@ -4,26 +4,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.sugarcrm.candybean.automation.Autoface.Type;
-import com.sugarcrm.candybean.automation.webdriver.AndroidAutoface;
-import com.sugarcrm.candybean.automation.webdriver.ChromeAutoface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxAutoface;
-import com.sugarcrm.candybean.automation.webdriver.InternetExplorerAutoface;
-import com.sugarcrm.candybean.automation.webdriver.IosAutoface;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.AndroidAutoface;
+import com.sugarcrm.candybean.automation.selenium.ChromeAutoface;
+import com.sugarcrm.candybean.automation.selenium.FirefoxAutoface;
+import com.sugarcrm.candybean.automation.selenium.InternetExplorerAutoface;
+import com.sugarcrm.candybean.automation.selenium.IosAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.CandybeanLogger;
 
-public class MobileAutofaceBuilder {
+public class MobileAutofaceBuilder extends AutofaceBuilder {
 
-	/*
-	 * The type of interface that the user wants to build.
-	 */
-	private Type type = null;
-	
 	/*
 	 * The path to the APP. Required for Android and IOS interface.
 	 */
@@ -38,21 +35,6 @@ public class MobileAutofaceBuilder {
 	 * The APP activity, required for Android interface.
 	 */
 	private String appActivity = null;
-	
-	/*
-	 * Logger for this class
-	 */
-	private Logger logger = Logger.getLogger(this.getClass().getName());
-	
-	/*
-	 * The class that calls this builder, required for logging and mobile interfaces.
-	 */
-	private Class<?> cls;
-	
-	/*
-	 * Candybean instance
-	 */
-	private Candybean candybean = null;
 	
 	/**
 	 * @param cls Typically the test class which uses this interface builder
@@ -112,8 +94,8 @@ public class MobileAutofaceBuilder {
 	 * </table>
 	 * @return
 	 */
-	public WebDriverAutoface build() throws CandybeanException{
-		WebDriverAutoface iface = null;
+	public SeleniumBrowserAutoface build() throws CandybeanException{
+		SeleniumBrowserAutoface iface = null;
 		candybean = Candybean.getInstance();
 		CandybeanLogger cbLogger;
 		try {
@@ -138,7 +120,7 @@ public class MobileAutofaceBuilder {
 	 * @return WebDriverInterface
 	 * @throws Exception
 	 */
-	private WebDriverAutoface getWebDriverInterface() throws CandybeanException {
+	private SeleniumBrowserAutoface getWebDriverInterface() throws CandybeanException {
 		logger.info("No webdriverinterface type specified from source code; will attempt to retrieve type from candybean configuration.");
 		Type configType = Autoface.parseType(candybean.config.getValue("automation.interface", "chrome"));
 		logger.info("Found the following webdriverinterface type: " + configType + ", from configuration: " + candybean.config.configFile.getAbsolutePath());
@@ -146,8 +128,8 @@ public class MobileAutofaceBuilder {
 	}
 
 	
-	private WebDriverAutoface getWebDriverInterface(Type type) throws CandybeanException {
-		WebDriverAutoface iface = null;
+	private SeleniumBrowserAutoface getWebDriverInterface(Type type) throws CandybeanException {
+		SeleniumBrowserAutoface iface = null;
 		DesiredCapabilities capabilities;
 		String testClassName = cls.getSimpleName();
 		switch (type) {

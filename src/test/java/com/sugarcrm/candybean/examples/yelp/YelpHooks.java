@@ -21,17 +21,17 @@
  */
 package com.sugarcrm.candybean.examples.yelp;
 
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.model.Model;
 
 public class YelpHooks {
 	
-	private WebDriverAutoface i;
+	private SeleniumBrowserAutoface i;
 	private YelpUser user;
 	private Model model;
 	
-	public YelpHooks(WebDriverAutoface i, YelpUser user) {
+	public YelpHooks(SeleniumBrowserAutoface i, YelpUser user) {
 		this.i = i;
 		this.user = user;
 	}

@@ -33,7 +33,7 @@ import org.junit.rules.ExpectedException;
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
 
@@ -46,7 +46,7 @@ import com.sugarcrm.candybean.utilities.Utils;
 public class Adhoc {
 	
 	protected static Candybean candybean;
-	protected static WebDriverAutoface iface;
+	protected static SeleniumBrowserAutoface iface;
 		
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();

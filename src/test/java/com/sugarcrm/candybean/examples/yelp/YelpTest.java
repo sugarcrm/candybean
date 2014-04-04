@@ -24,14 +24,16 @@ package com.sugarcrm.candybean.examples.yelp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.Autoface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.examples.yelp.YelpUser.YelpUserBuilder;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
@@ -42,7 +44,7 @@ public class YelpTest {
 	 */
 	private static Yelp yelp;
 	
-	public static WebDriverAutoface iface;
+	public static SeleniumBrowserAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{

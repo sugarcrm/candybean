@@ -22,7 +22,9 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
 import static org.junit.Assert.*;
+
 import java.io.File;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,27 +33,29 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.Autoface.Type;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.ChromeAutoface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxAutoface;
+import com.sugarcrm.candybean.automation.selenium.ChromeAutoface;
+import com.sugarcrm.candybean.automation.selenium.FirefoxAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumElement;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
 
 @RunWith(VRunner.class)
 public class WebDriverSystemTest {
 
-	public static WebDriverAutoface iface;
+	public static SeleniumBrowserAutoface iface;
 	
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
 		Candybean candybean = Candybean.getInstance();
-		AutofaceBuilder builder = candybean.getAutofaceBuilder(WebDriverSystemTest.class);
-		builder.setType(Type.CHROME);
-		iface = builder.build();
+		BrowserAutofaceBuilder builder = candybean.getBrowserAutofaceBuilder();
+		iface = builder.build(Type.CHROME);
 	}
 	
 	@Before
@@ -221,7 +225,7 @@ public class WebDriverSystemTest {
 		assertEquals(expDefStr, actDefStr);
 		
 		// switch to focus by control
-		iface.focusFrame(new WebDriverElement(Strategy.ID, "imgbox", iface.wd));
+		iface.focusFrame(new SeleniumElement(Strategy.ID, "imgbox", iface.wd));
 		actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
 		assertEquals(expFrmStr, actFrmStr);
 		
@@ -266,7 +270,7 @@ public class WebDriverSystemTest {
 		iface.go(expWindow2URL);
 //		iface.interact("window focus after go: " + iface.wd.getWindowHandle());
 		assertEquals(expWindow2Title, iface.wd.getTitle());
-		((WebDriverElement)iface.getWebDriverElement(Strategy.CLASS, "main").getElement(new Hook(Strategy.TAG, "a"), 0)).click();
+		((SeleniumElement)iface.getWebDriverElement(Strategy.CLASS, "main").getElement(new Hook(Strategy.TAG, "a"), 0)).click();
 //		iface.interact(iface.getWindowsString());
 				
 		// Verify URL with switching to window by title

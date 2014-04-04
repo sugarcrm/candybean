@@ -1,4 +1,4 @@
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import java.io.File;
 
@@ -9,7 +9,7 @@ import org.openqa.selenium.firefox.internal.ProfilesIni;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
-public class FirefoxAutoface extends WebDriverAutoface {
+public class FirefoxAutoface extends SeleniumBrowserAutoface {
 
 	public FirefoxAutoface() throws CandybeanException {
 		super(Type.FIREFOX);

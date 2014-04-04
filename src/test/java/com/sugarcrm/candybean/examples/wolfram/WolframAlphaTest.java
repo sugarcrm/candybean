@@ -1,14 +1,16 @@
 package com.sugarcrm.candybean.examples.wolfram;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.Autoface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
@@ -22,7 +24,7 @@ public class WolframAlphaTest {
 	 */
 	private static WolframAlpha wolfram;
 	
-	public static WebDriverAutoface iface;
+	public static SeleniumBrowserAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{

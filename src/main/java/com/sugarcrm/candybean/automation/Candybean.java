@@ -93,25 +93,51 @@ public final class Candybean {
 	}
 
 	/**
-	 * Returns an {@link AutofaceBuilder} responsible for creating an automation
-	 * interface for the test class, without a passed reference to the calling
-	 * class.
-	 * 
-	 * @return An automation interface builder specific to the test class.
+	 * @return A native autoface builder specific to the test class.
 	 * @throws CandybeanException
 	 */
-	public AutofaceBuilder getAutofaceBuilder() throws CandybeanException {
-		return this.getAutofaceBuilder(getCallingClass(2));
+	public NativeAutofaceBuilder getNativeAutofaceBuilder() throws CandybeanException {
+		return this.getNativeAutofaceBuilder(getCallingClass(2));
 	}
 
 	/**
-	 * Returns an AutofaceBuilder responsible for creating an automation
-	 * interface for the test class.
-	 * 
-	 * @return An automation interface builder specific to the test class.
+	 * @return A native autoface builder specific to the test class.
+	 * @throws CandybeanException
 	 */
-	public AutofaceBuilder getAutofaceBuilder(Class<?> cls) throws CandybeanException {
-		return new AutofaceBuilder(cls);
+	public NativeAutofaceBuilder getNativeAutofaceBuilder(Class<?> cls) throws CandybeanException {
+		throw new CandybeanException("Native autofaces have not yet been yet.");
+	}
+
+	/**
+	 * @return A browser autoface builder specific to the test class.
+	 * @throws CandybeanException
+	 */
+	public BrowserAutofaceBuilder getBrowserAutofaceBuilder() throws CandybeanException {
+		return this.getBrowserAutofaceBuilder(getCallingClass(2));
+	}
+
+	/**
+	 * @return An browser autoface builder specific to the test class.
+	 * @throws CandybeanException
+	 */
+	public BrowserAutofaceBuilder getBrowserAutofaceBuilder(Class<?> cls) throws CandybeanException {
+		return new BrowserAutofaceBuilder(cls);
+	}
+
+	/**
+	 * @return A mobile autoface builder specific to the test class.
+	 * @throws CandybeanException
+	 */
+	public MobileAutofaceBuilder getMobileAutofaceBuilder() throws CandybeanException {
+		return this.getMobileAutofaceBuilder(getCallingClass(2));
+	}
+
+	/**
+	 * @return A mobile autoface builder specific to the test class.
+	 * @throws CandybeanException
+	 */
+	public MobileAutofaceBuilder getMobileAutofaceBuilder(Class<?> cls) throws CandybeanException {
+		return new MobileAutofaceBuilder(cls);
 	}
 
 	/*

@@ -23,6 +23,7 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,9 +31,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverSelector;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumSelector;
 import com.sugarcrm.candybean.automation.Autoface.Type;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
@@ -42,7 +45,7 @@ import com.sugarcrm.candybean.runner.VRunner;
 @RunWith(VRunner.class)
 public class WebDriverSelectorSystemTest {
 
-	public static WebDriverAutoface iface;
+	public static SeleniumBrowserAutoface iface;
 	
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
@@ -68,7 +71,7 @@ public class WebDriverSelectorSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.ID, "month"), iface.wd);
+		SeleniumSelector select = new SeleniumSelector(new Hook(Strategy.ID, "month"), iface.wd);
 		// 2. Select the option 'Sep' from the 'birthday_month' drop-down menu
 		select.select(option);
 		// 3. Verify that 'Sep' was actually selected
@@ -81,7 +84,7 @@ public class WebDriverSelectorSystemTest {
     public void selectMultipleTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        SeleniumSelector select = new SeleniumSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         Assert.assertTrue(select.isMultiSelector());
 
@@ -101,7 +104,7 @@ public class WebDriverSelectorSystemTest {
     public void selectAllTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        SeleniumSelector select = new SeleniumSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
 
@@ -114,7 +117,7 @@ public class WebDriverSelectorSystemTest {
     public void deselectTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        SeleniumSelector select = new SeleniumSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         select.select("Ham");
 
@@ -129,7 +132,7 @@ public class WebDriverSelectorSystemTest {
     public void deselectMultiple() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        SeleniumSelector select = new SeleniumSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         select.selectAll();
 
@@ -152,7 +155,7 @@ public class WebDriverSelectorSystemTest {
     public void deselectAllTest() throws Exception {
         String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
         iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        SeleniumSelector select = new SeleniumSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
 
@@ -175,7 +178,7 @@ public class WebDriverSelectorSystemTest {
 		// 1. navigate to Facebook create account page
 		String facebookCreateAccountUrl = "https://www.facebook.com/r.php";
 		iface.go(facebookCreateAccountUrl);
-		WebDriverSelector select = iface.getSelect(new Hook(Strategy.ID, "month"));
+		SeleniumSelector select = iface.getSelect(new Hook(Strategy.ID, "month"));
 		// 2. Get the current option from the drop-down list
 		actual = select.getFirstSelectedOption();
 		// 3. Verify that actual value is the expected value

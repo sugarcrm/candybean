@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import java.util.List;
 
@@ -37,46 +37,46 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
  * Represents an identifiable (via {@link By}) element or element on a page that
- * can be interacted with. A {@link WebDriverElement} object should be used to
+ * can be interacted with. A {@link SeleniumElement} object should be used to
  * automate tasks that require interaction with elements on a page.
  * 
  * @author Conrad Warmbold
  */
-public class WebDriverElement extends Element {
+public class SeleniumElement extends Element {
 
 	public Pause pause;
 
 	protected WebDriver wd;
 	protected WebElement we;
 
-	public WebDriverElement(Strategy strategy, String hookString, WebDriver wd) throws CandybeanException {
+	public SeleniumElement(Strategy strategy, String hookString, WebDriver wd) throws CandybeanException {
 		this(new Hook(strategy, hookString), wd);
 	}
 
-	public WebDriverElement(Strategy strategy, String hookString, int index, WebDriver wd) throws CandybeanException {
+	public SeleniumElement(Strategy strategy, String hookString, int index, WebDriver wd) throws CandybeanException {
 		this(new Hook(strategy, hookString), index, wd);
 	}
 
-	public WebDriverElement(Hook hook, WebDriver wd) throws CandybeanException {
+	public SeleniumElement(Hook hook, WebDriver wd) throws CandybeanException {
 		this(hook, 0, wd);
 	}
 
-	public WebDriverElement(Hook hook, int index, WebDriver wd) throws CandybeanException {
+	public SeleniumElement(Hook hook, int index, WebDriver wd) throws CandybeanException {
 		super(hook, index);
 		this.wd = wd;
-		List<WebElement> wes = this.wd.findElements(WebDriverElement.By(hook));
+		List<WebElement> wes = this.wd.findElements(SeleniumElement.By(hook));
 		if (wes.size() == 0) {
 			throw new CandybeanException("Control not found; zero web elements returned.");
 		}
 		this.we = wes.get(index);
-		this.pause = new WebDriverPause(this);
+		this.pause = new SeleniumPause(this);
 	}
 
-	public WebDriverElement(Hook hook, int index, WebDriver wd, WebElement we) throws CandybeanException {
+	public SeleniumElement(Hook hook, int index, WebDriver wd, WebElement we) throws CandybeanException {
 		super(hook, index);
 		this.wd = wd;
 		this.we = we;
-		this.pause = new WebDriverPause(this);
+		this.pause = new SeleniumPause(this);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class WebDriverElement extends Element {
 	 * @param dropControl
 	 *            target of the drag and drop
 	 */
-	public void dragNDrop(WebDriverElement dropControl)
+	public void dragNDrop(SeleniumElement dropControl)
 			throws CandybeanException {
 		logger.info("Dragging element: " + this.toString()
 				+ " to element: " + dropControl.toString());
@@ -189,9 +189,9 @@ public class WebDriverElement extends Element {
 	public Element getElement(Hook hook, int index) throws CandybeanException {
 		logger.info("Getting element: " + hook.toString()
 				+ " from element: " + this.toString() + " with index: " + index);
-		WebElement childWe = this.we.findElements(WebDriverElement.By(hook))
+		WebElement childWe = this.we.findElements(SeleniumElement.By(hook))
 				.get(index);
-		return new WebDriverElement(hook, index, this.wd, childWe);
+		return new SeleniumElement(hook, index, this.wd, childWe);
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class WebDriverElement extends Element {
 		// since this
 		// is the only method that does it and it violates the general
 		// architecture
-		this.we = this.wd.findElements(WebDriverElement.By(this.hook)).get(this.index);
+		this.we = this.wd.findElements(SeleniumElement.By(this.hook)).get(this.index);
 		this.we.sendKeys(input);
 	}
 
@@ -271,17 +271,17 @@ public class WebDriverElement extends Element {
 			this.sendString(input);
 		else {
 			// Re-find the element to avoid the stale element problem.
-			this.we = this.wd.findElements(WebDriverElement.By(this.hook)).get(this.index);
+			this.we = this.wd.findElements(SeleniumElement.By(this.hook)).get(this.index);
 			this.we.sendKeys(input);
 		}
 	}
 
 	public By getBy() throws CandybeanException {
-		return WebDriverElement.By(this.hook);
+		return SeleniumElement.By(this.hook);
 	}
 
 	public static By By(Hook hook) throws CandybeanException {
-		return WebDriverElement.By(hook.getHookStrategy(),
+		return SeleniumElement.By(hook.getHookStrategy(),
 				hook.getHookString());
 	}
 

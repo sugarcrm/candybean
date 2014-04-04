@@ -24,13 +24,16 @@ package com.sugarcrm.candybean.examples.mobile;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.assertTrue;
+
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.Autoface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
@@ -41,7 +44,7 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  */
 public class SugarIosTest {
 	
-	public static WebDriverAutoface iface;
+	public static SeleniumBrowserAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sugarcrm.candybean.automation.webdriver;
+package com.sugarcrm.candybean.automation.selenium;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
@@ -62,16 +62,16 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
 /**
  * Drives the creation of multi-platform automation tests by providing a resourceful API
  * containing several helper methods to write automation tests. The {@link Candybean} configuration
- * will build a {@link WebDriverAutoface} based on the platform specified in the configuration. An appropriate platform-specific
+ * will build a {@link SeleniumMobileAutoface} based on the platform specified in the configuration. An appropriate platform-specific
  * driver is instantiated for use to write tests.
  *
  */
-public abstract class WebDriverAutoface extends Autoface {
+public abstract class SeleniumMobileAutoface extends BrowserAutoface {
 	
 	public WebDriver wd = null;
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 	
-	protected WebDriverAutoface(Type iType) throws CandybeanException {
+	protected WebDriverBrowserAutoface(Type iType) throws CandybeanException {
 		super(iType);
 	}
 	
@@ -239,7 +239,7 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * 
 	 * @param element		The element representing a focus-targeted IFrame
 	 */
-	public void focusFrame(WebDriverElement wde) throws CandybeanException {
+	public void focusFrame(SeleniumElement wde) throws CandybeanException {
 		logger.info("Focusing to frame by element: " + wde.toString());
 		this.wd.switchTo().frame(wde.we);
 	}
@@ -356,7 +356,7 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @param hook	 description of how to find the control
 	 * @throws CandybeanException 
 	 */
-	public WebDriverElement getWebDriverElement(Hook hook) throws CandybeanException {
+	public SeleniumElement getWebDriverElement(Hook hook) throws CandybeanException {
 		return this.getWebDriverElement(hook, 0);
 	}
 
@@ -368,7 +368,7 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @param index
 	 * @throws CandybeanException 
 	 */
-	public WebDriverElement getWebDriverElement(Strategy strategy, String hookString, int index) throws CandybeanException {
+	public SeleniumElement getWebDriverElement(Strategy strategy, String hookString, int index) throws CandybeanException {
 		return this.getWebDriverElement(new Hook(strategy, hookString), index);
 	}
 
@@ -379,7 +379,7 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @param hookString	string to find using the specified strategy
 	 * @throws CandybeanException 
 	 */
-	public WebDriverElement getWebDriverElement(Strategy strategy, String hookString) throws CandybeanException {
+	public SeleniumElement getWebDriverElement(Strategy strategy, String hookString) throws CandybeanException {
 		return this.getWebDriverElement(new Hook(strategy, hookString), 0);
 	}
 	
@@ -390,8 +390,8 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @param index
 	 * @throws CandybeanException 
 	 */
-	public WebDriverElement getWebDriverElement(Hook hook, int index) throws CandybeanException {
-		return new WebDriverElement(hook, index, this.wd);
+	public SeleniumElement getWebDriverElement(Hook hook, int index) throws CandybeanException {
+		return new SeleniumElement(hook, index, this.wd);
 	}
 	
 	/**
@@ -400,7 +400,7 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @return The list of all controls that match the strategy and hook
 	 * @throws CandybeanException 
 	 */
-	public List<WebDriverElement> getWebDriverElements(Strategy strategy, String hook) throws CandybeanException {
+	public List<SeleniumElement> getWebDriverElements(Strategy strategy, String hook) throws CandybeanException {
 		return this.getWebDriverElements(new Hook(strategy, hook));
 	}
 	
@@ -410,11 +410,11 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @return The list of all controls that match the strategy and hook
 	 * @throws CandybeanException 
 	 */
-	public List<WebDriverElement> getWebDriverElements(Hook hook) throws CandybeanException {
-		List<WebDriverElement> elements = new ArrayList<WebDriverElement>();
-		List<WebElement> wes = this.wd.findElements(WebDriverElement.By(hook.getHookStrategy(), hook.getHookString()));
+	public List<SeleniumElement> getWebDriverElements(Hook hook) throws CandybeanException {
+		List<SeleniumElement> elements = new ArrayList<SeleniumElement>();
+		List<WebElement> wes = this.wd.findElements(SeleniumElement.By(hook.getHookStrategy(), hook.getHookString()));
 		for (WebElement we : wes)
-			elements.add(new WebDriverElement(hook, 0, this.wd, we));
+			elements.add(new SeleniumElement(hook, 0, this.wd, we));
 		return elements;
 	}
 
@@ -423,7 +423,7 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @param hook		string to find using the specified strategy
 	 * @throws CandybeanException 
 	 */
-	public WebDriverSelector getSelect(Strategy strategy, String hook) throws CandybeanException {
+	public SeleniumSelector getSelect(Strategy strategy, String hook) throws CandybeanException {
 		return this.getSelect(new Hook(strategy, hook));
 	}
 	
@@ -431,8 +431,8 @@ public abstract class WebDriverAutoface extends Autoface {
 	 * @param hook	description of how to find the control
 	 * @throws CandybeanException 
 	 */
-	public WebDriverSelector getSelect(Hook hook) throws CandybeanException {
-		return new WebDriverSelector(hook, wd);
+	public SeleniumSelector getSelect(Hook hook) throws CandybeanException {
+		return new SeleniumSelector(hook, wd);
 	}
 
 	/**

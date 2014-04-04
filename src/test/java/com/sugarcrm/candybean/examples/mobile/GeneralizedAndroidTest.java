@@ -1,21 +1,23 @@
 package com.sugarcrm.candybean.examples.mobile;
 
 import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
 import com.sugarcrm.candybean.automation.AutofaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.Autoface.Type;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverAutoface;
+import com.sugarcrm.candybean.automation.selenium.SeleniumBrowserAutoface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 public class GeneralizedAndroidTest {
 
-	public static WebDriverAutoface iface;
+	public static SeleniumBrowserAutoface iface;
 
 	@BeforeClass
 	public static void beforeClass() throws CandybeanException{
