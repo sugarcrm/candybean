@@ -61,27 +61,18 @@ public class SugarTest {
 	}
 	
 	private static Candybean getCandybean() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null) {
-			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "candybean.config";
-		}
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		return Candybean.getInstance(candybeanConfig);
 	}
 	
 	private static Configuration getSugarConfig() throws Exception {
-		String sugarConfigStr = System.getProperty("sugar_config");
-		if (sugarConfigStr == null) {
-			sugarConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.config";
-		}
+		String sugarConfigStr = System.getProperty("sugar.config", Candybean.ROOT_DIR + File.separator + "config" + File.separator + "sugar.config");
 		return new Configuration(new File(Utils.adjustPath(sugarConfigStr)));
 	}
 	
 	private static Properties getSugarHooks() throws Exception {
-		String sugarHooksStr = System.getProperty("sugar_hooks");
-		if (sugarHooksStr == null) {
-			sugarHooksStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "sugar.hooks";
-		}
+		String sugarHooksStr = System.getProperty("sugar.hooks", Candybean.ROOT_DIR + File.separator + "config" + File.separator + "sugar.hooks");
 		Properties sugarHooks = new Properties();
 		sugarHooks.load(new FileInputStream(new File(Utils.adjustPath(sugarHooksStr))));
 		return sugarHooks;

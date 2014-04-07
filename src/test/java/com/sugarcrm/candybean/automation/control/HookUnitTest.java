@@ -39,7 +39,7 @@ public class HookUnitTest {
 	@Test
 	public void testGetHooks() {
 		try {
-			File hooksFile = new File(Candybean.CONFIG_DIR.getCanonicalPath() + File.separator + "testutils.hooks");
+			File hooksFile = new File(Candybean.ROOT_DIR + File.separator + "testutils.hooks");
 			hooksFile.createNewFile();
 			Properties hooksProps = new Properties();
 			String hook1Name = "hook1name";

@@ -51,13 +51,8 @@ public abstract class AbstractTest {
 	}
 
 	private static Candybean configureCandybean() throws IOException, CandybeanException {
-		String candybeanConfigStr = System
-				.getProperty(Candybean.CONFIG_KEY);
-		if (candybeanConfigStr == null)
-			candybeanConfigStr = Candybean.CONFIG_DIR.getCanonicalPath() + File.separator
-					+ Candybean.CONFIG_FILE_NAME;
-		Configuration candybeanConfig = new Configuration(new File(
-				Utils.adjustPath(candybeanConfigStr)));
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
+		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		return Candybean.getInstance(candybeanConfig);
 	}
 }

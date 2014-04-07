@@ -1,0 +1,26 @@
+<div id="tabs5-${packageId}" class="tab-pane">
+	<div class="container">
+		<div class="center-block text-center">
+			<span class="text-center center-block stat"><b>Tests Run:
+			</b>${package.tests}</span> <span class="stat"><b>Errors: </b>${package.errors}</span>
+			<span class="stat"><b>Failures: </b>${package.failures}</span> <span
+				class="stat"><b>Skipped: </b>${package.skipped}</span> <span
+				class="stat"><b>Success Rate: </b>${package.success}</span> <span
+				class="stat"><b>Total Time: </b>${package.time}</span>
+		</div>
+		<table id="table${packageId}" class="table display dataTable data-table"
+			width="100%">
+			<thead>
+				<tr>
+					<th>Test</th>
+					<th>Package</th>
+					<th>Class</th>
+					<th>Elapsed Time</th>
+					<th>Result</th>
+				</tr>
+			</thead>
+			<tbody>${packageTests}
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -76,281 +76,27 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
+	    <pluginManagement>
+	        <plugins>
+	            <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
 					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>[2.0,)</versionRange>
-										<goals>
-											<goal>unpack</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
+						<source>1.7</source>
+						<target>1.7</target>
 					</configuration>
 				</plugin>
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.5.1</version>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>chromedriver_linux32</artifactId>
-									<version>2.9.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>chromedriver_win32</artifactId>
-									<version>2.9.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>chromedriver_mac32</artifactId>
-									<version>2.9.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>chromedriver_linux64</artifactId>
-									<version>2.9.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>IEDriverServer-32</artifactId>
-									<version>2.39.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>IEDriverServer-64</artifactId>
-									<version>2.39.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>evernote_apk</artifactId>
-									<version>1.0.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.sugarcrm.candybean.binaries</groupId>
-									<artifactId>testapp_apk</artifactId>
-									<version>1.0.0</version>
-									<type>zip</type>
-									<outputDirectory>${project.basedir}/lib</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				<version>0.6.2.201302030002</version> <configuration> <destfile>${basedir}/target/coverage-reports/jacoco-unit.exec</destfile> 
-				<datafile>${basedir}/target/coverage-reports/jacoco-unit.exec</datafile> 
-				</configuration> <executions> <execution> <id>jacoco-initialize</id> <goals> 
-				<goal>prepare-agent</goal> </goals> </execution> <execution> <id>jacoco-site</id> 
-				<phase>package</phase> <goals> <goal>report</goal> </goals> </execution> 
-				</executions> </plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<header>./header.txt</header>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.15</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-scm-publish-plugin</artifactId> 
-				<version>1.0-beta-2</version> <configuration> <checkoutDirectory>${project.build.directory}/doc</checkoutDirectory> 
-				<checkinComment>publishing javadoc for ${project.artifactId}:${project.version}</checkinComment> 
-				<content>${project.reporting.outputDirectory}/apidocs</content> <skipDeletedFiles>true</skipDeletedFiles> 
-				<pubScmUrl>scm:git:git@github.com:sugarcrm/candybean.git</pubScmUrl> <scmBranch>gh-pages</scmBranch> 
-				</configuration> </plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<configuration>
-					<show>public</show>
-					<nohelp>true</nohelp>
-					<header>candybean ${project.version}</header>
-					<footer>candybean ${project.version}</footer>
-					<doctitle>candybean ${project.version}</doctitle>
-					<links>
-						<link>http://sugarcrm.github.io/candybean/</link>
-					</links>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.0</version>
-				<configuration>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+	            <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.15</version>
+				</plugin>
+	        </plugins>
+	    </pluginManagement>
 	</build>
 	<dependencies>
-		<!-- >dependency> <groupId>io.selendroid</groupId> <artifactId>selendroid-standalone</artifactId> 
-			<version>LATEST</version> </dependency> <dependency> <groupId>io.selendroid</groupId> 
-			<artifactId>selendroid-common</artifactId> <version>LATEST</version> </dependency> 
-			<dependency> <groupId>io.selendroid</groupId> <artifactId>selendroid-server-common</artifactId> 
-			<version>LATEST</version> </dependency> <dependency> <groupId>org.testng</groupId> 
-			<artifactId>testng</artifactId> <version>6.8.7</version> <scope>test</scope> 
-			</dependency -->
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>chromedriver_linux32</artifactId>
-			<version>2.9.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>chromedriver_win32</artifactId>
-			<version>2.9.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>chromedriver_mac32</artifactId>
-			<version>2.9.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>chromedriver_linux64</artifactId>
-			<version>2.9.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>IEDriverServer-32</artifactId>
-			<version>2.39.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>IEDriverServer-64</artifactId>
-			<version>2.39.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>evernote_apk</artifactId>
-			<version>1.0.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.sugarcrm.candybean.binaries</groupId>
-			<artifactId>testapp_apk</artifactId>
-			<version>1.0.0</version>
-			<type>distribution-zip</type>
-		</dependency>
-		<dependency>
+	    <dependency>
 			<groupId>org.monte</groupId>
 			<artifactId>cc</artifactId>
 			<version>0.7.7</version>
@@ -410,25 +156,6 @@
 	</dependencies>
 	<profiles>
 		<profile>
-			<id>system</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<includes>
-								<include>**/*SystemTest.java</include>
-							</includes>
-							<excludes>
-								<exclude>**/*UnitTest.java</exclude>
-							</excludes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
 			<id>unit</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -444,6 +171,25 @@
 							</includes>
 							<excludes>
 								<exclude>**/*SystemTest.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>system</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/*SystemTest.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*UnitTest.java</exclude>
 							</excludes>
 						</configuration>
 					</plugin>
@@ -469,6 +215,251 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>sugar</id>
+			<build>
+			    <pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-dependency-plugin</artifactId>
+												<versionRange>[2.0,)</versionRange>
+												<goals>
+													<goal>unpack</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute />
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.5.1</version>
+						<executions>
+							<execution>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>chromedriver_linux32</artifactId>
+											<version>2.9.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>chromedriver_win32</artifactId>
+											<version>2.9.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>chromedriver_mac32</artifactId>
+											<version>2.9.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>chromedriver_linux64</artifactId>
+											<version>2.9.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>IEDriverServer-32</artifactId>
+											<version>2.39.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>IEDriverServer-64</artifactId>
+											<version>2.39.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>evernote_apk</artifactId>
+											<version>1.0.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.sugarcrm.candybean.binaries</groupId>
+											<artifactId>testapp_apk</artifactId>
+											<version>1.0.0</version>
+											<type>zip</type>
+											<outputDirectory>${project.basedir}/lib</outputDirectory>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.mycila.maven-license-plugin</groupId>
+						<artifactId>maven-license-plugin</artifactId>
+						<version>2.5</version>
+						<configuration>
+							<header>./header.txt</header>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.4</version>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<configuration>
+							<show>public</show>
+							<nohelp>true</nohelp>
+							<header>candybean ${project.version}</header>
+							<footer>candybean ${project.version}</footer>
+							<doctitle>candybean ${project.version}</doctitle>
+							<links>
+								<link>http://sugarcrm.github.io/candybean/</link>
+							</links>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-project-info-reports-plugin</artifactId>
+						<version>2.0</version>
+						<configuration>
+							<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4</version>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+						<executions>
+							<execution>
+								<id>make-assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>chromedriver_linux32</artifactId>
+					<version>2.9.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>chromedriver_win32</artifactId>
+					<version>2.9.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>chromedriver_mac32</artifactId>
+					<version>2.9.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>chromedriver_linux64</artifactId>
+					<version>2.9.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>IEDriverServer-32</artifactId>
+					<version>2.39.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>IEDriverServer-64</artifactId>
+					<version>2.39.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>evernote_apk</artifactId>
+					<version>1.0.0</version>
+					<type>zip</type>
+				</dependency>
+				<dependency>
+					<groupId>com.sugarcrm.candybean.binaries</groupId>
+					<artifactId>testapp_apk</artifactId>
+					<version>1.0.0</version>
+					<type>zip</type>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 	<reporting>
