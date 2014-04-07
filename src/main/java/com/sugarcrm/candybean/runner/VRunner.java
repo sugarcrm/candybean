@@ -58,6 +58,7 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
 public class VRunner extends BlockJUnit4ClassRunner {
 	
 	public static final String BLOCKLIST_PATH_KEY = "blocklist";
+	public static final String BLOCKLIST_COMMENT = "#";
 	private static Logger logger;
 	
 	public VRunner(Class<?> klass) throws InitializationError, SecurityException, IOException {
@@ -69,7 +70,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	protected List<FrameworkMethod> computeTestMethods() {
 		/*
 		 * We must always use the candybean configured logger, so we attempt 
-		 * to instantiate candybean to retreive its named logger first
+		 * to instantiate candybean to retrieve its named logger first
 		 */
 		try {
 			logger = Logger.getLogger(Candybean.getInstance().getClass().getSimpleName());
@@ -144,12 +145,19 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	private Set<String> getBlockedTestNames() throws FileNotFoundException, IOException {
 		try{
 			Set<String> blockedTestNames = new HashSet<String>();
-			String blockListPath = System.getProperty(VRunner.BLOCKLIST_PATH_KEY, Candybean.CONFIG_DIR + File.separator + "blocklist.txt");
+			String blockListPath = System.getProperty(VRunner.BLOCKLIST_PATH_KEY, Candybean.ROOT_DIR + File.separator + "blocklist.txt");
 			BufferedReader fileReader = new BufferedReader(new FileReader(blockListPath));
-			String blockLine;
-			while ((blockLine = fileReader.readLine()) != null) {
-//				System.out.println(blockLine);
+			String blockLine = fileReader.readLine();
+			while (blockLine != null) {
+				int commentIndex = blockLine.indexOf(VRunner.BLOCKLIST_COMMENT);
+				while (commentIndex > 0) {
+					String newBlockLine = blockLine.substring(0, commentIndex);
+					logger.finer("Removing comments from blockLine '" + blockLine + "' to '" + newBlockLine);
+					blockLine = newBlockLine; 
+					commentIndex = blockLine.indexOf(VRunner.BLOCKLIST_COMMENT);
+				}
 				blockedTestNames.add(blockLine);
+				blockLine = fileReader.readLine();
 			}
 			fileReader.close();
 			return blockedTestNames;
