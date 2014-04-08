@@ -366,9 +366,7 @@ public class TestRecorder extends RunListener {
 							testPassed = false;
 						}
 						tstTemplate = tstTemplate.replace("${test.name}", testCase.getName());
-
 						tstTemplate = tstTemplate.replace("${test.class}", testCase.getClassName());
-
 						tstTemplate = tstTemplate.replace("${test.package}", testCase.getFullClassName().replace(testCase.getClassName(), ""));
 						float time = testCase.getTime();
 						if(time == 0){
@@ -377,18 +375,18 @@ public class TestRecorder extends RunListener {
 							tstTemplate = tstTemplate.replace("${test.runtime}", Utils.calculateTime(testSuite.getTimeElapsed()));
 						}
 						testMarkup.append(tstTemplate);
-						listItemTemplate = listItemTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());
-						listItemTemplate = listItemTemplate.replace("${package.name}",testCase.getFullName());
+						listItemTemplate = listItemTemplate.replace("${packageId}", "failed" + testCase.getName() + testCase.getClassName());
+						listItemTemplate = listItemTemplate.replace("${package.name}", testCase.getFullName());
 						if(!testPassed){
-							if(failedTestList.getFailures().containsKey(testCase.getName()+"("+testCase.getFullClassName()+")")){
+							if(failedTestList.getFailures().containsKey(testCase.getName() + "(" + testCase.getFullClassName() + ")")) {
 								String entryVideoTemplate = entryTemplate;
-								TestFailure videoInformation = failedTestList.getFailures().get(testCase.getName()+"("+testCase.getFullClassName()+")");
+								TestFailure videoInformation = failedTestList.getFailures().get(testCase.getName() + "(" + testCase.getFullClassName() + ")");
 								entryVideoTemplate = entryVideoTemplate.replace("${failure.header}", videoInformation.getPathToVideo());
 								entryVideoTemplate = entryVideoTemplate.replace("${failure.pathToVideo}", videoInformation.getPathToVideo());
 								entryVideoTemplate = entryVideoTemplate.replace("${failure.stacktrace}", videoInformation.getTrace());
 								entryVideoTemplate = entryVideoTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());
 								completeFailedTestContentMarkup.append(entryVideoTemplate);
-							}else{
+							} else {
 								//Video for this failed test was not recorded
 								String entryFailureTemplate = entryFailTemplate;
 								entryFailureTemplate = entryFailureTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());

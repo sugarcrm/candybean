@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.Set;
@@ -58,6 +59,7 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
 public class VRunner extends BlockJUnit4ClassRunner {
 	
 	public static final String BLOCKLIST_PATH_KEY = "blocklist";
+	public static final String BLOCKLIST_COMMENT = "#";
 	private static Logger logger;
 	
 	public VRunner(Class<?> klass) throws InitializationError, SecurityException, IOException {
@@ -69,7 +71,7 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	protected List<FrameworkMethod> computeTestMethods() {
 		/*
 		 * We must always use the candybean configured logger, so we attempt 
-		 * to instantiate candybean to retreive its named logger first
+		 * to instantiate candybean to retrieve its named logger first
 		 */
 		try {
 			logger = Logger.getLogger(Candybean.getInstance().getClass().getSimpleName());
@@ -127,11 +129,20 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	
 	private List<FrameworkMethod> removeBlockedTests(List<FrameworkMethod> tests) throws FileNotFoundException, IOException {
 		Set<String> blockListTests = this.getBlockedTestNames();
+		logger.info("Blocked tests: ");
+		Iterator<String> iter = blockListTests.iterator();
+		while (iter.hasNext()) {
+			logger.info("    " + iter.next());
+		}
 		List<FrameworkMethod> removeTests = new ArrayList<FrameworkMethod>();
 		for (FrameworkMethod test : tests) {
 			String testName = test.getMethod().getDeclaringClass().getSimpleName() + "." + test.getMethod().getName();
+			logger.info("Testing for: " + testName);
 			if (blockListTests.contains(testName)) {
+				logger.info("Blocklist test positive.  Found.");
 				removeTests.add(test); // add to separate list to avoid concurrent modification
+			} else {
+				logger.info("Blocklist test negative.  Not found.");
 			}
 		}
 		for (FrameworkMethod removeTest : removeTests) {
@@ -146,10 +157,17 @@ public class VRunner extends BlockJUnit4ClassRunner {
 			Set<String> blockedTestNames = new HashSet<String>();
 			String blockListPath = System.getProperty(VRunner.BLOCKLIST_PATH_KEY, Candybean.ROOT_DIR + File.separator + "blocklist.txt");
 			BufferedReader fileReader = new BufferedReader(new FileReader(blockListPath));
-			String blockLine;
-			while ((blockLine = fileReader.readLine()) != null) {
-//				System.out.println(blockLine);
-				blockedTestNames.add(blockLine);
+			String blockLine = fileReader.readLine().trim();
+			while (blockLine != null) {
+				int commentIndex = blockLine.indexOf(VRunner.BLOCKLIST_COMMENT);
+				while (commentIndex >= 0) {
+					String newBlockLine = blockLine.substring(0, commentIndex);
+					logger.info("Removing comments from blockLine '" + blockLine + "' to '" + newBlockLine + "'");
+					blockLine = newBlockLine.trim(); 
+					commentIndex = blockLine.indexOf(VRunner.BLOCKLIST_COMMENT);
+				}
+				if (!blockLine.equals("")) blockedTestNames.add(blockLine);
+				blockLine = fileReader.readLine();
 			}
 			fileReader.close();
 			return blockedTestNames;
