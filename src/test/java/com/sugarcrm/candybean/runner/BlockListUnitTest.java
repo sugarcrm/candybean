@@ -45,7 +45,7 @@ public class BlockListUnitTest {
 	// The blocklist should be passed via system variable
 	// with key "blocklist".  Marking as ignored after 
 	// passing to prevent wasted effort.
-//	@Ignore
+	@Ignore
 	@Test
 	public void blockListFail() throws Exception {
 		fail();
