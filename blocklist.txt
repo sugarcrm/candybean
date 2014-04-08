@@ -1,2 +1,3 @@
 BlockListUnitTest.noSuchMethodKeepGoing1
-BlockListUnitTest.blockListFail
+BlockListUnitTest.blockListFail ###this should be blocked
+#BlockListUnitTest.blockListFailed this should be ignored
