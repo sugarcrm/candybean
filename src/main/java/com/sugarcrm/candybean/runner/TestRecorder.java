@@ -389,10 +389,13 @@ public class TestRecorder extends RunListener {
 							} else {
 								//Video for this failed test was not recorded
 								String entryFailureTemplate = entryFailTemplate;
-								entryFailureTemplate = entryFailureTemplate.replace("${packageId}", "failed" + testCase.getName() + testCase.getClassName());
-								entryFailureTemplate = entryFailureTemplate.replace("${failure.exception}", testCase.getFailure().get("type").toString());
-								entryFailureTemplate = entryFailureTemplate.replace("${failure.message}", testCase.getFailure().get("message").toString());
-								entryFailureTemplate = entryFailureTemplate.replace("${failure.detail}", testCase.getFailure().get("detail").toString());
+								entryFailureTemplate = entryFailureTemplate.replace("${packageId}", "failed"+testCase.getName()+testCase.getClassName());
+								entryFailureTemplate = entryFailureTemplate.replace("${failure.exception}", 
+										testCase.getFailure().get("type") == null?"Not Specified":testCase.getFailure().get("type").toString());
+								entryFailureTemplate = entryFailureTemplate.replace("${failure.message}", 
+										testCase.getFailure().get("message") == null?"Not Specified":testCase.getFailure().get("message").toString());
+								entryFailureTemplate = entryFailureTemplate.replace("${failure.detail}",
+										testCase.getFailure().get("detail") == null?"Not Specified":testCase.getFailure().get("detail").toString());
 								completeFailedTestContentMarkup.append(entryFailureTemplate);
 							}
 							
