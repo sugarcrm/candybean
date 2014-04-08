@@ -31,6 +31,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import com.sugarcrm.candybean.automation.element.Element;
 import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.element.Location;
 import com.sugarcrm.candybean.automation.element.Pause;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -224,12 +225,35 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Scroll the browser window to this element.
+	 * Scroll this element to the top of the window
 	 */
 	public void scroll() throws CandybeanException {
-		logger.info("Scrolling to element: " + this.toString());
-		int y = this.we.getLocation().y;
-		((JavascriptExecutor) this.wd).executeScript("window.scrollBy(0," + y + ");");
+		scroll(Location.TOP);
+	}
+	
+
+	/**
+	 * Scroll the element to the specified location in the window.
+	 */
+	public void scroll(Location loc) throws CandybeanException {
+		int y = this.we.getLocation().getY();
+		int height = this.we.getSize().getHeight();
+		switch (loc) {
+		case TOP:
+			logger.info("Scrolling element to the top of the viewport: " + this.toString());
+			((JavascriptExecutor) this.wd).executeScript("window.scrollTo(0," + y + ");");
+			break;
+		case BOTTOM:
+			logger.info("Scrolling element to the bottom of the viewport: " + this.toString());
+			((JavascriptExecutor) this.wd).executeScript("window.scrollTo(0," + y + "- window.innerHeight + " + height + ");");
+			break;
+		case MIDDLE:
+			logger.info("Scrolling element to the middle of the viewport: " + this.toString());
+			((JavascriptExecutor) this.wd).executeScript("window.scrollTo(0," + y + "- (window.innerHeight/2) + " + height/2 + ");");
+			break;
+		default:
+			break;
+		}
 	}
 
 	/**
