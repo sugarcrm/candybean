@@ -25,7 +25,6 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,18 +43,14 @@ import com.sugarcrm.candybean.runner.VRunner;
 @RunWith(VRunner.class)
 public class WebDriverControlSystemTest {
 	
-	public static WebDriverInterface iface;
+	private WebDriverInterface iface;
 	
-	@BeforeClass
-	public static void beforeClass() throws CandybeanException{
+	@Before
+	public void setUp() throws CandybeanException {
 		Candybean candybean = Candybean.getInstance();
 		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverControlSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
-	}
-	
-	@Before
-	public void setUp() throws CandybeanException {
 		iface.start();
 	}
 

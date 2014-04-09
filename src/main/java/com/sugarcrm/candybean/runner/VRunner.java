@@ -28,20 +28,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.Set;
-
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
-
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-
+import org.junit.runners.model.RunnerScheduler;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.CandybeanLogger;
@@ -61,10 +66,23 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	
 	public static final String BLOCKLIST_PATH_KEY = "blocklist";
 	public static final String BLOCKLIST_COMMENT = "#";
+	private static int threadCounter = 0;
 	private static Logger logger;
+	private static Candybean candybean;
 	
 	public VRunner(Class<?> klass) throws InitializationError, SecurityException, IOException {
 		super(klass);
+		try {
+			candybean = Candybean.getInstance();
+			boolean parallelTests = Boolean.parseBoolean(candybean.config.getValue("parallel.enabled","false"));
+			if (parallelTests) {
+				setScheduler(new NonBlockingAsynchronousRunner(Integer.parseInt(Candybean.getInstance().config.getValue("parallel.threads", "4"))));
+			}
+		} catch (CandybeanException e1) {
+			logger = Logger.getLogger(VRunner.class.getSimpleName());
+			logger.severe("Unable to instantiate candybean.");
+		}
+
 	}
 
 	// TODO add validation/error checking, flexibility in provided class/method name, etc.
@@ -195,4 +213,56 @@ public class VRunner extends BlockJUnit4ClassRunner {
 		}
     	super.run(notifier);
     }
+    
+    private static class NonBlockingAsynchronousRunner implements RunnerScheduler {
+        private final List<Future<Object>> futures = Collections.synchronizedList(new ArrayList<Future<Object>>());
+        private final ExecutorService fService;
+        public NonBlockingAsynchronousRunner(int threads) {
+            fService = Executors.newFixedThreadPool(threads, new CandybeanThreadFactory(threads));
+        }
+
+        public void schedule(final Runnable childStatement) {
+            final Callable<Object> objectCallable = new Callable<Object>() {
+                public Object call() throws Exception {
+                	
+                    childStatement.run();
+                    return null;
+                }
+            };
+            futures.add(fService.submit(objectCallable));
+        }
+
+
+        public void finished() {
+            waitForCompletion();
+        }
+
+        public void waitForCompletion() {
+            for (Future<Object> each : futures)
+                try {
+                    each.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+    
+	private static class CandybeanThreadFactory implements ThreadFactory {
+		
+		private int numOfThreads = 4;
+		
+		public CandybeanThreadFactory(int numOfThreads) {
+			super();
+			this.numOfThreads = numOfThreads;
+		}
+
+		public Thread newThread(Runnable r) {
+			if(threadCounter == numOfThreads){
+				threadCounter = 0;
+			}
+			return new Thread(r, candybean.config.getValue("parallel.threadNamePattern","")+threadCounter++);
+		}
+	}
 }

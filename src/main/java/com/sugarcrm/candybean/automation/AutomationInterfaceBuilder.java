@@ -121,8 +121,10 @@ public class AutomationInterfaceBuilder {
 		CandybeanLogger cbLogger;
 		try {
 			cbLogger = (CandybeanLogger) Logger.getLogger(Candybean.class.getSimpleName());
-			FileHandler fh = new FileHandler("./log/" + cls.getSimpleName() + ".log");
-			cbLogger.addHandler(fh, cls.getSimpleName());
+			if (!cbLogger.containsHandler(cls.getSimpleName())) {
+				FileHandler fh = new FileHandler("./log/" + cls.getSimpleName() + ".log");
+				cbLogger.addHandler(fh, cls.getSimpleName());
+			}
 		} catch (IOException e) {
 			logger.severe("Unable to read/write to file " + "./log/" + cls.getSimpleName() + ".log");
 		}
