@@ -19,7 +19,7 @@ public class CandybeanLogger extends Logger {
 		super(name, null);
 	}
 
-	/*
+	/**
 	 * Removes the handler from the list of file handlers
 	 */
 	public void removeHandler(String simpleClassName) throws SecurityException { 
@@ -30,8 +30,10 @@ public class CandybeanLogger extends Logger {
 			super.removeHandler(handler);
 		}
 	}
+	
+	
 
-	/*
+	/**
 	 * Adds the handler to the logger
 	 */
 	public void addHandler(FileHandler fh, String simpleClassName) {
@@ -39,7 +41,7 @@ public class CandybeanLogger extends Logger {
 		super.addHandler(fh);
 	}
 	
-	/*
+	/**
 	 * Removes all the handlers in the candybean logger
 	 */
 	public void removeAllHandlers(){
@@ -48,7 +50,7 @@ public class CandybeanLogger extends Logger {
 		}
 	}
 	
-	/*
+	/**
 	 * Removes all the handlers in the candybean logger
 	 */
 	public void removeAllHandlersExcept(String simpleClassName){
@@ -57,6 +59,13 @@ public class CandybeanLogger extends Logger {
 				removeHandler(key);
 			}
 		}
+	}
+	
+	/**
+	 * Returns whether the logger contains a file handler for this class name.
+	 */
+	public boolean containsHandler(String className){
+		return handlers.containsKey(className);
 	}
 
 }

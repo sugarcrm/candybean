@@ -44,18 +44,14 @@ import com.sugarcrm.candybean.runner.VRunner;
 @RunWith(VRunner.class)
 public class WebDriverSystemTest {
 
-	public static WebDriverInterface iface;
+	private WebDriverInterface iface;
 	
-	@BeforeClass
-	public static void beforeClass() throws CandybeanException{
+	@Before
+	public void setUp() throws CandybeanException {
 		Candybean candybean = Candybean.getInstance();
 		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
-	}
-	
-	@Before
-	public void setUp() throws CandybeanException {
 		iface.start();
 	}
 
@@ -148,6 +144,7 @@ public class WebDriverSystemTest {
 //		this.iface.go("");
 	}
 
+	@Ignore
 	@Test
 	public void presentAcceptDismissDialogTest() throws Exception {
 		iface.go("http://www.mediacollege.com/internet/javascript/basic/alert.html");

@@ -42,18 +42,14 @@ import com.sugarcrm.candybean.runner.VRunner;
 @RunWith(VRunner.class)
 public class WebDriverSelectorSystemTest {
 
-	public static WebDriverInterface iface;
+	private WebDriverInterface iface;
 	
-	@BeforeClass
-	public static void beforeClass() throws CandybeanException{
+	@Before
+	public void setUp() throws CandybeanException {
 		Candybean candybean = Candybean.getInstance();
 		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverSelectorSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
-	}
-	
-	@Before
-	public void setUp() throws CandybeanException {
 		iface.start();
 	}
 
