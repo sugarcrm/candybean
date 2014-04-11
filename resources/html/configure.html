@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+<link rel="stylesheet"
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link
+	href="http://datatables.net/download/build/nightly/jquery.dataTables.css"
+	rel="stylesheet" type="text/css" />
+
+<style>
+.stat {
+	padding-right: 5em;
+	display: inline;
+}
+
+.pass {
+	color: #00cc00;
+}
+
+.fail {
+	color: #ff3366;
+}
+
+.skip {
+	color: #ffcc99;
+}
+</style>
+</head>
+<body>
+	<div style="padding-left:10%;">
+		<form action="/cfg/save" class="form-horizontal">
+			<fieldset>
+
+				<!-- Form Name -->
+				<legend>Candybean Configuration</legend>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="automation.interface">Automation
+						interface</label>
+					<div class="controls">
+						<input id="automation.interface" name="automation.interface"
+							type="text" placeholder="example: chrome,firefox,ie"
+							class="form-control">
+
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="browser.firefox.binary">Firefox
+						binary path</label>
+					<div class="controls">
+						<input id="browser.firefox.binary" name="browser.firefox.binary"
+							type="text" placeholder="example: /usr/bin/firefox"
+							class="form-control">
+						<p class="help-block">Link to the absolute path of the firefox
+							binary</p>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="browser.firefox.profile">Firefox
+						Browser profile</label>
+					<div class="controls">
+						<input id="browser.firefox.profile" name="browser.firefox.profile"
+							type="text" placeholder="example: default" class="form-control">
+
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="browser.chrome.driver.path">Chrome
+						driver path</label>
+					<div class="controls">
+						<input id="browser.chrome.driver.path"
+							name="browser.chrome.driver.path" type="text"
+							placeholder="example: usr/bin/chromedriver-mac32"
+							class="form-control">
+						<p class="help-block">Link to the absolute path of the chrome
+							binary</p>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="browser.chrome.driver.log.path">Chrome
+						driver log path</label>
+					<div class="controls">
+						<input id="browser.chrome.driver.log.path"
+							name="browser.chrome.driver.log.path" type="text"
+							placeholder="example: /usr/chrome/chromedriver.log"
+							class="form-control">
+
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="browser.ie.driver.path">IE
+						Browser path</label>
+					<div class="controls">
+						<input id="browser.ie.driver.path" name="browser.ie.driver.path"
+							type="text" placeholder="example: IEDriverServer-64.exe"
+							class="form-control">
+						<p class="help-block">Link to the absolute path of the
+							Internet explorer driver</p>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="perf.page.load.timeout">Page
+						load timeout</label>
+					<div class="controls">
+						<input id="perf.page.load.timeout" name="perf.page.load.timeout"
+							type="text" placeholder="example: 2" class="form-control">
+
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+					<label class="control-label" for="perf.implicit.wait.seconds">General
+						implicit wait (seconds)</label>
+					<div class="controls">
+						<input id="perf.implicit.wait.seconds"
+							name="perf.implicit.wait.seconds" type="text"
+							placeholder="example: 20" class="form-control">
+
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-default">Submit</button>
+
+			</fieldset>
+		</form>
+	</div>
+	<!-- /.tabbable -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script
+		src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

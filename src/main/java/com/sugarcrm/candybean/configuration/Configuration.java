@@ -120,7 +120,7 @@ public class Configuration {
      * @return copy of the properties
      */
     public Properties getPropertiesCopy() {
-        return new Properties(properties);
+        return (Properties) properties.clone();
     }
 
     /**
@@ -214,6 +214,21 @@ public class Configuration {
         }
     }
     
+    /*
+     * Stores the current properties to the provided file
+     * @param properties
+     * @param file
+     * @throws IOException
+     */
+    private void store(Properties properties, File file) throws IOException {
+        try {
+        	properties.store(new FileOutputStream(file), "");
+        } catch (IOException e) {
+            logger.warning("Unable to store " + file.getCanonicalPath() + ".\n");
+            logger.severe(e.getMessage());
+        }
+    }
+    
     public boolean hasKey(String key){
     	return properties.containsKey(key);
     }
@@ -226,6 +241,15 @@ public class Configuration {
      */
     public void store(OutputStream out) throws IOException {
         properties.store(out, null);
+    }
+    
+    /**
+     * Overwrites the config file associated with this Configuration with the new properties
+     * @param properties
+     * @throws IOException
+     */
+    public void overwrite(Properties properties) throws IOException {
+        store(properties,configFile);
     }
     
     /**
