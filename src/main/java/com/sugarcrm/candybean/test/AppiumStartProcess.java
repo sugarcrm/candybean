@@ -6,13 +6,13 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class AppiumProcess extends Thread{
+public class AppiumStartProcess extends Thread{
 	
 	private List<String> commands;
 	
 	private Logger logger;
 	
-	public AppiumProcess(List<String> commands, Logger logger) {
+	public AppiumStartProcess(List<String> commands, Logger logger) {
 		this.commands = commands;
 		this.logger = logger;
 	}
