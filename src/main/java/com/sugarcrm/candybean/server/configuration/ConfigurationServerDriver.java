@@ -28,6 +28,7 @@ public class ConfigurationServerDriver {
         resourceHandler.setResourceBase(".");
         context.addServlet(new ServletHolder(new ConfigurationServlet()),"/cfg");
         context.addServlet(new ServletHolder(new SaveConfigurationServlet()),"/cfg/save");
+        context.addServlet(new ServletHolder(new LoadConfigurationServlet()),"/cfg/load");
         
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { resourceHandler, context });
