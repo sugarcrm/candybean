@@ -44,6 +44,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
@@ -143,6 +144,15 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		} catch (IOException ioe) {
 			throw new CandybeanException(ioe);
 		}
+	}
+	
+	/**
+	 * Executes any javascript command
+	 * @param javascript The javascript code to execute
+	 */
+	public void executeJavascript(String javascript){
+		logger.info("Executing explicit javascript");
+		((JavascriptExecutor) this.wd).executeScript(javascript);
 	}
 	
 	/**
