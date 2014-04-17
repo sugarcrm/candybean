@@ -135,14 +135,16 @@ maxRecordingTime=120000
 <a name="tests"></a>
 Writing tests
 -------------
-Here's an example Java-JUnit test that extends AbstractTest (which instantiates 
-a Candybean interface from the configuration file) and begins testing through 
-the interface defined in the configuration.
+Here's an example Java-JUnit test that uses the candybean AutomationInterfaceBuilder and begins testing through 
+the interface.
 
 The second Java-JUnit test has been enabled for recording, using the @Record annotation, a feature of Candybean
 that will make a video recording of the test execution. This feature can be configured in the Candybean configuration file.
 
 The VTag annotation on the second JUnit test showcases the ability to tag certain tests to be run only on specific platforms.
+
+When attempting to run tests in parallel, it is important that WebDriverInterface is not instantiated as a static variable, and it is not safe
+to instantiate WebDriverInterface in the @BeforeClass annotated method, if one is included. 
 
 ```
 import com.sugarcrm.candybean;
@@ -151,13 +153,31 @@ import org.junit.Test;
 import com.sugarcrm.candybean.test.AbstractTest;
 
 @RunWith(VRunner.class)
-public class CandybeanTest extends AbstractTest {
+public class CandybeanTest {
+	
+	private WebDriverInterface iface;
+	
+	//The Candybean logger automatically handles the creation of log files specific to test classes
+	private Logger logger = Logger.getLogger(Candybean.class.getSimpleName());
+	
+	@Before
+	public void setUp() throws CandybeanException {
+		Candybean candybean = Candybean.getInstance();
+		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverControlSystemTest.class);
+		builder.setType(Type.CHROME);
+		iface = builder.build();
+		iface.start();
+	}
+
+	@After
+	public void tearDown() throws CandybeanException {
+		iface.stop();
+	}
 	
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
-		logger.log("Bringing up craigslist.com for an apartment search!");
-		candybean.getInterface().start();
-		candybean.getInterface().go("http://www.craigslist.com/");
+		logger.info("Bringing up craigslist.com for an apartment search!");
+		iface.go("http://www.craigslist.com/");
 		assertEquals("http://www.craigslist.org/about/sites", cb.getURL());
 		... do other things
 		... perform other assertions
@@ -178,10 +198,6 @@ public class CandybeanTest extends AbstractTest {
 		... use other candybean features			
 	}
 	
-	@AfterClass
-	public static void last() throws Exception {
-		candybean.getInterface().stop();
-	}
 }
 ```
 
