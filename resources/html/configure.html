@@ -28,6 +28,16 @@
 .skip {
 	color: #ffcc99;
 }
+.btn-center{
+	margin-left: 50%;
+	position: absolute;
+	left: -100px !important;
+}
+.legend-center{
+	margin-left: 50%;
+	left: -200px !important;
+	position: relative;
+}
 </style>
 </head>
 <body onLoad="loadFormValues()">
@@ -36,7 +46,7 @@
 			<fieldset>
 
 				<!-- Form Name -->
-				<legend>Candybean Configuration</legend>
+				<legend class="legend-center" style="width:400px !important;">Candybean Configuration</legend>
 
 				<!-- Text input-->
 				<div class="form-group">
@@ -450,30 +460,30 @@
 				</div>			
 				
 				<div class="form-group">
-					<label class="col-md-4 control-label" for="saucelabs.parallel">SauceLabs in Parallel?</label>
+					<label class="col-md-4 control-label" for="parallel.enabled">SauceLabs in Parallel?</label>
 					<div class="col-md-4">
 						<label class="btn btn-default **active**"> <input
-							id="saucelabs.parallel" name="saucelabs.parallel"
+							id="parallel.enabled" name="parallel.enabled"
 							value="true" type="radio"> Yes
 						</label> 
 						<label class="btn btn-default **active**"> <input
-							id="saucelabs.parallel" name="saucelabs.parallel"
+							id="parallel.enabled" name="parallel.enabled"
 							value="false" type="radio"> No
 						</label>
-						<p id="saucelabs.parallel.desc" class="help-block"></p>
-						<input  hidden="" id="saucelabs.parallel.desc.hidden" name="saucelabs.parallel.desc.hidden"></input>
+						<p id="parallel.enabled.desc" class="help-block"></p>
+						<input  hidden="" id="parallel.enabled.desc.hidden" name="parallel.enabled.desc.hidden"></input>
 					</div>
 				</div>		
 				
 				<div class="form-group">
-					<label class="col-md-4 control-label" for="saucelabs.threads">SauceLabs Max Threads</label>
+					<label class="col-md-4 control-label" for="parallel.threads">SauceLabs Max Threads</label>
 					<div class="col-md-4">
-						<input id="saucelabs.threads" name="saucelabs.threads"
+						<input id="parallel.threads" name="parallel.threads"
 							type="text"
 							placeholder=""
 							class="form-control input-md">
-						<p id="saucelabs.threads.desc" class="help-block"></p>
-						<input  hidden="" id="saucelabs.threads.desc.hidden" name="saucelabs.threads.desc.hidden"></input>
+						<p id="parallel.threads.desc" class="help-block"></p>
+						<input  hidden="" id="parallel.threads.desc.hidden" name="parallel.threads.desc.hidden"></input>
 					</div>
 				</div>			
 				
@@ -535,9 +545,12 @@
 						<p id="saucelabs.version.desc" class="help-block"></p>
 						<input  hidden="" id="saucelabs.version.desc.hidden" name="saucelabs.version.desc.hidden"></input>
 					</div>
-				</div>																										
+				</div>															
 				
-				<button type="submit" class="btn btn-default">Submit</button>
+				
+				<input  hidden="" id="configuration.header" name="configuration.header"></input>											
+				
+				<button style="width:200px !important;" type="submit" class="btn-center btn btn-default">Submit</button>
 
 			</fieldset>
 		</form>

@@ -4,7 +4,14 @@ function loadFormValues(){
         dataType: 'json', // Choosing a JSON datatype
         success: function(data) // Variable data contains the data we get from serverside
         {
-        	data.map( function(item) {
+        	var dataObj = JSON.parse(data);
+        	var header = dataObj.header;
+        	var headerElement = document.getElementById("configuration.header");
+        	if(headerElement != undefined){
+        		headerElement.value = header;
+        	}
+        	var formFields = dataObj.formFields;
+        	formFields.map( function(item) {
         		var obj = JSON.parse(item);
         		var parts = obj.value.split("=");
         		var key = parts[0].trim();

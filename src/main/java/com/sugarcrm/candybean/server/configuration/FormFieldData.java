@@ -1,5 +1,7 @@
 package com.sugarcrm.candybean.server.configuration;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 public class FormFieldData {
 	
 	private String fieldComments;
@@ -30,7 +32,7 @@ public class FormFieldData {
 
 	@Override
 	public String toString() {
-		return "{\"comments\":\""+fieldComments+"\"" + ",\"value\":\""+fieldValue+"\"" +
+		return "{\"comments\":\""+StringEscapeUtils.escapeJava(fieldComments)+"\"" + ",\"value\":\""+StringEscapeUtils.escapeJava(fieldValue)+"\"" +
 				"}";
 	}
 	

@@ -61,9 +61,20 @@ public class SaveConfigurationServlet extends HttpServlet {
 		f.createNewFile();
 		FileWriter fw = new FileWriter(f.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
+		//Write header first if it exists
+		if(props.containsKey("configuration.header")){
+			String[] headerLines = props.get("configuration.header").toString().split("###");
+			if (headerLines.length > 0) {
+				for (String headerLine : headerLines) {
+						bw.write("###" + headerLine + "\n");
+				}
+				bw.write("\n");
+			}
+		}
+		//Write the remaining key value pairs
 		for (Object key : props.keySet()) {
 			String mapKey = key.toString();
-			if (!mapKey.endsWith(".desc.hidden")) {
+			if (!mapKey.endsWith(".desc.hidden") && !mapKey.equals("configuration.header")) {
 				String descKey = mapKey + ".desc.hidden";
 				if (props.containsKey(descKey)) {
 					String[] comments = props.get(descKey).toString()
@@ -74,14 +85,9 @@ public class SaveConfigurationServlet extends HttpServlet {
 								bw.write("#" + comment + "\n");
 							}
 						}
-					} else {
-						bw.write("#\n");
 					}
-				} else {
-					bw.write("#\n");
 				}
 				bw.write(key + "=" + props.get(key) + "\n");
-				bw.write("\n");
 			}
 		}
 		bw.close();

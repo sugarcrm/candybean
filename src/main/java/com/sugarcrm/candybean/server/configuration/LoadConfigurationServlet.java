@@ -23,7 +23,7 @@ public class LoadConfigurationServlet extends HttpServlet {
     	PrintWriter out = response.getWriter();
     	try {
     		FormData data = getFormData();
-    		String jsonRepresentation = JSON.DEFAULT.toJSON(data.getFormFields());
+    		String jsonRepresentation = JSON.DEFAULT.toJSON(data);
 			out.print(jsonRepresentation);
 		} catch (CandybeanException e) {
 			throw new IOException(e);
@@ -35,44 +35,75 @@ public class LoadConfigurationServlet extends HttpServlet {
 		Candybean candybean = Candybean.getInstance();
 		File configFile = candybean.config.configFile;
 		BufferedReader br = new BufferedReader(new FileReader(configFile));
-		String line;
-		FormFieldData fieldData = new FormFieldData();
 		FormData formData = new FormData();
+		formData.setHeader(readHeader(br));
+		@SuppressWarnings("unused")
+		String line;
+		br.mark(0);
 		while ((line = br.readLine()) != null) {
-			if(line.isEmpty()){
-				//Do nothing
-			} else {
-				readComments(line, br, fieldData);
-				formData.getFormFields().add(
-						new FormFieldData(fieldData.getFieldComments(),
-								fieldData.getFieldValue()));
+			try {
+				br.reset();
+				formData.getFormFields().add(new FormFieldData(readComments(br), readKeyValueEntry(br)));
+				br.mark(0);
+			} catch (Exception e) {
+				continue;
 			}
 		}
 		br.close();
 		return formData;
     }
-	private void readComments(String previousLine, BufferedReader br, FormFieldData fieldData) throws IOException {
+    
+	private String readComments(BufferedReader br) throws IOException {
 		String line;
-		String comments;
-		if(previousLine.isEmpty()){
-			comments = "";
-		}else if(previousLine.startsWith("#")){
-			comments = previousLine;
-		}else {
-			comments = "";
-			fieldData.setFieldValue(previousLine);
-			fieldData.setFieldComments(comments);
-		}
+		String comments = "";
+		br.mark(0);
 		while ((line = br.readLine()) != null) {
-			if(line.startsWith("#")){
+			if(line.startsWith("#") || line.isEmpty()){
 				comments = comments.concat(line);
-			}else if(line.isEmpty()){
+			}else{
+				br.reset();
 				break;
-			}else {
-				fieldData.setFieldValue(line);
-				fieldData.setFieldComments(comments);
 			}
+			br.mark(0);
 		}
+		return comments;
+		
+	}
+    
+	private String readKeyValueEntry(BufferedReader br) throws IOException {
+		String line;
+		String keyValueEntry = "";
+		int keyValuePairsEncountered = 0;
+		br.mark(0);
+		while ((line = br.readLine()) != null) {
+			if(line.contains("=")){
+				keyValuePairsEncountered++;
+			}
+			if(!line.startsWith("#") && !line.isEmpty() && keyValuePairsEncountered <= 1){
+				keyValueEntry = keyValueEntry.concat(line);
+			}else{
+				br.reset();
+				break;
+			}
+			br.mark(0);
+		}
+		return keyValueEntry;
+	}
+
+	private String readHeader(BufferedReader br) throws IOException {
+		String line;
+		String header = "";
+		br.mark(0);
+		while ((line = br.readLine()) != null) {
+			if(line.startsWith("###") || line.isEmpty()){
+				header = header.concat(line);
+			}else{
+				br.reset();
+				break;
+			}
+			br.mark(0);
+		}
+		return header;
 	}
 	
 }
