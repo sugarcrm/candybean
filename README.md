@@ -92,14 +92,6 @@ The following key-value keys should be defined in a configuration file used to i
 By default, Candybean will look for a <b>candybean.config</b> file located in the 'config' directory, but
 a path can also be specified from the command line or a system variable 'candybean_config'.
 
-## Configuration Server ##
-Optionally, a candybean configuration file can be generated using the built-in configuration server.
-To start the server, simply run "mvn -Pconfigure compile", and you may access the web-based configuration interface
-at http://localhost:8080/cfg
-
-When using the configuration server, candybean will look for a config file to load default values in to the configuration form.
-
-
 ```
 # specifies the type of automation interface
 automation.interface = chrome # chrome | firefox | ie | opera | android | ios  
@@ -140,6 +132,11 @@ video.compression=Animation
 maxFileSize=512000
 maxRecordingTime=120000
 ```
+Optionally, a candybean configuration file can be generated using the built-in configuration server.
+To start the server, simply run "mvn -Pconfigure compile", and you may access the web-based configuration interface
+at http://localhost:8080/cfg
+
+When using the configuration server, candybean will look for a config file to load default values in to the configuration form.
 
 <a name="tests"></a>
 Writing tests
