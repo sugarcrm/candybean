@@ -23,6 +23,8 @@ package com.sugarcrm.candybean.automation.control;
 
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -32,6 +34,7 @@ import org.junit.rules.ExpectedException;
 
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
 import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.utilities.Utils;
@@ -79,6 +82,30 @@ public class Adhoc {
 		iface.getWebDriverElement(Strategy.ID, "le_label_1").dragNDrop(iface.getWebDriverElement(Strategy.ID, "21"));
 		iface.interact("pause...");
 		iface.focusDefault();
+	}
+	
+	@Ignore
+	@Test
+	public void cookieTest() throws Exception {
+		iface.go("http://orteil.dashnet.org/cookieclicker/");
+		WebDriverElement bigCookie = iface.getWebDriverElement(Strategy.ID, "bigCookie");
+		String s = Adhoc.getCookieClicks();
+		while (Integer.parseInt(s) > 0) {
+			for (int i = 0; i < Integer.parseInt(s); i++) {
+				bigCookie.click();
+			}
+			s = Adhoc.getCookieClicks();
+		}
+	}
+		
+	private static String getCookieClicks() {
+		String s = (String) JOptionPane.showInputDialog(null, 
+				"Continue with x clicks...", 
+				"Cookie Clicker", 
+				JOptionPane.PLAIN_MESSAGE, null,
+                null,
+                "1000000");
+		return s;
 	}
 	
 	@AfterClass
