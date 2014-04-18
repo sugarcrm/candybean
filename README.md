@@ -201,6 +201,9 @@ public class CandybeanTest {
 }
 ```
 
+To run tests in parallel, simply set the value of 'parallel.enabled' to true in the candybean configuration file.
+The number of threads used for parallel testing can be specified by setting the key 'parallel.threads' in the configuration file.
+
 Refer to [Candybean's API Documentation](http://sugarcrm.github.io/candybean/doc/index.html) for further feature usage.
 
 <a name="execute"></a>
