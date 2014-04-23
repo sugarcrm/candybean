@@ -23,6 +23,7 @@ package com.sugarcrm.candybean.automation.element;
 
 import java.util.logging.Logger;
 
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 public abstract class Element {
@@ -33,11 +34,12 @@ public abstract class Element {
 	/**
 	 * A preconfigured logger instance for child elements to log messages.
 	 */
-	public static final Logger logger = Logger.getLogger(Element.class.getSimpleName());
+	public static Logger logger;
 	
 	public Element(Hook hook, int index) {
 		this.hook = hook;
 		this.index = index;
+		logger = Logger.getLogger(Candybean.class.getSimpleName());
 	}
 	
 	/**
