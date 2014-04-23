@@ -86,8 +86,8 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds"));
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		if (System.getProperty("headless") == null
-				&& !(this instanceof AndroidInterface)
-				&& !(this instanceof IosInterface)
+				&& !(iType != Type.IOS)
+				&& !(iType != Type.ANDROID)
 				&& !System.getProperty("os.name").contains("mac")) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
