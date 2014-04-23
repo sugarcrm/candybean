@@ -155,6 +155,8 @@ public class AutomationInterfaceBuilder {
 		WebDriverInterface iface = null;
 		DesiredCapabilities capabilities;
 		String testClassName = cls.getSimpleName();
+		// Required if we are using saucelabs.
+		SaucelabsInterface sauceInterface = new SaucelabsInterface(type);
 		switch (type) {
 		case FIREFOX:
 			iface = new FirefoxInterface();
@@ -173,6 +175,9 @@ public class AutomationInterfaceBuilder {
 				capabilities.setCapability("app", appPath);
 				capabilities.setCapability("app-package", appPackage);
 				capabilities.setCapability("app-activity", appActivity);
+				sauceInterface.getCapabilities().setCapability("app", appPath);
+				sauceInterface.getCapabilities().setCapability("app-package", appPackage);
+				sauceInterface.getCapabilities().setCapability("app-activity", appActivity);
 				iface = new AndroidInterface(capabilities);
 			}else {
 				logger.info("Builder was not fully configured to create an Android interface. \n" +
@@ -183,6 +188,10 @@ public class AutomationInterfaceBuilder {
 					capabilities.setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
 					capabilities.setCapability("app-package", candybean.config.getValue(testClassName + ".app-package"));
 					capabilities.setCapability("app-activity", candybean.config.getValue(testClassName + ".app-activity"));
+					//sauceInterface.getCapabilities().setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
+					sauceInterface.getCapabilities().setCapability("app", "sauce-storage:evernote.zip");
+					sauceInterface.getCapabilities().setCapability("app-package", candybean.config.getValue(testClassName + ".app-package"));
+					sauceInterface.getCapabilities().setCapability("app-activity", candybean.config.getValue(testClassName + ".app-activity"));
 					iface = new AndroidInterface(capabilities);
 				}else {
 					String message = "Builder was unable to create an Android Interface from the provided settings in the builder, or \n" +
@@ -199,6 +208,7 @@ public class AutomationInterfaceBuilder {
 			if(isIOSFullyConfigured(true)) {
 				capabilities = new DesiredCapabilities();
 				capabilities.setCapability("app", appPath);
+				sauceInterface.getCapabilities().setCapability("app", appPath);
 				iface = new IosInterface(capabilities);
 			}else {
 				logger.info("Builder was not fully configured to create an IOS interface. \n" +
@@ -207,6 +217,7 @@ public class AutomationInterfaceBuilder {
 				if(isIOSFullyConfigured(false)){
 					capabilities = new DesiredCapabilities();
 					capabilities.setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
+					sauceInterface.getCapabilities().setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
 					iface = new IosInterface(capabilities);
 				}else {
 					String message = "Builder was unable to create an IOS Interface from the provided settings in the builder, or \n" +
@@ -223,7 +234,8 @@ public class AutomationInterfaceBuilder {
 		}
 		if (Boolean.parseBoolean(candybean.config.getValue("saucelabs.enabled"))) {
 			logger.info("Saucelabs was enabled by the user, using saucelabs to carry out the tests for the interface: "+ type);
-			return new SaucelabsInterface(type);
+			// Add any desired capabilities if we are running mobile tests on saucelabs.
+			return sauceInterface;
 		} else {
 			return iface;
 		}
