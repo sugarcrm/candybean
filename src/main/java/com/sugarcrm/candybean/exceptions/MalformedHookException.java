@@ -30,6 +30,4 @@ public class MalformedHookException extends CandybeanException {
 	public void setHookName(String hookName) {
 		this.hookName = hookName;
 	}
-
-
 }
