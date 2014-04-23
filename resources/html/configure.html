@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candybean Web-Based Configuration Interface</title>
+<link rel="stylesheet"
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link
+	href="http://datatables.net/download/build/nightly/jquery.dataTables.css"
+	rel="stylesheet" type="text/css" />
+
+<style>
+.stat {
+	padding-right: 5em;
+	display: inline;
+}
+
+.pass {
+	color: #00cc00;
+}
+
+.fail {
+	color: #ff3366;
+}
+
+.skip {
+	color: #ffcc99;
+}
+.btn-center{
+	margin-left: 50%;
+	position: absolute;
+	left: -100px !important;
+}
+.legend-center{
+	margin-left: 50%;
+	left: -200px !important;
+	position: relative;
+}
+</style>
+</head>
+<body onLoad="loadFormValues()">
+	<div style="padding-left: 10%;">
+		<form action="/cfg/save" class="form-horizontal">
+			<fieldset>
+
+				<!-- Form Name -->
+				<legend class="legend-center" style="width:400px !important;">Candybean Configuration</legend>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="automation.interface">Automation
+						interface</label>
+					<div class="col-md-4">
+						<input id="automation.interface" name="automation.interface"
+							type="text" placeholder="example: chrome,firefox,ie"
+							class="form-control input-md">
+						<p id="automation.interface.desc" class="help-block"></p>
+						<input  hidden="" id="automation.interface.desc.hidden" name="automation.interface.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="browser.firefox.binary">Firefox
+						binary path</label>
+					<div class="col-md-4">
+						<input id="browser.firefox.binary" name="browser.firefox.binary"
+							type="text" placeholder="example: /usr/bin/firefox"
+							class="form-control input-md">
+						<p id="browser.firefox.binary.desc" class="help-block"></p>
+						<input  hidden="" id="browser.firefox.binary.desc.hidden" name="browser.firefox.binary.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="browser.firefox.profile">Firefox
+						Browser profile</label>
+					<div class="col-md-4">
+						<input id="browser.firefox.profile" name="browser.firefox.profile"
+							type="text" placeholder="example: default"
+							class="form-control input-md">
+						<p id="browser.firefox.profile.desc" class="help-block"></p>
+						<input  hidden="" id="browser.firefox.profile.desc.hidden" name="browser.firefox.profile.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label"
+						for="browser.chrome.driver.path">Chrome driver path</label>
+					<div class="col-md-4">
+						<input id="browser.chrome.driver.path"
+							name="browser.chrome.driver.path" type="text"
+							placeholder="example: usr/bin/chromedriver-mac32"
+							class="form-control input-md">
+						<p id="browser.chrome.driver.path.desc" class="help-block"></p>
+						<input  hidden="" id="browser.chrome.driver.path.desc.hidden" name="browser.chrome.driver.path.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label"
+						for="browser.chrome.driver.log.path">Chrome driver log
+						path</label>
+					<div class="col-md-4">
+						<input id="browser.chrome.driver.log.path"
+							name="browser.chrome.driver.log.path" type="text"
+							placeholder="example: /usr/chrome/chromedriver.log"
+							class="form-control input-md">
+						<p id="browser.chrome.driver.log.path.desc" class="help-block"></p>
+						<input  hidden="" id="browser.chrome.driver.log.path.desc.hidden" name="browser.chrome.driver.log.path.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="browser.ie.driver.path">IE
+						Browser path</label>
+					<div class="col-md-4">
+						<input id="browser.ie.driver.path" name="browser.ie.driver.path"
+							type="text" placeholder="example: IEDriverServer-64.exe"
+							class="form-control input-md">
+						<p id="browser.ie.driver.path.desc" class="help-block"></p>
+						<input  hidden="" id="browser.ie.driver.path.desc.hidden" name="browser.ie.driver.path.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="perf.page.load.timeout">Page
+						load timeout</label>
+					<div class="col-md-4">
+						<input id="perf.page.load.timeout" name="perf.page.load.timeout"
+							type="text" placeholder="example: 2"
+							class="form-control input-md">
+						<p id="perf.page.load.timeout.desc" class="help-block"></p>
+						<input  hidden="" id="perf.page.load.timeout.desc.hidden" name="perf.page.load.timeout.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label"
+						for="perf.implicit.wait.seconds">General implicit wait
+						(seconds)</label>
+					<div class="col-md-4">
+						<input id="perf.implicit.wait.seconds"
+							name="perf.implicit.wait.seconds" type="text"
+							placeholder="example: 20" class="form-control input-md">
+						<p id="perf.implicit.wait.seconds.desc" class="help-block"></p>
+						<input  hidden="" id="perf.implicit.wait.seconds.desc.hidden" name="perf.implicit.wait.seconds.desc.hidden"></input>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="video.format">Test
+						Recorder Video Format</label>
+					<div class="col-md-4">
+						<input id="video.format" name="video.format" type="text"
+							placeholder="example: video/quicktime"
+							class="form-control input-md">
+						<p id="video.format.desc" class="help-block"></p>
+						<input  hidden="" id="video.format.desc.hidden" name="video.format.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="video.format.frameRate">Video
+						Recording Framerate</label>
+					<div class="col-md-4">
+						<input id="video.format.frameRate" name="video.format.frameRate"
+							type="text" placeholder="example: 15"
+							class="form-control input-md">
+						<p id="video.format.frameRate.desc" class="help-block"></p>
+						<input  hidden="" id="video.format.frameRate.desc.hidden" name="video.format.frameRate.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="video.directory">Recording
+						output folder</label>
+					<div class="col-md-4">
+						<input id="video.directory" name="video.directory" type="text"
+							placeholder="example: ./target/candybean-reports/recordings"
+							class="form-control input-md">
+						<p id="video.directory.desc" class="help-block"></p>
+						<input  hidden="" id="video.directory.desc.hidden" name="video.directory.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="video.encoding">Video
+						encoding</label>
+					<div class="col-md-4">
+						<input id="video.encoding" name="video.encoding" type="text"
+							placeholder="example: png" class="form-control input-md">
+						<p id="video.encoding.desc" class="help-block"></p>
+						<input  hidden="" id="video.encoding.desc.hidden" name="video.encoding.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="video.compression">Video
+						Compression</label>
+					<div class="col-md-4">
+						<input id="video.compression" name="video.compression" type="text"
+							placeholder="example: PNG" class="form-control input-md">
+						<p id="video.compression.desc" class="help-block"></p>
+						<input  hidden="" id="video.compression.desc.hidden" name="video.compression.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="maxFileSize">Max
+						Recording Size (KB)</label>
+					<div class="col-md-4">
+						<input id="maxFileSize" name="maxFileSize" type="text"
+							placeholder="example: 512000" class="form-control input-md">
+						<p id="maxFileSize.desc" class="help-block"></p>
+						<input  hidden="" id="maxFileSize.desc.hidden" name="maxFileSize.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="maxRecordingTime">Max
+						Recording Time (ms)</label>
+					<div class="col-md-4">
+						<input id="maxRecordingTime" name="maxRecordingTime" type="text"
+							placeholder="example: 120000" class="form-control input-md">
+						<p id="maxRecordingTime.desc" class="help-block"></p>
+						<input  hidden="" id="maxRecordingTime.desc.hidden" name="maxRecordingTime.desc.hidden"></input>
+					</div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="testResultsXMLPath">Test
+						Results XML Path</label>
+					<div class="col-md-4">
+						<input id="testResultsXMLPath" name="testResultsXMLPath"
+							type="text"
+							placeholder="example: ./target/candybean-reports/results/failedTestResults.xml"
+							class="form-control input-md">
+						<p id="testResultsXMLPath.desc" class="help-block"></p>
+						<input  hidden="" id="testResultsXMLPath.desc.hidden" name="testResultsXMLPath.desc.hidden"></input>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="testResultsReportPath">Test
+						Results Report Path</label>
+					<div class="col-md-4">
+						<input id="testResultsReportPath" name="testResultsReportPath"
+							type="text"
+							placeholder="example: ./target/candybean-reports/reports/CandybeanTestResults.html"
+							class="form-control input-md">
+						<p id="testResultsReportPath.desc" class="help-block"></p>
+						<input  hidden="" id="testResultsReportPath.desc.hidden" name="testResultsReportPath.desc.hidden"></input>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="testResultsReport.title">Test Results Report Title</label>
+					<div class="col-md-4">
+						<input id="testResultsReport.title" name="testResultsReport.title"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="testResultsReport.title.desc" class="help-block"></p>
+						<input  hidden="" id="testResultsReport.title.desc.hidden" name="testResultsReport.title.desc.hidden"></input>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="testResultsReport.testsPerPage">Test Results Per Page</label>
+					<div class="col-md-4">
+						<input id="testResultsReport.testsPerPage" name="testResultsReport.testsPerPage"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="testResultsReport.testsPerPage.desc" class="help-block"></p>
+						<input  hidden="" id="testResultsReport.testsPerPage.desc.hidden" name="testResultsReport.testsPerPage.desc.hidden"></input>
+					</div>
+				</div>				
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="surefireResultsDirectory">Surefire Results Directory</label>
+					<div class="col-md-4">
+						<input id="surefireResultsDirectory" name="surefireResultsDirectory"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="surefireResultsDirectory.desc" class="help-block"></p>
+						<input  hidden="" id="surefireResultsDirectory.desc.hidden" name="surefireResultsDirectory.desc.hidden"></input>
+					</div>
+				</div>								
+				
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="appium.automate">Automate Appium</label>
+					<div class="col-md-4">
+						<label class="btn btn-default **active**"> <input
+							id="appium.automate" name="appium.automate"
+							value="true" type="radio"> Yes
+						</label> 
+						<label class="btn btn-default **active**"> <input
+							id="appium.automate" name="appium.automate"
+							value="false" type="radio"> No
+						</label>
+						<p id="appium.automate.desc" class="help-block"></p>
+						<input  hidden="" id="appium.automate.desc.hidden" name="appium.automate.desc.hidden"></input>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="appium.path">Appium Path</label>
+					<div class="col-md-4">
+						<input id="appium.path" name="appium.path"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="appium.path.desc" class="help-block"></p>
+						<input  hidden="" id="appium.path.desc.hidden" name="appium.path.desc.hidden"></input>
+					</div>
+				</div>		
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="android.home">Android Home</label>
+					<div class="col-md-4">
+						<input id="android.home" name="android.home"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="android.home.desc" class="help-block"></p>
+						<input  hidden="" id="android.home.desc.hidden" name="android.home.desc.hidden"></input>
+					</div>
+				</div>	
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="android.platform.tools">Android Platform Tools Path</label>
+					<div class="col-md-4">
+						<input id="android.platform.tools" name="android.platform.tools"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="android.platform.tools.desc" class="help-block"></p>
+						<input  hidden="" id="android.platform.tools.desc.hidden" name="android.platform.tools.desc.hidden"></input>
+					</div>
+				</div>		
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="android.tools">Android Tools Path</label>
+					<div class="col-md-4">
+						<input id="android.tools" name="android.tools"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="android.tools.desc" class="help-block"></p>
+						<input  hidden="" id="android.tools.desc.hidden" name="android.tools.desc.hidden"></input>
+					</div>
+				</div>			
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="android.build.tools">Android Build Tools Path</label>
+					<div class="col-md-4">
+						<input id="android.build.tools" name="android.build.tools"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="android.build.tools.desc" class="help-block"></p>
+						<input  hidden="" id="android.build.tools.desc.hidden" name="android.build.tools.desc.hidden"></input>
+					</div>
+				</div>			
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="appium.ip">Appium IP</label>
+					<div class="col-md-4">
+						<input id="appium.ip" name="appium.ip"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="appium.ip.desc" class="help-block"></p>
+						<input  hidden="" id="appium.ip.desc.hidden" name="appium.ip.desc.hidden"></input>
+					</div>
+				</div>		
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="appium.port">Appium Port</label>
+					<div class="col-md-4">
+						<input id="appium.port" name="appium.port"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="appium.port.desc" class="help-block"></p>
+						<input  hidden="" id="appium.port.desc.hidden" name="appium.port.desc.hidden"></input>
+					</div>
+				</div>				
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="avd.emulator.name">AVD Emulator Name</label>
+					<div class="col-md-4">
+						<input id="avd.emulator.name" name="avd.emulator.name"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="avd.emulator.name.desc" class="help-block"></p>
+						<input  hidden="" id="avd.emulator.name.desc.hidden" name="avd.emulator.name.desc.hidden"></input>
+					</div>
+				</div>		
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="avd.emulator.path">AVD Emulator Path</label>
+					<div class="col-md-4">
+						<input id="avd.emulator.path" name="avd.emulator.path"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="avd.emulator.path.desc" class="help-block"></p>
+						<input  hidden="" id="avd.emulator.path.desc.hidden" name="avd.emulator.path.desc.hidden"></input>
+					</div>
+				</div>																						
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="avd.device.timeout">AVD Device Timeout</label>
+					<div class="col-md-4">
+						<input id="avd.device.timeout" name="avd.device.timeout"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="avd.device.timeout.desc" class="help-block"></p>
+						<input  hidden="" id="avd.device.timeout.desc.hidden" name="avd.device.timeout.desc.hidden"></input>
+					</div>
+				</div>		
+				
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="saucelabs.enabled">SauceLabs Enabled</label>
+					<div class="col-md-4">
+						<label class="btn btn-default **active**"> <input
+							id="saucelabs.enabled" name="saucelabs.enabled"
+							value="true" type="radio"> Yes
+						</label> 
+						<label class="btn btn-default **active**"> <input
+							id="saucelabs.enabled" name="saucelabs.enabled"
+							value="false" type="radio"> No
+						</label>
+						<p id="saucelabs.enabled.desc" class="help-block"></p>
+						<input  hidden="" id="saucelabs.enabled.desc.hidden" name="saucelabs.enabled.desc.hidden"></input>
+					</div>
+				</div>			
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="parallel.enabled">SauceLabs in Parallel?</label>
+					<div class="col-md-4">
+						<label class="btn btn-default **active**"> <input
+							id="parallel.enabled" name="parallel.enabled"
+							value="true" type="radio"> Yes
+						</label> 
+						<label class="btn btn-default **active**"> <input
+							id="parallel.enabled" name="parallel.enabled"
+							value="false" type="radio"> No
+						</label>
+						<p id="parallel.enabled.desc" class="help-block"></p>
+						<input  hidden="" id="parallel.enabled.desc.hidden" name="parallel.enabled.desc.hidden"></input>
+					</div>
+				</div>		
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="parallel.threads">SauceLabs Max Threads</label>
+					<div class="col-md-4">
+						<input id="parallel.threads" name="parallel.threads"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="parallel.threads.desc" class="help-block"></p>
+						<input  hidden="" id="parallel.threads.desc.hidden" name="parallel.threads.desc.hidden"></input>
+					</div>
+				</div>			
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="saucelabs.username">SauceLabs Username</label>
+					<div class="col-md-4">
+						<input id="saucelabs.username" name="saucelabs.username"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="saucelabs.username.desc" class="help-block"></p>
+						<input  hidden="" id="saucelabs.username.desc.hidden" name="saucelabs.username.desc.hidden"></input>
+					</div>
+				</div>		
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="saucelabs.accessKey">SauceLabs Access Key</label>
+					<div class="col-md-4">
+						<input id="saucelabs.accessKey" name="saucelabs.accessKey"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="saucelabs.accessKey.desc" class="help-block"></p>
+						<input  hidden="" id="saucelabs.accessKey.desc.hidden" name="saucelabs.accessKey.desc.hidden"></input>
+					</div>
+				</div>	
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="saucelabs.platform">SauceLabs Platform</label>
+					<div class="col-md-4">
+						<input id="saucelabs.platform" name="saucelabs.platform"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="saucelabs.platform.desc" class="help-block"></p>
+						<input  hidden="" id="saucelabs.platform.desc.hidden" name="saucelabs.platform.desc.hidden"></input>
+					</div>
+				</div>			
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="saucelabs.browser">SauceLabs Browser Type</label>
+					<div class="col-md-4">
+						<input id="saucelabs.browser" name="saucelabs.browser"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="saucelabs.browser.desc" class="help-block"></p>
+						<input  hidden="" id="saucelabs.browser.desc.hidden" name="saucelabs.browser.desc.hidden"></input>
+					</div>
+				</div>						
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="saucelabs.version">SauceLabs Browser Version</label>
+					<div class="col-md-4">
+						<input id="saucelabs.version" name="saucelabs.version"
+							type="text"
+							placeholder=""
+							class="form-control input-md">
+						<p id="saucelabs.version.desc" class="help-block"></p>
+						<input  hidden="" id="saucelabs.version.desc.hidden" name="saucelabs.version.desc.hidden"></input>
+					</div>
+				</div>															
+				
+				
+				<input  hidden="" id="configuration.header" name="configuration.header"></input>											
+				
+				<button style="width:200px !important;" type="submit" class="btn-center btn btn-default">Submit</button>
+
+			</fieldset>
+		</form>
+	</div>
+	<!-- /.tabbable -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script
+		src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="../../resources/javascript/configure.js"></script>
+</body>
+</html>

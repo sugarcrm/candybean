@@ -76,9 +76,9 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<build>
-	    <pluginManagement>
-	        <plugins>
-	            <plugin>
+		<pluginManagement>
+			<plugins>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
@@ -87,16 +87,16 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
-	            <plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.15</version>
 				</plugin>
-	        </plugins>
-	    </pluginManagement>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
-	    <dependency>
+		<dependency>
 			<groupId>org.monte</groupId>
 			<artifactId>cc</artifactId>
 			<version>0.7.7</version>
@@ -153,8 +153,41 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>7.1.6.v20100715</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>7.1.6.v20100715</version>
+		</dependency>
 	</dependencies>
 	<profiles>
+		<profile>
+			<id>configure</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.1.1</version>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<configuration>
+									<mainClass>com.sugarcrm.candybean.server.configuration.ConfigurationServerDriver</mainClass>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>unit</id>
 			<activation>
@@ -219,7 +252,7 @@
 		<profile>
 			<id>sugar</id>
 			<build>
-			    <pluginManagement>
+				<pluginManagement>
 					<plugins>
 						<plugin>
 							<groupId>org.eclipse.m2e</groupId>
