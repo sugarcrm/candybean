@@ -188,8 +188,7 @@ public class AutomationInterfaceBuilder {
 					capabilities.setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
 					capabilities.setCapability("app-package", candybean.config.getValue(testClassName + ".app-package"));
 					capabilities.setCapability("app-activity", candybean.config.getValue(testClassName + ".app-activity"));
-					//sauceInterface.getCapabilities().setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
-					sauceInterface.getCapabilities().setCapability("app", "sauce-storage:evernote.zip");
+					sauceInterface.getCapabilities().setCapability("app", new File(candybean.config.getValue(testClassName + ".app")).getAbsolutePath());
 					sauceInterface.getCapabilities().setCapability("app-package", candybean.config.getValue(testClassName + ".app-package"));
 					sauceInterface.getCapabilities().setCapability("app-activity", candybean.config.getValue(testClassName + ".app-activity"));
 					iface = new AndroidInterface(capabilities);
