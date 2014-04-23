@@ -200,19 +200,19 @@ public class VRunner extends BlockJUnit4ClassRunner {
 	 * Adds a {@link TestRecorder} listener to the JUnit {@link RunNotifier} which
 	 * listens to a failing state of a test annotated with {@link Record}. 
 	 */
-    @Override
-    public void run(final RunNotifier notifier) {
-    	try {
-			notifier.addFirstListener(TestRecorder.getInstance());
-		} catch (SecurityException e) {
-			logger.info("Unable to instantiate test recorder");
-		} catch (IOException e) {
-			logger.info("Unable to instantiate test recorder");
-		} catch (JAXBException e) {
-			logger.info("Unable to instantiate test recorder");
-		}
-    	super.run(notifier);
-    }
+//    @Override
+//    public void run(final RunNotifier notifier) {
+//    	try {
+//			notifier.addFirstListener(TestRecorder.getInstance());
+//		} catch (SecurityException e) {
+//			logger.info("Unable to instantiate test recorder");
+//		} catch (IOException e) {
+//			logger.info("Unable to instantiate test recorder");
+//		} catch (JAXBException e) {
+//			logger.info("Unable to instantiate test recorder");
+//		}
+//    	super.run(notifier);
+//    }
     
     private static class NonBlockingAsynchronousRunner implements RunnerScheduler {
         private final List<Future<Object>> futures = Collections.synchronizedList(new ArrayList<Future<Object>>());

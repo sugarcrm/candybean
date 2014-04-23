@@ -76,9 +76,9 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<build>
-	    <pluginManagement>
-	        <plugins>
-	            <plugin>
+		<pluginManagement>
+			<plugins>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
@@ -87,16 +87,29 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
-	            <plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>2.16</version>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.15</version>
+					<version>2.17</version>
+					<configuration>
+						<properties>
+							<property>
+								<name>listener</name>
+								<value>com.sugarcrm.candybean.utilities.reporting.ReportListener,com.sugarcrm.candybean.runner.RecordingListener</value>
+							</property>
+						</properties>
+					</configuration>
 				</plugin>
-	        </plugins>
-	    </pluginManagement>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
-	    <dependency>
+		<dependency>
 			<groupId>org.monte</groupId>
 			<artifactId>cc</artifactId>
 			<version>0.7.7</version>
@@ -147,6 +160,11 @@
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
 			<version>2.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.8</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -219,7 +237,7 @@
 		<profile>
 			<id>sugar</id>
 			<build>
-			    <pluginManagement>
+				<pluginManagement>
 					<plugins>
 						<plugin>
 							<groupId>org.eclipse.m2e</groupId>

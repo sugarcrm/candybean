@@ -26,6 +26,10 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -246,5 +250,39 @@ public class Utils {
 		public String toString() {
 			return "x:" + this.x.toString() + ",y:" + this.y.toString() + ",z:" + this.z.toString();
 		}
+	}
+	
+	/**
+	 * Reads the contents of a file
+	 * @param path Path to file
+	 * @param encoding Encoding of the file
+	 * @return The contents of the file
+	 * @throws IOException
+	 */
+	public static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+	}
+	
+	/**
+	 * Creates a file at the given path
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	public static File createFile(String path, boolean replace) throws IOException{
+		File f = new File(path);
+		if (!f.getParentFile().exists()) {
+			f.getParentFile().mkdirs();
+		}
+		if (f.exists()) {
+			if (replace) {
+				f.delete();
+				f.createNewFile();
+			}
+		} else {
+			f.createNewFile();
+		}
+		return f;
 	}
 }
