@@ -79,7 +79,7 @@ public final class Candybean {
 	private Candybean(Configuration config) throws CandybeanException {
 		try {
 			this.config = config;
-			logger = this.getLogger();
+			logger = this.createLogger();
 			LogManager.getLogManager().addLogger(logger);
 			logger.config("Instantiating Candybean with config: " + config.toString());
 		} catch (Exception e) {
@@ -171,8 +171,11 @@ public final class Candybean {
 	 * @throws Exception
 	 */
 	public static Candybean getInstance() throws CandybeanException {
-		Configuration config = Candybean.getDefaultConfiguration();
-		return Candybean.getInstance(config);
+		if (Candybean.instance == null) {
+			Configuration config = Candybean.getDefaultConfiguration();
+			Candybean.instance = new Candybean(config); 
+		}
+		return Candybean.instance;
 	}
 	
 	/**
@@ -195,7 +198,7 @@ public final class Candybean {
 		}
 	}
 
-	private CandybeanLogger getLogger() throws Exception {
+	private CandybeanLogger createLogger() throws Exception {
 		// Add a system property so that LogManager loads the specified logging configuration file before getting logger.
 		System.setProperty("java.util.logging.config.file", this.config.configFile.getCanonicalPath());
 		// Gets the logger based the configuration file specified at 'java.util.logging.config.file'
@@ -204,5 +207,11 @@ public final class Candybean {
 		return new CandybeanLogger(this.getClass().getSimpleName());
 	}
 
+	/**
+	 * @return Candybean logger
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
 
 }
