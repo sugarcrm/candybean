@@ -69,7 +69,7 @@ public final class Candybean {
 	/**
 	 * {@link Logger} object for use by Candybean.
 	 */
-	private final Logger logger;
+	public final Logger logger;
 
 	/**
 	 * Instantiates a Candybean object.
