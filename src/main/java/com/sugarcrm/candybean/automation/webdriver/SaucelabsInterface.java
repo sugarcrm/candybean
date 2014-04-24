@@ -32,7 +32,6 @@ public class SaucelabsInterface extends WebDriverInterface {
 	@Override
 	public void stop() throws CandybeanException {
 		logger.info("Stopping automation interface with type: " + super.iType);
-		super.wd.close();
 		super.stop();
 	}
 
