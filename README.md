@@ -19,21 +19,32 @@ See our [wiki](https://github.com/sugarcrm/candybean/wiki/Candybean), [FAQ](http
 <a name="features"></a>
 Features
 --------
-Here is an unordered list of planned project features Candybean:
-* Automation interface abstraction: the project is extensible across underlying automation libraries like Selenium and AutoIt
-* HTML5 support: supports the latest elements & attributes and provides additional automation functionality for common elements
-* Java-based testing: allows testers to write tests in Java and have the support of an IDE and easily-learned, ubiquitous language
-* Mobile support: tests can be queued to run on both iOS and Android devices
-* Customizable results/reporting: test results are parsed to output custom HTML with video
-* Data-driven: test input is extensible to support a variety of formats (e.g. DB, XML, JSON)
-* Script-style logging: makes debugging easier and fully configurable
-* Tag-based execution: provides another grouping mechanism for batching & executing tests
-* Parallel support: several options for supporting a batch of tests across available resources & platforms
-* Fully configurable: a single configuration runs Candybean and changes environment values based on exection platform 
-* Randomized testing: supports randomized/stress testing via a page object modeling-style convention 
-* JavaDoc & API documentation: includes usage details, examples, and best practices
-* Easy to install: as Maven dependency, forked source, JAR, or GUI installer
-* Unit and system tested
+Some project features planned for Candybean:
+* HTML 5 support (Sugar 7): supports HTML 5 elements
+* Support Java-based tests/calls: executes Java-based test scripts
+* Abstraction from dependent technologies:
+    * Supports multiple, independent reporting options (e.g. XML, HTML)
+    * Supports multiple automation frameworks (de-prioritized)
+    * Data-driven resource agnostic (e.g. DB, XML, JSON)
+* Independent from project-specific parameters:
+    * Supports product objectification, thus platform-independent
+    * Product independent (no Sugar-specific references)
+* Self-testing:
+    * Verify element hooks are valid before running tests
+    * Verify abstract element behavior (fields, menus, etc.)
+    * Unit and system tested
+* Script-style logging: make debugging readable, easier
+* Failure/error non-blocking: option to continue executing tests upon error/failure
+* Resource consolidating: pre-execution resource scan for consolidated allocation
+* Supports 'smart' waits (WIP definition)
+* Configurable with ease/overridable via CLI
+* Randomized testing: Supports randomized/stress testing
+* Open-source:
+    * JavaDoc/API with usage details, examples, best practices
+    * Externally-facing site/wiki with installation documentation
+    * Code samples
+* Best practice, OOP-organized code for ease of maintenance
+* Easy to install (GUI installer or minimal configuration)
 
 Components
 ----------
