@@ -52,7 +52,7 @@ public class SugarTest {
 		sugar.start();
 	}
 
-//	@Ignore
+	@Ignore
 	@Test
 	public void sugarLoginLogoutTest() throws Exception {
 		sugar.login();

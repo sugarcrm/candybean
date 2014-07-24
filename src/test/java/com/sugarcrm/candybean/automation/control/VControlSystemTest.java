@@ -71,8 +71,8 @@ public class VControlSystemTest {
 	public void getAttributeTest() throws Exception {
 		String w3Url = "http://sfbay.craigslist.org/";
 		iface.go(w3Url);
-		String actAltValue = iface.getControl(Strategy.ID, "container").getAttribute("summary");
-		String expAltValue = "page";
+		String actAltValue = iface.getControl(Strategy.ID, "query").getAttribute("placeholder");
+		String expAltValue = "search";
 		Assert.assertEquals(expAltValue, actAltValue);
 	}
 	
@@ -123,7 +123,7 @@ public class VControlSystemTest {
 		boolean actCaseSensPos = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", true); //true
 		boolean actCaseSensNeg = iface.getControl(Strategy.ID, "gc-footer").contains("google developers", true); //false
 		boolean actNeg = iface.getControl(Strategy.ID, "gc-footer").contains("goggle devs", false); //false
-		boolean negFalse = iface.getControl(Strategy.ID, "gc-topnav").contains("Google Developers", false); //false
+		boolean negFalse = iface.getControl(Strategy.ID, "gc-header").contains("Google Developers", false); //false
 		boolean negTrue = iface.getControl(Strategy.ID, "gc-footer").contains("Google Developers", false); //true
 		Assert.assertEquals(true, actCaseSensPos);
 		Assert.assertEquals(false, actCaseSensNeg);
@@ -253,7 +253,7 @@ public class VControlSystemTest {
 //		if (iface.getType().equals(Type.IE))
 //			hiddenInput = iface.getControl(Strategy.NAME, "site");
 //		else
-			hiddenInput = iface.getControl(Strategy.NAME, "areaID");
+			hiddenInput = iface.getControl(Strategy.CSS, "input[type='hidden']");
 		Assert.assertFalse(hiddenInput.isDisplayed());
 	}
 	

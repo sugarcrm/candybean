@@ -71,6 +71,13 @@ public class VSelect extends VControl {
         isMultiple = select.isMultiple();
 	}
 
+    protected VSelect(Candybean voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
+        super(voodoo, iface, hook, we);
+    }
+
+    /**
+     * @return  true if this instance represents a multi-select, false otherwise.
+     */
     public boolean isMultiple() {
         return isMultiple;
     }
