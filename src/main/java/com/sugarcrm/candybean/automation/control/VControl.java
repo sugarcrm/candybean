@@ -22,14 +22,10 @@
 package com.sugarcrm.candybean.automation.control;
 
 import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.sugarcrm.candybean.automation.VInterface;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.control.VHook.Strategy;
@@ -38,27 +34,59 @@ import com.sugarcrm.candybean.automation.control.VHook.Strategy;
  * @author cwarmbold
  */
 public class VControl {
-	
-	
 	protected final Candybean voodoo;
 	protected final VInterface iface;
 	protected final VHook hook;
 	protected int index;
+	/**
+	 * The Selenium WebElement representing this element.
+	 */
 	public WebElement we;
+	/**
+	 * An object allowing us to pause until a desired condition is met. 
+	 */
 	public Pause pause;
 	
+	/**
+	 * @param voodoo
+	 * @param iface
+	 * @param strategy
+	 * @param hook
+	 * @throws Exception
+	 */
 	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook) throws Exception {
 		this(voodoo, iface, new VHook(strategy, hook));
 	}
 	
+	/**
+	 * @param voodoo
+	 * @param iface
+	 * @param strategy
+	 * @param hook
+	 * @param index
+	 * @throws Exception
+	 */
 	public VControl(Candybean voodoo, VInterface iface, Strategy strategy, String hook, int index) throws Exception {
 		this(voodoo, iface, new VHook(strategy, hook), index);
 	}
 	
+	/**
+	 * @param voodoo
+	 * @param iface
+	 * @param hook
+	 * @throws Exception
+	 */
 	public VControl(Candybean voodoo, VInterface iface, VHook hook) throws Exception {
 		this(voodoo, iface, hook, 0);
 	}
 	
+	/**
+	 * @param voodoo
+	 * @param iface
+	 * @param hook
+	 * @param index
+	 * @throws Exception
+	 */
 	public VControl(Candybean voodoo, VInterface iface, VHook hook, int index) throws Exception {
 			this.voodoo = voodoo;
 			this.iface = iface;
@@ -70,7 +98,10 @@ public class VControl {
 			this.index = index;
 	}
 	
-	private VControl(Candybean voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
+	/**
+	 * Default-access constructor for use by VSelect.
+	 */
+	VControl(Candybean voodoo, VInterface iface, VHook hook, WebElement we) throws Exception {
 		this.voodoo = voodoo;
 		this.iface = iface;
 		this.hook = hook;
@@ -86,14 +117,18 @@ public class VControl {
 	 *							 cannot be found
 	 */
 	public String getAttribute(String attribute) throws Exception {
-		voodoo.log.info("Selenium: getting attribute: " + attribute	+ " for control: " + this.toString());
+		voodoo.log.info("CandyBean: getting attribute: " + attribute	+ " for control: " + this.toString());
 		String value = we.getAttribute(attribute);
-		if (value == null) throw new Exception("Selenium: attribute does not exist.");
+		if (value == null) throw new Exception("CandyBean: attribute does not exist.");
 		else return value;
 	}
 
+	/**
+	 * @return the HTML source for this element
+	 * @throws Exception
+	 */
 	public String getSource() throws Exception {
-		voodoo.log.info("Selenium: getting source for control: " + this.toString());
+		voodoo.log.info("CandyBean: getting source for control: " + this.toString());
 		return (String)((JavascriptExecutor)iface.wd).executeScript("return arguments[0].innerHTML;", this.we);
 	}
 
@@ -104,7 +139,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public String getText() throws Exception {
-		voodoo.log.info("Selenium: getting text for control: " + this.toString());
+		voodoo.log.info("CandyBean: getting text for control: " + this.toString());
 //		System.out.println("tagname: " + we.getTagName() + ", type attribute: " + we.getAttribute("type"));
 		String type = we.getAttribute("type");
 		if (type != null) {
@@ -114,14 +149,14 @@ public class VControl {
 		}
 		return we.getText();
 	}
-
+	
 	/**
 	 * Click the element.
 	 *
 	 * @throws Exception	 if the element can not be found
 	 */
 	public void click() throws Exception {
-		voodoo.log.info("Selenium: clicking on control: " + this.toString());
+		voodoo.log.info("Candybean: clicking on control: " + this.toString());
 		we.click();
 	}
 	
@@ -129,12 +164,9 @@ public class VControl {
 	 * Returns true if the control visibly contains the 
 	 * given string in any non-visible=false element.
 	 *
-	 * @param s					The target string searched 
-	 * for in the interface		
-	 * @param caseSensitive		Whether or not the search
-	 * is case sensitive		
-	 * @return		Returns true if the interface visibly 
-	 * contains the given string
+	 * @param  s   The target string searched for in the interface		
+	 * @param  caseSensitive   Whether or not the search is case sensitive		
+	 * @return true if this element visibly contains the given string
 	 * @throws Exception
 	 */
 	public boolean contains(String s, boolean caseSensitive) throws Exception {
@@ -157,7 +189,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void doubleClick() throws Exception {
-		voodoo.log.info("Selenium: double-clicking on control: " + this.toString());
+		voodoo.log.info("CandyBean: double-clicking on control: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.doubleClick(we).perform();
 	}
@@ -169,84 +201,107 @@ public class VControl {
 	 * @throws Exception	 if either element cannot be found
 	 */
 	public void dragNDrop(VControl dropControl)	throws Exception {
-		voodoo.log.info("Selenium: dragging control: " + this.toString() + " to control: " + dropControl.toString());
+		voodoo.log.info("CandyBean: dragging control: " + this.toString() + " to control: " + dropControl.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.dragAndDrop(this.we, dropControl.we).build().perform();
 	}
 
+	/**
+	 * @param hook
+	 * @return
+	 * @throws Exception
+	 */
 	public VControl getControl(VHook hook) throws Exception {
 		return this.getControl(hook, 0);
 	}
 
+    /**
+     * @param hook
+     * @param index
+     * @return
+     * @throws Exception
+     */
 	public VControl getControl(VHook hook, int index) throws Exception {
-		voodoo.log.info("Selenium: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
+		voodoo.log.info("CandyBean: getting control: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
 		WebElement childWe = this.we.findElements(VControl.makeBy(hook)).get(index);
 		return new VControl(this.voodoo, this.iface, hook, childWe);
 	}
 
+    /**
+     * @param hook
+     * @param index
+     * @return
+     * @throws Exception
+     */
+    public VSelect getSelect(VHook hook) throws Exception {
+        voodoo.log.info("CandyBean: getting select: " + hook.toString() + " from control: " + this.toString() + " with index: " + index);
+        WebElement childWe = this.we.findElement(VControl.makeBy(hook));
+        voodoo.log.info("Found select: " + childWe.toString());
+        return new VSelect(this.voodoo, this.iface, hook);
+    }
+
+	/**
+	 * @param strategy
+	 * @param hookString
+	 * @return
+	 * @throws Exception
+	 */
 	public VControl getControl(Strategy strategy, String hookString) throws Exception {
 		return this.getControl(strategy, hookString, 0);
 	}
 
+	/**
+	 * @param strategy
+	 * @param hookString
+	 * @param index
+	 * @return
+	 * @throws Exception
+	 */
 	public VControl getControl(Strategy strategy, String hookString, int index) throws Exception {
 		return this.getControl(new VHook(strategy, hookString), index);
 	}
 
-//	@Deprecated
-//	public void pause(String attribute, String value, int timeout) throws Exception {
-//		voodoo.log.info("Selenium: waiting for " + timeout + "ms for control: " + this.toString()
-//				+ " to have attribute: " + attribute + " to have value: " + value);
-//		final WebElement we = this.getWebElement(this.getBy(this.hook), 0);
-//		final String vAttribute = attribute;
-//		final String vValue = value;
-//		WebDriverWait wait = new WebDriverWait(this.iface.wd, timeout);
-//		wait.until(new Function<WebDriver, Boolean>() {
-//			public Boolean apply(WebDriver driver) {
-//				return we.getAttribute(vAttribute).contains(vValue);
-//			}
-//		});
-//	}
-	
 	/**
 	 * Hover over this control.
 	 *
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void hover() throws Exception {
-		voodoo.log.info("Selenium: hovering over control: " + this.toString());
+		voodoo.log.info("CandyBean: hovering over control: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.moveToElement(this.we).perform();
 	}
 	
 	/**
 	 * Returns true if and only if the control is displayed
-	 * {@link http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according to Selenium}
+	 * {@link "http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html"}
+	 * @return true if this element is visibly displayed on the page.
 	 *
 	 * @throws Exception
 	 */
 	public boolean isDisplayed() throws Exception {
-		voodoo.log.info("Selenium: determining if control is visible: " + this.toString());
+		voodoo.log.info("CandyBean: determining if element is visible: " + this.toString());
 		return we.isDisplayed();
 	}
 
 	/**
 	 * Right-click this control.
 	 *
-	 * @throws Exception	 if the element cannot be found
+	 * @throws Exception   if the element cannot be found
 	 */
 	public void rightClick() throws Exception {
-		voodoo.log.info("Selenium: right-clicking control: " + this.toString());
+		voodoo.log.info("CandyBean: right-clicking element: " + this.toString());
 		Actions action = new Actions(this.iface.wd);
 		action.contextClick(this.we).perform();
 	}
 
 	/**
-	 * Scroll the browser window to this control.
+	 * Scroll the browser window to this element.
 	 *
-	 * @throws Exception	 if the element cannot be found or if the scroll fails
+	 * @throws Exception   if the element cannot be found or if the scroll fails
 	 */
 	public void scroll() throws Exception {
-		voodoo.log.info("Selenium: scrolling to control: " + this.toString());
+		voodoo.log.info("CandyBean: scrolling to element: " + this.toString());
 		int y = this.we.getLocation().y;
 		((JavascriptExecutor) this.iface.wd).executeScript("window.scrollBy(0," + y + ");");
 	}
@@ -258,7 +313,7 @@ public class VControl {
 	 * @throws Exception	 if the element cannot be found
 	 */
 	public void sendString(String input) throws Exception {
-		voodoo.log.info("Selenium: sending string: " + input + " to control: " + this.toString());
+		voodoo.log.info("CandyBean: sending string: " + input + " to control: " + this.toString());
 		this.we.clear();
 		
 		// Re-find the element to avoid the stale element problem.
@@ -298,7 +353,7 @@ public class VControl {
 		case TAG:
 			return By.tagName(hook);
 		default:
-			throw new Exception("Selenium: strategy type not recognized.");
+			throw new Exception("CandyBean: strategy type not recognized.");
 		}
 	}
 }

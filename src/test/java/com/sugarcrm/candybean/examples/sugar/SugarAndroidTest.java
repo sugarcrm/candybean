@@ -102,7 +102,7 @@ public class SugarAndroidTest {
         driver.quit();
     }
 
-
+    @Ignore("Ignoring mobile tests for now.  Enable when mobile testing is desired.")
     @Test
     public void testLogin() throws Exception {
         WebElement username = driver.findElement(By.xpath("//window[1]/scrollview[1]/webview[1]/textfield[1]"));
