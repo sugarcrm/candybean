@@ -22,7 +22,9 @@
 package com.sugarcrm.candybean.automation;
 
 import static org.junit.Assert.*;
+
 import java.io.File;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -297,6 +299,16 @@ public class VInterfaceSystemTest {
 //		iface.interact(iface.getWindowsString());
 	}
 
+	@Test
+	public void executeJavaScriptTest() throws Exception {
+		String javascript = "alert('Alert!')";
+		assertFalse(iface.isDialogVisible());
+		iface.executeJavascript(javascript);
+		assertTrue(iface.isDialogVisible());
+		iface.acceptDialog();
+		assertFalse(iface.isDialogVisible());
+	}
+	
 	@Ignore
 	@Test
 	public void maximizeTest() {
