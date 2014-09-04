@@ -186,12 +186,38 @@ public class WebDriverElement extends Element {
 		action.dragAndDrop(this.we, dropControl.we).build().perform();
 	}
 
+	 /**
+	 * Get the select child of the given the hook of a parent element
+	 * 
+	 * @param hook
+	 * 				The hook of the parent element
+	 * @param index
+	 *				The index of where the child locates
+	 * @return Return a WebDriverSelector that is the child of the parent element
+	 * @throws CandybeanException
+	 */
+	public Element getSelect(Hook hook, int index) throws CandybeanException {
+		logger.info("Getting select: " + hook.toString() 
+				+ " from element: " + this.toString() + " with index: " + index);
+		WebElement childWe = this.we.findElements(WebDriverSelector.By(hook)).get(index);
+		return new WebDriverSelector(hook, index, this.wd, childWe); 
+	}
+
+	 /**
+	 * Get the element child of the given the hook of a parent element
+	 * 
+	 * @param hook
+	 *				The hook of the parent element
+	 * @param index
+	 *				The index of where the child locates
+	 * @return Return a WebDriverSelector that is the child of the parent element
+	 * @throws CandybeanException
+	 */
 	@Override
 	public Element getElement(Hook hook, int index) throws CandybeanException {
 		logger.info("Getting element: " + hook.toString()
 				+ " from element: " + this.toString() + " with index: " + index);
-		WebElement childWe = this.we.findElements(WebDriverElement.By(hook))
-				.get(index);
+		WebElement childWe = this.we.findElements(WebDriverElement.By(hook)).get(index);
 		return new WebDriverElement(hook, index, this.wd, childWe);
 	}
 
