@@ -71,7 +71,6 @@ public final class Candybean {
 	 */
 	public final Logger log;
 	
-
 	/**
 	 * Instantiates a Candybean object.
 	 * 
