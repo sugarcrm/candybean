@@ -49,8 +49,14 @@ public class WebDriverSelector extends WebDriverElement {
 	 */
 	public WebDriverSelector(Hook hook, WebDriver wd) throws CandybeanException {
 		super(hook, wd);
-        this.select = new Select(super.we);
-        this.isMultiSelector = select.isMultiple();
+		this.select = new Select(super.we);
+		this.isMultiSelector = select.isMultiple();
+	}
+	
+	public WebDriverSelector(Hook hook, int index, WebDriver wd, WebElement we) throws CandybeanException {
+		super(hook, index, wd, we);
+		this.select = new Select(we);
+		this.isMultiSelector = select.isMultiple();
 	}
 
     public boolean isMultiSelector() {
