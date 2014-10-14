@@ -318,6 +318,10 @@
 							<includes>
 								<include>**/*UnitTest.java</include>
 							</includes>
+							<excludes>
+								<exclude>**/*Android*</exclude>
+								<exclude>**/*Ios*</exclude>
+							</excludes>
 						</configuration>
 					</plugin>
 				</plugins>

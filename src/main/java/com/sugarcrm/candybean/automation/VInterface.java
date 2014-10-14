@@ -36,14 +36,13 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.interactions.HasTouchScreen;
 import org.openqa.selenium.interactions.TouchScreen;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -557,7 +556,16 @@ public class VInterface {
 		}
 	}
 	
-    /**
+	/**
+	 * Executes any Javascript command
+	 * @param javascript The Javascript code to execute
+	 */
+	public void executeJavascript(String javascript){
+		candybean.log.info("Executing explicit javascript:\n" + javascript);
+		((JavascriptExecutor)wd).executeScript(javascript);
+	}
+
+	/**
 	 * Encompasses a widget from the current page in order to perform
 	 * an action on it.  Providing this as a more aptly named alternative
 	 * to getControl as the 'thing' encompassed by this is not necessarily
