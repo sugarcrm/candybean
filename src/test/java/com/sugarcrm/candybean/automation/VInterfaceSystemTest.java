@@ -69,14 +69,19 @@ public class VInterfaceSystemTest {
 		iface.go(url3);
 		assertEquals(url3, iface.getURL());
 		iface.backward();
+		Thread.sleep(1000);
 		assertEquals(url2, iface.getURL());
 		iface.backward();
+		Thread.sleep(1000);
 		assertEquals(url1, iface.getURL());
 		iface.forward();
+		Thread.sleep(1000);
 		assertEquals(url2, iface.getURL());
 		iface.forward();
+		Thread.sleep(1000);
 		assertEquals(url3, iface.getURL());		
 		iface.refresh(); // refreshing only at end; mid-refreshes crash in Chrome
+		Thread.sleep(1000);
 		assertEquals(url3, iface.getURL());		
 	}
 	
@@ -222,8 +227,8 @@ public class VInterfaceSystemTest {
 	public void focusWindowTest() throws Exception {
 		String expWindow0Title = "HTML Examples";
 		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
-		String expWindow1Title = "Tryit Editor v2.0";
-		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro";
+		String expWindow1Title = "Tryit Editor v2.1";
+		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic_document";
 		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial";
 		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
 		String expWindow3Title = "Popup Window - HTML Code Tutorial";
@@ -235,7 +240,7 @@ public class VInterfaceSystemTest {
 		assertEquals(expWindow0Title, iface.wd.getTitle());
 		
 		// Click pops-up window titled "Tryit Editor v1.8"
-		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
+		iface.getControl(Strategy.PLINK, "HTML document").click();
 		
 		// Verify title without switching
 		assertEquals(expWindow0Title, iface.wd.getTitle());
@@ -251,7 +256,7 @@ public class VInterfaceSystemTest {
 //		iface.interact(iface.getWindowsString());
 		
 		// Click pop-up window titled "Tryit Editor v1.8"
-		iface.getControl(Strategy.PLINK, "A very simple HTML document").click();
+		iface.getControl(Strategy.PLINK, "HTML document").click();
 		
 		// Navigate elsewhere and trigger popup window
 //		iface.interact("window focus before go: " + iface.wd.getWindowHandle());
