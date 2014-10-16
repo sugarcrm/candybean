@@ -9,4 +9,5 @@ log/*.log
 src/test/resources/screenshot.png
 release.properties
 pom.xml.releaseBackup
+pom.release
 
