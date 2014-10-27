@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.sugarcrm.candybean.exceptions.CandybeanException;
+import org.openqa.selenium.By;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.MalformedHookException;
 import com.thoughtworks.selenium.SeleniumException;
@@ -95,6 +97,44 @@ public class Hook {
 		default:
 			throw new SeleniumException("Selenium: Strategy not recognized: " + strategy);
 		}
+	}
+
+	/**
+	 * A helper method to convert Hook to By
+	 * @param hook	The hook that specifies a web element
+	 * @return		The converted By
+	 * @throws CandybeanException
+	 */
+	public static By getBy(Hook hook) throws CandybeanException {
+		switch (hook.hookStrategy) {
+			case CSS:
+				return By.cssSelector(hook.hookString);
+			case XPATH:
+				return By.xpath(hook.hookString);
+			case ID:
+				return By.id(hook.hookString);
+			case NAME:
+				return By.name(hook.hookString);
+			case LINK:
+				return By.linkText(hook.hookString);
+			case PLINK:
+				return By.partialLinkText(hook.hookString);
+			case CLASS:
+				return By.className(hook.hookString);
+			case TAG:
+				return By.tagName(hook.hookString);
+			default:
+				throw new CandybeanException("Strategy type not recognized.");
+		}
+	}
+
+	/**
+	 * A helper method to convert Hook to By
+	 * @return		The converted By
+	 * @throws CandybeanException
+	 */
+	public By getBy() throws CandybeanException {
+		return this.getBy(this);
 	}
 	
 	public String toString() {

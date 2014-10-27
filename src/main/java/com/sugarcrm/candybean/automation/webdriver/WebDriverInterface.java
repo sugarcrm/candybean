@@ -85,6 +85,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	@Override
 	public void start() throws CandybeanException {
+		// Set implicit wait and timeout parameters
 		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds"));
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
 		if (System.getProperty("headless") == null
@@ -122,6 +123,16 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	public void interact(String message) {
 		logger.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
+	}
+
+	/**
+	 * Returns a WebDriverPause object for waiting on some condition
+	 * @return
+	 */
+	public WebDriverPause getPause() {
+		long timeoutS = Long.parseLong(candybean.config.getValue("perf.explicit.wait.seconds", "15"));
+		long timeoutMs = timeoutS * 1000;
+		return new WebDriverPause(wd, timeoutMs);
 	}
 	
 	/**
@@ -233,7 +244,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	public void focusFrame(int index) throws CandybeanException {
 		logger.info("Focusing to frame by index: " + index);
-		this.wd.switchTo().frame(index);
+		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(index));
 	}
 	
 	/**
@@ -243,7 +254,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	public void focusFrame(String nameOrId) throws CandybeanException {
 		logger.info("Focusing to frame by name or ID: " + nameOrId);
-		this.wd.switchTo().frame(nameOrId);
+		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(nameOrId));
 	}
 	
 	/**
@@ -253,7 +264,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	public void focusFrame(WebDriverElement wde) throws CandybeanException {
 		logger.info("Focusing to frame by element: " + wde.toString());
-		this.wd.switchTo().frame(wde.we);
+		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(wde));
 	}
 	
 	/**
@@ -423,7 +434,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	public List<WebDriverElement> getWebDriverElements(Hook hook) throws CandybeanException {
 		List<WebDriverElement> elements = new ArrayList<WebDriverElement>();
-		List<WebElement> wes = this.wd.findElements(WebDriverElement.By(hook.getHookStrategy(), hook.getHookString()));
+		List<WebElement> wes = this.wd.findElements(Hook.getBy(hook));
 		for (WebElement we : wes)
 			elements.add(new WebDriverElement(hook, 0, this.wd, we));
 		return elements;
