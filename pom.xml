@@ -4,7 +4,7 @@
 	<artifactId>candybean</artifactId>
 	<packaging>jar</packaging>
 	<name>candybean</name>
-	<version>1.1.4</version>
+	<version>1.1.5-SNAPSHOT</version>
 	<description>A highly configurable testing framework that seeks to automate across web and mobile while encapsulating common testing features.</description>
 	<url>http://sugarcrm.github.io/candybean/</url>
 	<licenses>
@@ -30,7 +30,7 @@
 		<connection>scm:git:https://github.com/sugarcrm/candybean.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/sugarcrm/candybean.git</developerConnection>
 		<url>https://github.com/sugarcrm/candybean</url>
-	  <tag>candybean-1.1.4</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<developers>
 		<developer>
