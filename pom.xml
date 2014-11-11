@@ -28,7 +28,7 @@
   	</parent>
 	<scm>
 		<connection>scm:git:https://github.com/sugarcrm/candybean.git</connection>
-		<developerConnection>scm:git:https://github.com/sugarcrm/candybean.git</developerConnection>
+		<developerConnection>scm:git:ssh://git@github.com/sugarcrm/candybean.git</developerConnection>
 		<url>https://github.com/sugarcrm/candybean</url>
 	</scm>
 	<developers>
@@ -74,6 +74,16 @@
 			<url>http://bits.netbeans.org/netbeans/trunk/maven-snapshot/</url>
 		</pluginRepository>
 	</pluginRepositories>
+	<distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	  <repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  </repository>
+	</distributionManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -180,6 +190,17 @@
 						<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					</configuration>
 				</plugin>
+				<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-release-plugin</artifactId>
+				  <version>2.5</version>
+				  <configuration>
+				    <autoVersionSubmodules>true</autoVersionSubmodules>
+				    <useReleaseProfile>false</useReleaseProfile>
+				    <releaseProfiles>release</releaseProfiles>
+				    <goals>deploy</goals>
+				  </configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -221,6 +242,17 @@
 						<goal>copy-dependencies</goal> </goals> <configuration> <outputDirectory> 
 						${project.build.directory}/lib </outputDirectory> </configuration> </execution -->
 				</executions>
+			</plugin>
+			<plugin>
+			  <groupId>org.sonatype.plugins</groupId>
+			  <artifactId>nexus-staging-maven-plugin</artifactId>
+			  <version>1.6.2</version>
+			  <extensions>true</extensions>
+			  <configuration>
+			     <serverId>ossrh</serverId>
+			     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+			     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+			  </configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -318,10 +350,6 @@
 							<includes>
 								<include>**/*UnitTest.java</include>
 							</includes>
-							<excludes>
-								<exclude>**/*Android*</exclude>
-								<exclude>**/*Ios*</exclude>
-							</excludes>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -355,6 +383,70 @@
 								<include>**/*Sugar*.java</include>
 							</includes>
 						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	    <profile>
+	      <id>ossrh</id>
+	      <activation>
+	        <activeByDefault>true</activeByDefault>
+	      </activation>
+	      <properties>
+	        <gpg.executable>gpg</gpg.executable>
+	      </properties>
+	    </profile>
+		<profile> 
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<configuration>
+							<show>public</show>
+							<nohelp>true</nohelp>
+					       	<header>candybean ${project.version}</header>
+					       	<footer>candybean ${project.version}</footer>
+					       	<doctitle>candybean ${project.version}</doctitle>
+					       	<links>
+					        	<link>http://sugarcrm.github.io/candybean/</link>
+					       	</links>
+					   	</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
