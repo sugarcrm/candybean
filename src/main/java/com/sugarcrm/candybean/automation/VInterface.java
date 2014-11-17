@@ -560,9 +560,9 @@ public class VInterface {
 	 * Executes any Javascript command
 	 * @param javascript The Javascript code to execute
 	 */
-	public void executeJavascript(String javascript){
+	public void executeJavascript(String javascript, Object... args){
 		candybean.log.info("Executing explicit javascript:\n" + javascript);
-		((JavascriptExecutor)wd).executeScript(javascript);
+		((JavascriptExecutor)wd).executeScript(javascript, args);
 	}
 
 	/**
