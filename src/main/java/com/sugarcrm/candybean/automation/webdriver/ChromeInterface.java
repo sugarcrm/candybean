@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
+import org.openqa.selenium.support.ThreadGuard;
 
 public class ChromeInterface extends WebDriverInterface {
 
@@ -20,7 +21,13 @@ public class ChromeInterface extends WebDriverInterface {
 		String chromeDriverLogPath = candybean.config.getPathValue("browser.chrome.driver.log.path");
 		logger.info("chromeDriverLogPath: " + chromeDriverLogPath);
 		chromeOptions.addArguments("--log-path=" + chromeDriverLogPath);
+
 		String chromeDriverPath = candybean.config.getPathValue("browser.chrome.driver.path");
+		if("true".equals(candybean.config.getPathValue("parallel.enabled")) &&
+				Integer.parseInt(candybean.config.getPathValue("parallel.threads")) > 1) {
+			chromeDriverPath = chromeDriverPath.replaceAll("$", "_" + Thread.currentThread().getName());
+		}
+
 		logger.info("chromeDriverPath: " + chromeDriverPath);
 		if(StringUtils.isEmpty(chromeDriverPath) || !new File(chromeDriverPath).exists()){
 			String error = "Unable to find chrome browser driver from the specified location ("+chromeDriverPath+")  in the configuration file! \n"
@@ -33,7 +40,7 @@ public class ChromeInterface extends WebDriverInterface {
 			logger.info("Instantiating Chrome with:\n    log path:"
 					+ chromeDriverLogPath + "\n    driver path: "
 					+ chromeDriverPath);
-			super.wd = new ChromeDriver(chromeOptions);
+			super.wd = ThreadGuard.protect(new ChromeDriver(chromeOptions));
 			super.start(); // requires wd to be instantiated first
 		}
 	}
