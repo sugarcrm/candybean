@@ -228,67 +228,76 @@ public class WebDriverSystemTest {
 		assertEquals(expDefStr, actDefStr);
 	}
 
-//	@Ignore
 	@Test
 	public void focusWindowTest() throws Exception {
-		String expWindow0Title = "EchoEcho.Com Tools - Tools";
-		String expWindow0URL = "http://www.echoecho.com/toolpopupgenerator.htm";
-		String expWindow1Title = "Yahoo";
-		String expWindow1URL = "https://www.yahoo.com/";
-		String expWindow2Title = "Popup Windows : Example - JavaScript Tutorial - EchoEcho.Com - Beginners best choice!";
-		String expWindow2URL = "http://www.echoecho.com/jswindows03.htm";
-		String expWindow3Title = "Yahoo";
-		String expWindow3URL = "https://www.yahoo.com/";
-		
+		String expWindow0Title = "HTML Examples";
+		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
+		String expWindow1Title = "Tryit Editor v2.2";
+		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic_document";
+		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial";
+		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
+		String expWindow3Title = "Popup Window - HTML Code Tutorial";
+		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
+
 		iface.go(expWindow0URL);
-	
+
 		// Check assumptions
 		assertEquals(expWindow0Title, iface.wd.getTitle());
-		
-		// Click pops-up window titled "Tryit Editor v1.9"
-		iface.getWebDriverElement(Strategy.NAME, "B1").click();
-		
+
+		// Click pops-up window titled "Tryit Editor v1.8"
+		iface.getWebDriverElement(Strategy.PLINK, "HTML document").click();
+
 		// Verify title without switching
 		assertEquals(expWindow0Title, iface.wd.getTitle());
-		
+
 		// Verify title with switching
 		iface.focusWindow(1);
 		assertEquals(expWindow1Title, iface.wd.getTitle());
-		
-		// Verify title with switching
-		iface.focusWindow(0);
+//		iface.interact(iface.getWindowsString());
+
+		// Close window which should auto-focus to previous window; verify title
+		iface.closeWindow();
 		assertEquals(expWindow0Title, iface.wd.getTitle());
-		
+//		iface.interact(iface.getWindowsString());
+
+		// Click pop-up window titled "Tryit Editor v1.8"
+		iface.getWebDriverElement(Strategy.PLINK, "HTML document").click();
+
 		// Navigate elsewhere and trigger popup window
+//		iface.interact("window focus before go: " + iface.wd.getWindowHandle());
 		iface.go(expWindow2URL);
 //		iface.interact("window focus after go: " + iface.wd.getWindowHandle());
-		assertEquals(expWindow2Title, iface.wd.getTitle());
-		((WebDriverElement)iface.getWebDriverElement(Strategy.CLASS, "main").getElement(new Hook(Strategy.TAG, "a"), 0)).click();
+		iface.getWebDriverElement(Strategy.PLINK, "this link").click();
 //		iface.interact(iface.getWindowsString());
-				
+
+		// Verify title with (not) switching to current window by index
+		iface.focusWindow(0);
+		assertEquals(expWindow2Title, iface.wd.getTitle());
+//		iface.interact(iface.getWindowsString());
+
 		// Verify URL with switching to window by title
 		iface.focusWindow(expWindow1Title);
 		String actWindowURL = iface.getURL();
 		assertEquals(expWindow1URL, actWindowURL);
 //		iface.interact(iface.getWindowsString());
-		
+
 		// Verify URL with switching to window by URL
-		iface.focusWindow(2);
+		iface.focusWindow(expWindow3URL);
 		assertEquals(expWindow3Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
-		
+
 		// Close window and revert to previous window (1 index); verify URL
 		iface.closeWindow();
 		actWindowURL = iface.getURL();
 		assertEquals(expWindow1URL, actWindowURL);
 //		iface.interact(iface.getWindowsString());
-		
+
 		// Close window and revert to previous window (0 index); verify URL
 		iface.closeWindow();
 		actWindowURL = iface.getURL();
 		assertEquals(expWindow2URL, actWindowURL);
 //		iface.interact(iface.getWindowsString());
-		
+
 		// Verify error by switching to erroneous window titles & indices
 		thrown.expect(Exception.class);
 		thrown.expectMessage("The given focus window string matched no title or URL: garbage");
@@ -298,6 +307,30 @@ public class WebDriverSystemTest {
 		thrown.expectMessage("Given focus window index is out of bounds: 1 current size: 1");
 		iface.focusWindow(1);
 //		iface.interact(iface.getWindowsString());
+	}
+
+	@Test
+	public void executeJavaScriptTest() throws Exception {
+		// 0 arguments
+		String javascript = "alert('Alert!')";
+		iface.executeJavascript(javascript);
+		assertTrue(iface.wd.switchTo().alert().getText().contains("Alert!"));
+		iface.acceptDialog();
+
+		// 1 argument
+		javascript = "alert(arguments[0])";
+		String arg = "one";
+		iface.executeJavascript(javascript, arg);
+		assertTrue(iface.wd.switchTo().alert().getText().contains(arg));
+		iface.acceptDialog();
+
+		// multiple arguments
+		javascript = "alert(arguments[0] + ' and ' + arguments[1])";
+		String[] args = { "two", "three" };
+		iface.executeJavascript(javascript, args);
+		assertTrue(iface.wd.switchTo().alert().getText().contains(args[0]));
+		assertTrue(iface.wd.switchTo().alert().getText().contains(args[1]));
+		iface.acceptDialog();
 	}
 
 	@Ignore
