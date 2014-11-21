@@ -33,9 +33,7 @@ public class DataSource extends ArrayList<FieldSet> {
 	private DataSource data = null;
 	private String filename = "";
 
-	public DataSource() {
-		super();
-	}
+	public DataSource() {}
 	
 	public String getFilename() {
 		return this.filename;

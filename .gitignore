@@ -1,12 +1,25 @@
+# Eclipse
 .classpath
 .project
 .settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# logs
 target/
 log/*.log
 log/*.log*
 log/*.html
 log/*.xml
 log/*.mov
+
+# libs
 lib/*driver*
 lib/*Driver*
 lib/*.apk

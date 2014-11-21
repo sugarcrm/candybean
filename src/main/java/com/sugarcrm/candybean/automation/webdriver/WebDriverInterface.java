@@ -70,6 +70,7 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
 public abstract class WebDriverInterface extends AutomationInterface {
 	
 	public WebDriver wd = null;
+	private String baseUrl = "";
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 	
 	protected WebDriverInterface(Type iType) throws CandybeanException {
@@ -248,7 +249,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	/**
 	 * Switches focus to the IFrame identified by the given {@link Element}
 	 * 
-	 * @param element		The element representing a focus-targeted IFrame
+	 * @param wde		The element representing a focus-targeted IFrame
 	 */
 	public void focusFrame(WebDriverElement wde) throws CandybeanException {
 		logger.info("Focusing to frame by element: " + wde.toString());
@@ -416,7 +417,6 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	}
 	
 	/**
-	 * @param strategy The strategy used to search for the control
 	 * @param hook The associated hook for the strategy
 	 * @return The list of all controls that match the strategy and hook
 	 * @throws CandybeanException 
@@ -481,8 +481,8 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	
 	/**
 	 * Determines whether a timeout has occurred since the start time
-	 * @param startTime The start time in milliseconds
-	 * @param timeout The time in seconds for timeout
+	 * @param startTimeMs The start time in milliseconds
+	 * @param timeoutSec The time in seconds for timeout
 	 * @return
 	 */
 	private boolean waitForTimeout(long startTimeMs, long timeoutSec) {
@@ -525,8 +525,25 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			return false;
 		}
 	}
-	
-    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+
+	/**
+	 * This saves the base URL that might be needed for various purposes
+	 * (e.g. Query parameters to control application under test)
+	 * @param baseUrl
+	 */
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	/**
+	 * This returns the base URL
+	 * @return the base URL
+	 */
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
 		private RemoteTouchScreen touch;
 
 		public SwipeableWebDriver(URL remoteAddress,
