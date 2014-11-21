@@ -22,6 +22,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.apache.maven.plugins.surefire.report.ReportTestCase;
 import org.apache.maven.plugins.surefire.report.ReportTestSuite;
 import org.apache.maven.plugins.surefire.report.SurefireReportParser;
@@ -120,7 +121,7 @@ public class TestRecorder extends RunListener {
 
 	private static final String DATA_TABLE_INIT_TEMPLATE_PATH = "./resources/html/dataTableInitTemplate.html";
 
-	private TestRecorder() throws SecurityException, IOException, JAXBException {
+	private TestRecorder() throws SecurityException, IOException, JAXBException, CandybeanException {
 		super();
 		logger = Logger.getLogger(Candybean.class.getSimpleName());
 		this.context = JAXBContext.newInstance(FailedTests.class);
@@ -129,7 +130,7 @@ public class TestRecorder extends RunListener {
 		this.xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML), false);
 	}
 	
-	public static TestRecorder getInstance() throws SecurityException, IOException, JAXBException {
+	public static TestRecorder getInstance() throws SecurityException, IOException, JAXBException, CandybeanException {
 		if(testRecorder == null) {
 			testRecorder = new TestRecorder();
 		}
