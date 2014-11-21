@@ -5,17 +5,11 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+import com.sugarcrm.candybean.automation.webdriver.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.webdriver.AndroidInterface;
-import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
-import com.sugarcrm.candybean.automation.webdriver.InternetExplorerInterface;
-import com.sugarcrm.candybean.automation.webdriver.IosInterface;
-import com.sugarcrm.candybean.automation.webdriver.SaucelabsInterface;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverInterface;
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.CandybeanLogger;
@@ -157,6 +151,7 @@ public class AutomationInterfaceBuilder {
 		String testClassName = cls.getSimpleName();
 		// Required if we are using saucelabs.
 		SaucelabsInterface sauceInterface = new SaucelabsInterface(type);
+		GridInterface gridInterface = new GridInterface(type);
 		switch (type) {
 		case FIREFOX:
 			iface = new FirefoxInterface();
@@ -231,8 +226,19 @@ public class AutomationInterfaceBuilder {
 		default:
 			throw new CandybeanException("WebDriver automation interface type not recognized: " + type);
 		}
-		if (Boolean.parseBoolean(candybean.config.getValue("saucelabs.enabled"))) {
-			logger.info("Saucelabs was enabled by the user, using saucelabs to carry out the tests for the interface: "+ type);
+
+		boolean isSaucelabsEnabled = Boolean.parseBoolean(candybean.config.getValue("saucelabs.enabled"));
+		boolean isGridEnabled = Boolean.parseBoolean(candybean.config.getValue("grid.enabled"));
+
+		if(isGridEnabled && isSaucelabsEnabled) {
+			throw new CandybeanException("Saucelabs and Grid should not be enabled at the same time. Check your config"
+					+ " file again.");
+		} else if(isGridEnabled) {
+			logger.info("Grid was enabled by the user, using grid to carry out the tests for the interface: "+ type);
+			return gridInterface;
+		} else if (isSaucelabsEnabled) {
+			logger.info("Saucelabs was enabled by the user, using saucelabs to carry out the tests for the interface: "
+					+ type);
 			// Add any desired capabilities if we are running mobile tests on saucelabs.
 			return sauceInterface;
 		} else {
