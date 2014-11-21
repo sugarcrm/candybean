@@ -4,6 +4,7 @@ import com.sugarcrm.candybean.automation.AutomationInterface;
 import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.testUtilities.TestConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -23,10 +24,9 @@ public class GridSystemTest {
 
 	@Before
 	public void setUp() throws Exception {
-		String projectDir = System.getProperty("user.dir");
-		Configuration config = new Configuration(new File(projectDir + File.separator +
-				"src/test/resources/gridsystemtest.config"));
+		Configuration config = TestConfiguration.getTestConfiguration("systemtest.grid.config");
 		Candybean candybean = Candybean.getInstance(config);
+
 		AutomationInterfaceBuilder builder = candybean.getAIB(GridSystemTest.class);
 		builder.setType(AutomationInterface.Type.CHROME);
 		iface = builder.build();

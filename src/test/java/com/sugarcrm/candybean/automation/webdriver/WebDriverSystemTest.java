@@ -23,6 +23,9 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import static org.junit.Assert.*;
 import java.io.File;
+
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.testUtilities.TestConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -47,8 +50,9 @@ public class WebDriverSystemTest {
 	private WebDriverInterface iface;
 	
 	@Before
-	public void setUp() throws CandybeanException {
-		Candybean candybean = Candybean.getInstance();
+	public void setUp() throws Exception {
+		Configuration config = TestConfiguration.getTestConfiguration("systemtest.webdriver.config");
+		Candybean candybean = Candybean.getInstance(config);
 		AutomationInterfaceBuilder builder = candybean.getAIB(WebDriverSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();
