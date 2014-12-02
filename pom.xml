@@ -109,12 +109,16 @@
 	
 	<!-- The dependencies for CandyBean -->
 	<dependencies>
+		<!--
+			Monte is a plugin for capturing screenshots and videos. However it is a third-party jar. You
+			need to run the following before you run any tests
+			mvn install:install-file -Dfile=./lib/monte-cc.jar -DgroupId=org.monte -DartifactId=cc
+			-Dversion=0.7.7 -Dpackaging=jar
+		-->
 		<dependency>
 			<groupId>org.monte</groupId>
 			<artifactId>cc</artifactId>
 			<version>0.7.7</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/monte-cc.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>

@@ -87,10 +87,8 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	public void start() throws CandybeanException {
 		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds"));
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-		if (System.getProperty("headless") == null
-				&& !(iType != Type.IOS)
-				&& !(iType != Type.ANDROID)
-				&& !System.getProperty("os.name").contains("mac")) {
+		
+		if (System.getProperty("headless") == null && iType != Type.IOS && iType != Type.ANDROID) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 			this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
@@ -151,9 +149,9 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * Executes any javascript command
 	 * @param javascript The javascript code to execute
 	 */
-	public void executeJavascript(String javascript){
+	public void executeJavascript(String javascript, Object... args){
 		logger.info("Executing explicit javascript");
-		((JavascriptExecutor) this.wd).executeScript(javascript);
+		((JavascriptExecutor) this.wd).executeScript(javascript, args);
 	}
 	
 	/**
