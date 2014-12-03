@@ -203,6 +203,18 @@ public class WebDriverElement extends Element {
 		return new WebDriverSelector(hook, index, this.wd, childWe); 
 	}
 
+	/**
+	 * Get the select child of the given the hook of a parent element with an index of 0
+	 *
+	 * @param hook
+	 * 				The hook of the parent element
+	 * @return Return a WebDriverSelector that is the child of the parent element
+	 * @throws CandybeanException
+	 */
+	public Element getSelect(Hook hook) throws CandybeanException {
+		return this.getSelect(hook, 0);
+	}
+
 	 /**
 	 * Get the element child of the given the hook of a parent element
 	 * 
@@ -222,6 +234,17 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
+	 * Get the element child of the given the hook of a parent element with an index of 0
+	 *
+	 * @param hook The hook of the parent element
+	 * @return Return a WebDriverSelector that is the child of the parent element
+	 * @throws CandybeanException
+	 */
+	public Element getElement(Hook hook) throws CandybeanException {
+		return this.getElement(hook, 0);
+	}
+
+	/**
 	 * Hover over this element.
 	 */
 	public void hover() throws CandybeanException {
@@ -231,14 +254,23 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Returns true if and only if the element is displayed {@link http
-	 * ://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according
+	 * Returns true if and only if the element is displayed {@link
+	 * http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according
 	 * to Selenium}
 	 */
 	public boolean isDisplayed() throws CandybeanException {
-		logger.info("Determining if element is visible: "
-				+ this.toString());
+		logger.info("Determining if element is visible: " + this.toString());
 		return we.isDisplayed();
+	}
+
+	/**
+	 * Returns true if and only if the element is enabled
+	 * @return
+	 * @throws CandybeanException
+	 */
+	public boolean isEnabled() throws CandybeanException {
+		logger.info("Determining if element is enabled: " + this.toString());
+		return we.isEnabled();
 	}
 
 	/**
