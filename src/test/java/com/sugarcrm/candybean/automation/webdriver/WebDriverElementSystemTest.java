@@ -36,7 +36,6 @@ import org.junit.runner.RunWith;
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
-import com.sugarcrm.candybean.automation.webdriver.WebDriverElement;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
@@ -77,21 +76,19 @@ public class WebDriverElementSystemTest {
 	
 	@Test
 	public void getElementTest() throws Exception {
-		String expH2 = "san francisco";
+		String logoText = "craigslist";
 		iface.go("http://sfbay.craigslist.org/");
-		WebDriverElement header = iface.getWebDriverElement(Strategy.ID, "topban");
-		((WebDriverElement) header.getElement(new Hook(Strategy.TAG, "a"), 1)).click();
-		header = iface.getWebDriverElement(Strategy.ID, "topban");
-		WebDriverElement h2Control = ((WebDriverElement) header.getElement(new Hook(Strategy.TAG, "h2"), 0));
-		String actH2 = h2Control.getText().trim();
-		Assert.assertEquals(expH2, actH2);
+		WebDriverElement div = iface.getWebDriverElement(Strategy.ID, "logo");
+		WebDriverElement logoElement = ((WebDriverElement) div.getElement(new Hook(Strategy.TAG, "a"), 0));
+		String actLogo = logoElement.getText().trim();
+		Assert.assertEquals(logoText, actLogo);
 	}
 
 	@Test
 	public void getElementsTest() throws Exception {
 		iface.go("http://sfbay.craigslist.org/");
 		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.CLASS,"ban");
-		Assert.assertEquals(elements.size(),15);
+		Assert.assertEquals(elements.size(),14);
 	}
 
 	@Test
@@ -182,7 +179,7 @@ public class WebDriverElementSystemTest {
 		iface.pause(timeout);
 		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"test\"]/p[1]/button[1]").click();
 		startTime = System.currentTimeMillis();
-		textControl.pause.untilVisible(timeout);
+		iface.getPause().waitForVisible(textControl, 10000);
 		endTime = System.currentTimeMillis();
 		Assert.assertTrue((endTime - startTime) / Long.parseLong("1000") < (long)timeout);
 	}
@@ -197,7 +194,7 @@ public class WebDriverElementSystemTest {
 		showAlertButton.click();
 		iface.pause(500);
 		WebDriverElement delayAlert = iface.getWebDriverElement(new Hook(Strategy.CSS, ".hentry .quick-alert"));
-		delayAlert.pause.untilVisible((int)timeoutMilliSec);
+		iface.getPause().waitForVisible(delayAlert, (int)timeoutMilliSec);
 		Assert.assertTrue(delayAlert.isDisplayed());
 		
 		/* 
@@ -210,6 +207,18 @@ public class WebDriverElementSystemTest {
 //		Assert.assertFalse(delayAlert.isDisplayed());
 //		thrown.expect(TimeoutException.class);
 //		delayAlert.pause.untilVisible((int)timeoutMilliSec);
+	}
+
+	@Test
+	public void pauseUntilClickableTest() throws Exception {
+		String url = "http://sfbay.craigslist.org/";
+		iface.go(url);
+
+		String sfcLi = "#topban .sublinks li:first-child";
+		Hook sfcLiButton = new Hook(Strategy.CSS, sfcLi + " a");
+		iface.getPause().waitUntil(WaitConditions.clickable(sfcLiButton));
+		iface.getWebDriverElement(sfcLiButton).click();
+		Assert.assertEquals(iface.getURL(), url + "sfc/");
 	}
 
 	@Test
