@@ -1,6 +1,9 @@
 package com.sugarcrm.candybean.runner;
 
 import static org.junit.Assert.*;
+
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.testUtilities.TestConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -32,8 +35,9 @@ public class RecordSystemTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
-	public void setUp() throws CandybeanException {
-		Candybean candybean = Candybean.getInstance();
+	public void setUp() throws Exception {
+		Configuration config = TestConfiguration.getTestConfiguration("systemtest.webdriver.config");
+		Candybean candybean = Candybean.getInstance(config);
 		AutomationInterfaceBuilder builder = candybean.getAIB(RecordSystemTest.class);
 		builder.setType(Type.CHROME);
 		iface = builder.build();

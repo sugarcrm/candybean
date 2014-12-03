@@ -70,6 +70,7 @@ import com.sugarcrm.candybean.utilities.Utils.Pair;
 public abstract class WebDriverInterface extends AutomationInterface {
 	
 	public WebDriver wd = null;
+	private String baseUrl = "";
 	private Stack<Pair<Integer, String>> windows = new Stack<Pair<Integer, String>>();
 	
 	protected WebDriverInterface(Type iType) throws CandybeanException {
@@ -84,12 +85,11 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	@Override
 	public void start() throws CandybeanException {
+		// Set implicit wait and timeout parameters
 		long implicitWait = Long.parseLong(candybean.config.getValue("perf.implicit.wait.seconds"));
 		wd.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
-		if (System.getProperty("headless") == null
-				&& !(iType != Type.IOS)
-				&& !(iType != Type.ANDROID)
-				&& !System.getProperty("os.name").contains("mac")) {
+		
+		if (System.getProperty("headless") == null && iType != Type.IOS && iType != Type.ANDROID) {
 			java.awt.Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wd.manage().window().setSize(new Dimension(screenSize.width, screenSize.height));
 			this.windows.push(new Pair<Integer, String>(new Integer(0), this.wd.getWindowHandle()));
@@ -122,6 +122,16 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		logger.info("Interaction via popup dialog with message: " + message);
 		JOptionPane.showInputDialog(message);
 	}
+
+	/**
+	 * Returns a WebDriverPause object for waiting on some condition
+	 * @return
+	 */
+	public WebDriverPause getPause() {
+		long timeoutS = Long.parseLong(candybean.config.getValue("perf.explicit.wait.seconds", "15"));
+		long timeoutMs = timeoutS * 1000;
+		return new WebDriverPause(wd, timeoutMs);
+	}
 	
 	/**
 	 * Takes a full screenshot and saves it to the given file.
@@ -150,9 +160,9 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * Executes any javascript command
 	 * @param javascript The javascript code to execute
 	 */
-	public void executeJavascript(String javascript){
+	public void executeJavascript(String javascript, Object... args){
 		logger.info("Executing explicit javascript");
-		((JavascriptExecutor) this.wd).executeScript(javascript);
+		((JavascriptExecutor) this.wd).executeScript(javascript, args);
 	}
 	
 	/**
@@ -232,7 +242,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	public void focusFrame(int index) throws CandybeanException {
 		logger.info("Focusing to frame by index: " + index);
-		this.wd.switchTo().frame(index);
+		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(index));
 	}
 	
 	/**
@@ -242,17 +252,17 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 */
 	public void focusFrame(String nameOrId) throws CandybeanException {
 		logger.info("Focusing to frame by name or ID: " + nameOrId);
-		this.wd.switchTo().frame(nameOrId);
+		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(nameOrId));
 	}
 	
 	/**
 	 * Switches focus to the IFrame identified by the given {@link Element}
 	 * 
-	 * @param element		The element representing a focus-targeted IFrame
+	 * @param wde		The element representing a focus-targeted IFrame
 	 */
 	public void focusFrame(WebDriverElement wde) throws CandybeanException {
 		logger.info("Focusing to frame by element: " + wde.toString());
-		this.wd.switchTo().frame(wde.we);
+		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(wde));
 	}
 	
 	/**
@@ -416,14 +426,13 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	}
 	
 	/**
-	 * @param strategy The strategy used to search for the control
 	 * @param hook The associated hook for the strategy
 	 * @return The list of all controls that match the strategy and hook
 	 * @throws CandybeanException 
 	 */
 	public List<WebDriverElement> getWebDriverElements(Hook hook) throws CandybeanException {
 		List<WebDriverElement> elements = new ArrayList<WebDriverElement>();
-		List<WebElement> wes = this.wd.findElements(WebDriverElement.By(hook.getHookStrategy(), hook.getHookString()));
+		List<WebElement> wes = this.wd.findElements(Hook.getBy(hook));
 		for (WebElement we : wes)
 			elements.add(new WebDriverElement(hook, 0, this.wd, we));
 		return elements;
@@ -481,8 +490,8 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	
 	/**
 	 * Determines whether a timeout has occurred since the start time
-	 * @param startTime The start time in milliseconds
-	 * @param timeout The time in seconds for timeout
+	 * @param startTimeMs The start time in milliseconds
+	 * @param timeoutSec The time in seconds for timeout
 	 * @return
 	 */
 	private boolean waitForTimeout(long startTimeMs, long timeoutSec) {
@@ -525,8 +534,25 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			return false;
 		}
 	}
-	
-    public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
+
+	/**
+	 * This saves the base URL that might be needed for various purposes
+	 * (e.g. Query parameters to control application under test)
+	 * @param baseUrl
+	 */
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	/**
+	 * This returns the base URL
+	 * @return the base URL
+	 */
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public class SwipeableWebDriver extends RemoteWebDriver implements HasTouchScreen {
 		private RemoteTouchScreen touch;
 
 		public SwipeableWebDriver(URL remoteAddress,

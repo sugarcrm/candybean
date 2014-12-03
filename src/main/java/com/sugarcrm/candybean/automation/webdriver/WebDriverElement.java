@@ -32,7 +32,6 @@ import org.openqa.selenium.interactions.Actions;
 import com.sugarcrm.candybean.automation.element.Element;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Location;
-import com.sugarcrm.candybean.automation.element.Pause;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
@@ -44,8 +43,6 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * @author Conrad Warmbold
  */
 public class WebDriverElement extends Element {
-
-	public Pause pause;
 
 	protected WebDriver wd;
 	protected WebElement we;
@@ -65,19 +62,17 @@ public class WebDriverElement extends Element {
 	public WebDriverElement(Hook hook, int index, WebDriver wd) throws CandybeanException {
 		super(hook, index);
 		this.wd = wd;
-		List<WebElement> wes = this.wd.findElements(WebDriverElement.By(hook));
+		List<WebElement> wes = this.wd.findElements(Hook.getBy(hook));
 		if (wes.size() == 0) {
 			throw new CandybeanException("Control not found; zero web elements returned.");
 		}
 		this.we = wes.get(index);
-		this.pause = new WebDriverPause(this);
 	}
 
 	public WebDriverElement(Hook hook, int index, WebDriver wd, WebElement we) throws CandybeanException {
 		super(hook, index);
 		this.wd = wd;
 		this.we = we;
-		this.pause = new WebDriverPause(this);
 	}
 
 	/**
@@ -186,12 +181,38 @@ public class WebDriverElement extends Element {
 		action.dragAndDrop(this.we, dropControl.we).build().perform();
 	}
 
+	 /**
+	 * Get the select child of the given the hook of a parent element
+	 * 
+	 * @param hook
+	 * 				The hook of the parent element
+	 * @param index
+	 *				The index of where the child locates
+	 * @return Return a WebDriverSelector that is the child of the parent element
+	 * @throws CandybeanException
+	 */
+	public Element getSelect(Hook hook, int index) throws CandybeanException {
+		logger.info("Getting select: " + hook.toString() 
+				+ " from element: " + this.toString() + " with index: " + index);
+		WebElement childWe = this.we.findElements(Hook.getBy(hook)).get(index);
+		return new WebDriverSelector(hook, index, this.wd, childWe); 
+	}
+
+	 /**
+	 * Get the element child of the given the hook of a parent element
+	 * 
+	 * @param hook
+	 *				The hook of the parent element
+	 * @param index
+	 *				The index of where the child locates
+	 * @return Return a WebDriverSelector that is the child of the parent element
+	 * @throws CandybeanException
+	 */
 	@Override
 	public Element getElement(Hook hook, int index) throws CandybeanException {
 		logger.info("Getting element: " + hook.toString()
 				+ " from element: " + this.toString() + " with index: " + index);
-		WebElement childWe = this.we.findElements(WebDriverElement.By(hook))
-				.get(index);
+		WebElement childWe = this.we.findElements(Hook.getBy(hook)).get(index);
 		return new WebDriverElement(hook, index, this.wd, childWe);
 	}
 
@@ -210,8 +231,7 @@ public class WebDriverElement extends Element {
 	 * to Selenium}
 	 */
 	public boolean isDisplayed() throws CandybeanException {
-		logger.info("Determining if element is visible: "
-				+ this.toString());
+		logger.info("Determining if element is visible: " + this.toString());
 		return we.isDisplayed();
 	}
 
@@ -274,7 +294,7 @@ public class WebDriverElement extends Element {
 		// since this
 		// is the only method that does it and it violates the general
 		// architecture
-		this.we = this.wd.findElements(WebDriverElement.By(this.hook)).get(this.index);
+		this.we = this.wd.findElements(Hook.getBy(this.hook)).get(this.index);
 		this.we.sendKeys(input);
 	}
 
@@ -295,41 +315,17 @@ public class WebDriverElement extends Element {
 			this.sendString(input);
 		else {
 			// Re-find the element to avoid the stale element problem.
-			this.we = this.wd.findElements(WebDriverElement.By(this.hook)).get(this.index);
+			this.we = this.wd.findElements(Hook.getBy(this.hook)).get(this.index);
 			this.we.sendKeys(input);
 		}
 	}
 
+	/**
+	 * Get the By using the hook in this WebDriverElement
+	 * @return
+	 * @throws CandybeanException
+	 */
 	public By getBy() throws CandybeanException {
-		return WebDriverElement.By(this.hook);
-	}
-
-	public static By By(Hook hook) throws CandybeanException {
-		return WebDriverElement.By(hook.getHookStrategy(),
-				hook.getHookString());
-	}
-
-	public static By By(Strategy strategy, String hookString)
-			throws CandybeanException {
-		switch (strategy) {
-		case CSS:
-			return By.cssSelector(hookString);
-		case XPATH:
-			return By.xpath(hookString);
-		case ID:
-			return By.id(hookString);
-		case NAME:
-			return By.name(hookString);
-		case LINK:
-			return By.linkText(hookString);
-		case PLINK:
-			return By.partialLinkText(hookString);
-		case CLASS:
-			return By.className(hookString);
-		case TAG:
-			return By.tagName(hookString);
-		default:
-			throw new CandybeanException("Strategy type not recognized.");
-		}
+		return Hook.getBy(this.hook);
 	}
 }

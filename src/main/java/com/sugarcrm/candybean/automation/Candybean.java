@@ -69,7 +69,7 @@ public final class Candybean {
 	/**
 	 * {@link Logger} object for use by Candybean.
 	 */
-	public final Logger logger;
+	public final Logger log;
 
 	/**
 	 * Instantiates a Candybean object.
@@ -79,9 +79,9 @@ public final class Candybean {
 	private Candybean(Configuration config) throws CandybeanException {
 		try {
 			this.config = config;
-			logger = this.createLogger();
-			LogManager.getLogManager().addLogger(logger);
-			logger.config("Instantiating Candybean with config: " + config.toString());
+			log = this.createLogger();
+			LogManager.getLogManager().addLogger(log);
+			log.config("Instantiating Candybean with config: " + config.toString());
 		} catch (Exception e) {
 			throw new CandybeanException(e);
 		}
@@ -157,7 +157,7 @@ public final class Candybean {
 	 * @throws IOException 
 	 * @throws Exception if instantiating the logger fails
 	 */
-	public static Candybean getInstance(Configuration config) throws CandybeanException {
+	public static synchronized Candybean getInstance(Configuration config) throws CandybeanException {
 		if (Candybean.instance == null) {
 			Candybean.instance = new Candybean(config); 
 		}
@@ -170,7 +170,7 @@ public final class Candybean {
 	 * @return global candybean instance based on a default configuration
 	 * @throws Exception
 	 */
-	public static Candybean getInstance() throws CandybeanException {
+	public static synchronized Candybean getInstance() throws CandybeanException {
 		if (Candybean.instance == null) {
 			Configuration config = Candybean.getDefaultConfiguration();
 			Candybean.instance = new Candybean(config); 
@@ -211,7 +211,7 @@ public final class Candybean {
 	 * @return Candybean logger
 	 */
 	public Logger getLogger() {
-		return logger;
+		return log;
 	}
 
 }
