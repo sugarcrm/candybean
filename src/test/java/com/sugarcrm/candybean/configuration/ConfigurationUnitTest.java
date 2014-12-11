@@ -31,7 +31,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,6 +45,11 @@ public class ConfigurationUnitTest {
     public void setUp() {
         config = new Configuration();
     }
+
+	@Test(expected = CandybeanException.class)
+	public void testMissingConfig() throws CandybeanException, IOException {
+		new Configuration(new File(Candybean.ROOT_DIR + File.separator + "test/resources/nonexistent.config"));
+	}
 
     @Test
     public void testSystem() {
