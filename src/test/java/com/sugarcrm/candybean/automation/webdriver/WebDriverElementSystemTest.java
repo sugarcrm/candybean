@@ -243,6 +243,16 @@ public class WebDriverElementSystemTest {
 		Assert.assertFalse(imgElement.isDisplayed());
 	}
 
+	@Test
+	public void isEnabledTest() throws Exception {
+		iface.go("http://www.mkyong.com/wp-content/uploads/jQuery/jQuery-disabled-submit-button-after-clicked.html");
+		WebDriverElement button = iface.getWebDriverElement(new Hook(Strategy.TAG, "input"));
+		Assert.assertTrue(button.isEnabled());
+
+		button.click();
+		Assert.assertFalse(button.isEnabled());
+	}
+
 	@Ignore
 	@Test
 	public void rightClickTest() throws Exception {
