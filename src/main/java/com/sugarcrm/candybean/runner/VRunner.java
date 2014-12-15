@@ -210,6 +210,8 @@ public class VRunner extends BlockJUnit4ClassRunner {
 			logger.info("Unable to instantiate test recorder");
 		} catch (JAXBException e) {
 			logger.info("Unable to instantiate test recorder");
+		} catch (CandybeanException e) {
+			logger.info("Unable to instantiate test recorder");
 		}
     	super.run(notifier);
     }
