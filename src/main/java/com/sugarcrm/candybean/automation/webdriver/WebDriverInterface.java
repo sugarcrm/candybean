@@ -128,9 +128,11 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * @return
 	 */
 	public WebDriverPause getPause() {
-		long timeoutS = Long.parseLong(candybean.config.getValue("perf.explicit.wait.seconds", "15"));
-		long timeoutMs = timeoutS * 1000;
-		return new WebDriverPause(wd, timeoutMs);
+		long timeoutMs = Long.parseLong(
+				candybean.config.getValue("perf.explicit.wait.timeout.mseconds", "15000"));
+		long pollingS = Long.parseLong(
+				candybean.config.getValue("perf.explicit.wait.polling.seconds", "5"));
+		return new WebDriverPause(wd, timeoutMs, pollingS);
 	}
 	
 	/**

@@ -31,6 +31,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
+import java.text.DecimalFormat;
 import java.util.logging.Logger;
 
 import static java.lang.System.currentTimeMillis;
@@ -44,13 +45,14 @@ import static java.lang.System.currentTimeMillis;
 public class WebDriverPause {
 	private WebDriver wd;
 	private long defaultTimeoutMs;
-	private static final long WD_POLLING_INTERVAL = 1000;
+	private long defaultPollingIntervalS;
 
 	public Logger logger;
 
-	public WebDriverPause(WebDriver wd, long defaultTimeoutMs) {
+	public WebDriverPause(WebDriver wd, long defaultTimeoutMs, long defaultPollingIntervalS) {
 		this.wd = wd;
 		this.defaultTimeoutMs = defaultTimeoutMs;
+		this.defaultPollingIntervalS = defaultPollingIntervalS;
 		this.logger = Logger.getLogger(Candybean.class.getSimpleName());
 	}
 
@@ -62,34 +64,32 @@ public class WebDriverPause {
 	 * @throws CandybeanException
 	 */
 	public Object waitUntil(ExpectedCondition condition, long timeoutMs) throws CandybeanException {
-		long wdPollingInterval = WD_POLLING_INTERVAL;
-		if(timeoutMs <= WD_POLLING_INTERVAL) {
-			wdPollingInterval = timeoutMs;
-		}
-
 		// This is done by double-polling. WebDriverWait waits for wdPollingInterval amount of time.
 		// This is done repetitively until the time reaches timeoutMs.
+		long timeoutS = timeoutMs * 1000;
+		long pollingIntervalS = timeoutS <= defaultPollingIntervalS ? timeoutS : defaultPollingIntervalS;
 		final long startTime = currentTimeMillis();
-		long currentTime = 0;
-		CandybeanException toThrow = null;
+		long currentTimeMs, currentTimeS = 0;
+		String toThrow = null;
 		Object toReturn = null;
 
-		while(currentTime <= timeoutMs) {
+		while((currentTimeMs = currentTimeMillis() - startTime) <= timeoutMs) {
 			try {
-				logger.info(currentTime + " milliseconds have passed. Waiting until " + condition.toString() +
+				currentTimeS = currentTimeMs / 1000;
+				logger.info(currentTimeS + " seconds have passed. Waiting until " + condition.toString() +
 						" is satisfied.");
-				toReturn = (new WebDriverWait(this.wd, wdPollingInterval / 1000)).until(condition);
+				toReturn = (new WebDriverWait(this.wd, pollingIntervalS)).until(condition);
 				toThrow = null;
 				break;
 			} catch (WebDriverException wdException) {
-				toThrow = new CandybeanException(wdException.toString());
+				toThrow = wdException.toString();
 			}
-			currentTime = currentTimeMillis() - startTime;
 		}
 
 		if(toThrow != null) {
-			logger.severe("The timeout " + timeoutMs + " milliseconds have reached. Throwing Exception.");
-			throw toThrow;
+			logger.severe("The timeout " + currentTimeS + " seconds have reached. Throwing Exception.");
+			throw new CandybeanException(toThrow.replaceAll("(.*Timed out after )[0-9]+( seconds.*)",
+					"$1" + currentTimeS + "$2"));
 		}
 
 		return toReturn;
