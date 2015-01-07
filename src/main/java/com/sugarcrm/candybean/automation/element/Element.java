@@ -53,6 +53,36 @@ public abstract class Element {
 	 */
 	public abstract Element getElement(Hook hook, int index) throws CandybeanException;
 
+	/**
+	 * Executes a javascript command against this element.
+	 * @param	javascript	The javascript code to execute
+	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
+	 *                      be incremented by 1 because this element will be used as the first arg
+	 */
+	public abstract void executeJavascript(String javascript, Object... args);
+
+	/**
+	 * @return	an int containing the element's width.
+	 */
+	public abstract int getWidth();
+
+	/**
+	 * @return	an int containing the element's height.
+	 */
+	public abstract int getHeight();
+
+	/**
+	 * Returns the value of the specified CSS property, or null if it does not exist.
+	 *
+	 * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
+	 * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned, in
+	 * accordance with the DOM CSS2 specification - you should directly access the longhand
+	 * properties (e.g. background-color) to access the desired values.
+	 *
+	 * @return	String	the value of the specified property, or null if it does not exist.
+	 */
+	public abstract String getCssValue(String propertyName);
+
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + "(hook:"
