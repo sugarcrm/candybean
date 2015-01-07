@@ -217,6 +217,50 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
+	 * Executes a javascript command against this element.
+	 *
+	 * @param	javascript	The javascript code to execute
+	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
+	 *                      be incremented by 1 because this element will be used as the first arg
+	 */
+	@Override
+	public void executeJavascript(String javascript, Object... args) {
+		logger.info("Executing explicit javascript against " + toString());
+		((JavascriptExecutor) wd).executeScript(javascript, we, args);
+	}
+
+	/**
+	 * @return an int containing the element's width.
+	 */
+	@Override
+	public int getWidth() {
+		return we.getSize().getWidth();
+	}
+
+	/**
+	 * @return an int containing the element's height.
+	 */
+	@Override
+	public int getHeight() {
+		return we.getSize().getHeight();
+	}
+
+	/**
+	 * Returns the value of the specified CSS property, or null if it does not exist.
+	 * <p/>
+	 * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
+	 * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned, in
+	 * accordance with the DOM CSS2 specification - you should directly access the longhand
+	 * properties (e.g. background-color) to access the desired values.
+	 *
+	 * @return String    the value of the specified property, or null if it does not exist.
+	 */
+	@Override
+	public String getCssValue(String propertyName) {
+		return we.getCssValue(propertyName);
+	}
+
+	/**
 	 * Hover over this element.
 	 */
 	public void hover() throws CandybeanException {

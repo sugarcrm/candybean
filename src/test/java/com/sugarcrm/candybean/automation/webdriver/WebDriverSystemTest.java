@@ -236,7 +236,7 @@ public class WebDriverSystemTest {
 	public void focusWindowTest() throws Exception {
 		String expWindow0Title = "HTML Examples";
 		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
-		String expWindow1Title = "Tryit Editor v2.2";
+		String expWindow1Title = "Tryit Editor v2.3";
 		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic_document";
 		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial";
 		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
@@ -256,6 +256,7 @@ public class WebDriverSystemTest {
 
 		// Verify title with switching
 		iface.focusWindow(1);
+		Thread.sleep(1000);
 		assertEquals(expWindow1Title, iface.wd.getTitle());
 //		iface.interact(iface.getWindowsString());
 

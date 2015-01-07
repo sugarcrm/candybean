@@ -307,4 +307,45 @@ public class WebDriverElementSystemTest {
 		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
 	}
 
-}	
+	@Test
+	public void executeJavascriptTest() throws CandybeanException {
+		iface.go("http://duckduckgo.com/");
+		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "search_form_input_homepage"));
+		String searchTerm = "This is a search term";
+		searchBox.executeJavascript("arguments[0].value = '" + searchTerm + "';");
+		Assert.assertTrue(searchBox.getAttribute("value").equals(searchTerm));
+	}
+
+	@Test
+	public void getWidthTest() throws CandybeanException {
+		iface.go("https://www.google.com/");
+		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
+		int searchBoxWidth = searchBox.getWidth();
+		Assert.assertTrue(searchBoxWidth > 0);
+	}
+
+	@Test
+	public void getHeightTest() throws CandybeanException {
+		iface.go("https://www.google.com/");
+		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
+		int searchBoxHeight = searchBox.getHeight();
+		Assert.assertTrue(searchBoxHeight > 0);
+	}
+
+	@Test
+	public void getCssValueTest() throws CandybeanException {
+		iface.go("https://www.google.com/");
+		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
+		Assert.assertEquals(searchBox.getCssValue("display"), "block");
+	}
+
+	@Test
+	public void getSourceTest() throws CandybeanException {
+		iface.go("https://www.google.com/");
+		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "lga"));
+		String found = searchBox.getSource();
+		String expected = "id=\"hplogo\"";
+		Assert.assertTrue("Src did not contain " + expected + "\nFound source:\n" + found,
+				found.contains("id=\"hplogo\""));
+	}
+}
