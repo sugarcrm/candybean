@@ -58,8 +58,9 @@ public abstract class Element {
 	 * @param	javascript	The javascript code to execute
 	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
 	 *                      be incremented by 1 because this element will be used as the first arg
+	 * @return	an object representation of the return value of the executed Javascript.
 	 */
-	public abstract void executeJavascript(String javascript, Object... args);
+	public abstract Object executeJavascript(String javascript, Object... args);
 
 	/**
 	 * @return	an int containing the element's width.

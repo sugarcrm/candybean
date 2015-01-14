@@ -157,14 +157,17 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			throw new CandybeanException(ioe);
 		}
 	}
-	
+
 	/**
 	 * Executes any javascript command
-	 * @param javascript The javascript code to execute
+	 * @param	javascript	The javascript code to execute
+	 * @return	an object representation of the return value of the executed Javascript.  Depending
+	 * 			on the type returned from the Javascript, this may be of type WebElement, Double,
+	 * 			Long, Boolean, String, List&lt;Object&gt;, or null.
 	 */
-	public void executeJavascript(String javascript, Object... args){
+	public Object executeJavascript(String javascript, Object... args){
 		logger.info("Executing explicit javascript");
-		((JavascriptExecutor) this.wd).executeScript(javascript, args);
+		return ((JavascriptExecutor) this.wd).executeScript(javascript, args);
 	}
 	
 	/**
