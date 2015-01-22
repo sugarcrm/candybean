@@ -314,6 +314,9 @@ public class WebDriverElementSystemTest {
 		String searchTerm = "This is a search term";
 		searchBox.executeJavascript("arguments[0].value = '" + searchTerm + "';");
 		Assert.assertTrue(searchBox.getAttribute("value").equals(searchTerm));
+		String boxContents = (String)(searchBox.executeJavascript("return arguments[0].value;"));
+		Assert.assertEquals("Javascript return value incorrect.  Expected: " + searchTerm +
+				"   Found: " + boxContents, boxContents, searchTerm);
 	}
 
 	@Test

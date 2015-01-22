@@ -26,21 +26,13 @@ import java.io.File;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.testUtilities.TestConfiguration;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
 
@@ -336,6 +328,13 @@ public class WebDriverSystemTest {
 		assertTrue(iface.wd.switchTo().alert().getText().contains(args[0]));
 		assertTrue(iface.wd.switchTo().alert().getText().contains(args[1]));
 		iface.acceptDialog();
+
+		Long toReturn = 12l;
+		javascript = "return " + toReturn + ";";
+		Long returnValue = (Long)(iface.executeJavascript(javascript));
+		assertEquals("Javascript return value incorrect.  Expected: " + toReturn +
+				"   Found: " + returnValue, toReturn, returnValue);
+
 	}
 
 	@Ignore

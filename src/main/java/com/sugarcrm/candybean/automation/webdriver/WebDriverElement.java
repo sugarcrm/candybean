@@ -222,11 +222,14 @@ public class WebDriverElement extends Element {
 	 * @param	javascript	The javascript code to execute
 	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
 	 *                      be incremented by 1 because this element will be used as the first arg
+	 * @return	an object representation of the return value of the executed Javascript.  Depending
+	 * 			on the type returned from the Javascript, this may be of type WebElement, Double,
+	 * 			Long, Boolean, String, List&lt;Object&gt;, or null.
 	 */
 	@Override
-	public void executeJavascript(String javascript, Object... args) {
+	public Object executeJavascript(String javascript, Object... args) {
 		logger.info("Executing explicit javascript against " + toString());
-		((JavascriptExecutor) wd).executeScript(javascript, we, args);
+		return ((JavascriptExecutor) wd).executeScript(javascript, we, args);
 	}
 
 	/**
@@ -270,8 +273,8 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Returns true if and only if the element is displayed {@link http
-	 * ://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according
+	 * Returns true if and only if the element is displayed {@link
+	 * "http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html" according
 	 * to Selenium}
 	 */
 	public boolean isDisplayed() throws CandybeanException {
