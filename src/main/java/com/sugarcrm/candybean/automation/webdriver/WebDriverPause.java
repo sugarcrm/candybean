@@ -138,4 +138,50 @@ public class WebDriverPause {
 	public WebDriverElement waitForVisible(WebDriverElement wde) throws CandybeanException {
 		return this.waitForVisible(wde, defaultTimeoutMs);
 	}
+
+	/**
+	 * Provides a simple method to wait for invisible
+	 *
+	 * @param hook
+	 * @param timeoutMs
+	 * @throws CandybeanException
+	 * 		If the element visible after timeout
+	 */
+	public void waitForInvisible(Hook hook, long timeoutMs) throws CandybeanException {
+		waitUntil(WaitConditions.invisible(hook), timeoutMs);
+	}
+
+	/**
+	 * Provides a simple method to wait for invisible
+	 *
+	 * @param hook
+	 * @throws CandybeanException
+	 * 		If the element visible after timeout
+	 */
+	public void waitForInvisible(Hook hook) throws CandybeanException {
+		waitForInvisible(hook, defaultTimeoutMs);
+	}
+
+	/**
+	 * Provides a simple method to wait for invisible
+	 *
+	 * @param wde
+	 * @param timeoutMs
+	 * @throws CandybeanException
+	 * 		If the element visible after timeout
+	 */
+	public void waitForInvisible(WebDriverElement wde, long timeoutMs) throws CandybeanException {
+		waitUntil(WaitConditions.invisible(wde), timeoutMs);
+	}
+
+	/**
+	 * Provides a simple method to wait for invisible
+	 *
+	 * @param wde
+	 * @throws CandybeanException
+	 * 		If the element visible after timeout
+	 */
+	public void waitForInvisible(WebDriverElement wde) throws CandybeanException {
+		waitForInvisible(wde, defaultTimeoutMs);
+	}
 }

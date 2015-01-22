@@ -67,7 +67,6 @@ public class WaitConditions {
 	 *
 	 * @param hook
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<WebDriverElement> visible(final Hook hook) {
 		return new ExpectedCondition<WebDriverElement>() {
@@ -93,7 +92,6 @@ public class WaitConditions {
 	 *
 	 * @param wde
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<WebDriverElement> visible(final WebDriverElement wde) {
 		return new ExpectedCondition<WebDriverElement>() {
@@ -118,10 +116,47 @@ public class WaitConditions {
 	 *
 	 * @param hook
 	 * @return
-	 * @throws CandybeanException
 	 */
-	public static ExpectedCondition<Boolean> invisible(Hook hook) throws CandybeanException {
-		return ExpectedConditions.invisibilityOfElementLocated(getBy(hook));
+	public static ExpectedCondition<Boolean> invisible(final Hook hook) {
+		return  new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				try {
+					WebElement element = findElement(hook, driver);
+					return !(element.isDisplayed());
+				} catch (NoSuchElementException | CandybeanException | StaleElementReferenceException e) {
+					return true;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return "invisibility of " + hook;
+			}
+		};
+	}
+
+	/**
+	 * Wait until the element is not present on the DOM OR invisible
+	 * @param wde
+	 * @return
+	 */
+	public static ExpectedCondition<Boolean> invisible(final WebDriverElement wde) {
+		return new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				try {
+					return !wde.isDisplayed();
+				} catch (NoSuchElementException | CandybeanException | StaleElementReferenceException e) {
+					return true;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return "invisibility of " + wde;
+			}
+		};
 	}
 
 	/**
