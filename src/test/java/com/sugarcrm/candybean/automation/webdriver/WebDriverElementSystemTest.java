@@ -40,6 +40,7 @@ import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
+import org.openqa.selenium.TimeoutException;
 
 @RunWith(VRunner.class)
 public class WebDriverElementSystemTest {
@@ -207,6 +208,38 @@ public class WebDriverElementSystemTest {
 //		Assert.assertFalse(delayAlert.isDisplayed());
 //		thrown.expect(TimeoutException.class);
 //		delayAlert.pause.untilVisible((int)timeoutMilliSec);
+	}
+
+	@Test
+	public void pauseUntilInvisibleTest() throws Exception {
+		long timeoutMilliSec = 3000;
+		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
+
+		WebDriverElement imgElement = iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2"));
+		WebDriverElement hideButton = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox2 input"));
+
+		// Test to ensure we don't wait for elements that are not there
+		hideButton.click();
+		iface.getPause().waitForInvisible(imgElement, timeoutMilliSec);
+		Assert.assertFalse(imgElement.isDisplayed());
+		iface.getPause().waitForInvisible(hideButton);
+
+
+		WebDriverElement hideButton2 = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox1 input"));
+		hideButton2.click();
+
+		iface.getPause().waitForInvisible(new Hook(Strategy.CSS, "imgbox1"), 2000);
+
+		// Check that waitForInvisible throws a Timeout exception if it waits too long
+		try {
+			iface.getWebDriverElement(new Hook(Strategy.CSS, ".box[value='Reset All']")).click();
+			iface.getPause().waitForInvisible(new Hook(Strategy.ID, "imgbox2"), timeoutMilliSec);
+		} catch (CandybeanException e) {
+			Assert.assertTrue(iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2")).isDisplayed());
+			return;
+		}
+		// Fail if the try doesn't return
+		Assert.fail();
 	}
 
 	@Test
