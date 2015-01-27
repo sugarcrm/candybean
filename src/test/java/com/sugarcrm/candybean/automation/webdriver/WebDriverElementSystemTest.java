@@ -40,7 +40,6 @@ import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
-import org.openqa.selenium.TimeoutException;
 
 @RunWith(VRunner.class)
 public class WebDriverElementSystemTest {
@@ -373,6 +372,28 @@ public class WebDriverElementSystemTest {
 		iface.go("https://www.google.com/");
 		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
 		Assert.assertEquals(searchBox.getCssValue("display"), "block");
+	}
+
+	@Test
+	public void waitForAttribute() throws Exception {
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "p1"));
+		text.click();
+		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "hidden", true, 10) != null);
+		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "hidden", false, 10) != null);
+		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", false, 10) != null);
+		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", false, 10) != null);
+	}
+
+	@Test
+	public void waitForRegexAttribute() throws Exception {
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "p1"));
+		text.click();
+		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", "h.*n", true, 10) != null);
+		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", ".idden", false, 10) != null);
+		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", "n.*l", false) != null);
+		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", false) != null);
 	}
 
 	@Test

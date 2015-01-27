@@ -5,6 +5,8 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static com.sugarcrm.candybean.automation.element.Hook.getBy;
 
 /**
@@ -411,9 +413,8 @@ public class WaitConditions {
 					return null;
 				}
 			}
-
 			@Override
-			public String toString() {
+			public String toString(){
 				return "window to be available: " + nameOrHandle;
 			}
 		};
@@ -432,6 +433,83 @@ public class WaitConditions {
 			public Boolean apply(WebDriver driver) {
 				driver.getWindowHandles();
 				return driver.getWindowHandles().size() == numberOfWindows;
+			}
+		};
+	}
+
+	/*
+	 * Return the element found by hook that contains the specified attribute value if expected,
+	 * or the reverse if not.
+	 *
+	 * @param hook        The hook used to find the element
+	 * @param attribute   The attribute to check
+	 * @param value       The expected value of the attribute
+	 * @param expectValue If the value is expected or not
+	 * @return The element if the specified value contains the specified attributed, null otherwise
+	 */
+	public static ExpectedCondition<WebDriverElement> hasAttribute(final Hook hook, final String attribute,
+			final String value, final boolean expectValue) {
+		return new ExpectedCondition<WebDriverElement>() {
+			@Override
+			public WebDriverElement apply(WebDriver driver) {
+				try {
+					WebElement element = findElement(hook, driver);
+					/*
+					Split the string so that we can match the attribute.
+					If we are waiting for a value of "red", then "red left-aligned large"
+					should match that, but "starred" should not.
+					 */
+					String[] values = element.getAttribute(attribute).split("\\s");
+					for (int x = 0; x < values.length; x++) {
+						if (values[x].equals(value)) {
+							return expectValue ? createWebDriverElement(hook, element, driver) : null;
+						}
+					}
+					return expectValue ? null : createWebDriverElement(hook, element, driver);
+				} catch (CandybeanException | StaleElementReferenceException e) {
+						return null;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return attribute + (expectValue? " is ": " isn't ") + value;
+			}
+		};
+	}
+
+	/*
+	 * Return the element found by hook that contains the specified attribute value via regex if expecting match, or
+	 * reverse if expectValue is false
+	 *
+	 * @param hook The hook used to find the element
+	 * @param attribute The attribute to check
+	 * @param regex String regex of the expected value of the attribute
+	 * @param expectValue If the value is expected or not
+	 * @return The element if the specified value contains the specified attributed, null otherwise
+	 * @throws CandybeanException If the element is not found
+	 */
+	public static ExpectedCondition<WebDriverElement> hasRegexAttribute(final Hook hook, final String attribute,
+																		final String regex, final boolean expectValue)
+	throws CandybeanException {
+		return new ExpectedCondition<WebDriverElement>() {
+			@Override
+			public WebDriverElement apply(WebDriver driver) {
+				try {
+					WebElement element = findElement(hook, driver);
+
+					Pattern p = Pattern.compile(regex);
+					Matcher m = p.matcher(element.getAttribute(attribute));
+					return expectValue ? (m.matches() ? createWebDriverElement(hook, element, driver) : null)
+										:(m.matches() ? null : createWebDriverElement(hook, element, driver));
+				} catch (CandybeanException | StaleElementReferenceException e) {
+					return null;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return attribute + (expectValue? " matches ": " does not match ") + regex;
 			}
 		};
 	}

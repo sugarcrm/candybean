@@ -184,4 +184,70 @@ public class WebDriverPause {
 	public void waitForInvisible(WebDriverElement wde) throws CandybeanException {
 		waitForInvisible(wde, defaultTimeoutMs);
 	}
+
+	/**
+	 * Wait for an element to have the specified attribute with the specified value if expectValue is true, and the
+	 * reverse if false, waiting for up to timeoutMS milliseconds.
+	 *
+	 * @param hook Hook used to search for the element
+	 * @param attribute Attributed used to check for value
+	 * @param value Specified value of the attribute
+	 * @param expectValue If the value is expected or not
+	 * @param timeoutMS Max wait time before timeout
+	 * @return The found matching element
+	 * @throws CandybeanException If element not found or attribute has the wrong value
+	 */
+	public WebDriverElement waitForAttribute(Hook hook, String attribute, String value, boolean expectValue, long timeoutMS)
+			throws CandybeanException {
+		return (WebDriverElement) waitUntil(WaitConditions.hasAttribute(hook, attribute, value, expectValue),  timeoutMS);
+	}
+
+    /**
+	 * Wait for an element to have the specified attribute with the specified value if expectValue is true, and the
+	 * reverse if false, waiting for up to 15s
+	 *
+	 * @param hook Hook used to search for the element
+	 * @param attribute Attributed used to check for value
+	 * @param value Specified value of the attribute
+	 * @param expectValue If the value is expected or not
+	 * @return The found matching element
+	 * @throws CandybeanException If element not found or attribute has the wrong value
+	 */
+	public WebDriverElement waitForAttribute(Hook hook, String attribute, String value, boolean expectValue)
+			throws CandybeanException {
+		return (WebDriverElement) waitUntil(WaitConditions.hasAttribute(hook, attribute, value, expectValue), defaultTimeoutMs);
+	}
+
+	/**
+	 * Wait for an element to have the specified attribute with the specified value if expectValue is true, and the
+	 * reverse if false, waiting for up to timeoutMS milliseconds.
+	 *
+	 * @param hook Hook used to search for the element
+	 * @param attribute Attributed used to check for value
+	 * @param regex Speecified regex pattern of the attribute
+	 * @param expectValue If the value is expected or not
+	 * @param timeoutMS Max wait time before timeout
+	 * @return The found matching element
+	 * @throws CandybeanException If element not found or attribute has the wrong value
+	 */
+	public WebDriverElement waitForRegexAttribute(Hook hook, String attribute, String regex, boolean expectValue, long timeoutMS)
+			throws CandybeanException {
+		return (WebDriverElement) waitUntil(WaitConditions.hasRegexAttribute(hook, attribute, regex, expectValue),  timeoutMS);
+	}
+
+    /**
+	 * Wait for an element to have the specified attribute with the specified value if expectValue is true, and the
+	 * reverse if false, waiting for up to 15s
+	 *
+	 * @param hook Hook used to search for the element
+	 * @param attribute Attributed used to check for value
+	 * @param regex Specified regex pattern of the attribute
+	 * @param expectValue If the value is expected or not
+	 * @return The found matching element
+	 * @throws CandybeanException If element not found or attribute has the wrong value
+	 */
+	public WebDriverElement waitForRegexAttribute(Hook hook, String attribute, String regex, boolean expectValue)
+			throws CandybeanException {
+		return (WebDriverElement) waitUntil(WaitConditions.hasRegexAttribute(hook, attribute, regex, expectValue), defaultTimeoutMs);
+	}
 }
