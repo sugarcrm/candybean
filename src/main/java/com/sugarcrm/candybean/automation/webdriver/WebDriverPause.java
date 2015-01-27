@@ -41,6 +41,7 @@ import static java.lang.System.currentTimeMillis;
  * condition is satisfied
  *
  * @author Eric Tam
+ * @author Jason Mittertreiner
  */
 public class WebDriverPause {
 	private WebDriver wd;
@@ -100,6 +101,50 @@ public class WebDriverPause {
 	}
 
 	/**
+	 * Wait until an element is present on the DOM for up to timeoutMs seconds
+	 *
+	 * @param hook Hook to find the element
+	 * @param timeoutMs Max wait time
+	 * @return The located element
+	 * @throws CandybeanException
+	 */
+	public WebDriverElement waitForElement(Hook hook, long timeoutMs) throws CandybeanException {
+		return (WebDriverElement) this.waitUntil(WaitConditions.present(hook), timeoutMs);
+	}
+
+	/**
+	 * Wait until an element is present on the DOM for up to 15 seconds
+	 *
+	 * @param hook Hook to find the element
+	 * @return The located element
+	 * @throws CandybeanException
+	 */
+	public WebDriverElement waitForElement(Hook hook) throws CandybeanException {
+		return (WebDriverElement) this.waitUntil(WaitConditions.present(hook), defaultTimeoutMs);
+	}
+
+	/**
+	 * wait until an element is no present on the dom for up to timeoutMs seconds
+	 *
+	 * @param hook hook to find the element
+	 * @param timeoutMs max wait time
+	 * @throws CandybeanException
+	 */
+	public void waitForElementRemoved(Hook hook, long timeoutMs) throws CandybeanException {
+		waitUntil(WaitConditions.not(WaitConditions.present(hook)), timeoutMs);
+	}
+
+	/**
+	 * wait until an element is no present on the dom for up to 15 seconds
+	 *
+	 * @param hook hook to find the element
+	 * @throws CandybeanException
+	 */
+	public void waitForElementRemoved(Hook hook) throws CandybeanException {
+		waitUntil(WaitConditions.not(WaitConditions.present(hook)), defaultTimeoutMs);
+	}
+
+	/**
 	 * Provides a simple method to wait for visible as it is often used
 	 * @param hook
 	 * @param timeoutMs
@@ -142,8 +187,8 @@ public class WebDriverPause {
 	/**
 	 * Provides a simple method to wait for invisible
 	 *
-	 * @param hook
-	 * @param timeoutMs
+	 * @param hook The hook used to find the element
+	 * @param timeoutMs The max wait time
 	 * @throws CandybeanException
 	 * 		If the element visible after timeout
 	 */
@@ -154,7 +199,7 @@ public class WebDriverPause {
 	/**
 	 * Provides a simple method to wait for invisible
 	 *
-	 * @param hook
+	 * @param hook The hook used to find the element
 	 * @throws CandybeanException
 	 * 		If the element visible after timeout
 	 */
@@ -165,8 +210,8 @@ public class WebDriverPause {
 	/**
 	 * Provides a simple method to wait for invisible
 	 *
-	 * @param wde
-	 * @param timeoutMs
+	 * @param wde The WebDriverElement to wait for
+	 * @param timeoutMs The max wait time
 	 * @throws CandybeanException
 	 * 		If the element visible after timeout
 	 */
@@ -177,7 +222,7 @@ public class WebDriverPause {
 	/**
 	 * Provides a simple method to wait for invisible
 	 *
-	 * @param wde
+	 * @param wde The WebDriverElement to wait for
 	 * @throws CandybeanException
 	 * 		If the element visible after timeout
 	 */
@@ -249,5 +294,30 @@ public class WebDriverPause {
 	public WebDriverElement waitForRegexAttribute(Hook hook, String attribute, String regex, boolean expectValue)
 			throws CandybeanException {
 		return (WebDriverElement) waitUntil(WaitConditions.hasRegexAttribute(hook, attribute, regex, expectValue), defaultTimeoutMs);
+	}
+
+	/**
+	 * Waits until a specified element is on(off) screen for up to 15 seconds
+	 *
+	 * @param hook Hook used to search for the element
+	 * @param isOnScreen Whether to check is the element is on or off screen
+	 * @return The element
+	 * @throws CandybeanException
+	 */
+	public WebDriverElement waitForOnScreen(Hook hook, boolean isOnScreen) throws CandybeanException {
+		return  this.waitForOnScreen(hook, defaultTimeoutMs, isOnScreen);
+	}
+
+    /**
+	 * Waits until a specified element is on(off) screen for up to timeoutMS seconds
+	 *
+	 * @param hook Hook used to search for the element
+	 * @param timeoutMs Maximum time to wait for the element
+	 * @param isOnScreen Whether to check is the element is on or off screen
+	 * @return The element
+	 * @throws CandybeanException
+	 */
+	public WebDriverElement waitForOnScreen(Hook hook, long timeoutMs, boolean isOnScreen) throws CandybeanException {
+		return (WebDriverElement) this.waitUntil(WaitConditions.onScreen(hook, isOnScreen), timeoutMs);
 	}
 }

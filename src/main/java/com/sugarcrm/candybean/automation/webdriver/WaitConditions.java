@@ -1,10 +1,14 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static com.sugarcrm.candybean.automation.element.Hook.getBy;
@@ -14,6 +18,7 @@ import static com.sugarcrm.candybean.automation.element.Hook.getBy;
  * conditions and custom conditions that implements the interface ExpectedCondition<RETURN_TYPE>.
  *
  * @author Eric Tam <etam@sugarcrm.com>
+ * @author Jason Mittertreiner
  */
 public class WaitConditions {
 	private WaitConditions() {
@@ -39,18 +44,17 @@ public class WaitConditions {
 	}
 
 	/**
-	 * A helper method to find element on the page and handles exceptions
+	 * A helper method to find the first matching element on the page
 	 *
-	 * @param hook
-	 * @param driver
-	 * @return
+	 * @param hook The hook used to search for the element
+	 * @param driver WebDriver to search with
+	 * @return The element, if found
+	 * @throws CandybeanException If the element is not found
 	 */
 	private static WebElement findElement(Hook hook, WebDriver driver) throws CandybeanException {
-		try {
-			return driver.findElement(getBy(hook));
-		} catch (WebDriverException e) {
-			throw e;
-		}
+        List<WebElement> elements = driver.findElements(getBy(hook));
+        if (elements.isEmpty())  throw new CandybeanException("No such elements found");
+        return elements.get(0);
 	}
 
 	/**
@@ -126,7 +130,7 @@ public class WaitConditions {
 				try {
 					WebElement element = findElement(hook, driver);
 					return !(element.isDisplayed());
-				} catch (NoSuchElementException | CandybeanException | StaleElementReferenceException e) {
+				} catch (CandybeanException | StaleElementReferenceException e) {
 					return true;
 				}
 			}
@@ -149,7 +153,7 @@ public class WaitConditions {
 			public Boolean apply(WebDriver driver) {
 				try {
 					return !wde.isDisplayed();
-				} catch (NoSuchElementException | CandybeanException | StaleElementReferenceException e) {
+				} catch (CandybeanException | StaleElementReferenceException e) {
 					return true;
 				}
 			}
@@ -187,14 +191,14 @@ public class WaitConditions {
 				try {
 					WebElement element = findElement(hook, driver);
 					return createWebDriverElement(hook, element, driver);
-				} catch (CandybeanException | StaleElementReferenceException e) {
+				} catch (CandybeanException | StaleElementReferenceException e ) {
 					return null;
 				}
 			}
 
 			@Override
 			public String toString() {
-				return "visibility of " + hook;
+				return "presence of " + hook;
 			}
 		};
 	}
@@ -219,6 +223,31 @@ public class WaitConditions {
 	 */
 	public static ExpectedCondition<WebElement> clickable(WebDriverElement wde) {
 		return ExpectedConditions.elementToBeClickable(wde.we);
+	}
+
+	/**
+	 *
+	 * @param hook
+	 * @return
+	 * 		ExpectedCondition that tests to see if the element in on screen
+	 * @throws CandybeanException
+	 */
+	public static ExpectedCondition<WebDriverElement> onScreen(final Hook hook, final boolean isOnScreen) throws CandybeanException {
+        return new ExpectedCondition<WebDriverElement>() {
+			@Override
+			public WebDriverElement apply(WebDriver driver) {
+				try {
+					WebDriverElement element = createWebDriverElement(hook,findElement(hook, driver),driver);
+					return element.isOnScreen() == isOnScreen ? element : null;
+				} catch (CandybeanException | StaleElementReferenceException e) {
+					return null;
+				}
+			}
+
+			@Override
+			public String toString() { return "if " + hook + (isOnScreen ? "is on screen" : "is off screen");
+			}
+		};
 	}
 
 	/**

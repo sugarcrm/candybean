@@ -114,12 +114,16 @@ public class WebDriverElementSystemTest {
 		String actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
 		String expChapterText = "Hit Me!";
 		Assert.assertEquals(expChapterText, actChapterText);
+		/* Webpage moved
+
 		//Fourth test
 		url = "http://www.developphp.com/view_lesson.php?v=576";
 		iface.go(url);
 		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
 		expChapterText = "Generic Button";
 		Assert.assertEquals(expChapterText, actChapterText);
+
+		*/
 	}
 
 	@Test
@@ -187,26 +191,21 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void pauseUntilVisibleTest() throws Exception {
 		long timeoutMilliSec = 4000;
-		iface.go("http://www.learningjquery.com/2007/01/effect-delay-trick/");
-		
-		//The alert displays for 3s after clicking the button; this should not trigger the 4s timeout
-		WebDriverElement showAlertButton = iface.getWebDriverElement(new Hook(Strategy.CSS, ".hentry input"));
-		showAlertButton.click();
-		iface.pause(500);
-		WebDriverElement delayAlert = iface.getWebDriverElement(new Hook(Strategy.CSS, ".hentry .quick-alert"));
-		iface.getPause().waitForVisible(delayAlert, (int)timeoutMilliSec);
-		Assert.assertTrue(delayAlert.isDisplayed());
-		
-		/* 
-		 * The code below is a negative test to check for TimeoutException. The example in this url doesn't allow
-		 * this because the alert div will disappear from DOM after 3s after clicking the button. This will give
-		 * StaleElementReferenceException. We need better example in the future to cover this case.
-		 */
-//		//Pause 5s to wait the alert to disappear; this should trigger the timeout
-//		iface.pause(5000);
-//		Assert.assertFalse(delayAlert.isDisplayed());
-//		thrown.expect(TimeoutException.class);
-//		delayAlert.pause.untilVisible((int)timeoutMilliSec);
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
+
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "p1"));
+		text.click();
+		Assert.assertTrue(iface.getPause().waitForVisible(new Hook(Strategy.ID, "p1"), timeoutMilliSec) != null);
+		Assert.assertTrue(text.isDisplayed());
+		// Wait for the text to go invisible again
+		iface.pause(3000);
+		Assert.assertTrue(iface.getPause().waitForVisible(new Hook(Strategy.ID, "p1")) != null);
+		Assert.assertTrue(text.isDisplayed());
+
+		// Look for a nonexistent element to get time out
+		thrown.expect(CandybeanException.class);
+		iface.getPause().waitForVisible(new Hook(Strategy.ID, "p2"), 500);
+
 	}
 
 	@Test
@@ -394,6 +393,36 @@ public class WebDriverElementSystemTest {
 		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", ".idden", false, 10) != null);
 		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", "n.*l", false) != null);
 		Assert.assertTrue(iface.getPause().waitForRegexAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", false) != null);
+	}
+
+	@Test
+	public void waitForOnScreen() throws Exception {
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/onOffScreen.html");
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "p1"));
+		text.click();
+		iface.getPause().waitForOnScreen(new Hook(Strategy.ID, "p1"), true);
+		Assert.assertTrue(iface.getWebDriverElement(new Hook(Strategy.ID, "p1")).isOnScreen());
+		iface.getPause().waitForOnScreen(new Hook(Strategy.ID, "p1"), false);
+		Assert.assertFalse(iface.getWebDriverElement(new Hook(Strategy.ID, "p1")).isOnScreen());
+		iface.getPause().waitForOnScreen(new Hook(Strategy.ID, "p1"), true);
+		Assert.assertTrue(iface.getWebDriverElement(new Hook(Strategy.ID, "p1")).isOnScreen());
+
+		iface.getPause().waitForOnScreen(new Hook(Strategy.ID, "svg1"), true);
+		iface.getPause().waitForOnScreen(new Hook(Strategy.ID, "svg2"), false);
+		iface.getPause().waitForOnScreen(new Hook(Strategy.ID, "svg3"), true);
+	}
+
+	@Test
+	public void toggleWaitForElement() throws Exception {
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/removeFromDOM.html");
+		WebDriverElement button = iface.getWebDriverElement(new Hook(Strategy.ID, "b1"));
+		iface.getPause().waitForElement(new Hook(Strategy.ID, "p1"));
+		button.click();
+		iface.getPause().waitForElementRemoved(new Hook(Strategy.ID, "p1"));
+		button.click();
+		iface.getPause().waitForElement(new Hook(Strategy.ID, "p1"));
+		button.click();
+		iface.getPause().waitForElementRemoved(new Hook(Strategy.ID, "p1"));
 	}
 
 	@Test
