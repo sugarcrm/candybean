@@ -232,6 +232,25 @@ public class WebDriverElement extends Element {
 		return ((JavascriptExecutor) wd).executeScript(javascript, we, args);
 	}
 
+    /**
+	 * Executes an asynchronous javascript command against this element. The script executed with
+     * this method must explicitly signal they are finished by invoking the provided callback. This
+     * callback is always injected into the executed function as the last argument
+	 *
+	 * @param	javascript	The javascript code to execute
+	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
+	 *                      be incremented by 1 because this element will be used as the first arg
+     * @return	an object representation of the first argument passed to the callback
+     *          of the executed Javascript.  Depending on the type returned from the
+     *          Javascript, this may be of type WebElement, Long, Boolean, String,
+     *          List&lt;Object&gt;, or null.
+	 */
+    @Override
+	public Object executeAsyncJavascript(String javascript, Object... args) {
+		logger.info("Executing explicit async javascript against " + toString());
+		return ((JavascriptExecutor) wd).executeAsyncScript(javascript, we, args);
+	}
+
 	/**
 	 * @return an int containing the element's width.
 	 */
