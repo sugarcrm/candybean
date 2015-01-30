@@ -21,6 +21,7 @@ public class WaitConditions {
 	/**
 	 * A helper method to create a WebDriverElement given Hook and element. Depending on the tag, it will
 	 * return either WebDriverSelector or WebDriverElement
+	 *
 	 * @param hook
 	 * @param element
 	 * @param driver
@@ -28,7 +29,7 @@ public class WaitConditions {
 	 * @throws CandybeanException
 	 */
 	private static WebDriverElement createWebDriverElement(Hook hook, WebElement element, WebDriver driver)
-		throws CandybeanException {
+			throws CandybeanException {
 		if ("select".equals(element.getTagName())) {
 			return new WebDriverSelector(hook, driver);
 		}
@@ -37,6 +38,7 @@ public class WaitConditions {
 
 	/**
 	 * A helper method to find element on the page and handles exceptions
+	 *
 	 * @param hook
 	 * @param driver
 	 * @return
@@ -52,8 +54,9 @@ public class WaitConditions {
 	/**
 	 * This returns the negated (logically opposite) condition. It waits until apply() returns null or false
 	 * e.g. Conditions.not(Conditions.visible(...))
-	 * @param	condition the condition you would like to negate
-	 * @return	The negated condition
+	 *
+	 * @param    condition the condition you would like to negate
+	 * @return The negated condition
 	 */
 	public static ExpectedCondition<Boolean> not(ExpectedCondition<?> condition) {
 		return ExpectedConditions.not(condition);
@@ -61,6 +64,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is present on the DOM AND visible
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -71,7 +75,7 @@ public class WaitConditions {
 			public WebDriverElement apply(WebDriver driver) {
 				try {
 					WebElement element = findElement(hook, driver);
-					return element.isDisplayed()? createWebDriverElement(hook, element, driver) : null;
+					return element.isDisplayed() ? createWebDriverElement(hook, element, driver) : null;
 				} catch (CandybeanException | StaleElementReferenceException e) {
 					return null;
 				}
@@ -86,6 +90,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is present on the DOM AND visible
+	 *
 	 * @param wde
 	 * @return
 	 * @throws CandybeanException
@@ -95,7 +100,7 @@ public class WaitConditions {
 			@Override
 			public WebDriverElement apply(WebDriver driver) {
 				try {
-					return wde.isDisplayed()? wde : null;
+					return wde.isDisplayed() ? wde : null;
 				} catch (CandybeanException e) {
 					return null;
 				}
@@ -110,6 +115,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is not present on the DOM OR invisible
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -120,6 +126,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is not present on the DOM OR invisible
+	 *
 	 * @param hook
 	 * @param text
 	 * @return
@@ -131,6 +138,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is present on the DOM
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -156,6 +164,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is clickable state (visible AND enabled)
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -166,6 +175,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is clickable state (visible AND enabled)
+	 *
 	 * @param wde
 	 * @return
 	 * @throws CandybeanException
@@ -176,6 +186,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is selected
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -186,6 +197,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is selected
+	 *
 	 * @param wde
 	 * @return
 	 * @throws CandybeanException
@@ -196,6 +208,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is unselected
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -206,6 +219,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is unselected
+	 *
 	 * @param wde
 	 * @return
 	 * @throws CandybeanException
@@ -217,6 +231,7 @@ public class WaitConditions {
 	/**
 	 * Wait until the frame is available to switch (Polling on switchTo().frame(...) until No NoSuchFrameException) and
 	 * switch to this frame if no exception has occurred
+	 *
 	 * @param hook
 	 * @return
 	 * @throws CandybeanException
@@ -228,6 +243,7 @@ public class WaitConditions {
 	/**
 	 * Wait until the frame is available to switch (Polling on switchTo().frame(...) until No NoSuchFrameException) and
 	 * switch to this frame if no exception has occurred
+	 *
 	 * @param name
 	 * @return
 	 * @throws CandybeanException
@@ -286,6 +302,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is not present on the DOM
+	 *
 	 * @param wde
 	 * @return
 	 * @throws CandybeanException
@@ -296,6 +313,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the expected text presents on the element
+	 *
 	 * @param hook
 	 * @param text
 	 * @return
@@ -307,6 +325,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the expected text presents on the element
+	 *
 	 * @param wde
 	 * @param text
 	 * @return
@@ -318,6 +337,7 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the expected text presents on the element's value attribute
+	 *
 	 * @param hook
 	 * @param text
 	 * @return
@@ -329,12 +349,55 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the expected text presents on the element's value attribute
+	 *
 	 * @param wde
 	 * @param text
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<Boolean> textIsPresentInValue(WebDriverElement wde, String text) {
 		return ExpectedConditions.textToBePresentInElementValue(wde.we, text);
+	}
+
+	/**
+	 * Wait until the window is available to switch (Polling on switchTo().window(...) until no
+	 * NoSuchWindowException) and switch to this window if no exception has occurred
+	 *
+	 * @param	nameOrHandle	The name or handle of the window to switch to.
+	 * @return	a WebDriver instance focused on the specified window
+	 */
+	public static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final String nameOrHandle) {
+		return new ExpectedCondition<WebDriver>() {
+			@Override
+			public WebDriver apply(WebDriver driver) {
+				try {
+					return driver.switchTo().window(nameOrHandle);
+				} catch (NoSuchWindowException e) {
+					System.out.println("No such window.");
+					return null;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return "window to be available: " + nameOrHandle;
+			}
+		};
+	}
+
+	/**
+	 * Wait for the specified number of windows to exist, e.g. when launching a new one to ensure
+	 * it has been fully instantiated before interacting with it.
+	 *
+	 * @param	numberOfWindows	an int representing the desired number of windows to wait for.
+	 * @return	boolean true if the number of windows is currently numberOfWindows, false if not
+	 */
+	public static ExpectedCondition<Boolean> numberOfWindowsToBe(final int numberOfWindows) {
+		return new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				driver.getWindowHandles();
+				return driver.getWindowHandles().size() == numberOfWindows;
+			}
+		};
 	}
 }
