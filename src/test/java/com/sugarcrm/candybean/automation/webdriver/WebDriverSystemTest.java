@@ -130,10 +130,21 @@ public class WebDriverSystemTest {
 		}
 	}
 
-	@Ignore
 	@Test
-	public void closeWindowTest() throws Exception {
-//		this.iface.closeWindow();
+	public void openCloseWindowTest() throws Exception {
+		String googleUrl = "https://www.google.com/";
+		String bingUrl = "http://www.bing.com/";
+
+		iface.go(googleUrl);
+		assertEquals(googleUrl, iface.wd.getCurrentUrl());
+		iface.openWindow(bingUrl);
+		assertEquals(bingUrl, iface.wd.getCurrentUrl());
+		iface.focusWindow(0);
+		assertEquals(googleUrl, iface.wd.getCurrentUrl());
+		iface.focusWindow(1);
+		assertEquals(bingUrl, iface.wd.getCurrentUrl());
+		iface.closeWindow();
+		assertEquals(googleUrl, iface.wd.getCurrentUrl());
 	}
 
 	@Ignore

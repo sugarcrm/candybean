@@ -59,6 +59,7 @@ import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Drives the creation of multi-platform automation tests by providing a resourceful API
@@ -285,7 +286,20 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		logger.info("Focusing to frame by element: " + wde.toString());
 		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(wde));
 	}
-	
+
+	/**
+	 * Open a new browser window with specified URL and places focus on the new window.
+	 *
+	 * @param	url	a String containing the URL to open in the new window.
+	 */
+	public void openWindow(String url) throws CandybeanException {
+		logger.info("Opening a new window and navigating to: " + url);
+		int numWindows = wd.getWindowHandles().size();
+		executeJavascript("window.open('" + url + "');");
+		getPause().waitUntil(WaitConditions.numberOfWindowsToBe(numWindows + 1));
+		focusWindow(url); // focusWindow automatically pushes the window onto the stack.
+	}
+
 	/**
 	 * Close the current browser window.
 	 */
@@ -318,7 +332,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			if (index >= windowHandles.length) {
 				throw new CandybeanException("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 			} else {
-				this.wd.switchTo().window(windowHandles[index]);
+				getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windowHandles[index]));
 				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
 				logger.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
@@ -346,7 +360,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			int i = 0;
 			boolean windowFound = false;
 			while (i < windowHandles.length && !windowFound) {
-				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
+				WebDriver window = (WebDriver)getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windowHandles[i]));
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
 					windows.push(new Pair<Integer, String>(new Integer(i), this.wd.getWindowHandle()));
 					logger.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
@@ -355,7 +369,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 				i++;
 			}
 			if (!windowFound) {
-				this.wd.switchTo().window(windows.peek().y);
+				getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windows.peek().y));
 				throw new CandybeanException("The given focus window string matched no title or URL: " + titleOrUrl);
 			}
 		}	
