@@ -169,7 +169,23 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		logger.info("Executing explicit javascript");
 		return ((JavascriptExecutor) this.wd).executeScript(javascript, args);
 	}
-	
+
+	/**
+     * Executes an asynchronous javascript command. The script executed with
+     * this method must explicitly signal they are finished by invoking the provided callback. This
+     * callback is always injected into the executed function as the last argument
+     *
+	 * @param	javascript	The javascript code to execute
+	 * @return	an object representation of the first argument passed to the callback
+     *          of the executed Javascript.  Depending on the type returned from the
+     *          Javascript, this may be of type WebElement, Long, Boolean, String,
+     *          List&lt;Object&gt;, or null.
+	 */
+	public Object executeAsyncJavascript(String javascript, Object... args){
+		logger.info("Executing explicit async javascript");
+		return ((JavascriptExecutor) this.wd).executeAsyncScript(javascript, args);
+	}
+
 	/**
 	 * Refreshes the interface.  If refresh is undefined, it does nothing.
 	 * 
