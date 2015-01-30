@@ -1,7 +1,5 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.openqa.selenium.*;
@@ -46,15 +44,15 @@ public class WaitConditions {
 	/**
 	 * A helper method to find the first matching element on the page
 	 *
-	 * @param hook The hook used to search for the element
-	 * @param driver WebDriver to search with
-	 * @return The element, if found
-	 * @throws CandybeanException If the element is not found
+	 * @param	hook	The hook used to search for the element
+	 * @param	driver	WebDriver to search with
+	 * @return 	The element, if found
+	 * @throws 	CandybeanException	If the element is not found
 	 */
 	private static WebElement findElement(Hook hook, WebDriver driver) throws CandybeanException {
-        List<WebElement> elements = driver.findElements(getBy(hook));
-        if (elements.isEmpty())  throw new CandybeanException("No such elements found");
-        return elements.get(0);
+		List<WebElement> elements = driver.findElements(getBy(hook));
+		if (elements.isEmpty()) throw new CandybeanException("No such elements found");
+		return elements.get(0);
 	}
 
 	/**
@@ -119,12 +117,22 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is not present on the DOM OR invisible
+<<<<<<< HEAD
 	 *
 	 * @param hook
 	 * @return
+=======
+	 * This is not possible with ExpectedConditions.not() because no only
+	 * do we need to return when isDisplayed is false, we also need to
+	 * return true with isDisplayed throws an exception, which
+	 * ExpectedConditions.not does not do.
+	 *
+	 * @param	hook	The hook to search for the element
+	 * @return	True, when the element is invisible or removed, otherwise false
+>>>>>>> CB-31: Pause support for various conditions
 	 */
 	public static ExpectedCondition<Boolean> invisible(final Hook hook) {
-		return  new ExpectedCondition<Boolean>() {
+		return new ExpectedCondition<Boolean>() {
 			@Override
 			public Boolean apply(WebDriver driver) {
 				try {
@@ -144,8 +152,13 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is not present on the DOM OR invisible
-	 * @param wde
-	 * @return
+	 * This is not possible with ExpectedConditions.not because no only
+	 * do we need to return when isDisplayed is false, we also need to
+	 * return true with isDisplayed throws an exception, which
+	 * ExpectedConditions.not does not do.
+	 *
+	 * @param	wde	The webdriver element to search for
+	 * @return	True, when the element is invisible or removed, otherwise false
 	 */
 	public static ExpectedCondition<Boolean> invisible(final WebDriverElement wde) {
 		return new ExpectedCondition<Boolean>() {
@@ -226,14 +239,15 @@ public class WaitConditions {
 	}
 
 	/**
+	 * Test if the x and y coordinates of the element are with in the width and height of the screen
 	 *
-	 * @param hook
-	 * @return
-	 * 		ExpectedCondition that tests to see if the element in on screen
-	 * @throws CandybeanException
+	 * @param	hook	The hook used to find the element
+	 * @param	isOnScreen	If the element should be on screen or not
+	 * @return	ExpectedCondition that tests to see if the element in on screen
+	 * @throws	CandybeanException
 	 */
 	public static ExpectedCondition<WebDriverElement> onScreen(final Hook hook, final boolean isOnScreen) throws CandybeanException {
-        return new ExpectedCondition<WebDriverElement>() {
+		return new ExpectedCondition<WebDriverElement>() {
 			@Override
 			public WebDriverElement apply(WebDriver driver) {
 				try {
@@ -470,14 +484,18 @@ public class WaitConditions {
 	 * Return the element found by hook that contains the specified attribute value if expected,
 	 * or the reverse if not.
 	 *
-	 * @param hook        The hook used to find the element
-	 * @param attribute   The attribute to check
-	 * @param value       The expected value of the attribute
-	 * @param expectValue If the value is expected or not
-	 * @return The element if the specified value contains the specified attributed, null otherwise
+	 * @param	hook	The hook used to find the element
+	 * @param	attribute	The attribute to check
+	 * @param	value	The expected value of the attribute
+	 * @param	expectValue	If the value is expected or not
+	 * @return	The element if the specified value contains the specified attributed, null otherwise
 	 */
 	public static ExpectedCondition<WebDriverElement> hasAttribute(final Hook hook, final String attribute,
+<<<<<<< HEAD
 			final String value, final boolean expectValue) {
+=======
+		final String value, final boolean expectValue) {
+>>>>>>> CB-31: Pause support for various conditions
 		return new ExpectedCondition<WebDriverElement>() {
 			@Override
 			public WebDriverElement apply(WebDriver driver) {
@@ -488,9 +506,8 @@ public class WaitConditions {
 					If we are waiting for a value of "red", then "red left-aligned large"
 					should match that, but "starred" should not.
 					 */
-					String[] values = element.getAttribute(attribute).split("\\s");
-					for (int x = 0; x < values.length; x++) {
-						if (values[x].equals(value)) {
+					for (String currentValue : element.getAttribute(attribute).split("\\s")) {
+						if (currentValue.equals(value)) {
 							return expectValue ? createWebDriverElement(hook, element, driver) : null;
 						}
 					}
@@ -519,8 +536,7 @@ public class WaitConditions {
 	 * @throws CandybeanException If the element is not found
 	 */
 	public static ExpectedCondition<WebDriverElement> hasRegexAttribute(final Hook hook, final String attribute,
-																		final String regex, final boolean expectValue)
-	throws CandybeanException {
+		final String regex, final boolean expectValue) throws CandybeanException {
 		return new ExpectedCondition<WebDriverElement>() {
 			@Override
 			public WebDriverElement apply(WebDriver driver) {
@@ -530,7 +546,7 @@ public class WaitConditions {
 					Pattern p = Pattern.compile(regex);
 					Matcher m = p.matcher(element.getAttribute(attribute));
 					return expectValue ? (m.matches() ? createWebDriverElement(hook, element, driver) : null)
-										:(m.matches() ? null : createWebDriverElement(hook, element, driver));
+							:(m.matches() ? null : createWebDriverElement(hook, element, driver));
 				} catch (CandybeanException | StaleElementReferenceException e) {
 					return null;
 				}

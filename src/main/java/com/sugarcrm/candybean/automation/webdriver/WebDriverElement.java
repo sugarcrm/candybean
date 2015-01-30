@@ -306,10 +306,10 @@ public class WebDriverElement extends Element {
 		logger.info("Determining if element is on screen " + this.toString());
 		Point location = we.getLocation();
 		Dimension windowSize = wd.manage().window().getSize();
-		return (   location.getY() + we.getSize().getHeight() > 0
-				&& location.getY()                            < windowSize.getHeight()
-				&& location.getX() + we.getSize().getWidth()  > 0
-				&& location.getX()                            < windowSize.getWidth());
+		return ( location.getY() + we.getSize().getHeight() > 0
+			&&   location.getY() < windowSize.getHeight()
+			&&   location.getX() + we.getSize().getWidth() > 0
+			&&   location.getX() < windowSize.getWidth());
 	}
 
 	/**
