@@ -23,10 +23,7 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import java.util.List;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import com.sugarcrm.candybean.automation.element.Element;
@@ -299,6 +296,20 @@ public class WebDriverElement extends Element {
 	public boolean isDisplayed() throws CandybeanException {
 		logger.info("Determining if element is visible: " + this.toString());
 		return we.isDisplayed();
+	}
+
+	/**
+	 * Returns true if and only if part of the element is located on the screen/page
+	 */
+
+	public boolean isOnScreen() throws CandybeanException {
+		logger.info("Determining if element is on screen " + this.toString());
+		Point location = we.getLocation();
+		Dimension windowSize = wd.manage().window().getSize();
+		return ( location.getY() + we.getSize().getHeight() > 0
+			&&   location.getY() < windowSize.getHeight()
+			&&   location.getX() + we.getSize().getWidth() > 0
+			&&   location.getX() < windowSize.getWidth());
 	}
 
 	/**

@@ -1,0 +1,42 @@
+<!--
+This file presents an html page with a button and a
+box. On clicking the button, the box is removed or
+replaced on the DOM after a delay.  It is intended
+to be used for testing waitConditions that need an
+element to variably be on and off the DOM.
+-->
+
+<html>
+<head>
+<script type="text/javascript">
+	function toggleDOM() {
+		console.log("In toggle");
+		var p1 = document.getElementById('p1');
+		var parent = document.getElementById('div1');
+		if (p1 != null) {
+			parent.removeChild(p1);
+		}
+		else{
+			var para = document.createElement("p");
+			para.setAttribute('id', 'p1');
+			var text = document.createTextNode("This is some writing");
+			para.appendChild(text);
+			parent.appendChild(para);
+		}
+	}
+</script>
+</head>
+
+<style>
+	.onScreen {
+		position: absolute; left: 50; top:50;
+	}
+</style>
+
+<body>
+	<div id='div1'>
+		<input type="button" id="b1" class="onScreen" onclick="setTimeout(toggleDOM,3000)"></input>
+		<p id='p1'>This is some writing</p>
+	</div>
+</body>
+</html>

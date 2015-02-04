@@ -1,0 +1,76 @@
+<!--
+This file presents an html page with a single element
+that moves on and off the screenevery 5 seconds once
+clicked. It is intended to be used for testing 
+waitConditions that need an element to variably be 
+on and off screen.
+-->
+
+<html>
+	<head>
+
+<script type="text/javascript">
+	function move() {
+		var svg1 = document.getElementById('svg1');
+		var svg2 = document.getElementById('svg2');
+		var svg3 = document.getElementById('svg3');
+
+		svg1.setAttribute("class", 'top-left-on');
+		svg2.setAttribute("class", 'top-left-off');
+	}
+	window.onload = move;
+</script>
+
+	</head>
+<style>
+	.onScreen {
+		position: absolute; left: 50; top:50;
+	}
+	.offScreen {
+		position: absolute; left: -50; top:-50;
+	}
+
+	.middle {
+		position: absolute; left: 50%; top: 50%;
+	}
+
+	.top-left-off{
+		position: absolute; left: -200; top: -100;
+	}
+
+	.top-left-on{
+		position: absolute; left: -150; top: -75;
+	}
+</style>
+
+<body>
+<p id="p1" class="onScreen" onclick="setInterval(toggleOnScreen, 3000);">Hello World</p>
+
+<svg width="200" height="100" class='middle' id="svg1">
+  <rect width="200" height="100" style="fill:rgba(0,0,255,.5);stroke-width:0;" />
+</svg>
+
+<svg width="200" height="100" class="middle" id="svg2">
+  <rect width="200" height="100" style="fill:rgba(255,0,0,.5);stroke-width:0;" />
+</svg>
+
+<svg width="200" height="100" class="middle" id="svg3">
+  <rect width="200" height="100" style="fill:rgba(0,255,0,.5);stroke-width:0;" />
+</svg>
+
+<script type="text/javascript">
+	function toggleOnScreen() {
+		var p1 = document.getElementById('p1');
+
+		if (p1.className == 'onScreen') {
+			p1.className = 'offScreen';
+		}
+		else {
+			p1.className = 'onScreen';
+		}
+	}
+</script>
+
+
+</body>
+</html>
