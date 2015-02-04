@@ -117,11 +117,6 @@ public class WaitConditions {
 
 	/**
 	 * Wait until the element is not present on the DOM OR invisible
-<<<<<<< HEAD
-	 *
-	 * @param hook
-	 * @return
-=======
 	 * This is not possible with ExpectedConditions.not() because no only
 	 * do we need to return when isDisplayed is false, we also need to
 	 * return true with isDisplayed throws an exception, which
@@ -129,7 +124,6 @@ public class WaitConditions {
 	 *
 	 * @param	hook	The hook to search for the element
 	 * @return	True, when the element is invisible or removed, otherwise false
->>>>>>> CB-31: Pause support for various conditions
 	 */
 	public static ExpectedCondition<Boolean> invisible(final Hook hook) {
 		return new ExpectedCondition<Boolean>() {
@@ -491,11 +485,7 @@ public class WaitConditions {
 	 * @return	The element if the specified value contains the specified attributed, null otherwise
 	 */
 	public static ExpectedCondition<WebDriverElement> hasAttribute(final Hook hook, final String attribute,
-<<<<<<< HEAD
 			final String value, final boolean expectValue) {
-=======
-		final String value, final boolean expectValue) {
->>>>>>> CB-31: Pause support for various conditions
 		return new ExpectedCondition<WebDriverElement>() {
 			@Override
 			public WebDriverElement apply(WebDriver driver) {
@@ -536,7 +526,7 @@ public class WaitConditions {
 	 * @throws CandybeanException If the element is not found
 	 */
 	public static ExpectedCondition<WebDriverElement> hasRegexAttribute(final Hook hook, final String attribute,
-		final String regex, final boolean expectValue) throws CandybeanException {
+			final String regex, final boolean expectValue) throws CandybeanException {
 		return new ExpectedCondition<WebDriverElement>() {
 			@Override
 			public WebDriverElement apply(WebDriver driver) {
@@ -546,7 +536,7 @@ public class WaitConditions {
 					Pattern p = Pattern.compile(regex);
 					Matcher m = p.matcher(element.getAttribute(attribute));
 					return expectValue ? (m.matches() ? createWebDriverElement(hook, element, driver) : null)
-							:(m.matches() ? null : createWebDriverElement(hook, element, driver));
+						:(m.matches() ? null : createWebDriverElement(hook, element, driver));
 				} catch (CandybeanException | StaleElementReferenceException e) {
 					return null;
 				}
@@ -556,6 +546,6 @@ public class WaitConditions {
 			public String toString() {
 				return attribute + (expectValue? " matches ": " does not match ") + regex;
 			}
-		};
-	}
+	};
 }
+		}

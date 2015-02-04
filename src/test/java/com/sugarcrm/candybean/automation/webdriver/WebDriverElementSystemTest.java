@@ -381,7 +381,7 @@ public class WebDriverElementSystemTest {
 		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "hidden", true, 10) != null);
 		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "hidden", false, 10) != null);
 		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", false, 10) != null);
-		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", false, 10) != null);
+		Assert.assertTrue(iface.getPause().waitForAttribute(new Hook(Strategy.ID, "p1"), "class", "normal", true, 10) != null);
 	}
 
 	@Test
