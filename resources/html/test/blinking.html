@@ -1,0 +1,37 @@
+<!--
+This file presents an html page with a single element
+that blinks every 5 seconds once clicked. It is 
+intended to be used for testing waitConditions that
+need an element to variably be visible and not 
+visible.
+-->
+
+<html>
+<head>
+<style>
+	.hidden {
+		visibility:hidden;
+	}
+</style>
+</head>
+
+<body>
+<p id="p1" class="normal" onclick="setInterval(switchP1Class, 3000)">Hello World</p>
+
+<script type="text/javascript">
+	function switchP1Class() {
+		var p1 = document.getElementById('p1');
+
+		if (p1.className == "hidden") {
+			p1.className = 'normal'
+		}
+		else {
+			p1.className = 'hidden';
+		}
+	}
+</script>
+
+
+</body>
+</html>
+

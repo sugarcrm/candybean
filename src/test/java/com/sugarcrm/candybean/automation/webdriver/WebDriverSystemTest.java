@@ -23,26 +23,20 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import static org.junit.Assert.*;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.testUtilities.TestConfiguration;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.automation.webdriver.ChromeInterface;
-import com.sugarcrm.candybean.automation.webdriver.FirefoxInterface;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
+import org.openqa.selenium.WebDriver;
 
 @RunWith(VRunner.class)
 public class WebDriverSystemTest {
@@ -136,10 +130,21 @@ public class WebDriverSystemTest {
 		}
 	}
 
-	@Ignore
 	@Test
-	public void closeWindowTest() throws Exception {
-//		this.iface.closeWindow();
+	public void openCloseWindowTest() throws Exception {
+		String googleUrl = "https://www.google.com/";
+		String bingUrl = "http://www.bing.com/";
+
+		iface.go(googleUrl);
+		assertEquals(googleUrl, iface.wd.getCurrentUrl());
+		iface.openWindow(bingUrl);
+		assertEquals(bingUrl, iface.wd.getCurrentUrl());
+		iface.focusWindow(0);
+		assertEquals(googleUrl, iface.wd.getCurrentUrl());
+		iface.focusWindow(1);
+		assertEquals(bingUrl, iface.wd.getCurrentUrl());
+		iface.closeWindow();
+		assertEquals(googleUrl, iface.wd.getCurrentUrl());
 	}
 
 	@Ignore
@@ -336,6 +341,47 @@ public class WebDriverSystemTest {
 		assertTrue(iface.wd.switchTo().alert().getText().contains(args[0]));
 		assertTrue(iface.wd.switchTo().alert().getText().contains(args[1]));
 		iface.acceptDialog();
+
+		Long toReturn = 12l;
+		javascript = "return " + toReturn + ";";
+		Long returnValue = (Long)(iface.executeJavascript(javascript));
+		assertEquals("Javascript return value incorrect.  Expected: " + toReturn +
+				"   Found: " + returnValue, toReturn, returnValue);
+
+	}
+
+    @Test
+	public void executeAsyncJavaScriptTest() throws Exception {
+        iface.wd.manage().timeouts().setScriptTimeout(1500, TimeUnit.MILLISECONDS);
+
+		// 0 arguments
+        long start = System.currentTimeMillis();
+		String javascript = "window.setTimeout(arguments[arguments.length - 1], 500);";
+		iface.executeAsyncJavascript(javascript);
+
+        // Assert that the test waited for at least 500ms
+        assertTrue(System.currentTimeMillis() >= start + 500);
+
+		// 1 argument
+        start = System.currentTimeMillis();
+		javascript = "window.setTimeout(arguments[arguments.length - 1], arguments[0]);";
+		iface.executeAsyncJavascript(javascript, 1000);
+
+        // Assert that the test waited for at least 1000ms
+        assertTrue(System.currentTimeMillis() >= start + 1000);
+
+        // multiple arguments
+        start = System.currentTimeMillis();
+        javascript = "window.setTimeout(arguments[arguments.length - 1], arguments[0]-arguments[1]);";
+
+		iface.executeAsyncJavascript(javascript, 1000, 400);
+        assertTrue(System.currentTimeMillis() >= start + 600);
+
+		String toReturn = "Hello World!";
+		javascript = "window.setTimeout(arguments[arguments.length-1] (\"Hello World!\"), 100);";
+		String returnValue = (String)(iface.executeAsyncJavascript(javascript));
+		assertEquals("Javascript return value incorrect.  Expected: " + toReturn +
+				"   Found: " + returnValue, toReturn, returnValue);
 	}
 
 	@Ignore

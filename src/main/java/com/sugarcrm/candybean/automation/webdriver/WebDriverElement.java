@@ -23,10 +23,7 @@ package com.sugarcrm.candybean.automation.webdriver;
 
 import java.util.List;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import com.sugarcrm.candybean.automation.element.Element;
@@ -222,11 +219,33 @@ public class WebDriverElement extends Element {
 	 * @param	javascript	The javascript code to execute
 	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
 	 *                      be incremented by 1 because this element will be used as the first arg
+	 * @return	an object representation of the return value of the executed Javascript.  Depending
+	 * 			on the type returned from the Javascript, this may be of type WebElement, Double,
+	 * 			Long, Boolean, String, List&lt;Object&gt;, or null.
 	 */
 	@Override
-	public void executeJavascript(String javascript, Object... args) {
+	public Object executeJavascript(String javascript, Object... args) {
 		logger.info("Executing explicit javascript against " + toString());
-		((JavascriptExecutor) wd).executeScript(javascript, we, args);
+		return ((JavascriptExecutor) wd).executeScript(javascript, we, args);
+	}
+
+    /**
+	 * Executes an asynchronous javascript command against this element. The script executed with
+     * this method must explicitly signal they are finished by invoking the provided callback. This
+     * callback is always injected into the executed function as the last argument
+	 *
+	 * @param	javascript	The javascript code to execute
+	 * @param	args	The arguments to pass.  Note that indices of the arguments passed will
+	 *                      be incremented by 1 because this element will be used as the first arg
+     * @return	an object representation of the first argument passed to the callback
+     *          of the executed Javascript.  Depending on the type returned from the
+     *          Javascript, this may be of type WebElement, Long, Boolean, String,
+     *          List&lt;Object&gt;, or null.
+	 */
+    @Override
+	public Object executeAsyncJavascript(String javascript, Object... args) {
+		logger.info("Executing explicit async javascript against " + toString());
+		return ((JavascriptExecutor) wd).executeAsyncScript(javascript, we, args);
 	}
 
 	/**
@@ -270,13 +289,27 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Returns true if and only if the element is displayed {@link http
-	 * ://selenium.googlecode.com/svn/trunk/docs/api/java/index.html according
+	 * Returns true if and only if the element is displayed {@link
+	 * "http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html" according
 	 * to Selenium}
 	 */
 	public boolean isDisplayed() throws CandybeanException {
 		logger.info("Determining if element is visible: " + this.toString());
 		return we.isDisplayed();
+	}
+
+	/**
+	 * Returns true if and only if part of the element is located on the screen/page
+	 */
+
+	public boolean isOnScreen() throws CandybeanException {
+		logger.info("Determining if element is on screen " + this.toString());
+		Point location = we.getLocation();
+		Dimension windowSize = wd.manage().window().getSize();
+		return ( location.getY() + we.getSize().getHeight() > 0
+			&&   location.getY() < windowSize.getHeight()
+			&&   location.getX() + we.getSize().getWidth() > 0
+			&&   location.getX() < windowSize.getWidth());
 	}
 
 	/**

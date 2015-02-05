@@ -59,6 +59,7 @@ import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Drives the creation of multi-platform automation tests by providing a resourceful API
@@ -157,16 +158,35 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			throw new CandybeanException(ioe);
 		}
 	}
-	
+
 	/**
 	 * Executes any javascript command
-	 * @param javascript The javascript code to execute
+	 * @param	javascript	The javascript code to execute
+	 * @return	an object representation of the return value of the executed Javascript.  Depending
+	 * 			on the type returned from the Javascript, this may be of type WebElement, Double,
+	 * 			Long, Boolean, String, List&lt;Object&gt;, or null.
 	 */
-	public void executeJavascript(String javascript, Object... args){
+	public Object executeJavascript(String javascript, Object... args){
 		logger.info("Executing explicit javascript");
-		((JavascriptExecutor) this.wd).executeScript(javascript, args);
+		return ((JavascriptExecutor) this.wd).executeScript(javascript, args);
 	}
-	
+
+	/**
+     * Executes an asynchronous javascript command. The script executed with
+     * this method must explicitly signal they are finished by invoking the provided callback. This
+     * callback is always injected into the executed function as the last argument
+     *
+	 * @param	javascript	The javascript code to execute
+	 * @return	an object representation of the first argument passed to the callback
+     *          of the executed Javascript.  Depending on the type returned from the
+     *          Javascript, this may be of type WebElement, Long, Boolean, String,
+     *          List&lt;Object&gt;, or null.
+	 */
+	public Object executeAsyncJavascript(String javascript, Object... args){
+		logger.info("Executing explicit async javascript");
+		return ((JavascriptExecutor) this.wd).executeAsyncScript(javascript, args);
+	}
+
 	/**
 	 * Refreshes the interface.  If refresh is undefined, it does nothing.
 	 * 
@@ -266,7 +286,20 @@ public abstract class WebDriverInterface extends AutomationInterface {
 		logger.info("Focusing to frame by element: " + wde.toString());
 		this.getPause().waitUntil(WaitConditions.frameToBeAvailableAndSwitchToIt(wde));
 	}
-	
+
+	/**
+	 * Open a new browser window with specified URL and places focus on the new window.
+	 *
+	 * @param	url	a String containing the URL to open in the new window.
+	 */
+	public void openWindow(String url) throws CandybeanException {
+		logger.info("Opening a new window and navigating to: " + url);
+		int numWindows = wd.getWindowHandles().size();
+		executeJavascript("window.open('" + url + "');");
+		getPause().waitUntil(WaitConditions.numberOfWindowsToBe(numWindows + 1));
+		focusWindow(url); // focusWindow automatically pushes the window onto the stack.
+	}
+
 	/**
 	 * Close the current browser window.
 	 */
@@ -299,7 +332,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			if (index >= windowHandles.length) {
 				throw new CandybeanException("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 			} else {
-				this.wd.switchTo().window(windowHandles[index]);
+				getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windowHandles[index]));
 				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
 				logger.info("Focused by index: " + index + " to window: " + windows.peek());
 			}
@@ -327,7 +360,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 			int i = 0;
 			boolean windowFound = false;
 			while (i < windowHandles.length && !windowFound) {
-				WebDriver window = this.wd.switchTo().window(windowHandles[i]);
+				WebDriver window = (WebDriver)getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windowHandles[i]));
 				if (window.getTitle().equals(titleOrUrl) || window.getCurrentUrl().equals(titleOrUrl)) {
 					windows.push(new Pair<Integer, String>(new Integer(i), this.wd.getWindowHandle()));
 					logger.info("Focused by title or URL: " + titleOrUrl + " to window: " + windows.peek());
@@ -336,7 +369,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 				i++;
 			}
 			if (!windowFound) {
-				this.wd.switchTo().window(windows.peek().y);
+				getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windows.peek().y));
 				throw new CandybeanException("The given focus window string matched no title or URL: " + titleOrUrl);
 			}
 		}	
