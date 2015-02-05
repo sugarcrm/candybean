@@ -114,16 +114,12 @@ public class WebDriverElementSystemTest {
 		String actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
 		String expChapterText = "Hit Me!";
 		Assert.assertEquals(expChapterText, actChapterText);
-		/* Webpage moved
-
 		//Fourth test
 		url = "http://www.developphp.com/view_lesson.php?v=576";
 		iface.go(url);
-		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"page_data\"]/div[4]/input").getText(); // button type button
-		expChapterText = "Generic Button";
+		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"searchbtn\"]").getText(); // button type button
+		expChapterText = "Search";
 		Assert.assertEquals(expChapterText, actChapterText);
-
-		*/
 	}
 
 	@Test
@@ -335,7 +331,7 @@ public class WebDriverElementSystemTest {
 		iface.getWebDriverElement(Strategy.ID, "search_button_homepage").click();
 		iface.getWebDriverElement(Strategy.ID, "search_form_input").sendString("sugar", true);
 		iface.getWebDriverElement(Strategy.ID, "search_button").click();
-		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
+		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "Sugar CRM").isDisplayed());
 	}
 
 	@Test
