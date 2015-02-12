@@ -67,8 +67,8 @@ public class WebDriverPause {
 	public Object waitUntil(ExpectedCondition condition, long timeoutMs) throws CandybeanException {
 		// This is done by double-polling. WebDriverWait waits for wdPollingInterval amount of time.
 		// This is done repetitively until the time reaches timeoutMs.
-		long timeoutS = timeoutMs * 1000;
-		long pollingIntervalS = timeoutS <= defaultPollingIntervalS ? timeoutS : defaultPollingIntervalS;
+		final long pollingIntervalS = Math.min(defaultPollingIntervalS,  Math.max(timeoutMs/1000, 1));
+		final long seleniumPollingIntervalMs = 250;
 		final long startTime = currentTimeMillis();
 		long currentTimeMs, currentTimeS = 0;
 		String toThrow = null;
@@ -79,7 +79,7 @@ public class WebDriverPause {
 				currentTimeS = currentTimeMs / 1000;
 				logger.info(currentTimeS + " seconds have passed. Waiting until " + condition.toString() +
 						" is satisfied.");
-				toReturn = (new WebDriverWait(this.wd, pollingIntervalS)).until(condition);
+				toReturn = (new WebDriverWait(this.wd, pollingIntervalS, seleniumPollingIntervalMs)).until(condition);
 				toThrow = null;
 				break;
 			} catch (WebDriverException wdException) {
