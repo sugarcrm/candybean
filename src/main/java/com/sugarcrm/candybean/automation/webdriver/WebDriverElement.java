@@ -40,7 +40,6 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * @author Conrad Warmbold
  */
 public class WebDriverElement extends Element {
-
 	protected WebDriver wd;
 	protected WebElement we;
 
@@ -109,7 +108,7 @@ public class WebDriverElement extends Element {
 		String type = this.we.getAttribute("type");
 		if (type != null
 				&& (type.equalsIgnoreCase("button") || type
-						.equalsIgnoreCase("input"))) {
+						.equalsIgnoreCase("text"))) {
 			return this.we.getAttribute("value");
 		}
 		return this.we.getText();
@@ -354,47 +353,41 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Clears the element and sends a string to it.
+	 * Selects all text in this element if it is a textfield.  Note that this method does not
+	 * currently support textareas or any type of element apart from a textfield.  It clicks on the
+	 * element, so links will be activated, radio buttons will be selected, drop boxes will be
+	 * opened, etc.  Use of this method on any non-textfield element is not currently supported.
+	 */
+	public void selectAll() {
+		we.click();
+		we.sendKeys(Keys.END,Keys.chord(Keys.SHIFT,Keys.HOME));
+	}
+
+	/**
+	 * Clear the element and send a string to it.
 	 * 
-	 * @param input
-	 *            string to send
+	 * @param   input   string to send
 	 */
 	public void sendString(String input) throws CandybeanException {
-		logger.info("Sending string: " + input + " to element: "
-				+ this.toString());
-		this.we.clear();
-
-		// Re-find the element to avoid the stale element problem.
-		// Re-finding this *still* causes problems in getControl.getControl
-		// situations; a
-		// universal solution should be found to resolve this inconsistency
-		// since this
-		// is the only method that does it and it violates the general
-		// architecture
-		this.we = this.wd.findElements(Hook.getBy(this.hook)).get(this.index);
-		this.we.sendKeys(input);
+		sendString(input, false);
 	}
 
 	/**
 	 * Send a string to this element.
 	 * 
-	 * @param input
-	 *            string to send
-	 * @param append
-	 *            if append is true, the element will be cleared first
-	 * @throws CandybeanException
+	 * @param   input   string to send
+	 * @param   append  if append is false, the element will be cleared first
+	 * @throws  CandybeanException
 	 */
-	public void sendString(String input, boolean append)
-			throws CandybeanException {
-		logger.info("Clear first?: " + append + "; sending string: " + input
-				+ " to element: " + this.toString());
-		if (!append)
-			this.sendString(input);
-		else {
-			// Re-find the element to avoid the stale element problem.
-			this.we = this.wd.findElements(Hook.getBy(this.hook)).get(this.index);
-			this.we.sendKeys(input);
+	public void sendString(String input, boolean append) throws CandybeanException {
+		logger.info((append ? "Clearing field and s" : "S") + "ending string: " + input +
+			" to element: " + toString());
+
+		if(!append) {
+			selectAll();
 		}
+
+		we.sendKeys(input);
 	}
 
 	/**
