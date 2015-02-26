@@ -338,6 +338,11 @@ public class WebDriverElementSystemTest {
 		textField.sendString(searchString1);
 		textField.sendString(searchString2, true);
 		Assert.assertEquals(searchString1 + searchString2, textField.getText());
+
+		// clear and set to empty string scenario
+		String emptyString = "";
+		textField.sendString(emptyString);
+		Assert.assertEquals(emptyString, textField.getText());
 	}
 
 	@Test
