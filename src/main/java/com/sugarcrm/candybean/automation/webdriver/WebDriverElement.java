@@ -385,6 +385,7 @@ public class WebDriverElement extends Element {
 
 		if(!append) {
 			selectAll();
+			we.sendKeys(Keys.DELETE);
 		}
 
 		we.sendKeys(input);
