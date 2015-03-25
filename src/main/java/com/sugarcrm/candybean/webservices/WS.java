@@ -21,216 +21,219 @@
  */
 package com.sugarcrm.candybean.webservices;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Helps make web-service calls and supports several operations like POST and GET.
  * 
  */
 public class WS {
-	
-	private static Logger log = Logger.getLogger(WS.class.getSimpleName());
-	
-	public enum TYPE { JSON, XML };
-	public enum OP { DELETE, GET, POST, PUT };
 
-	public static String getValue(TYPE type, String body, String key) throws Exception {
-		String value = null;
-		switch (type) {
-			case JSON:
-//				JSONObject jsonObj = (JSONObject)JSONValue.parse(body);
-				//TODO
-				break;
-			case XML:
-				SAXParserFactory factory = SAXParserFactory.newInstance();
-			    factory.setValidating(true);
-			    SAXParser saxParser = factory.newSAXParser();
-		        saxParser.parse(new ByteArrayInputStream(body.getBytes()), new DefaultHandler());
-		        //TODO
-		    	break;
-			default:
-				throw new Exception("WS:TYPE not recognized.");
-		}
-		return value;
-	}
-	
+	protected static Logger log = Logger.getLogger(WS.class.getSimpleName());
+	public enum OP { DELETE, GET, POST, PUT }
+
+	/**
+	 * Send an DELETE, GET, POST, or PUT http request
+	 * @param op The type of http request
+	 * @param uri The http endpoint
+	 * @param headers Map of header key value pairs
+	 * @param body String representation of the request body
+	 * @return Key Value pairs of the response
+	 * @throws Exception When http request failed
+	 * @deprecated Use {@link #request(OP,String,Map,String,ContentType)}
+	 */
+	@Deprecated
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body) throws Exception {
-		return request(op, uri, headers, body, null);
+		return request(op, uri, headers, body, ContentType.DEFAULT_TEXT);
 	}
-	
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {		
-		HttpUriRequest request = null;
-	    Map<String, Object> mapParse = null;
+
+	/**
+	 * Send an DELETE, GET, POST, or PUT http request
+	 * @param op The type of http request
+	 * @param uri The http endpoint
+	 * @param payload Map of key value pairs for the body
+	 * @param postHeaders List of Maps of header key value pairs
+	 * @param body String representation of the request body (ignored)
+	 * @return Key Value pairs of the response
+	 * @throws Exception When http request failed
+	 * @deprecated This is a work around for old compatibility, use {@link #request(OP,String,Map,String,ContentType)} or {@link #request(OP,String,Map,Map)}
+	 */
+	@Deprecated
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> payload, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {
+		HashMap<String, String> headers = new HashMap<>();
+		for (HashMap<String, String> map : postHeaders) {
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				headers.put(entry.getKey(), entry.getValue());
+			}
+		}
+		if (body == null) {
+			return request(op, uri, headers, payload);
+		} else {
+			return request(op,uri, headers, body, ContentType.DEFAULT_TEXT);
+		}
+	}
+
+    /**
+	 * Send an DELETE, GET, POST, or PUT http request using a JSON body
+	 * @param op The type of http request
+	 * @param uri The http endpoint
+	 * @param headers Map of header key value pairs
+	 * @param body Map of Key Value pairs
+	 * @return Key Value pairs of the response
+	 * @throws Exception When http request failed
+	 */
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String,String> body) throws Exception {
+		return request(op,uri,headers,body,ContentType.APPLICATION_JSON);
+	}
+
+	/**
+	 * Send an DELETE, GET, POST, or PUT http request, intended for multipart data and JSON requests
+	 * @param op The type of http request
+	 * @param uri The http endpoint
+	 * @param headers Map of header key value pairs
+	 * @param body Map of Key Value pairs
+	 * @param contentType The intended content type of the body
+	 * @return Key Value pairs of the response
+	 * @throws Exception When http request failed
+	 */
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String,String> body, ContentType contentType) throws Exception {
+		Map<String, Object> mapParse;
 		switch (op) {
 			case DELETE:
-				request = new HttpDelete(uri);
-	            mapParse = requestIt(request, headers);
+				mapParse = handleRequest(new HttpDelete(uri), headers);
 				break;
 			case GET:
-				request = new HttpGet(uri);
-	            mapParse = requestIt(request, headers);
+				mapParse = handleRequest(new HttpGet(uri), headers);
 				break;
 			case POST:
 				HttpPost post = new HttpPost(uri);
-				
-				if (postHeaders != null) {
-					for (HashMap<String, String> h : postHeaders) {
-						for (String key : h.keySet()) {
-							post.setHeader(key, h.get(key));
-						}
+				if (body != null) {
+					if (contentType == ContentType.MULTIPART_FORM_DATA) {
+						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+						for (Map.Entry<String, String> entry : body.entrySet())
+							builder.addTextBody(entry.getKey(), entry.getValue());
+						post.setEntity(builder.build());
+					} else {
+						JSONObject jsonBody = new JSONObject(body);
+						StringEntity strBody = new StringEntity(jsonBody.toJSONString(), ContentType.APPLICATION_JSON);
+						post.setEntity(strBody);
 					}
 				}
-
-	            mapParse = postRequest(post, headers, body); 
+				mapParse = handleRequest(post, headers);
 				break;
 			case PUT:
 				HttpPut put = new HttpPut(uri);
 				if (body != null) {
-					put.setEntity(new StringEntity(body));
+					if (contentType == ContentType.MULTIPART_FORM_DATA) {
+                        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                        for (Map.Entry<String,String> entry: body.entrySet())
+                            builder.addTextBody(entry.getKey(), entry.getValue());
+                        put.setEntity(builder.build());
+					} else {
+						JSONObject jsonBody = new JSONObject(body);
+						StringEntity strBody = new StringEntity(jsonBody.toJSONString(), ContentType.APPLICATION_JSON);
+						put.setEntity(strBody);
+					}
 				}
-				request = put;
-	            mapParse = requestIt(request, headers);
+				mapParse = handleRequest(put, headers);
 				break;
 			default:
 				throw new Exception("WS:OP type not recognized.");
 		}
-		
 		return mapParse;
 	}
-	
-	private static Map<String, Object> requestIt(HttpUriRequest request, Map<String, String> headers) {
-		
-		Header[] hdrs = new Header[headers.size()];
-		
-		int i = 0;
+
+	/**
+	 * Send an DELETE, GET, POST, or PUT http request
+	 * @param op The type of http request
+	 * @param uri The http endpoint
+	 * @param headers Map of header key value pairs
+	 * @param body String representation of the request body
+	 * @param contentType The content type of the body
+	 * @return Key Value pairs of the response
+	 * @throws Exception When http request failed
+	 */
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body, ContentType contentType) throws Exception {
+	    Map<String, Object> mapParse;
+		switch (op) {
+			case DELETE:
+	            mapParse = handleRequest(new HttpDelete(uri), headers);
+				break;
+			case GET:
+	            mapParse = handleRequest(new HttpGet(uri), headers);
+				break;
+			case POST:
+				HttpPost post = new HttpPost(uri);
+				if (body != null) {
+					post.setEntity(new StringEntity(body, contentType));
+				}
+	            mapParse = handleRequest(post, headers);
+				break;
+			case PUT:
+				HttpPut put = new HttpPut(uri);
+				if (body != null) {
+					put.setEntity(new StringEntity(body, contentType));
+				}
+	            mapParse = handleRequest(put, headers);
+				break;
+			default:
+				throw new Exception("WS:OP type not recognized.");
+		}
+		return mapParse;
+	}
+
+	/**
+	 * Protected method to handle sending and receiving an http request
+	 * @param request The Http request that is being send
+	 * @param headers Map of Key Value header pairs
+	 * @return Key Value pairs of the response
+	 */
+	protected static Map<String, Object> handleRequest(HttpUriRequest request, Map<String, String> headers) {
+
 		for (Map.Entry<String, String> header : headers.entrySet()) {
-			hdrs[i++] = new BasicHeader(header.getKey(), header.getValue());
+			request.addHeader(new BasicHeader(header.getKey(), header.getValue()));
 		}
-		
-		request.setHeaders(hdrs);
-		
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpResponse execute = null;
-        try {
-			execute = httpClient.execute(request);
+
+		HttpResponse response;
+		try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()){
+			response = httpClient.execute(request);
+
+            // -1 is not a valid response code, so we use it as a tempory value to check if
+            // getting the status code failed. We check the status inside the if statement to
+            // ensure that response is not null when we check.
+			int code = -1;
+			if (response == null || (code = response.getStatusLine().getStatusCode()) != 200) {
+				throw -1 == code ?
+						new RuntimeException("Http Request failed: Response null"):
+						new RuntimeException("Failed : HTTP error code : " + code);
+			}
+
+			JSONObject parse = (JSONObject) JSONValue.parse(new InputStreamReader(response.getEntity().getContent()));
+
+			@SuppressWarnings("unchecked")
+			Map<String, Object> mapParse = (Map<String, Object>) parse;
+			return mapParse;
+
 		} catch (IOException e) {
 			log.severe(e.getMessage());
-		}
-		
-		httpErrorSimpleCheckHttp(execute);
-
-		HttpEntity entity = execute.getEntity();
-
-		JSONObject parse = null;
-		try {
-			parse = (JSONObject) JSONValue.parse(new InputStreamReader(entity
-					.getContent()));
-		} catch (IllegalStateException | IOException e) {
-			log.severe(e.getMessage());
-		}
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> mapParse = (Map<String, Object>) parse;
-		httpClient.close();
-		return mapParse;
-	}
-	
-	private static Map<String, Object> postRequest(HttpPost post, Map<String, String> headers, String body) {
-
-        MultipartEntity me = setMultipartEntity(headers);
-		post.setEntity(me);
-
-		if (body != null) {
-			try {
-				post.setEntity(new StringEntity(body));
-			} catch (UnsupportedEncodingException e1) {
-				log.severe(e1.getMessage());
-			}
-		}
-		
-		DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-		HttpResponse execute = null;
-		try {
-			execute = defaultHttpClient.execute(post);
-		} catch (IOException e) {
-			log.severe(e.getMessage());
-		}
-
-		httpErrorSimpleCheckHttp(execute);
-
-		HttpEntity entity = execute.getEntity();
-
-		JSONObject parse = null;
-		try {
-			parse = (JSONObject) JSONValue.parse(new InputStreamReader(entity
-					.getContent()));
-		} catch (IllegalStateException | IOException e) {
-			log.severe(e.getMessage());
-		}
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> mapParse = (Map<String, Object>) parse;
-		defaultHttpClient.close();
-		return mapParse;
-	}
-	
-	private static MultipartEntity setMultipartEntity(Map<String, String> headers) {
-
-		MultipartEntity multipartEntity = new MultipartEntity();
-		try {
-			for (Map.Entry<String, String> entry : headers.entrySet()) {
-				multipartEntity.addPart(entry.getKey(),
-						new StringBody(entry.getValue()));
-			}
-		} catch (UnsupportedEncodingException e) {
-			log.severe(e.getMessage());
-		}
-
-		return multipartEntity;
-	}
-
-	private static void httpErrorSimpleCheckHttp(HttpResponse execute) {
-
-		int code = execute.getStatusLine().getStatusCode();
-		if (code != 200) {
-			throw new RuntimeException("Failed : HTTP error code : " + code);
-		}
-	}
-	
-	public static void main(String[] args) {
-		try {
-//			System.out.println("=======decode=======");
-//			String s = "[0,{\"1\":{\"2\":{\"3\":{\"4\":[5,{\"6\":7}]}}}}]";
-//			Object obj = JSONValue.parse(s);
-//			JSONArray arr = (JSONArray) obj;
-//			System.out.println(arr.get(1));
-//			System.out.println(arr.has("2"));
-//			System.out.println(arr.get("2"));
-		} catch(Exception e) {
-			log.severe(e.getMessage());
+			return new HashMap<>();
 		}
 	}
 }
