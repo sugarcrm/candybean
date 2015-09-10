@@ -41,6 +41,7 @@ import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 
 @RunWith(VRunner.class)
 public class WebDriverElementSystemTest {
@@ -154,6 +155,7 @@ public class WebDriverElementSystemTest {
 		//Double-Clicking this button will trigger an alert through JavaScript event
 		WebDriverElement dbClickButton = iface.getWebDriverElement(new Hook(Strategy.ID, "buttonId"));
 		dbClickButton.doubleClick();
+		iface.pause(500);
 		Assert.assertTrue(iface.isDialogVisible());
 		iface.acceptDialog();
 	}
@@ -210,34 +212,19 @@ public class WebDriverElementSystemTest {
 
 	@Test
 	public void pauseUntilInvisibleTest() throws Exception {
-		long timeoutMilliSec = 3000;
-		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
+		long timeoutMilliSec = 2000;
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
 
-		WebDriverElement imgElement = iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2"));
-		WebDriverElement hideButton = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox2 input"));
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "p1"));
+		text.click();
+		iface.getPause().waitForInvisible(new Hook(Strategy.ID, "p1"), timeoutMilliSec);
+		Assert.assertTrue(!text.isDisplayed());
 
-		// Test to ensure we don't wait for elements that are not there
-		hideButton.click();
-		iface.getPause().waitForInvisible(imgElement, timeoutMilliSec);
-		Assert.assertFalse(imgElement.isDisplayed());
-		iface.getPause().waitForInvisible(hideButton);
+		// Wait until we know the element is visible and then force a timeout
+		iface.getPause().waitForVisible(new Hook(Strategy.ID, "p1"), timeoutMilliSec);
 
-
-		WebDriverElement hideButton2 = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox1 input"));
-		hideButton2.click();
-
-		iface.getPause().waitForInvisible(new Hook(Strategy.CSS, "imgbox1"), 2000);
-
-		// Check that waitForInvisible throws a Timeout exception if it waits too long
-		try {
-			iface.getWebDriverElement(new Hook(Strategy.CSS, ".box[value='Reset All']")).click();
-			iface.getPause().waitForInvisible(new Hook(Strategy.ID, "imgbox2"), timeoutMilliSec);
-		} catch (CandybeanException e) {
-			Assert.assertTrue(iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2")).isDisplayed());
-			return;
-		}
-		// Fail if the try doesn't return
-		Assert.fail();
+		thrown.expect(CandybeanException.class);
+		iface.getPause().waitForInvisible(new Hook(Strategy.ID, "p3"), 100);
 	}
 
 	@Test
@@ -249,7 +236,11 @@ public class WebDriverElementSystemTest {
 		Hook sfcLiButton = new Hook(Strategy.CSS, sfcLi + " a");
 		iface.getPause().waitUntil(WaitConditions.clickable(sfcLiButton));
 		iface.getWebDriverElement(sfcLiButton).click();
-		Assert.assertEquals(iface.getURL(), url + "sfc/");
+
+		String sbyLi = "#topban .sublinks li:nth-child(2)";
+		Hook sbyLiButton = new Hook(Strategy.CSS, sbyLi + " a");
+		iface.getPause().waitUntil(WaitConditions.clickable(sbyLiButton));
+		Assert.assertEquals(url + "sfc/", iface.getURL());
 	}
 
 	@Test
@@ -263,15 +254,12 @@ public class WebDriverElementSystemTest {
 	
 	@Test
 	public void isDisplayedTest() throws Exception {
-		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
-		
-		WebDriverElement imgElement = iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2"));
-		Assert.assertTrue(imgElement.isDisplayed());
-		
-		//Click the hide button to hide imgElement (Setting visibility style to hidden)
-		WebDriverElement hideButton = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox2 input"));
-		hideButton.click();
-		Assert.assertFalse(imgElement.isDisplayed());
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
+
+		WebDriverElement p3 = iface.getWebDriverElement(new Hook(Strategy.ID, "p3"));
+		Assert.assertTrue(p3.isDisplayed());
+		p3.click();
+		Assert.assertFalse(p3.isDisplayed());
 	}
 
 	@Ignore

@@ -1,9 +1,9 @@
 <!--
-This file presents an html page with a single element
-that blinks every 5 seconds once clicked. It is 
-intended to be used for testing waitConditions that
-need an element to variably be visible and not 
-visible.
+This file presents an html page with an element (p1)
+that toggles visibility every second once clicked, and an 
+element (p3) which toggles visibility when clicked. It is
+intended to be used for testing waitConditions that need
+an element to variably be visible and not visible.
 -->
 
 <html>
@@ -16,17 +16,18 @@ visible.
 </head>
 
 <body>
-<p id="p1" class="normal" onclick="setInterval(switchP1Class, 3000)">Hello World</p>
+	<p id="p1" class="normal" onclick="setInterval(function(){switchClass('p1');}, 1000)">Hello World</p>
+	<p id="p3" class="normal" onclick="switchClass('p3')">Hello World</p>
 
 <script type="text/javascript">
-	function switchP1Class() {
-		var p1 = document.getElementById('p1');
+	function switchClass(element) {
+		var elem = document.getElementById(element);
 
-		if (p1.className == "hidden") {
-			p1.className = 'normal'
+		if (elem.className == "hidden") {
+			elem.className = 'normal'
 		}
 		else {
-			p1.className = 'hidden';
+			elem.className = 'hidden';
 		}
 	}
 </script>
@@ -34,4 +35,3 @@ visible.
 
 </body>
 </html>
-

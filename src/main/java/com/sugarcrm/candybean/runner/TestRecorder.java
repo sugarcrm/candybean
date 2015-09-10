@@ -283,7 +283,7 @@ public class TestRecorder extends RunListener {
 			baseTemplate = baseTemplate.replace("${summary.failures}", summary.get("totalFailures"));
 			baseTemplate = baseTemplate.replace("${summary.skipped}", summary.get("totalSkipped"));
 			baseTemplate = baseTemplate.replace("${summary.success}", summary.get("totalPercentage")+"%");
-			baseTemplate = baseTemplate.replace("${summary.time}",  Utils.calculateTime(Float.parseFloat(summary.get("totalElapsedTime"))));
+			baseTemplate = baseTemplate.replace("${summary.time}",  Utils.calculateTime(Float.parseFloat(summary.get("totalElapsedTime").replace(",",""))));
 			baseTemplate = baseTemplate.replace("${testsPerPage}", config.getValue("testResultsReport.testsPerPage"));
 			StringBuilder packageMarkup = new StringBuilder();
 			StringBuilder packageTableMarkup = new StringBuilder();
@@ -315,7 +315,7 @@ public class TestRecorder extends RunListener {
 				pkgTableTemplate = pkgTableTemplate.replace("${package.failures}", summaryForPackage.get("totalFailures"));
 				pkgTableTemplate = pkgTableTemplate.replace("${package.skipped}", summaryForPackage.get("totalSkipped"));
 				pkgTableTemplate = pkgTableTemplate.replace("${package.success}", summaryForPackage.get("totalPercentage")+"%");
-				pkgTableTemplate = pkgTableTemplate.replace("${package.time}", Utils.calculateTime(Float.parseFloat((summaryForPackage.get("totalElapsedTime")))));
+				pkgTableTemplate = pkgTableTemplate.replace("${package.time}", Utils.calculateTime(Float.parseFloat(summaryForPackage.get("totalElapsedTime").replace(",",""))));
 				
 				pkgTemplate = pkgTemplate.replace("${packageId}", pkg.replace(".", ""));
 				pkgTemplate = pkgTemplate.replace("${package.name}", pkg);
