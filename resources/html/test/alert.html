@@ -1,0 +1,18 @@
+<!-- This html page contains a button which when clicked opens a --
+  -- delayed alert-->
+
+<html>
+  <head>
+    <script type="text/javascript">
+      function createIframe() {
+        window.open("alert.html");
+      }
+    </script>
+  </head>
+  <title>TestAlert</title>
+  <body>
+    <div id='div1'>
+      <input type="button" id="b1" onclick="setTimeout(createIframe, 1000)"/>
+    </div>
+  </body>
+</html>
