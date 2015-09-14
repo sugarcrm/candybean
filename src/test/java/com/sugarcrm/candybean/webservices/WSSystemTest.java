@@ -24,10 +24,7 @@ package com.sugarcrm.candybean.webservices;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.apache.http.entity.ContentType;
 import org.json.simple.JSONObject;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import java.util.HashMap;
@@ -76,15 +73,17 @@ public class WSSystemTest {
 	}
 
 	@Test
+	@Ignore("This test should pass, but takes a full minute to do so because it" +
+			"waits for the response to time out.")
 	public void testResponseError() {
 		ExpectedException exception = ExpectedException.none();
 		try {
 			exception.expect(CandybeanException.class);
 			// Send to an IP address that does not exist
-			response = WS.request(WS.OP.POST, "240.0.0.0", headers, "", ContentType.DEFAULT_TEXT);
+			response = WS.request(WS.OP.POST, "http://240.0.0.0", headers, "", ContentType.DEFAULT_TEXT);
 			Assert.fail();
 		} catch (CandybeanException e) {
-			Assert.assertEquals("Target host is null", e.getMessage());
+			Assert.assertEquals("Connect to 240.0.0.0:80 [/240.0.0.0] failed: Operation timed out", e.getMessage());
 		}
 	}
 
