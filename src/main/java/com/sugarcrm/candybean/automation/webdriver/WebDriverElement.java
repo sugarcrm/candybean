@@ -32,6 +32,7 @@ import com.sugarcrm.candybean.automation.element.Location;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
+
 /**
  * Represents an identifiable (via {@link By}) element or element on a page that
  * can be interacted with. A {@link WebDriverElement} object should be used to
@@ -358,9 +359,27 @@ public class WebDriverElement extends Element {
 	 * element, so links will be activated, radio buttons will be selected, drop boxes will be
 	 * opened, etc.  Use of this method on any non-textfield element is not currently supported.
 	 */
-	public void selectAll() {
-		we.click();
-		we.sendKeys(Keys.END,Keys.chord(Keys.SHIFT,Keys.HOME));
+	public void selectAll() throws CandybeanException {
+		executeJavascript("arguments[0].select()");
+	}
+
+	/**
+	 * Clears the text of a text field using Javascript
+	 * Does not trigger the element's onChange event
+	 */
+	public void clearJS() throws CandybeanException {
+		executeJavascript("arguments[0].focus()");
+		selectAll();
+		we.sendKeys(Keys.BACK_SPACE);
+	}
+
+	/**
+	 * Clears an element using Selenium's clear
+	 * Triggers the element's onChange event
+	 */
+	public void clear() {
+		executeJavascript("arguments[0].focus()");
+		we.clear();
 	}
 
 	/**
@@ -377,17 +396,14 @@ public class WebDriverElement extends Element {
 	 * 
 	 * @param   input   string to send
 	 * @param   append  if append is false, the element will be cleared first
-	 * @throws  CandybeanException
+	 * @throws CandybeanException
 	 */
 	public void sendString(String input, boolean append) throws CandybeanException {
-		logger.info((append ? "Clearing field and s" : "S") + "ending string: " + input +
-			" to element: " + toString());
-
+		logger.info((append ? "Appending": "Clearing field and sending") + " text: \"" + input +
+				"\" to element: " + toString());
 		if(!append) {
-			selectAll();
-			we.sendKeys(Keys.DELETE);
+			clearJS();
 		}
-
 		we.sendKeys(input);
 	}
 
