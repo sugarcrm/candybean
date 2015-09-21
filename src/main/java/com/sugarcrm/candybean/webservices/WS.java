@@ -90,7 +90,7 @@ public class WS {
 		}
 	}
 
-    /**
+	/**
 	 * Send an DELETE, GET, POST, or PUT http request using a JSON body
 	 * @param op The type of http request
 	 * @param uri The http endpoint
@@ -142,10 +142,10 @@ public class WS {
 				HttpPut put = new HttpPut(uri);
 				if (body != null) {
 					if (contentType == ContentType.MULTIPART_FORM_DATA) {
-                        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                        for (Map.Entry<String,String> entry: body.entrySet())
-                            builder.addTextBody(entry.getKey(), entry.getValue());
-                        put.setEntity(builder.build());
+						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+						for (Map.Entry<String,String> entry: body.entrySet())
+							builder.addTextBody(entry.getKey(), entry.getValue());
+						put.setEntity(builder.build());
 					} else {
 						JSONObject jsonBody = new JSONObject(body);
 						StringEntity strBody = new StringEntity(jsonBody.toJSONString(), ContentType.APPLICATION_JSON);
@@ -171,27 +171,27 @@ public class WS {
 	 * @throws Exception When http request failed
 	 */
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body, ContentType contentType) throws Exception {
-	    Map<String, Object> mapParse;
+		Map<String, Object> mapParse;
 		switch (op) {
 			case DELETE:
-	            mapParse = handleRequest(new HttpDelete(uri), headers);
+				mapParse = handleRequest(new HttpDelete(uri), headers);
 				break;
 			case GET:
-	            mapParse = handleRequest(new HttpGet(uri), headers);
+				mapParse = handleRequest(new HttpGet(uri), headers);
 				break;
 			case POST:
 				HttpPost post = new HttpPost(uri);
 				if (body != null) {
 					post.setEntity(new StringEntity(body, contentType));
 				}
-	            mapParse = handleRequest(post, headers);
+				mapParse = handleRequest(post, headers);
 				break;
 			case PUT:
 				HttpPut put = new HttpPut(uri);
 				if (body != null) {
 					put.setEntity(new StringEntity(body, contentType));
 				}
-	            mapParse = handleRequest(put, headers);
+				mapParse = handleRequest(put, headers);
 				break;
 			default:
 				throw new Exception("WS:OP type not recognized.");
@@ -215,9 +215,9 @@ public class WS {
 		try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()){
 			response = httpClient.execute(request);
 
-            // -1 is not a valid response code, so we use it as a tempory value to check if
-            // getting the status code failed. We check the status inside the if statement to
-            // ensure that response is not null when we check.
+			// -1 is not a valid response code, so we use it as a tempory value to check if
+			// getting the status code failed. We check the status inside the if statement to
+			// ensure that response is not null when we check.
 			int code = -1;
 			if (response == null || (code = response.getStatusLine().getStatusCode()) != 200) {
 				throw -1 == code ?
