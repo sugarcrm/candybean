@@ -23,12 +23,11 @@ package com.sugarcrm.candybean.webservices;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
@@ -41,7 +40,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 /**
- * Helps make web-service calls and supports several operations like POST and GET.
+ * Helps make web-service calls and supports DELETE, GET, POST, and PUT
  * 
  */
 public class WS {
@@ -49,8 +48,12 @@ public class WS {
 	protected static Logger log = Logger.getLogger(WS.class.getSimpleName());
 	public enum OP { DELETE, GET, POST, PUT }
 
+	// The list of HTTP return codes indicating success
+	private static final Set<Integer> ACCEPTABLE_RETURN_CODE_SET = new HashSet<>(Arrays.asList(
+			new Integer[] { 200, 201, 202 }));
+
 	/**
-	 * Send an DELETE, GET, POST, or PUT http request
+	 * Send a DELETE, GET, POST, or PUT http request
 	 * @param op The type of http request
 	 * @param uri The http endpoint
 	 * @param headers Map of header key value pairs
@@ -65,7 +68,7 @@ public class WS {
 	}
 
 	/**
-	 * Send an DELETE, GET, POST, or PUT http request
+	 * Send a DELETE, GET, POST, or PUT http request
 	 * @param op The type of http request
 	 * @param uri The http endpoint
 	 * @param payload Map of key value pairs for the body
@@ -73,7 +76,8 @@ public class WS {
 	 * @param body String representation of the request body (ignored)
 	 * @return Key Value pairs of the response
 	 * @throws Exception When http request failed
-	 * @deprecated This is a work around for old compatibility, use {@link #request(OP,String,Map,String,ContentType)} or {@link #request(OP,String,Map,Map)}
+	 * @deprecated This is a work around for old compatibility, use {@link #request(OP,String,Map,String,ContentType)}
+	 * or {@link #request(OP,String,Map,Map)}
 	 */
 	@Deprecated
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> payload, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {
@@ -86,32 +90,32 @@ public class WS {
 		if (body == null) {
 			return request(op, uri, headers, payload);
 		} else {
-			return request(op,uri, headers, body, ContentType.DEFAULT_TEXT);
+			return request(op, uri, headers, body, ContentType.DEFAULT_TEXT);
 		}
 	}
 
 	/**
-	 * Send an DELETE, GET, POST, or PUT http request using a JSON body
+	 * Send a DELETE, GET, POST, or PUT http request using a JSON body
 	 * @param op The type of http request
 	 * @param uri The http endpoint
 	 * @param headers Map of header key value pairs
 	 * @param body Map of Key Value pairs
 	 * @return Key Value pairs of the response
-	 * @throws Exception When http request failed
+	 * @throws Exception If HTTP request failed
 	 */
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String,String> body) throws Exception {
-		return request(op,uri,headers,body,ContentType.APPLICATION_JSON);
+	public static Map<String, Object> request(OP op, String uri, Map<String,String> headers, Map<String,String> body) throws Exception {
+		return request(op, uri, headers, body, ContentType.APPLICATION_JSON);
 	}
 
 	/**
-	 * Send an DELETE, GET, POST, or PUT http request, intended for multipart data and JSON requests
+	 * Send a DELETE, GET, POST, or PUT http request, intended for multipart data and JSON requests
 	 * @param op The type of http request
 	 * @param uri The http endpoint
 	 * @param headers Map of header key value pairs
 	 * @param body Map of Key Value pairs
 	 * @param contentType The intended content type of the body
 	 * @return Key Value pairs of the response
-	 * @throws Exception When http request failed
+	 * @throws Exception If HTTP request failed
 	 */
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String,String> body, ContentType contentType) throws Exception {
 		Map<String, Object> mapParse;
@@ -127,8 +131,9 @@ public class WS {
 				if (body != null) {
 					if (contentType == ContentType.MULTIPART_FORM_DATA) {
 						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String, String> entry : body.entrySet())
+						for (Map.Entry<String, String> entry : body.entrySet()) {
 							builder.addTextBody(entry.getKey(), entry.getValue());
+						}
 						post.setEntity(builder.build());
 					} else {
 						JSONObject jsonBody = new JSONObject(body);
@@ -143,8 +148,9 @@ public class WS {
 				if (body != null) {
 					if (contentType == ContentType.MULTIPART_FORM_DATA) {
 						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String,String> entry: body.entrySet())
+						for (Map.Entry<String,String> entry: body.entrySet()) {
 							builder.addTextBody(entry.getKey(), entry.getValue());
+						}
 						put.setEntity(builder.build());
 					} else {
 						JSONObject jsonBody = new JSONObject(body);
@@ -155,13 +161,19 @@ public class WS {
 				mapParse = handleRequest(put, headers);
 				break;
 			default:
-				throw new Exception("WS:OP type not recognized.");
+				/*
+				 * JLS 13.4.26: Adding or reordering constants in an enum type will not break compatibility with
+				 * pre-existing binaries.
+				 * Thus we include a default in the case that a future version of the enum has a case which is not
+				 * one of the above
+				 */
+				throw new Exception("Unrecognized OP type... Perhaps your binaries are the wrong version?");
 		}
 		return mapParse;
 	}
 
 	/**
-	 * Send an DELETE, GET, POST, or PUT http request
+	 * Send a DELETE, GET, POST, or PUT http request
 	 * @param op The type of http request
 	 * @param uri The http endpoint
 	 * @param headers Map of header key value pairs
@@ -194,7 +206,13 @@ public class WS {
 				mapParse = handleRequest(put, headers);
 				break;
 			default:
-				throw new Exception("WS:OP type not recognized.");
+				/*
+				 * JLS 13.4.26: Adding or reordering constants in an enum type will not break compatibility with
+				 * pre-existing binaries.
+				 * Thus we include a default in the case that a future version of the enum has a case which is not
+				 * one of the above
+				 */
+				throw new Exception("Unrecognized OP type... Perhaps your binaries are the wrong version?");
 		}
 		return mapParse;
 	}
@@ -204,36 +222,37 @@ public class WS {
 	 * @param request The Http request that is being send
 	 * @param headers Map of Key Value header pairs
 	 * @return Key Value pairs of the response
+	 * @throws CandybeanException If the response is null or not an acceptable HTTP code
 	 */
-	protected static Map<String, Object> handleRequest(HttpUriRequest request, Map<String, String> headers) {
-
+	protected static Map<String, Object> handleRequest(HttpUriRequest request, Map<String, String> headers) throws CandybeanException {
+		// Add the request headers and execute the request
 		for (Map.Entry<String, String> header : headers.entrySet()) {
 			request.addHeader(new BasicHeader(header.getKey(), header.getValue()));
 		}
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		try {
+			HttpResponse response = httpClient.execute(request);
 
-		HttpResponse response;
-		try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()){
-			response = httpClient.execute(request);
-
-			// -1 is not a valid response code, so we use it as a tempory value to check if
-			// getting the status code failed. We check the status inside the if statement to
-			// ensure that response is not null when we check.
-			int code = -1;
-			if (response == null || (code = response.getStatusLine().getStatusCode()) != 200) {
-				throw -1 == code ?
-						new RuntimeException("Http Request failed: Response null"):
-						new RuntimeException("Failed : HTTP error code : " + code);
+			// Check for invalid responses or error return codes
+			if (response == null) {
+				throw new CandybeanException("Http Request failed: Response null");
 			}
 
+			// Cast the response into a Map and return
 			JSONObject parse = (JSONObject) JSONValue.parse(new InputStreamReader(response.getEntity().getContent()));
-
 			@SuppressWarnings("unchecked")
 			Map<String, Object> mapParse = (Map<String, Object>) parse;
-			return mapParse;
 
-		} catch (IOException e) {
-			log.severe(e.getMessage());
-			return new HashMap<>();
+			int code = response.getStatusLine().getStatusCode();
+			if (!ACCEPTABLE_RETURN_CODE_SET.contains(code)) {
+				throw new CandybeanException("HTTP request received HTTP code : " + code + "\n"
+						+ "Response: " + parse.toString());
+			}
+
+			return mapParse;
+		} catch (IOException e){
+			// Catch the IOException and throw it as a CandybeanException
+			throw new CandybeanException(e);
 		}
 	}
 }
