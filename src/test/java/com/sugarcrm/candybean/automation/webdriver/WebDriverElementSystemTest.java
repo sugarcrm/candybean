@@ -63,20 +63,20 @@ public class WebDriverElementSystemTest {
 	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
-	
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-	
+
 
 	@Test
 	public void getAttributeTest() throws Exception {
 		iface.go("http://sfbay.craigslist.org/");
 		String actAltValue = iface.getWebDriverElement(Strategy.ID, "ppp").getAttribute("class");
 		String expAltValue = "col";
-		Assert.assertEquals(expAltValue, actAltValue);    
+		Assert.assertEquals(expAltValue, actAltValue);
 	}
-	
-	
+
+
 	@Test
 	public void getElementTest() throws Exception {
 		String logoText = "craigslist";
@@ -105,10 +105,9 @@ public class WebDriverElementSystemTest {
 		String bannerText = bannerLogo.getText();
 		Assert.assertEquals(bannerText,banner);
 		//Second test
-		String meanUrl = "http://www.mean.io/";
-		iface.go(meanUrl);
-		String banner1 = "The Friendly";
-		WebDriverElement bannerElement = iface.getWebDriverElement(Strategy.CLASS, "banner-top-title");
+		iface.go(craigsUrl);
+		String banner1 = "community";
+		WebDriverElement bannerElement = iface.getWebDriverElement(Strategy.CLASS, "ban");
 		String bannerElementText = bannerElement.getText();
 		Assert.assertTrue(bannerElementText.contains(banner1));
 		//Third test
@@ -155,7 +154,7 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void doubleClickTest() throws Exception {
 		iface.go("http://www.developerhelpway.com/jquery/events/dblClick-event.html");
-		
+
 		//Double-Clicking this button will trigger an alert through JavaScript event
 		WebDriverElement dbClickButton = iface.getWebDriverElement(new Hook(Strategy.ID, "buttonId"));
 		dbClickButton.doubleClick();
@@ -255,7 +254,7 @@ public class WebDriverElementSystemTest {
 		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"middlecolumn\"]/p[5]/a[2]/img").hover();
 		Assert.assertTrue(image.isDisplayed());
 	}
-	
+
 	@Test
 	public void isDisplayedTest() throws Exception {
 		iface.go("file://" + System.getProperty("user.dir") + "/resources/html/test/blinking.html");
