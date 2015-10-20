@@ -112,16 +112,20 @@ public class WebDriverElementSystemTest {
 		String bannerElementText = bannerElement.getText();
 		Assert.assertTrue(bannerElementText.contains(banner1));
 		//Third test
+		// This test may not be valid based on the fact fact that name may not
+		// be applicable to getting text (CB-261)
+		/*
 		String url = "http://www.echoecho.com/htmlforms12.htm";
 		iface.go(url);
 		String actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
 		String expChapterText = "Hit Me!";
 		Assert.assertEquals(expChapterText, actChapterText);
+		*/
 		//Fourth test
-		url = "http://www.developphp.com/view_lesson.php?v=576";
+		String url = "http://www.developphp.com/view_lesson.php?v=576";
 		iface.go(url);
-		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"searchbtn\"]").getText(); // button type button
-		expChapterText = "Search";
+		String actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"searchbtn\"]").getText(); // button type button
+		String expChapterText = "Search";
 		Assert.assertEquals(expChapterText, actChapterText);
 	}
 
@@ -254,7 +258,7 @@ public class WebDriverElementSystemTest {
 	
 	@Test
 	public void isDisplayedTest() throws Exception {
-		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
+		iface.go("file://" + System.getProperty("user.dir") + "/resources/html/test/blinking.html");
 
 		WebDriverElement p3 = iface.getWebDriverElement(new Hook(Strategy.ID, "p3"));
 		Assert.assertTrue(p3.isDisplayed());
