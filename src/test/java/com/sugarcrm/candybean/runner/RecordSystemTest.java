@@ -48,21 +48,20 @@ public class RecordSystemTest {
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void passedUrlTest() throws Exception {
-		String amazonUrl = "http://www.amazon.com/";
-		iface.go(amazonUrl);
-		assertEquals(amazonUrl, iface.getURL());		
+		String googleUrl = "https://www.google.com/";
+		iface.go(googleUrl);
+		assertEquals(googleUrl, iface.getURL());
 	}
 	
-	@Ignore
 	@Test
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void failedUrlTest() throws Exception {
-		String amazonUrl = "http://www.amazon.com/";
-		String yahooUrl = "https://yahoo.com";
+		String amazonUrl = "https://www.amazon.com/";
+		String yahooUrl = "https://www.yahoo.com/";
 		iface.go(amazonUrl);
 		iface.go(yahooUrl);
-		assertEquals(iface.getURL(), amazonUrl);		
+		assertEquals(yahooUrl, iface.getURL());
 	}
 
 	@After

@@ -65,8 +65,8 @@ public class WebDriverSystemTest {
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
 		String url1 = "https://www.google.com/";
-		String url2 = "http://www.wikipedia.org/";
-		String url3 = "http://www.reddit.com/";
+		String url2 = "https://www.wikipedia.org/";
+		String url3 = "https://www.reddit.com/";
 		iface.go(url1);
 		iface.go(url2);
 		iface.go(url3);
@@ -241,9 +241,9 @@ public class WebDriverSystemTest {
 	public void focusWindowTest() throws Exception {
 		String expWindow0Title = "HTML Examples";
 		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
-		String expWindow1Title = "Tryit Editor v2.3";
+		String expWindow1Title = "Tryit Editor v2.6";
 		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic_document";
-		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial";
+		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial | HTML Code Tutorial";
 		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
 		String expWindow3Title = "Popup Window - HTML Code Tutorial";
 		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
@@ -253,7 +253,7 @@ public class WebDriverSystemTest {
 		// Check assumptions
 		assertEquals(expWindow0Title, iface.wd.getTitle());
 
-		// Click pops-up window titled "Tryit Editor v1.8"
+		// Click pops-up window titled "Tryit Editor v2.6"
 		iface.getWebDriverElement(Strategy.PLINK, "HTML document").click();
 
 		// Verify title without switching
