@@ -48,9 +48,9 @@ public class RecordSystemTest {
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void passedUrlTest() throws Exception {
-		String amazonUrl = "https://www.google.com/";
-		iface.go(amazonUrl);
-		assertEquals(amazonUrl, iface.getURL());
+		String googleUrl = "https://www.google.com/";
+		iface.go(googleUrl);
+		assertEquals(googleUrl, iface.getURL());
 	}
 	
 	@Test
