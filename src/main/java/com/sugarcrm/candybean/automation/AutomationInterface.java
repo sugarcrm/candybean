@@ -61,7 +61,7 @@ public abstract class AutomationInterface {
 	 * 
 	 * @param iType
 	 * @return
-	 * @throws Exception
+	 * @throws CandybeanException
 	 */
 	public static Type parseType(String iType) throws CandybeanException {
 		Type parsedType = null;
@@ -80,7 +80,7 @@ public abstract class AutomationInterface {
 	 * Pause the automation for the specified duration.
 	 *
 	 * @param ms	Duration of pause in milliseconds
-	 * @throws Exception if the underlying {@link Thread#sleep} is interrupted
+	 * @throws CandybeanException if the underlying {@link Thread#sleep} is interrupted
 	 */
 	public void pause(long ms) throws CandybeanException {
 		try {

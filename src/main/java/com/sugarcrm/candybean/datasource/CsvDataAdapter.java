@@ -51,7 +51,7 @@ public class CsvDataAdapter extends DataAdapter {
 	 * 
 	 * @param testData
 	 *            : String
-	 * @return dataSourceHashMap : HashMap<String, DataSource>
+	 * @return dataSourceHashMap : HashMap&lt;String, DataSource&gt;
 	 */
 	public HashMap<String, DataSource> getData(String testData) {
 

@@ -13,9 +13,9 @@ import static com.sugarcrm.candybean.automation.element.Hook.getBy;
 
 /**
  * This is a list of available wait conditions for WebDriverPause. It is a mix of default Selenium
- * conditions and custom conditions that implements the interface ExpectedCondition<RETURN_TYPE>.
+ * conditions and custom conditions that implements the interface ExpectedCondition
  *
- * @author Eric Tam <etam@sugarcrm.com>
+ * @author Eric Tam etam@sugarcrm.com
  * @author Jason Mittertreiner
  */
 public class WaitConditions {
@@ -189,7 +189,6 @@ public class WaitConditions {
 	 *
 	 * @param hook
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<WebDriverElement> present(final Hook hook) {
 		return new ExpectedCondition<WebDriverElement>() {
@@ -226,7 +225,6 @@ public class WaitConditions {
 	 *
 	 * @param wde
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<WebElement> clickable(WebDriverElement wde) {
 		return ExpectedConditions.elementToBeClickable(wde.we);
@@ -274,7 +272,6 @@ public class WaitConditions {
 	 *
 	 * @param wde
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<Boolean> selected(WebDriverElement wde) {
 		return ExpectedConditions.elementToBeSelected(wde.we);
@@ -296,7 +293,6 @@ public class WaitConditions {
 	 *
 	 * @param wde
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<Boolean> unselected(WebDriverElement wde) {
 		return ExpectedConditions.elementSelectionStateToBe(wde.we, false);
@@ -320,7 +316,6 @@ public class WaitConditions {
 	 *
 	 * @param name
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<WebDriver> frameToBeAvailableAndSwitchToIt(String name) {
 		return ExpectedConditions.frameToBeAvailableAndSwitchToIt(name);
@@ -379,7 +374,6 @@ public class WaitConditions {
 	 *
 	 * @param wde
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<Boolean> staleness(WebDriverElement wde) {
 		return ExpectedConditions.stalenessOf(wde.we);
@@ -403,7 +397,6 @@ public class WaitConditions {
 	 * @param wde
 	 * @param text
 	 * @return
-	 * @throws CandybeanException
 	 */
 	public static ExpectedCondition<Boolean> textIsPresent(WebDriverElement wde, String text) {
 		return ExpectedConditions.textToBePresentInElement(wde.we, text);
