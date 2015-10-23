@@ -209,7 +209,7 @@ public class Configuration {
 	 * Writes the property list from the Properties table to the file path in a format suitable for loading into
 	 * a properties table using the load(InputStream) or load(String) method.
 	 *
-	 * @param filePath
+	 * @param file
 	 * @throws IOException
 	 */
 	public void store(File file) throws IOException {
