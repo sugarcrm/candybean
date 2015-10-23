@@ -266,11 +266,12 @@ public class WebDriverElement extends Element {
 
 	/**
 	 * Returns the value of the specified CSS property, or null if it does not exist.
+	 * <p>
 	 * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
 	 * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned, in
 	 * accordance with the DOM CSS2 specification - you should directly access the longhand
 	 * properties (e.g. background-color) to access the desired values.
-	 *
+	 * </p>
 	 * @return String    the value of the specified property, or null if it does not exist.
 	 */
 	@Override
