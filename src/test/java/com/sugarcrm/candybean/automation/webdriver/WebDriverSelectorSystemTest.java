@@ -79,9 +79,8 @@ public class WebDriverSelectorSystemTest {
 
     @Test
     public void selectMultipleTest() throws Exception {
-        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
-        iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/multipleSelect.html");
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/select"), iface.wd);
 
         Assert.assertTrue(select.isMultiSelector());
 
@@ -99,9 +98,8 @@ public class WebDriverSelectorSystemTest {
 
     @Test
     public void selectAllTest() throws Exception {
-        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
-        iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/multipleSelect.html");
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
 
@@ -112,9 +110,8 @@ public class WebDriverSelectorSystemTest {
 
     @Test
     public void deselectTest() throws Exception {
-        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
-        iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/multipleSelect.html");
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/select"), iface.wd);
 
         select.select("Ham");
 
@@ -127,9 +124,8 @@ public class WebDriverSelectorSystemTest {
 
     @Test
     public void deselectMultiple() throws Exception {
-        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
-        iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/multipleSelect.html");
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/select"), iface.wd);
 
         select.selectAll();
 
@@ -150,9 +146,8 @@ public class WebDriverSelectorSystemTest {
 
     @Test
     public void deselectAllTest() throws Exception {
-        String multipleSelectURL = "http://odyniec.net/articles/multiple-select-fields/";
-        iface.go(multipleSelectURL);
-        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "//*[@id=\"content\"]/div[4]/select"), iface.wd);
+        iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/multipleSelect.html");
+        WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
 

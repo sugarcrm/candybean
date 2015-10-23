@@ -40,12 +40,15 @@ import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 
 @RunWith(VRunner.class)
 public class WebDriverElementSystemTest {
-	
 	private WebDriverInterface iface;
-	
+	String elementsPage = "file://"+ System.getProperty("user.dir")+"/resources/html/test/elements.html";
+
+
 	@Before
 	public void setUp() throws Exception {
 		Configuration config = TestConfiguration.getTestConfiguration("systemtest.webdriver.config");
@@ -60,20 +63,20 @@ public class WebDriverElementSystemTest {
 	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
-	
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-	
+
 
 	@Test
 	public void getAttributeTest() throws Exception {
 		iface.go("http://sfbay.craigslist.org/");
 		String actAltValue = iface.getWebDriverElement(Strategy.ID, "ppp").getAttribute("class");
 		String expAltValue = "col";
-		Assert.assertEquals(expAltValue, actAltValue);    
+		Assert.assertEquals(expAltValue, actAltValue);
 	}
-	
-	
+
+
 	@Test
 	public void getElementTest() throws Exception {
 		String logoText = "craigslist";
@@ -102,32 +105,35 @@ public class WebDriverElementSystemTest {
 		String bannerText = bannerLogo.getText();
 		Assert.assertEquals(bannerText,banner);
 		//Second test
-		String meanUrl = "http://www.mean.io/";
-		iface.go(meanUrl);
-		String banner1 = "The Friendly";
-		WebDriverElement bannerElement = iface.getWebDriverElement(Strategy.CLASS, "banner-top-title");
+		iface.go(craigsUrl);
+		String banner1 = "community";
+		WebDriverElement bannerElement = iface.getWebDriverElement(Strategy.CLASS, "ban");
 		String bannerElementText = bannerElement.getText();
 		Assert.assertTrue(bannerElementText.contains(banner1));
 		//Third test
+		// This test may not be valid based on the fact fact that name may not
+		// be applicable to getting text (CB-261)
+		/*
 		String url = "http://www.echoecho.com/htmlforms12.htm";
 		iface.go(url);
 		String actChapterText = iface.getWebDriverElement(Strategy.NAME, "shorttext").getText(); // input type button
 		String expChapterText = "Hit Me!";
 		Assert.assertEquals(expChapterText, actChapterText);
+		*/
 		//Fourth test
-		url = "http://www.developphp.com/view_lesson.php?v=576";
+		String url = "http://www.developphp.com/view_lesson.php?v=576";
 		iface.go(url);
-		actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"searchbtn\"]").getText(); // button type button
-		expChapterText = "Search";
+		String actChapterText = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"searchbtn\"]").getText(); // button type button
+		String expChapterText = "Search";
 		Assert.assertEquals(expChapterText, actChapterText);
 	}
 
 	@Test
 	public void getSelectTest() throws Exception {
-		iface.go("http://sfbay.craigslist.org/");
-		WebDriverElement formElement = iface.getWebDriverElement(Strategy.ID, "search");
+		iface.go(elementsPage);
+		WebDriverElement formElement = iface.getWebDriverElement(Strategy.ID, "form");
 		WebDriverSelector actualSelectElement = (WebDriverSelector) formElement.getSelect(new Hook(Strategy.TAG, "select"), 0);
-		Assert.assertEquals("for sale", actualSelectElement.getFirstSelectedOption());
+		Assert.assertEquals("Option 1", actualSelectElement.getFirstSelectedOption());
 	}
 
 	@Test
@@ -148,23 +154,26 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void doubleClickTest() throws Exception {
 		iface.go("http://www.developerhelpway.com/jquery/events/dblClick-event.html");
-		
+
 		//Double-Clicking this button will trigger an alert through JavaScript event
 		WebDriverElement dbClickButton = iface.getWebDriverElement(new Hook(Strategy.ID, "buttonId"));
 		dbClickButton.doubleClick();
+		iface.pause(500);
 		Assert.assertTrue(iface.isDialogVisible());
 		iface.acceptDialog();
 	}
 
 	@Test
 	public void dragNDropTest() throws Exception {
-		String url = "http://demos.telerik.com/kendo-ui/dragdrop/index";
+		String url = "http://demos111.mootools.net/DragDrop";
 		iface.go(url);
-		
-		WebDriverElement dragElement = iface.getWebDriverElement(new Hook(Strategy.ID, "draggable"));
-		WebDriverElement dropElement = iface.getWebDriverElement(new Hook(Strategy.ID, "droptarget"));
+
+		WebDriverElement dragElement = iface.getWebDriverElement(new Hook(Strategy.CSS, ".drag"));
+		WebDriverElement dropElement = iface.getWebDriverElement(new Hook(Strategy.CSS, ".drop"));
+		Assert.assertTrue("100px".equals(dropElement.getCssValue("height")));
 		dragElement.dragNDrop(dropElement);
-		Assert.assertEquals("You did great!", dropElement.getText());
+		iface.pause(1000);
+		Assert.assertTrue("130px".equals(dropElement.getCssValue("height")));
 	}
 
 	@Test
@@ -206,34 +215,19 @@ public class WebDriverElementSystemTest {
 
 	@Test
 	public void pauseUntilInvisibleTest() throws Exception {
-		long timeoutMilliSec = 3000;
-		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
+		long timeoutMilliSec = 2000;
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/blinking.html");
 
-		WebDriverElement imgElement = iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2"));
-		WebDriverElement hideButton = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox2 input"));
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "p1"));
+		text.click();
+		iface.getPause().waitForInvisible(new Hook(Strategy.ID, "p1"), timeoutMilliSec);
+		Assert.assertTrue(!text.isDisplayed());
 
-		// Test to ensure we don't wait for elements that are not there
-		hideButton.click();
-		iface.getPause().waitForInvisible(imgElement, timeoutMilliSec);
-		Assert.assertFalse(imgElement.isDisplayed());
-		iface.getPause().waitForInvisible(hideButton);
+		// Wait until we know the element is visible and then force a timeout
+		iface.getPause().waitForVisible(new Hook(Strategy.ID, "p1"), timeoutMilliSec);
 
-
-		WebDriverElement hideButton2 = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox1 input"));
-		hideButton2.click();
-
-		iface.getPause().waitForInvisible(new Hook(Strategy.CSS, "imgbox1"), 2000);
-
-		// Check that waitForInvisible throws a Timeout exception if it waits too long
-		try {
-			iface.getWebDriverElement(new Hook(Strategy.CSS, ".box[value='Reset All']")).click();
-			iface.getPause().waitForInvisible(new Hook(Strategy.ID, "imgbox2"), timeoutMilliSec);
-		} catch (CandybeanException e) {
-			Assert.assertTrue(iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2")).isDisplayed());
-			return;
-		}
-		// Fail if the try doesn't return
-		Assert.fail();
+		thrown.expect(CandybeanException.class);
+		iface.getPause().waitForInvisible(new Hook(Strategy.ID, "p3"), 100);
 	}
 
 	@Test
@@ -245,7 +239,11 @@ public class WebDriverElementSystemTest {
 		Hook sfcLiButton = new Hook(Strategy.CSS, sfcLi + " a");
 		iface.getPause().waitUntil(WaitConditions.clickable(sfcLiButton));
 		iface.getWebDriverElement(sfcLiButton).click();
-		Assert.assertEquals(iface.getURL(), url + "sfc/");
+
+		String sbyLi = "#topban .sublinks li:nth-child(2)";
+		Hook sbyLiButton = new Hook(Strategy.CSS, sbyLi + " a");
+		iface.getPause().waitUntil(WaitConditions.clickable(sbyLiButton));
+		Assert.assertEquals(url + "sfc/", iface.getURL());
 	}
 
 	@Test
@@ -256,18 +254,15 @@ public class WebDriverElementSystemTest {
 		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"middlecolumn\"]/p[5]/a[2]/img").hover();
 		Assert.assertTrue(image.isDisplayed());
 	}
-	
+
 	@Test
 	public void isDisplayedTest() throws Exception {
-		iface.go("http://www.w3schools.com/css/css_display_visibility.asp");
-		
-		WebDriverElement imgElement = iface.getWebDriverElement(new Hook(Strategy.ID, "imgbox2"));
-		Assert.assertTrue(imgElement.isDisplayed());
-		
-		//Click the hide button to hide imgElement (Setting visibility style to hidden)
-		WebDriverElement hideButton = iface.getWebDriverElement(new Hook(Strategy.CSS, "#imgbox2 input"));
-		hideButton.click();
-		Assert.assertFalse(imgElement.isDisplayed());
+		iface.go("file://" + System.getProperty("user.dir") + "/resources/html/test/blinking.html");
+
+		WebDriverElement p3 = iface.getWebDriverElement(new Hook(Strategy.ID, "p3"));
+		Assert.assertTrue(p3.isDisplayed());
+		p3.click();
+		Assert.assertFalse(p3.isDisplayed());
 	}
 
 	@Ignore
@@ -296,9 +291,9 @@ public class WebDriverElementSystemTest {
 		select.select("I have a bike");
 		Assert.assertEquals("Control should be selected -- selected: " + select.isSelected(0), select.isSelected(0), true);
 
-        // Exception should throw for non-checkbox element
-//        VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
-//        candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
+		// Exception should throw for non-checkbox element
+		// VHook nonCheckboxHook = new VHook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[3]/input[1]"); // a radio box
+		// candybean.select(nonCheckboxHook, true);  // yes, verified exception was thrown
 
 		// Checking getAttributeValue()
 		WebDriverElement element = iface.getWebDriverElement(new Hook(Strategy.XPATH, "/html/body/div[1]/div/div[4]/div[2]/form[1]/input[1]"));
@@ -317,21 +312,28 @@ public class WebDriverElementSystemTest {
 
 	@Test
 	public void sendStringTest() throws Exception {
+		String garbageString = "This string is garbage that needs to be cleared.";
 		String searchString = "sugarcrm";
-		
-		// clear and send scenario
-		iface.go("http://www.duckduckgo.com/");
-		iface.getWebDriverElement(Strategy.ID, "search_form_input_homepage").sendString(searchString);
-		iface.getWebDriverElement(Strategy.ID, "search_button_homepage").click();
-		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "SugarCRM").isDisplayed());
+		iface.go(elementsPage);
+
+		WebDriverElement textField = iface.getWebDriverElement(Strategy.ID, "textfield");
+
+		// clear and set scenario
+		textField.sendString(garbageString);
+		textField.sendString(searchString);
+		Assert.assertEquals(searchString, textField.getText());
 
 		// append scenario -- base test and append assert
-		iface.go("http://www.duckduckgo.com/");
-		iface.getWebDriverElement(Strategy.ID, "search_form_input_homepage").sendString("crm", false);
-		iface.getWebDriverElement(Strategy.ID, "search_button_homepage").click();
-		iface.getWebDriverElement(Strategy.ID, "search_form_input").sendString("sugar", true);
-		iface.getWebDriverElement(Strategy.ID, "search_button").click();
-		Assert.assertTrue(iface.getWebDriverElement(Strategy.PLINK, "Sugar CRM").isDisplayed());
+		String searchString1 = "sugar";
+		String searchString2 = "con";
+		textField.sendString(searchString1);
+		textField.sendString(searchString2, true);
+		Assert.assertEquals(searchString1 + searchString2, textField.getText());
+
+		// clear and set to empty string scenario
+		String emptyString = "";
+		textField.sendString(emptyString);
+		Assert.assertEquals(emptyString, textField.getText());
 	}
 
 	@Test
@@ -348,25 +350,23 @@ public class WebDriverElementSystemTest {
 
 	@Test
 	public void getWidthTest() throws CandybeanException {
-		iface.go("https://www.google.com/");
-		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
-		int searchBoxWidth = searchBox.getWidth();
-		Assert.assertTrue(searchBoxWidth > 0);
+		iface.go(elementsPage);
+		WebDriverElement textField = iface.getWebDriverElement(Strategy.ID, "textfield");
+		Assert.assertTrue(textField.getWidth() > 0);
 	}
 
 	@Test
 	public void getHeightTest() throws CandybeanException {
-		iface.go("https://www.google.com/");
-		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
-		int searchBoxHeight = searchBox.getHeight();
-		Assert.assertTrue(searchBoxHeight > 0);
+		iface.go(elementsPage);
+		WebDriverElement textField = iface.getWebDriverElement(Strategy.ID, "textfield");
+		Assert.assertTrue(textField.getHeight() > 0);
 	}
 
 	@Test
 	public void getCssValueTest() throws CandybeanException {
-		iface.go("https://www.google.com/");
-		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "gbqfq"));
-		Assert.assertEquals(searchBox.getCssValue("display"), "block");
+		iface.go(elementsPage);
+		WebDriverElement textField = iface.getWebDriverElement(Strategy.ID, "textfield");
+		Assert.assertEquals("inline-block", textField.getCssValue("display"));
 	}
 
 	@Test

@@ -154,8 +154,7 @@ public final class Candybean {
 	 *
 	 * @param config  {@link Configuration} object created from candybean.config
 	 * @return singleton candybean instance
-	 * @throws IOException 
-	 * @throws Exception if instantiating the logger fails
+	 * @throws CandybeanException if instantiating the logger fails
 	 */
 	public static synchronized Candybean getInstance(Configuration config) throws CandybeanException {
 		if (Candybean.instance == null) {
@@ -168,7 +167,7 @@ public final class Candybean {
 	 * Get the global candybean instance
 	 * 
 	 * @return global candybean instance based on a default configuration
-	 * @throws Exception
+	 * @throws CandybeanException
 	 */
 	public static synchronized Candybean getInstance() throws CandybeanException {
 		if (Candybean.instance == null) {

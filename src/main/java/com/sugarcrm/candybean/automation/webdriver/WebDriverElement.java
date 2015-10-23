@@ -32,6 +32,7 @@ import com.sugarcrm.candybean.automation.element.Location;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 
+
 /**
  * Represents an identifiable (via {@link By}) element or element on a page that
  * can be interacted with. A {@link WebDriverElement} object should be used to
@@ -40,7 +41,6 @@ import com.sugarcrm.candybean.exceptions.CandybeanException;
  * @author Conrad Warmbold
  */
 public class WebDriverElement extends Element {
-
 	protected WebDriver wd;
 	protected WebElement we;
 
@@ -109,7 +109,7 @@ public class WebDriverElement extends Element {
 		String type = this.we.getAttribute("type");
 		if (type != null
 				&& (type.equalsIgnoreCase("button") || type
-						.equalsIgnoreCase("input"))) {
+						.equalsIgnoreCase("text"))) {
 			return this.we.getAttribute("value");
 		}
 		return this.we.getText();
@@ -266,12 +266,12 @@ public class WebDriverElement extends Element {
 
 	/**
 	 * Returns the value of the specified CSS property, or null if it does not exist.
-	 * <p/>
+	 * <p>
 	 * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
 	 * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned, in
 	 * accordance with the DOM CSS2 specification - you should directly access the longhand
 	 * properties (e.g. background-color) to access the desired values.
-	 *
+	 * </p>
 	 * @return String    the value of the specified property, or null if it does not exist.
 	 */
 	@Override
@@ -289,9 +289,8 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Returns true if and only if the element is displayed {@link
-	 * "http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html" according
-	 * to Selenium}
+	 * Returns true if and only if the element is displayed
+	 * <a href="http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html"> according to Selenium</a>
 	 */
 	public boolean isDisplayed() throws CandybeanException {
 		logger.info("Determining if element is visible: " + this.toString());
@@ -354,47 +353,72 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Clears the element and sends a string to it.
+	 * Selects all text in and focuses on a Javascript HTMLInputElement.
+	 * Selects only from input fields, and will not currently work on
+	 * textAreas (CB-260) but support is planned
+	 *
+	 * @throws CandybeanException If used on a non INPUT element
+	 */
+	public void selectAll() throws CandybeanException {
+		String tag = we.getTagName();
+		// The Javascript select() method is INPUT specific, throw if used
+		// on a non-INPUT tag
+		if (!"input".equals(tag)) {
+			throw new CandybeanException("Cannot select text of a non-" +
+					"INPUT element. Actual element was of tag: " + tag);
+		}
+		executeJavascript("arguments[0].select()");
+	}
+
+	/**
+	 * Clears an element. If the element is an "input" element, clear
+	 * it by selecting all the text and pressing back space to avoid
+	 * triggering an onChange event. We don't want to trigger the onChange
+	 * event while clearing a textfield as doing so may interfere with the
+	 * following set call
+	 *
+	 * If the field is not an "input" element, use Selenium's clear method
+	 * instead
+	 *
+	 * Also focuses the cleared element
+	 */
+	public void clear() throws CandybeanException {
+		String tag = we.getTagName();
+		// Theoretically, the .select() call in selectAll should focus the element
+		// according to https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/select
+		// However, this seems to have issues in iframes, so we call focus regardless
+		executeJavascript("arguments[0].focus()");
+		if ("input".equals(tag)) {
+			selectAll();
+			we.sendKeys(Keys.BACK_SPACE);
+		} else {
+			we.clear();
+		}
+	}
+
+	/**
+	 * Clear the element and send a string to it.
 	 * 
-	 * @param input
-	 *            string to send
+	 * @param	input	The string to send
 	 */
 	public void sendString(String input) throws CandybeanException {
-		logger.info("Sending string: " + input + " to element: "
-				+ this.toString());
-		this.we.clear();
-
-		// Re-find the element to avoid the stale element problem.
-		// Re-finding this *still* causes problems in getControl.getControl
-		// situations; a
-		// universal solution should be found to resolve this inconsistency
-		// since this
-		// is the only method that does it and it violates the general
-		// architecture
-		this.we = this.wd.findElements(Hook.getBy(this.hook)).get(this.index);
-		this.we.sendKeys(input);
+		sendString(input, false);
 	}
 
 	/**
 	 * Send a string to this element.
 	 * 
-	 * @param input
-	 *            string to send
-	 * @param append
-	 *            if append is true, the element will be cleared first
+	 * @param   input   string to send
+	 * @param   append  if append is false, the element will be cleared first
 	 * @throws CandybeanException
 	 */
-	public void sendString(String input, boolean append)
-			throws CandybeanException {
-		logger.info("Clear first?: " + append + "; sending string: " + input
-				+ " to element: " + this.toString());
-		if (!append)
-			this.sendString(input);
-		else {
-			// Re-find the element to avoid the stale element problem.
-			this.we = this.wd.findElements(Hook.getBy(this.hook)).get(this.index);
-			this.we.sendKeys(input);
+	public void sendString(String input, boolean append) throws CandybeanException {
+		logger.info((append ? "Appending" : "Clearing field and sending") + " text: \"" + input +
+				"\" to element: " + toString());
+		if (!append) {
+			clear();
 		}
+		we.sendKeys(input);
 	}
 
 	/**
