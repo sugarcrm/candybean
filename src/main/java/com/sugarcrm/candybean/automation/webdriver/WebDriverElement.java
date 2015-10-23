@@ -266,7 +266,6 @@ public class WebDriverElement extends Element {
 
 	/**
 	 * Returns the value of the specified CSS property, or null if it does not exist.
-	 * <p/>
 	 * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
 	 * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned, in
 	 * accordance with the DOM CSS2 specification - you should directly access the longhand
@@ -289,9 +288,8 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Returns true if and only if the element is displayed {@link
-	 * "http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html" according
-	 * to Selenium}
+	 * Returns true if and only if the element is displayed
+	 * <a href="http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html"> according to Selenium</a>
 	 */
 	public boolean isDisplayed() throws CandybeanException {
 		logger.info("Determining if element is visible: " + this.toString());

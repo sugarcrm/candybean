@@ -61,6 +61,7 @@ public class AutomationInterfaceBuilder {
 	/**
 	 * Builds the interface specified. If an interface cannot be built using the specified parameters, an attempt
 	 * will be made using candybean configuration files. If an interface cannot be built, an exception will be thrown.
+	 * <!--
 	 * <br><br>
 	 * Below are the minimum settings required to build a specific type of interface.
 	 * <br><br>
@@ -107,6 +108,7 @@ public class AutomationInterfaceBuilder {
 	 *			</tr>
 	 *		</tbody> 	
 	 * </table>
+	 * -->
 	 * @return
 	 */
 	public WebDriverInterface build() throws CandybeanException{

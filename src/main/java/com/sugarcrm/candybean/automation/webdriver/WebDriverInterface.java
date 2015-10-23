@@ -140,8 +140,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * Takes a full screenshot and saves it to the given file.
 	 * 
 	 * @param file			The file to which a screenshot is saved
-	 * @throws IOException 
-	 * @throws AWTException 
+	 * @throws CandybeanException
 	 */
 	public void screenshot(File file) throws CandybeanException {
 		logger.info("Taking screenshot; saving to file: " + file.toString());

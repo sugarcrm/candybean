@@ -12,7 +12,7 @@ import java.net.URL;
 
 /**
  * This is the interface for running a test through Selenium Grid
- * @author Eric Tam <etam@sugarcrm.com>
+ * @author Eric Tam etam@sugarcrm.com
  */
 public class GridInterface extends WebDriverInterface {
 	private DesiredCapabilities capabilities = new DesiredCapabilities();
