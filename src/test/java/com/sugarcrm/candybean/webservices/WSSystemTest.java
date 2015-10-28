@@ -5,17 +5,17 @@
  * top-down and bottom-up batches, mobile variants, test translation across
  * languages, plain-language testing, and web service testing.
  * Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -58,18 +58,18 @@ public class WSSystemTest {
 			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
-		Assert.assertEquals("application/json", ((JSONObject)response.get("headers")).get("Accept"));
-		Assert.assertEquals("Test-Header-Value", ((JSONObject)response.get("headers")).get("Test-Header-Key"));
+		Assert.assertEquals("application/json", ((JSONObject) response.get("headers")).get("Accept"));
+		Assert.assertEquals("Test-Header-Value", ((JSONObject) response.get("headers")).get("Test-Header-Key"));
 	}
 
 	@Test
 	public void testHTTPError() {
 		ExpectedException exception = ExpectedException.none();
-		try{
+		try {
 			exception.expect(CandybeanException.class);
 			response = WS.request(WS.OP.POST, uri + "/get", headers, "", ContentType.DEFAULT_TEXT);
 			Assert.fail();
-		} catch(CandybeanException e) {
+		} catch (CandybeanException e) {
 			Assert.assertEquals("HTTP request received HTTP code: 405",
 					e.getMessage().split("\n")[0]);
 		}
@@ -78,12 +78,12 @@ public class WSSystemTest {
 	@Test
 	public void testResponseError() {
 		ExpectedException exception = ExpectedException.none();
-		try{
+		try {
 			exception.expect(CandybeanException.class);
 			// Send to an IP address that does not exist
 			response = WS.request(WS.OP.POST, "240.0.0.0", headers, "", ContentType.DEFAULT_TEXT);
 			Assert.fail();
-		} catch(CandybeanException e) {
+		} catch (CandybeanException e) {
 			Assert.assertEquals("Target host is null", e.getMessage());
 		}
 	}
@@ -127,7 +127,7 @@ public class WSSystemTest {
 		String jsonData = "{\"key\":\"value\", \"key2\":\"value2\"}";
 		try {
 			headers.put("Content-Type", "application/json");
-			response = WS.request(WS.OP.PUT , uri + "/put", headers, jsonData, ContentType.APPLICATION_JSON);
+			response = WS.request(WS.OP.PUT, uri + "/put", headers, jsonData, ContentType.APPLICATION_JSON);
 		} catch (Exception e) {
 			Assert.fail(e.toString());
 		}
@@ -140,10 +140,10 @@ public class WSSystemTest {
 
 	@Test
 	public void testPutRequestJSONMap() {
-		Map<String,String> jsonData = new HashMap<>();
-		jsonData.put("key1","value1");
-		jsonData.put("key2","value2");
-		jsonData.put("key3","value3");
+		Map<String, String> jsonData = new HashMap<>();
+		jsonData.put("key1", "value1");
+		jsonData.put("key2", "value2");
+		jsonData.put("key3", "value3");
 
 		try {
 			headers.put("Content-Type", "application/json");
@@ -173,10 +173,10 @@ public class WSSystemTest {
 
 	@Test
 	public void testPutRequestsMultiPartFormData() {
-		Map<String,String> data = new HashMap<>();
-		data.put("key1","value1");
-		data.put("key2","value2");
-		data.put("key3","value3");
+		Map<String, String> data = new HashMap<>();
+		data.put("key1", "value1");
+		data.put("key2", "value2");
+		data.put("key3", "value3");
 
 		try {
 			response = WS.request(WS.OP.PUT, uri + "/put", headers, data, ContentType.MULTIPART_FORM_DATA);
@@ -184,9 +184,9 @@ public class WSSystemTest {
 			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
-		Assert.assertEquals("value1", ((Map)response.get("form")).get("key1"));
-		Assert.assertEquals("value2", ((Map)response.get("form")).get("key2"));
-		Assert.assertEquals("value3", ((Map)response.get("form")).get("key3"));
+		Assert.assertEquals("value1", ((Map) response.get("form")).get("key1"));
+		Assert.assertEquals("value2", ((Map) response.get("form")).get("key2"));
+		Assert.assertEquals("value3", ((Map) response.get("form")).get("key3"));
 	}
 
 	@Test
@@ -219,10 +219,10 @@ public class WSSystemTest {
 
 	@Test
 	public void testPostRequestJSONMap() {
-		Map<String,String> jsonData = new HashMap<>();
-		jsonData.put("key1","value1");
-		jsonData.put("key2","value2");
-		jsonData.put("key3","value3");
+		Map<String, String> jsonData = new HashMap<>();
+		jsonData.put("key1", "value1");
+		jsonData.put("key2", "value2");
+		jsonData.put("key3", "value3");
 
 		try {
 			headers.put("Content-Type", "application/json");
@@ -252,10 +252,10 @@ public class WSSystemTest {
 
 	@Test
 	public void testPostRequestsMultiPartFormData() {
-		Map<String,String> data = new HashMap<>();
-		data.put("key1","value1");
-		data.put("key2","value2");
-		data.put("key3","value3");
+		Map<String, String> data = new HashMap<>();
+		data.put("key1", "value1");
+		data.put("key2", "value2");
+		data.put("key3", "value3");
 
 		try {
 			response = WS.request(WS.OP.POST, uri + "/post", headers, data, ContentType.MULTIPART_FORM_DATA);
@@ -264,8 +264,8 @@ public class WSSystemTest {
 		}
 		Assert.assertTrue(response != null);
 		Assert.assertEquals("value1", ((Map) response.get("form")).get("key1"));
-		Assert.assertEquals("value2", ((Map)response.get("form")).get("key2"));
-		Assert.assertEquals("value3", ((Map)response.get("form")).get("key3"));
+		Assert.assertEquals("value2", ((Map) response.get("form")).get("key2"));
+		Assert.assertEquals("value3", ((Map) response.get("form")).get("key3"));
 	}
 
 }

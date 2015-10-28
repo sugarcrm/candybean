@@ -5,17 +5,17 @@
  * top-down and bottom-up batches, mobile variants, test translation across
  * languages, plain-language testing, and web service testing.
  * Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,16 +41,17 @@ import org.json.simple.JSONValue;
 
 /**
  * Helps make web-service calls and supports DELETE, GET, POST, and PUT
- * 
+ *
  */
 public class WS {
 
 	protected static Logger log = Logger.getLogger(WS.class.getSimpleName());
-	public enum OP { DELETE, GET, POST, PUT }
+
+	public enum OP {DELETE, GET, POST, PUT}
 
 	// The list of HTTP return codes indicating success
 	private static final Set<Integer> ACCEPTABLE_RETURN_CODE_SET = new HashSet<>(Arrays.asList(
-			new Integer[] { 200, 201, 202 }));
+			new Integer[]{200, 201, 202}));
 
 	/**
 	 * Send a DELETE, GET, POST, or PUT http request
@@ -60,7 +61,7 @@ public class WS {
 	 * @param body String representation of the request body
 	 * @return Key Value pairs of the response
 	 * @throws Exception When http request failed
-	 * @deprecated Use {@link #request(OP,String,Map,String,ContentType)}
+	 * @deprecated Use {@link #request(OP, String, Map, String, ContentType)}
 	 */
 	@Deprecated
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body) throws Exception {
@@ -76,8 +77,8 @@ public class WS {
 	 * @param body String representation of the request body (ignored)
 	 * @return Key Value pairs of the response
 	 * @throws Exception When http request failed
-	 * @deprecated This is a work around for old compatibility, use {@link #request(OP,String,Map,String,ContentType)}
-	 * or {@link #request(OP,String,Map,Map)}
+	 * @deprecated This is a work around for old compatibility, use {@link #request(OP, String, Map, String, ContentType)}
+	 * or {@link #request(OP, String, Map, Map)}
 	 */
 	@Deprecated
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> payload, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {
@@ -103,7 +104,7 @@ public class WS {
 	 * @return Key Value pairs of the response
 	 * @throws Exception If HTTP request failed
 	 */
-	public static Map<String, Object> request(OP op, String uri, Map<String,String> headers, Map<String,String> body) throws Exception {
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, String> body) throws Exception {
 		return request(op, uri, headers, body, ContentType.APPLICATION_JSON);
 	}
 
@@ -117,7 +118,7 @@ public class WS {
 	 * @return Key Value pairs of the response
 	 * @throws Exception If HTTP request failed
 	 */
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String,String> body, ContentType contentType) throws Exception {
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, String> body, ContentType contentType) throws Exception {
 		switch (op) {
 			case DELETE:
 				return handleRequest(new HttpDelete(uri), headers);
@@ -144,7 +145,7 @@ public class WS {
 				if (body != null) {
 					if (contentType == ContentType.MULTIPART_FORM_DATA) {
 						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String,String> entry: body.entrySet()) {
+						for (Map.Entry<String, String> entry : body.entrySet()) {
 							builder.addTextBody(entry.getKey(), entry.getValue());
 						}
 						put.setEntity(builder.build());
@@ -235,15 +236,13 @@ public class WS {
 			if (!ACCEPTABLE_RETURN_CODE_SET.contains(code)) {
 				throw new CandybeanException("HTTP request received HTTP code: " + code + "\n"
 						+ "Response: " + response.toString());
-			}
-
-			else if (mapParse == null) {
+			} else if (mapParse == null) {
 				throw new CandybeanException("Could not format response\n"
 						+ "Response: " + response.toString());
 			}
 
 			return mapParse;
-		} catch (IOException|IllegalStateException e){
+		} catch (IOException | IllegalStateException e) {
 			// Cast the other possible exceptions as a CandybeanException
 			throw new CandybeanException(e);
 		}
