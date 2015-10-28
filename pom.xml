@@ -34,8 +34,8 @@
 	</parent>
 
 	<scm>
-		<connection>scm:git:https://github.com/sugarcrm/candybean.git</connection>
-		<developerConnection>scm:git:https://github.com/sugarcrm/candybean.git</developerConnection>
+		<connection>scm:git:ssh://git@github.com/sugarcrm/candybean.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/sugarcrm/candybean.git</developerConnection>
 		<url>https://github.com/sugarcrm/candybean</url>
 	</scm>
 
