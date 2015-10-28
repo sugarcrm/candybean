@@ -21,17 +21,18 @@
  */
 package com.sugarcrm.candybean.webservices;
 
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.apache.http.entity.ContentType;
 import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO: Mock these calls instead of actually making them
 public class WSSystemTest {
 	String uri = "http://httpbin.org";
 	Map<String, String> headers = new HashMap<>();
@@ -49,14 +50,143 @@ public class WSSystemTest {
 	}
 
 	@Test
+	public void testHeaders() {
+		headers.put("Test-Header-Key", "Test-Header-Value");
+		try {
+			response = WS.request(WS.OP.GET, uri + "/headers", headers, "", ContentType.DEFAULT_TEXT);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		Assert.assertEquals("application/json", ((JSONObject)response.get("headers")).get("Accept"));
+		Assert.assertEquals("Test-Header-Value", ((JSONObject)response.get("headers")).get("Test-Header-Key"));
+	}
+
+	@Test
+	public void testHTTPError() {
+		ExpectedException exception = ExpectedException.none();
+		try{
+			exception.expect(CandybeanException.class);
+			response = WS.request(WS.OP.POST, uri + "/get", headers, "", ContentType.DEFAULT_TEXT);
+			Assert.fail();
+		} catch(CandybeanException e) {
+			Assert.assertEquals("HTTP request received HTTP code: 405",
+					e.getMessage().split("\n")[0]);
+		}
+	}
+
+	@Test
+	public void testResponseError() {
+		ExpectedException exception = ExpectedException.none();
+		try{
+			exception.expect(CandybeanException.class);
+			// Send to an IP address that does not exist
+			response = WS.request(WS.OP.POST, "240.0.0.0", headers, "", ContentType.DEFAULT_TEXT);
+			Assert.fail();
+		} catch(CandybeanException e) {
+			Assert.assertEquals("Target host is null", e.getMessage());
+		}
+	}
+
+	@Test
 	public void testGetRequest() {
 		try {
 			response = WS.request(WS.OP.GET, uri + "/get", headers, "", ContentType.DEFAULT_TEXT);
 		} catch (Exception e) {
-			Assert.fail();
+			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
 		Assert.assertEquals(uri + "/get", response.get("url"));
+	}
+
+	@Test
+	public void testDeleteRequest() {
+		try {
+			response = WS.request(WS.OP.DELETE, uri + "/delete", headers, "", ContentType.DEFAULT_TEXT);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		Assert.assertEquals(uri + "/delete", response.get("url"));
+	}
+
+	@Test
+	public void testPutRequest() {
+		try {
+			response = WS.request(WS.OP.PUT, uri + "/put", headers, "Hello World", ContentType.APPLICATION_JSON);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		// The field data will contain what ever we sent it
+		Assert.assertEquals("Hello World", response.get("data"));
+	}
+
+	@Test
+	public void testPutRequestJSONStr() {
+		String jsonData = "{\"key\":\"value\", \"key2\":\"value2\"}";
+		try {
+			headers.put("Content-Type", "application/json");
+			response = WS.request(WS.OP.PUT , uri + "/put", headers, jsonData, ContentType.APPLICATION_JSON);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		Assert.assertEquals("value", ((JSONObject) response.get("json")).get("key"));
+		Assert.assertEquals("value", ((Map) response.get("json")).get("key"));
+		Assert.assertEquals("value2", ((JSONObject) response.get("json")).get("key2"));
+
+	}
+
+	@Test
+	public void testPutRequestJSONMap() {
+		Map<String,String> jsonData = new HashMap<>();
+		jsonData.put("key1","value1");
+		jsonData.put("key2","value2");
+		jsonData.put("key3","value3");
+
+		try {
+			headers.put("Content-Type", "application/json");
+			response = WS.request(WS.OP.PUT, uri + "/put", headers, jsonData, ContentType.APPLICATION_JSON);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		Assert.assertEquals("value1", ((JSONObject) response.get("json")).get("key1"));
+		Assert.assertEquals("value2", ((Map) response.get("json")).get("key2"));
+		Assert.assertEquals("value3", ((JSONObject) response.get("json")).get("key3"));
+
+	}
+
+	@Test
+	public void testPutRequestsFormData() {
+		String formData = "test=asdf";
+		try {
+			headers.put("Content-Type", "application/x-www-form-urlencoded");
+			response = WS.request(WS.OP.PUT, uri + "/put", headers, formData, ContentType.APPLICATION_FORM_URLENCODED);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		Assert.assertEquals("asdf", ((Map) response.get("form")).get("test"));
+	}
+
+	@Test
+	public void testPutRequestsMultiPartFormData() {
+		Map<String,String> data = new HashMap<>();
+		data.put("key1","value1");
+		data.put("key2","value2");
+		data.put("key3","value3");
+
+		try {
+			response = WS.request(WS.OP.PUT, uri + "/put", headers, data, ContentType.MULTIPART_FORM_DATA);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		Assert.assertTrue(response != null);
+		Assert.assertEquals("value1", ((Map)response.get("form")).get("key1"));
+		Assert.assertEquals("value2", ((Map)response.get("form")).get("key2"));
+		Assert.assertEquals("value3", ((Map)response.get("form")).get("key3"));
 	}
 
 	@Test
@@ -64,7 +194,7 @@ public class WSSystemTest {
 		try {
 			response = WS.request(WS.OP.POST, uri + "/post", headers, "Hello World", ContentType.APPLICATION_JSON);
 		} catch (Exception e) {
-			Assert.fail();
+			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
 		// The field data will contain what ever we sent it
@@ -78,7 +208,7 @@ public class WSSystemTest {
 			headers.put("Content-Type", "application/json");
 			response = WS.request(WS.OP.POST, uri + "/post", headers, jsonData, ContentType.APPLICATION_JSON);
 		} catch (Exception e) {
-			Assert.fail();
+			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
 		Assert.assertEquals("value", ((JSONObject) response.get("json")).get("key"));
@@ -98,7 +228,7 @@ public class WSSystemTest {
 			headers.put("Content-Type", "application/json");
 			response = WS.request(WS.OP.POST, uri + "/post", headers, jsonData, ContentType.APPLICATION_JSON);
 		} catch (Exception e) {
-			Assert.fail();
+			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
 		Assert.assertEquals("value1", ((JSONObject) response.get("json")).get("key1"));
@@ -114,7 +244,7 @@ public class WSSystemTest {
 			headers.put("Content-Type", "application/x-www-form-urlencoded");
 			response = WS.request(WS.OP.POST, uri + "/post", headers, formData, ContentType.APPLICATION_FORM_URLENCODED);
 		} catch (Exception e) {
-			Assert.fail();
+			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
 		Assert.assertEquals("asdf", ((Map) response.get("form")).get("test"));
@@ -130,12 +260,12 @@ public class WSSystemTest {
 		try {
 			response = WS.request(WS.OP.POST, uri + "/post", headers, data, ContentType.MULTIPART_FORM_DATA);
 		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
+			Assert.fail(e.toString());
 		}
 		Assert.assertTrue(response != null);
 		Assert.assertEquals("value1", ((Map) response.get("form")).get("key1"));
 		Assert.assertEquals("value2", ((Map)response.get("form")).get("key2"));
 		Assert.assertEquals("value3", ((Map)response.get("form")).get("key3"));
 	}
+
 }

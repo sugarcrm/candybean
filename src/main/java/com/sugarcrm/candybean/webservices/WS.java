@@ -118,14 +118,11 @@ public class WS {
 	 * @throws Exception If HTTP request failed
 	 */
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String,String> body, ContentType contentType) throws Exception {
-		Map<String, Object> mapParse;
 		switch (op) {
 			case DELETE:
-				mapParse = handleRequest(new HttpDelete(uri), headers);
-				break;
+				return handleRequest(new HttpDelete(uri), headers);
 			case GET:
-				mapParse = handleRequest(new HttpGet(uri), headers);
-				break;
+				return handleRequest(new HttpGet(uri), headers);
 			case POST:
 				HttpPost post = new HttpPost(uri);
 				if (body != null) {
@@ -141,8 +138,7 @@ public class WS {
 						post.setEntity(strBody);
 					}
 				}
-				mapParse = handleRequest(post, headers);
-				break;
+				return handleRequest(post, headers);
 			case PUT:
 				HttpPut put = new HttpPut(uri);
 				if (body != null) {
@@ -158,8 +154,7 @@ public class WS {
 						put.setEntity(strBody);
 					}
 				}
-				mapParse = handleRequest(put, headers);
-				break;
+				return handleRequest(put, headers);
 			default:
 				/*
 				 * JLS 13.4.26: Adding or reordering constants in an enum type will not break compatibility with
@@ -169,7 +164,6 @@ public class WS {
 				 */
 				throw new Exception("Unrecognized OP type... Perhaps your binaries are the wrong version?");
 		}
-		return mapParse;
 	}
 
 	/**
@@ -180,31 +174,26 @@ public class WS {
 	 * @param body String representation of the request body
 	 * @param contentType The content type of the body
 	 * @return Key Value pairs of the response
-	 * @throws Exception When http request failed
+	 * @throws CandybeanException When http request failed
 	 */
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body, ContentType contentType) throws Exception {
-		Map<String, Object> mapParse;
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, String body, ContentType contentType) throws CandybeanException {
 		switch (op) {
 			case DELETE:
-				mapParse = handleRequest(new HttpDelete(uri), headers);
-				break;
+				return handleRequest(new HttpDelete(uri), headers);
 			case GET:
-				mapParse = handleRequest(new HttpGet(uri), headers);
-				break;
+				return handleRequest(new HttpGet(uri), headers);
 			case POST:
 				HttpPost post = new HttpPost(uri);
 				if (body != null) {
 					post.setEntity(new StringEntity(body, contentType));
 				}
-				mapParse = handleRequest(post, headers);
-				break;
+				return handleRequest(post, headers);
 			case PUT:
 				HttpPut put = new HttpPut(uri);
 				if (body != null) {
 					put.setEntity(new StringEntity(body, contentType));
 				}
-				mapParse = handleRequest(put, headers);
-				break;
+				return handleRequest(put, headers);
 			default:
 				/*
 				 * JLS 13.4.26: Adding or reordering constants in an enum type will not break compatibility with
@@ -212,9 +201,8 @@ public class WS {
 				 * Thus we include a default in the case that a future version of the enum has a case which is not
 				 * one of the above
 				 */
-				throw new Exception("Unrecognized OP type... Perhaps your binaries are the wrong version?");
+				throw new CandybeanException("Unrecognized OP type... Perhaps your binaries are the wrong version?");
 		}
-		return mapParse;
 	}
 
 	/**
@@ -245,13 +233,18 @@ public class WS {
 
 			int code = response.getStatusLine().getStatusCode();
 			if (!ACCEPTABLE_RETURN_CODE_SET.contains(code)) {
-				throw new CandybeanException("HTTP request received HTTP code : " + code + "\n"
-						+ "Response: " + parse.toString());
+				throw new CandybeanException("HTTP request received HTTP code: " + code + "\n"
+						+ "Response: " + response.toString());
+			}
+
+			else if (mapParse == null) {
+				throw new CandybeanException("Could not format response\n"
+						+ "Response: " + response.toString());
 			}
 
 			return mapParse;
-		} catch (IOException e){
-			// Catch the IOException and throw it as a CandybeanException
+		} catch (IOException|IllegalStateException e){
+			// Cast the other possible exceptions as a CandybeanException
 			throw new CandybeanException(e);
 		}
 	}
