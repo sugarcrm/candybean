@@ -140,7 +140,7 @@ public class WSSystemTest {
 
 	@Test
 	public void testPutRequestJSONMap() {
-		Map<String, String> jsonData = new HashMap<>();
+		Map<String, Object> jsonData = new HashMap<>();
 		jsonData.put("key1", "value1");
 		jsonData.put("key2", "value2");
 		jsonData.put("key3", "value3");
@@ -173,7 +173,7 @@ public class WSSystemTest {
 
 	@Test
 	public void testPutRequestsMultiPartFormData() {
-		Map<String, String> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		data.put("key1", "value1");
 		data.put("key2", "value2");
 		data.put("key3", "value3");
@@ -214,16 +214,14 @@ public class WSSystemTest {
 		Assert.assertEquals("value", ((JSONObject) response.get("json")).get("key"));
 		Assert.assertEquals("value", ((Map) response.get("json")).get("key"));
 		Assert.assertEquals("value2", ((JSONObject) response.get("json")).get("key2"));
-
 	}
 
 	@Test
 	public void testPostRequestJSONMap() {
-		Map<String, String> jsonData = new HashMap<>();
+		Map<String, Object> jsonData = new HashMap<>();
 		jsonData.put("key1", "value1");
 		jsonData.put("key2", "value2");
 		jsonData.put("key3", "value3");
-
 		try {
 			headers.put("Content-Type", "application/json");
 			response = WS.request(WS.OP.POST, uri + "/post", headers, jsonData, ContentType.APPLICATION_JSON);
@@ -234,7 +232,31 @@ public class WSSystemTest {
 		Assert.assertEquals("value1", ((JSONObject) response.get("json")).get("key1"));
 		Assert.assertEquals("value2", ((Map) response.get("json")).get("key2"));
 		Assert.assertEquals("value3", ((JSONObject) response.get("json")).get("key3"));
+	}
 
+	@Test
+	public void testPostRequestNestedJSON() {
+		Map<String, Object> jsonData = new HashMap<>();
+		Map<String, Object> nestedJSONData1 = new HashMap<>();
+		Map<String, Object> nestedJSONData2= new HashMap<>();
+		jsonData.put("key1", "value1");
+		nestedJSONData1.put("key4", "value4");
+		nestedJSONData1.put("key5", "value5");
+		nestedJSONData2.put("key6", "value6");
+		jsonData.put("key2", nestedJSONData1);
+		jsonData.put("key3", nestedJSONData2);
+		try {
+			headers.put("Content-Type", "application/json");
+			response = WS.request(WS.OP.POST, uri + "/post", headers, jsonData, ContentType.APPLICATION_JSON);
+		} catch (Exception e) {
+			Assert.fail(e.toString());
+		}
+		System.out.println(response.get("json"));
+		Assert.assertTrue(response != null);
+		Assert.assertEquals("value1", ((JSONObject) response.get("json")).get("key1"));
+		Assert.assertEquals("value4", ((Map) ((Map) response.get("json")).get("key2")).get("key4"));
+		Assert.assertEquals("value5", ((JSONObject) ((JSONObject) response.get("json")).get("key2")).get("key5"));
+		Assert.assertEquals("value6", ((Map) ((JSONObject) response.get("json")).get("key3")).get("key6"));
 	}
 
 	@Test
@@ -252,7 +274,7 @@ public class WSSystemTest {
 
 	@Test
 	public void testPostRequestsMultiPartFormData() {
-		Map<String, String> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		data.put("key1", "value1");
 		data.put("key2", "value2");
 		data.put("key3", "value3");

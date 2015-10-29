@@ -81,11 +81,11 @@ public class WS {
 	 * or {@link #request(OP, String, Map, Map)}
 	 */
 	@Deprecated
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> payload, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {
+	public static Map<String, Object> request(OP op, String uri, Map<String, Object> payload, String body, ArrayList<HashMap<String, Object>> postHeaders) throws Exception {
 		HashMap<String, String> headers = new HashMap<>();
-		for (HashMap<String, String> map : postHeaders) {
-			for (Map.Entry<String, String> entry : map.entrySet()) {
-				headers.put(entry.getKey(), entry.getValue());
+		for (HashMap<String, Object> map : postHeaders) {
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				headers.put(entry.getKey(), (String) entry.getValue());
 			}
 		}
 		if (body == null) {
@@ -104,7 +104,7 @@ public class WS {
 	 * @return Key Value pairs of the response
 	 * @throws Exception If HTTP request failed
 	 */
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, String> body) throws Exception {
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, Object> body) throws Exception {
 		return request(op, uri, headers, body, ContentType.APPLICATION_JSON);
 	}
 
@@ -118,7 +118,7 @@ public class WS {
 	 * @return Key Value pairs of the response
 	 * @throws Exception If HTTP request failed
 	 */
-	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, String> body, ContentType contentType) throws Exception {
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, Object> body, ContentType contentType) throws Exception {
 		switch (op) {
 			case DELETE:
 				return handleRequest(new HttpDelete(uri), headers);
@@ -129,8 +129,8 @@ public class WS {
 				if (body != null) {
 					if (contentType == ContentType.MULTIPART_FORM_DATA) {
 						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String, String> entry : body.entrySet()) {
-							builder.addTextBody(entry.getKey(), entry.getValue());
+						for (Map.Entry<String, Object> entry : body.entrySet()) {
+							builder.addTextBody(entry.getKey(), (String) entry.getValue());
 						}
 						post.setEntity(builder.build());
 					} else {
@@ -145,8 +145,8 @@ public class WS {
 				if (body != null) {
 					if (contentType == ContentType.MULTIPART_FORM_DATA) {
 						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String, String> entry : body.entrySet()) {
-							builder.addTextBody(entry.getKey(), entry.getValue());
+						for (Map.Entry<String, Object> entry : body.entrySet()) {
+							builder.addTextBody(entry.getKey(), (String) entry.getValue());
 						}
 						put.setEntity(builder.build());
 					} else {
