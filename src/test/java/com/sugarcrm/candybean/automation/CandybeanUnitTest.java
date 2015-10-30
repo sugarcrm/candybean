@@ -33,7 +33,7 @@ public class CandybeanUnitTest {
 
 	@Test
 	public void testCandybeanLog() throws Exception {
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.getDefaultConfigFile());
 		Configuration candybeanConfig = new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
 		Candybean candybean = Candybean.getInstance(candybeanConfig);
 		assert(candybean != null);

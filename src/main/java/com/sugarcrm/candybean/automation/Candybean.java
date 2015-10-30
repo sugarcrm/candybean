@@ -23,8 +23,10 @@ package com.sugarcrm.candybean.automation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.CandybeanLogger;
@@ -52,7 +54,13 @@ public final class Candybean {
 	/**
 	 * The default configuration file name to instantiate candybean.
 	 */
-	public static final String DEFAULT_CONFIG_FILE = ROOT_DIR + File.separator + "candybean.config";
+	public static final List<String> DEFAULT_CONFIG_FILES = Arrays.asList(
+			ROOT_DIR + File.separator + "candybean.config",
+			ROOT_DIR + File.separator + "src" + File.separator + "test" +
+					File.separator + "resources" + File.separator + "candybean.config",
+			ROOT_DIR + File.separator + "src" + File.separator + "test" +
+					File.separator + "resources" + File.separator + "voodoo.properties"
+			);
 
 	/**
 	 * {@link Configuration} object created by loading the candybean
@@ -187,11 +195,22 @@ public final class Candybean {
 	public AutomationInterface getInterface() throws Exception {
 		throw new Exception("There are no non-webdriver automation interfaces currently defined.");
 	}
-	
+
+	public static String getDefaultConfigFile() throws CandybeanException{
+		final String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
+		if (candybeanConfigStr != null) {
+			return candybeanConfigStr;
+		}
+		for (String f: Candybean.DEFAULT_CONFIG_FILES) {
+			if (new File(f).exists()) {
+				return f;
+			}
+		}
+		throw new CandybeanException("Could not find appropriate config file");
+	}
 	private static Configuration getDefaultConfiguration() throws CandybeanException {
 		try {
-			String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
-			return new Configuration(new File(Utils.adjustPath(candybeanConfigStr)));
+			return new Configuration(new File(Utils.adjustPath(getDefaultConfigFile())));
 		} catch (IOException ioe) {
 			throw new CandybeanException(ioe);
 		}

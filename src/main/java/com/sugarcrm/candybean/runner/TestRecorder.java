@@ -125,7 +125,7 @@ public class TestRecorder extends RunListener {
 		super();
 		logger = Logger.getLogger(Candybean.class.getSimpleName());
 		this.context = JAXBContext.newInstance(FailedTests.class);
-		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.DEFAULT_CONFIG_FILE);
+		String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY, Candybean.getDefaultConfigFile());
 		this.config = new Configuration(new File(candybeanConfigStr));
 		this.xmlFile = createFile(config.getValue("testResultsXMLPath", FAILED_TEST_RESULTS_XML), false);
 	}
