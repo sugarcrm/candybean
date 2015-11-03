@@ -81,15 +81,20 @@ public class WS {
 	 * or {@link #request(OP, String, Map, Map)}
 	 */
 	@Deprecated
-	public static Map<String, Object> request(OP op, String uri, Map<String, Object> payload, String body, ArrayList<HashMap<String, Object>> postHeaders) throws Exception {
+	public static Map<String, Object> request(OP op, String uri, Map<String, String> payload, String body, ArrayList<HashMap<String, String>> postHeaders) throws Exception {
 		HashMap<String, String> headers = new HashMap<>();
-		for (HashMap<String, Object> map : postHeaders) {
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				headers.put(entry.getKey(), (String) entry.getValue());
+		for (HashMap<String, String> map : postHeaders) {
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				headers.put(entry.getKey(), entry.getValue());
 			}
 		}
+		HashMap<String,Object> newPayload = new HashMap<>();
+		for (Map.Entry<String,String> entry: payload.entrySet()) {
+			newPayload.put(entry.getKey(), entry.getValue());
+		}
+
 		if (body == null) {
-			return request(op, uri, headers, payload);
+			return request(op, uri, headers, newPayload);
 		} else {
 			return request(op, uri, headers, body, ContentType.DEFAULT_TEXT);
 		}
