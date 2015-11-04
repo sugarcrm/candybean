@@ -28,6 +28,8 @@ import com.sugarcrm.candybean.runner.VRunner;
  */
 @RunWith(VRunner.class)
 public class RecordSystemTest {
+	final String testPage1 = "file://"+ System.getProperty("user.dir")+"/resources/html/test/testPlayground.html";
+	final String testPage2 = "file://"+ System.getProperty("user.dir")+"/resources/html/test/onOffScreen.html";
 
 	private WebDriverInterface iface;
 	
@@ -48,20 +50,17 @@ public class RecordSystemTest {
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void passedUrlTest() throws Exception {
-		String googleUrl = "https://www.google.com/";
-		iface.go(googleUrl);
-		assertEquals(googleUrl, iface.getURL());
+		iface.go(testPage1);
+		assertEquals(testPage1, iface.getURL());
 	}
-	
+
 	@Test
 	@Record(duration = Duration.FINAL_FAILED)
 	@VTag(tags={"mac", "windows", "linux"}, tagLogicClass="com.sugarcrm.candybean.runner.VTagUnitTest", tagLogicMethod="processTags")
 	public void failedUrlTest() throws Exception {
-		String amazonUrl = "https://www.amazon.com/";
-		String yahooUrl = "https://www.yahoo.com/";
-		iface.go(amazonUrl);
-		iface.go(yahooUrl);
-		assertEquals(yahooUrl, iface.getURL());
+		iface.go(testPage1);
+		iface.go(testPage2);
+		assertEquals(testPage2, iface.getURL());
 	}
 
 	@After
