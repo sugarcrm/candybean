@@ -26,10 +26,7 @@ import java.util.List;
 
 import com.sugarcrm.candybean.configuration.Configuration;
 import com.sugarcrm.candybean.testUtilities.TestConfiguration;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
 import com.sugarcrm.candybean.automation.Candybean;
@@ -59,7 +56,8 @@ public class WebDriverSelectorSystemTest {
 	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
-	
+
+    @Ignore("Requires a Chromedriver update, see CB-259")
 	@Test
 	public void selectTest() throws Exception {
         iface.go(testPage);
@@ -68,6 +66,7 @@ public class WebDriverSelectorSystemTest {
 		Assert.assertEquals("Option 2", select.getAllSelectedOptions().get(0));
 	}
 
+    @Ignore("Requires a Chromedriver update, see CB-259")
     @Test
     public void selectMultipleTest() throws Exception {
         iface.go(testPage);
@@ -87,32 +86,30 @@ public class WebDriverSelectorSystemTest {
         Assert.assertTrue(select.isSelected(options, true));
     }
 
+    @Ignore("Requires a Chromedriver update, see CB-259")
     @Test
     public void selectAllTest() throws Exception {
         iface.go(testPage);
         WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/div/select"), iface.wd);
 
         Assert.assertFalse(select.isSelected());
-
         select.selectAll();
-
         Assert.assertTrue(select.isSelected(select.getOptions(), true));
     }
 
+    @Ignore("Requires a Chromedriver update, see CB-259")
     @Test
     public void deselectTest() throws Exception {
         iface.go(testPage);
         WebDriverSelector select = new WebDriverSelector(new Hook(Strategy.XPATH, "/html/body/div/select"), iface.wd);
 
         select.select("Ham");
-
         Assert.assertTrue(select.isSelected("Ham"));
-
         select.deselect("Ham");
-
         Assert.assertFalse(select.isSelected("Ham"));
     }
 
+    @Ignore("Requires a Chromedriver update, see CB-259")
     @Test
     public void deselectMultiple() throws Exception {
         iface.go(testPage);
@@ -135,6 +132,7 @@ public class WebDriverSelectorSystemTest {
         Assert.assertTrue(select.isSelected(selected, true));
     }
 
+    @Ignore("Requires a Chromedriver update, see CB-259")
     @Test
     public void deselectAllTest() throws Exception {
         iface.go(testPage);
