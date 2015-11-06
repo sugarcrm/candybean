@@ -36,7 +36,6 @@ import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
-import org.openqa.selenium.WebDriver;
 
 @RunWith(VRunner.class)
 public class WebDriverSystemTest {
@@ -126,7 +125,7 @@ public class WebDriverSystemTest {
 		}
 	}
 
-	@Ignore("CB-259: Chromedriver")
+	@Ignore("CB-259: Need support for chromedriver 2.20, as it does not block popups by default")
 	@Test
 	public void openCloseWindowTest() throws Exception {
 		iface.go(testPage1);
@@ -168,14 +167,16 @@ public class WebDriverSystemTest {
 
 	@Test
 	public void containsTest() throws Exception {
+		final boolean CASE_SENSITIVE = true;
+		final boolean CASE_INSENSITIVE = false;
 		iface.go(testPage1);
-		Assert.assertTrue(iface.contains("Click button", true));
-		Assert.assertTrue(iface.contains("cLiCk BuTtOn", false));
-		Assert.assertTrue(iface.contains("Click button", false));
-		Assert.assertFalse(iface.contains("cLiCk BuTtOn", true));
+		Assert.assertTrue(iface.contains("Click button", CASE_SENSITIVE));
+		Assert.assertTrue(iface.contains("cLiCk BuTtOn", CASE_INSENSITIVE));
+		Assert.assertTrue(iface.contains("Click button", CASE_INSENSITIVE));
+		Assert.assertFalse(iface.contains("cLiCk BuTtOn", CASE_SENSITIVE));
 
-		Assert.assertFalse(iface.contains("Doesn't contain this", true));
-		Assert.assertFalse(iface.contains("Doesn't contain this", true));
+		Assert.assertFalse(iface.contains("Doesn't contain this", CASE_SENSITIVE));
+		Assert.assertFalse(iface.contains("Doesn't contain this", CASE_INSENSITIVE));
 	}
 
 	@Test
@@ -255,23 +256,25 @@ public class WebDriverSystemTest {
 		assertEquals(testPage2, iface.getURL());
 
 		// Verify errors by switching to erroneous window titles & indices
+		// We use try catch rather than expected errors so that we can assert multiple error message
 		try {
 			iface.focusWindow("garbage");
-			assertTrue("Test did not fail when expected", false);
+			fail("The test should not have been able to focus the window titled \"garbage\"");
 		} catch (CandybeanException e) {
 			assertEquals("The given focus window string matched no title or URL: garbage",
 					e.getMessage());
 		}
 		try {
 			iface.focusWindow(-1);
-			assertTrue("Test did not fail when expected", false);
+			fail("The test should not have been able to focus the window of index -1");
 		} catch (CandybeanException e) {
 			assertEquals("Given focus window index is out of bounds: -1; current size: 1",
 					e.getMessage());
 		}
 		try {
 			iface.focusWindow(0);
-			assertTrue("Test did not fail when expected", false);
+			fail("The test should not have been able to focus the window of index 0, " +
+					"that window should no longer exist");
 		} catch (CandybeanException e) {
 			assertEquals("Given focus window index is out of bounds: 1; current size: 1",
 					e.getMessage());
