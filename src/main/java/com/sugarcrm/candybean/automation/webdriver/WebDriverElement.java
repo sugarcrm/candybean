@@ -99,17 +99,14 @@ public class WebDriverElement extends Element {
 	}
 
 	/**
-	 * Get the visible text of this element. If the element is a button, the
-	 * value is returned.
-	 * 
+	 * Get the visible text of this element.
+	 * Return the value if it is an input element, otherwise, return the innnerText
+	 *
 	 * @return the visible text of this element
 	 */
 	public String getText() throws CandybeanException {
 		logger.info("Getting text for element: " + this.toString());
-		String type = this.we.getAttribute("type");
-		if (type != null
-				&& (type.equalsIgnoreCase("button") || type
-						.equalsIgnoreCase("text"))) {
+		if ("input".equals(we.getTagName())){
 			return this.we.getAttribute("value");
 		}
 		return this.we.getText();

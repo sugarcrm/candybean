@@ -36,13 +36,15 @@ import com.sugarcrm.candybean.automation.AutomationInterface.Type;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.runner.VRunner;
-import org.openqa.selenium.WebDriver;
 
 @RunWith(VRunner.class)
 public class WebDriverSystemTest {
 
 	private WebDriverInterface iface;
-	
+
+	final String testPage1 = "file://"+ System.getProperty("user.dir")+"/resources/html/test/testPlayground.html";
+	final String testPage2 = "file://"+ System.getProperty("user.dir")+"/resources/html/test/onOffScreen.html";
+
 	@Before
 	public void setUp() throws Exception {
 		Configuration config = TestConfiguration.getTestConfiguration("systemtest.webdriver.config");
@@ -61,39 +63,33 @@ public class WebDriverSystemTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
-//	@Ignore
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
-		String url1 = "https://www.google.com/";
-		String url2 = "https://www.wikipedia.org/";
-		String url3 = "https://www.reddit.com/";
-		iface.go(url1);
-		iface.go(url2);
-		iface.go(url3);
-		assertEquals(url3, iface.getURL());
+		iface.go(testPage1);
+		iface.go(testPage2);
+		iface.go(testPage1);
+		assertEquals(testPage1, iface.getURL());
 		iface.backward();
 		iface.pause(1000);
-		assertEquals(url2, iface.getURL());
+		assertEquals(testPage2, iface.getURL());
 		iface.backward();
 		iface.pause(1000);
-		assertEquals(url1, iface.getURL());
+		assertEquals(testPage1, iface.getURL());
 		iface.forward();
 		iface.pause(1000);
-		assertEquals(url2, iface.getURL());
+		assertEquals(testPage2, iface.getURL());
 		iface.forward();
 		iface.pause(1000);
-		assertEquals(url3, iface.getURL());		
+		assertEquals(testPage1, iface.getURL());
 		iface.refresh(); // refreshing only at end; mid-refreshes crash in Chrome
 		iface.pause(2000);
-		assertEquals(url3, iface.getURL());		
+		assertEquals(testPage1, iface.getURL());
 	}
 
-//	@Ignore
 	@Test
 	public void screenshotTest() throws Exception {
 		File screenshotFile = new File(Candybean.ROOT_DIR + File.separator + "screenshot.png");
-		String url = "https://www.google.com/";
-		iface.go(url);
+		iface.go(testPage1);
 		iface.screenshot(screenshotFile);
 		assertTrue(screenshotFile.exists());
 		screenshotFile.delete();
@@ -102,24 +98,23 @@ public class WebDriverSystemTest {
 	@Ignore
 	@Test
 	public void startStopRestartTest() throws Exception {
-		String expUrl = "https://www.google.com/";
-		iface.go(expUrl);
+		iface.go(testPage1);
 		String actUrl = iface.getURL();
-		assertEquals(expUrl, actUrl);
+		assertEquals(testPage1, actUrl);
 		iface.stop();
 		iface = new FirefoxInterface();
-		iface.go(expUrl);
+		iface.go(testPage1);
 		actUrl = iface.getURL();
-		assertEquals(expUrl, actUrl);
+		assertEquals(testPage1, actUrl);
 		iface.restart();
-		iface.go(expUrl);
+		iface.go(testPage1);
 		actUrl = iface.getURL();
-		assertEquals(expUrl, actUrl);
+		assertEquals(testPage1, actUrl);
 		iface.stop();
 		iface = new ChromeInterface();
-		iface.go(expUrl);
+		iface.go(testPage1);
 		actUrl = iface.getURL();
-		assertEquals(expUrl, actUrl);
+		assertEquals(testPage1, actUrl);
 		iface.stop();
 		try {
 			thrown.expect(Exception.class);
@@ -130,39 +125,31 @@ public class WebDriverSystemTest {
 		}
 	}
 
+	@Ignore("CB-259: Need support for chromedriver 2.20, as it does not block popups by default")
 	@Test
 	public void openCloseWindowTest() throws Exception {
-		String googleUrl = "https://www.google.com/";
-		String bingUrl = "http://www.bing.com/";
-
-		iface.go(googleUrl);
-		assertEquals(googleUrl, iface.wd.getCurrentUrl());
-		iface.openWindow(bingUrl);
-		assertEquals(bingUrl, iface.wd.getCurrentUrl());
+		iface.go(testPage1);
+		assertEquals(testPage1, iface.wd.getCurrentUrl());
+		iface.openWindow(testPage2);
+		assertEquals(testPage2, iface.wd.getCurrentUrl());
 		iface.focusWindow(0);
-		assertEquals(googleUrl, iface.wd.getCurrentUrl());
+		assertEquals(testPage1, iface.wd.getCurrentUrl());
 		iface.focusWindow(1);
-		assertEquals(bingUrl, iface.wd.getCurrentUrl());
+		assertEquals(testPage2, iface.wd.getCurrentUrl());
 		iface.closeWindow();
-		assertEquals(googleUrl, iface.wd.getCurrentUrl());
+		assertEquals(testPage1, iface.wd.getCurrentUrl());
 	}
 
-	@Ignore
-	@Test
-	public void goTest() throws Exception {
-//		this.iface.go("");
-	}
-
-	@Ignore
 	@Test
 	public void presentAcceptDismissDialogTest() throws Exception {
-		iface.go("http://www.mediacollege.com/internet/javascript/basic/alert.html");
+		iface.go(testPage1);
 		
 		// dialog not yet visible
 		assertFalse(iface.isDialogVisible());
 		
 		// clicking; alert should be visible and window inactive
-		iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+		iface.getWebDriverElement(Strategy.ID, "newAlert").click();
+		iface.pause(1000);
 		assertTrue(iface.isDialogVisible());
 		
 		// accepting alert dialog; should be gone
@@ -171,152 +158,127 @@ public class WebDriverSystemTest {
 		
 		// Dismiss not available in Chrome
 		if (!(iface instanceof ChromeInterface)) {
-			iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"content\"]/p[2]/input").click();
+			iface.getWebDriverElement(Strategy.ID, "newAlert").click();
 			assertTrue(iface.isDialogVisible());
 			iface.dismissDialog();
 			assertFalse(iface.isDialogVisible());
 		}
 	}
 
-//	@Ignore
 	@Test
 	public void containsTest() throws Exception {
-		iface.go("https://code.google.com/");
-		boolean actCaseSensPos = iface.contains("Google Developers", true); //true
-		boolean actCaseSensNeg = iface.contains("google developers", true); //false
-		boolean actNeg = iface.contains("goggle devs", false); //false
-		assertEquals(true, actCaseSensPos);
-		assertEquals(false, actCaseSensNeg);
-		assertEquals(false, actNeg);
-	}
-	
-	@Ignore
-	@Test
-	public void focusDefaultTest() throws Exception {
-//		this.iface.focusDefault();
+		final boolean CASE_SENSITIVE = true;
+		final boolean CASE_INSENSITIVE = false;
+		iface.go(testPage1);
+		Assert.assertTrue(iface.contains("Click button", CASE_SENSITIVE));
+		Assert.assertTrue(iface.contains("cLiCk BuTtOn", CASE_INSENSITIVE));
+		Assert.assertTrue(iface.contains("Click button", CASE_INSENSITIVE));
+		Assert.assertFalse(iface.contains("cLiCk BuTtOn", CASE_SENSITIVE));
+
+		Assert.assertFalse(iface.contains("Doesn't contain this", CASE_SENSITIVE));
+		Assert.assertFalse(iface.contains("Doesn't contain this", CASE_INSENSITIVE));
 	}
 
-//	@Ignore
 	@Test
 	public void focusFrameTest() throws Exception {
-		String expDefStr = "The magic of iframes";
-		String expFrmStr = "http://www.littlewebhut.com/images/eightball.gif";
-		iface.go("http://www.littlewebhut.com/articles/html_iframe_example/");
-		String actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
-		assertEquals(expDefStr, actDefStr);
-		
+		String mainText = "Click button to hide me";
+		String iframeText = "This goes inside the iframe";
+		iface.go(testPage1);
+		WebDriverElement mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
+		assertEquals(mainText, mainFramePara.getText());
+
 		// switch focus to frame by index
-		iface.focusFrame(1);
-//		System.out.println("SOURCE:\n" + iface.wd.getPageSource());
-		String actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
-		assertEquals(expFrmStr, actFrmStr);
+		iface.focusFrame(0);
+		WebDriverElement iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
+		assertEquals(iframeText, iframePara.getText());
 		
 		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
-		assertEquals(expDefStr, actDefStr);
-		
+		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
+		assertEquals(mainText, mainFramePara.getText());
+
 		// switch focus to frame by name
-		iface.focusFrame("imgbox");
-		actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
-		assertEquals(expFrmStr, actFrmStr);
-		
+		iface.focusFrame("Test_iframe");
+		iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
+		assertEquals(iframeText, iframePara.getText());
+
 		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
-		assertEquals(expDefStr, actDefStr);
-		
+		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
+		assertEquals(mainText, mainFramePara.getText());
+
 		// switch to focus by control
-		iface.focusFrame(new WebDriverElement(Strategy.ID, "imgbox", iface.wd));
-		actFrmStr = iface.getWebDriverElement(Strategy.TAG, "img").getAttribute("src");
-		assertEquals(expFrmStr, actFrmStr);
-		
+		iface.focusFrame(new WebDriverElement(Strategy.ID, "Test_iframe", iface.wd));
+		iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
+		assertEquals(iframeText, iframePara.getText());
+
 		// switch to default focus
 		iface.focusDefault();
-		actDefStr = iface.getWebDriverElement(Strategy.TAG, "h2").getText();
-		assertEquals(expDefStr, actDefStr);
+		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
+		assertEquals(mainText, mainFramePara.getText());
 	}
 
+	@Ignore("CB-263: Candybean does not properly model windows")
 	@Test
 	public void focusWindowTest() throws Exception {
-		String expWindow0Title = "HTML Examples";
-		String expWindow0URL = "http://www.w3schools.com/html/html_examples.asp";
-		String expWindow1Title = "Tryit Editor v2.6";
-		String expWindow1URL = "http://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic_document";
-		String expWindow2Title = "HTML Popup Windows - HTML Code Tutorial | HTML Code Tutorial";
-		String expWindow2URL = "http://www.htmlcodetutorial.com/linking/linking_famsupp_70.html";
-		String expWindow3Title = "Popup Window - HTML Code Tutorial";
-		String expWindow3URL = "http://www.htmlcodetutorial.com/linking/popup_test_a.html";
+		String mainWindowTitle = "Candybean Test Page";
+		String altWindowTitle = "Candybean Test Page 2";
 
-		iface.go(expWindow0URL);
+		iface.go(testPage1);
 
-		// Check assumptions
-		assertEquals(expWindow0Title, iface.wd.getTitle());
-
-		// Click pops-up window titled "Tryit Editor v2.6"
-		iface.getWebDriverElement(Strategy.PLINK, "HTML document").click();
+		// Opens a window in a new tab
+		iface.getWebDriverElement(Strategy.PLINK, "Open in new window").click();
+		iface.getWebDriverElement(Strategy.PLINK, "Open in new window").click();
 
 		// Verify title without switching
-		assertEquals(expWindow0Title, iface.wd.getTitle());
+		assertEquals(mainWindowTitle, iface.wd.getTitle());
 
 		// Verify title with switching
 		iface.focusWindow(1);
 		Thread.sleep(1000);
-		assertEquals(expWindow1Title, iface.wd.getTitle());
-//		iface.interact(iface.getWindowsString());
+		assertEquals(altWindowTitle, iface.wd.getTitle());
 
 		// Close window which should auto-focus to previous window; verify title
 		iface.closeWindow();
-		assertEquals(expWindow0Title, iface.wd.getTitle());
-//		iface.interact(iface.getWindowsString());
+		assertEquals(mainWindowTitle, iface.wd.getTitle());
 
-		// Click pop-up window titled "Tryit Editor v1.8"
-		iface.getWebDriverElement(Strategy.PLINK, "HTML document").click();
-
-		// Navigate elsewhere and trigger popup window
-//		iface.interact("window focus before go: " + iface.wd.getWindowHandle());
-		iface.go(expWindow2URL);
-//		iface.interact("window focus after go: " + iface.wd.getWindowHandle());
-		iface.getWebDriverElement(Strategy.PLINK, "this link").click();
-//		iface.interact(iface.getWindowsString());
-
-		// Verify title with (not) switching to current window by index
-		iface.focusWindow(0);
-		assertEquals(expWindow2Title, iface.wd.getTitle());
-//		iface.interact(iface.getWindowsString());
-
-		// Verify URL with switching to window by title
-		iface.focusWindow(expWindow1Title);
-		String actWindowURL = iface.getURL();
-		assertEquals(expWindow1URL, actWindowURL);
-//		iface.interact(iface.getWindowsString());
+		iface.getWebDriverElement(Strategy.PLINK, "Open in new window").click();
+		iface.focusWindow(altWindowTitle);
+		assertEquals(altWindowTitle, iface.wd.getTitle());
+		assertEquals(testPage2, iface.getURL());
 
 		// Verify URL with switching to window by URL
-		iface.focusWindow(expWindow3URL);
-		assertEquals(expWindow3Title, iface.wd.getTitle());
-//		iface.interact(iface.getWindowsString());
+		iface.focusWindow(testPage1);
+		assertEquals(mainWindowTitle, iface.wd.getTitle());
 
 		// Close window and revert to previous window (1 index); verify URL
 		iface.closeWindow();
-		actWindowURL = iface.getURL();
-		assertEquals(expWindow1URL, actWindowURL);
-//		iface.interact(iface.getWindowsString());
+		assertEquals(testPage2, iface.getURL());
 
-		// Close window and revert to previous window (0 index); verify URL
-		iface.closeWindow();
-		actWindowURL = iface.getURL();
-		assertEquals(expWindow2URL, actWindowURL);
-//		iface.interact(iface.getWindowsString());
-
-		// Verify error by switching to erroneous window titles & indices
-		thrown.expect(Exception.class);
-		thrown.expectMessage("The given focus window string matched no title or URL: garbage");
-		iface.focusWindow("garbage");
-		thrown.expectMessage("Given focus window index is out of bounds: -1 current size: 1");
-		iface.focusWindow(-1);
-		thrown.expectMessage("Given focus window index is out of bounds: 1 current size: 1");
-		iface.focusWindow(1);
-//		iface.interact(iface.getWindowsString());
+		// Verify errors by switching to erroneous window titles & indices
+		// We use try catch rather than expected errors so that we can assert multiple error message
+		try {
+			iface.focusWindow("garbage");
+			fail("The test should not have been able to focus the window titled \"garbage\"");
+		} catch (CandybeanException e) {
+			assertEquals("The given focus window string matched no title or URL: garbage",
+					e.getMessage());
+		}
+		try {
+			iface.focusWindow(-1);
+			fail("The test should not have been able to focus the window of index -1");
+		} catch (CandybeanException e) {
+			assertEquals("Given focus window index is out of bounds: -1; current size: 1",
+					e.getMessage());
+		}
+		try {
+			iface.focusWindow(0);
+			fail("The test should not have been able to focus the window of index 0, " +
+					"that window should no longer exist");
+		} catch (CandybeanException e) {
+			assertEquals("Given focus window index is out of bounds: 1; current size: 1",
+					e.getMessage());
+		}
 	}
 
 	@Test
@@ -383,23 +345,4 @@ public class WebDriverSystemTest {
 		assertEquals("Javascript return value incorrect.  Expected: " + toReturn +
 				"   Found: " + returnValue, toReturn, returnValue);
 	}
-
-	@Ignore
-	@Test
-	public void maximizeTest() {
-//		this.iface.maximize();
-	}
-
-	@Ignore
-	@Test
-	public void getControlTest() throws Exception {
-//		this.iface.getWebDriverElement(null);
-	}
-
-	@Ignore
-	@Test
-	public void getSelectTest() throws Exception {
-//		this.iface.getSelect(null);
-	}
-
 }
