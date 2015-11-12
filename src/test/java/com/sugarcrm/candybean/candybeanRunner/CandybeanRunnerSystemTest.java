@@ -6,10 +6,14 @@ import org.junit.runner.RunWith;
 
 import java.io.*;
 
+/**
+ * A series of test intended to test some of the expected function
+ * Since there doesn't appear to be a good way to test a runner, these
+ * tests certainly are not conclusive.
+ */
 @RunWith(CandybeanRunner.class)
 public class CandybeanRunnerSystemTest {
 	static String filename = "./candybeanTest.txt";
-	String testName;
 
 	@BeforeClass
 	static public void createFile() {
@@ -46,15 +50,17 @@ public class CandybeanRunnerSystemTest {
 
 	@Before
 	public void before() throws InterruptedException {
-		testName = getClass().getSimpleName();
-		System.err.println("In Before of " + testName);
 	}
 
 	@After
 	public void after() throws InterruptedException {
-		System.err.println("In After of " + testName);
 	}
 
+	/**
+	 * Increments a number in a file until the test passes
+	 * Note: Ensure that retries is set to at least 1
+	 * when running this test
+	 */
 	@Test
 	public void testCountTest() {
 		File f = new File(filename);
@@ -72,14 +78,18 @@ public class CandybeanRunnerSystemTest {
 
 	@Test
 	public void testTimeoutSuccess() throws InterruptedException {
-		System.err.println("In Tests");
 		Thread.sleep(500);
 	}
 
-	@Ignore("This test used to test timing out, it is expected to fail")
+	/**
+	 * This test is intended to fail, however, since it is killed by the runner, not
+	 * the test itself, it can't use an expected exception to run properly
+	 *
+	 * @throws InterruptedException
+	 */
+	@Ignore("This test is used to test timing out, it is expected to fail")
 	@Test
 	public void testTimeoutFail() throws InterruptedException {
-		System.err.println("In Tests");
 		Thread.sleep(2000);
 	}
 
