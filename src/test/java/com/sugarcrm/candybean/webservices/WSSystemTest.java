@@ -251,7 +251,6 @@ public class WSSystemTest {
 		} catch (Exception e) {
 			Assert.fail(e.toString());
 		}
-		System.out.println(response.get("json"));
 		Assert.assertTrue(response != null);
 		Assert.assertEquals("value1", ((JSONObject) response.get("json")).get("key1"));
 		Assert.assertEquals("value4", ((Map) ((Map) response.get("json")).get("key2")).get("key4"));

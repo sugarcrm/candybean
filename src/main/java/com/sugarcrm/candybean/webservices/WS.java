@@ -21,12 +21,6 @@
  */
 package com.sugarcrm.candybean.webservices;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
-import java.util.logging.Logger;
-
-
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
@@ -39,9 +33,13 @@ import org.apache.http.message.BasicHeader;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.logging.Logger;
+
 /**
  * Helps make web-service calls and supports DELETE, GET, POST, and PUT
- *
  */
 public class WS {
 
@@ -55,10 +53,11 @@ public class WS {
 
 	/**
 	 * Send a DELETE, GET, POST, or PUT http request
-	 * @param op The type of http request
-	 * @param uri The http endpoint
+	 *
+	 * @param op      The type of http request
+	 * @param uri     The http endpoint
 	 * @param headers Map of header key value pairs
-	 * @param body String representation of the request body
+	 * @param body    String representation of the request body
 	 * @return Key Value pairs of the response
 	 * @throws Exception When http request failed
 	 * @deprecated Use {@link #request(OP, String, Map, String, ContentType)}
@@ -70,11 +69,12 @@ public class WS {
 
 	/**
 	 * Send a DELETE, GET, POST, or PUT http request
-	 * @param op The type of http request
-	 * @param uri The http endpoint
-	 * @param payload Map of key value pairs for the body
+	 *
+	 * @param op          The type of http request
+	 * @param uri         The http endpoint
+	 * @param payload     Map of key value pairs for the body
 	 * @param postHeaders List of Maps of header key value pairs
-	 * @param body String representation of the request body (ignored)
+	 * @param body        String representation of the request body (ignored)
 	 * @return Key Value pairs of the response
 	 * @throws Exception When http request failed
 	 * @deprecated This is a work around for old compatibility, use {@link #request(OP, String, Map, String, ContentType)}
@@ -88,8 +88,8 @@ public class WS {
 				headers.put(entry.getKey(), entry.getValue());
 			}
 		}
-		HashMap<String,Object> newPayload = new HashMap<>();
-		for (Map.Entry<String,String> entry: payload.entrySet()) {
+		HashMap<String, Object> newPayload = new HashMap<>();
+		for (Map.Entry<String, String> entry : payload.entrySet()) {
 			newPayload.put(entry.getKey(), entry.getValue());
 		}
 
@@ -102,10 +102,11 @@ public class WS {
 
 	/**
 	 * Send a DELETE, GET, POST, or PUT http request using a JSON body
-	 * @param op The type of http request
-	 * @param uri The http endpoint
+	 *
+	 * @param op      The type of http request
+	 * @param uri     The http endpoint
 	 * @param headers Map of header key value pairs
-	 * @param body Map of Key Value pairs
+	 * @param body    Map of Key Value pairs
 	 * @return Key Value pairs of the response
 	 * @throws Exception If HTTP request failed
 	 */
@@ -115,15 +116,19 @@ public class WS {
 
 	/**
 	 * Send a DELETE, GET, POST, or PUT http request, intended for multipart data and JSON requests
-	 * @param op The type of http request
-	 * @param uri The http endpoint
-	 * @param headers Map of header key value pairs
-	 * @param body Map of Key Value pairs
+	 *
+	 * @param op          The type of http request
+	 * @param uri         The http endpoint
+	 * @param headers     Map of header key value pairs
+	 * @param body        A recursive map representing a JSON, where Object is one of String|Map&lt;String,Object&gt;
 	 * @param contentType The intended content type of the body
 	 * @return Key Value pairs of the response
 	 * @throws Exception If HTTP request failed
 	 */
 	public static Map<String, Object> request(OP op, String uri, Map<String, String> headers, Map<String, Object> body, ContentType contentType) throws Exception {
+		if (!verifyBody(body)) {
+			throw new CandybeanException("Body is not representable as JSON");
+		}
 		switch (op) {
 			case DELETE:
 				return handleRequest(new HttpDelete(uri), headers);
@@ -131,35 +136,11 @@ public class WS {
 				return handleRequest(new HttpGet(uri), headers);
 			case POST:
 				HttpPost post = new HttpPost(uri);
-				if (body != null) {
-					if (contentType == ContentType.MULTIPART_FORM_DATA) {
-						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String, Object> entry : body.entrySet()) {
-							builder.addTextBody(entry.getKey(), (String) entry.getValue());
-						}
-						post.setEntity(builder.build());
-					} else {
-						JSONObject jsonBody = new JSONObject(body);
-						StringEntity strBody = new StringEntity(jsonBody.toJSONString(), ContentType.APPLICATION_JSON);
-						post.setEntity(strBody);
-					}
-				}
+				addBodyToRequest(post, body, contentType);
 				return handleRequest(post, headers);
 			case PUT:
 				HttpPut put = new HttpPut(uri);
-				if (body != null) {
-					if (contentType == ContentType.MULTIPART_FORM_DATA) {
-						MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-						for (Map.Entry<String, Object> entry : body.entrySet()) {
-							builder.addTextBody(entry.getKey(), (String) entry.getValue());
-						}
-						put.setEntity(builder.build());
-					} else {
-						JSONObject jsonBody = new JSONObject(body);
-						StringEntity strBody = new StringEntity(jsonBody.toJSONString(), ContentType.APPLICATION_JSON);
-						put.setEntity(strBody);
-					}
-				}
+				addBodyToRequest(put, body, contentType);
 				return handleRequest(put, headers);
 			default:
 				/*
@@ -174,10 +155,11 @@ public class WS {
 
 	/**
 	 * Send a DELETE, GET, POST, or PUT http request
-	 * @param op The type of http request
-	 * @param uri The http endpoint
-	 * @param headers Map of header key value pairs
-	 * @param body String representation of the request body
+	 *
+	 * @param op          The type of http request
+	 * @param uri         The http endpoint
+	 * @param headers     Map of header key value pairs
+	 * @param body        String representation of the request body
 	 * @param contentType The content type of the body
 	 * @return Key Value pairs of the response
 	 * @throws CandybeanException When http request failed
@@ -213,6 +195,7 @@ public class WS {
 
 	/**
 	 * Protected method to handle sending and receiving an http request
+	 *
 	 * @param request The Http request that is being send
 	 * @param headers Map of Key Value header pairs
 	 * @return Key Value pairs of the response
@@ -251,5 +234,49 @@ public class WS {
 			// Cast the other possible exceptions as a CandybeanException
 			throw new CandybeanException(e);
 		}
+	}
+
+	/**
+	 * Private helper method to abstract creating a POST/PUT request.
+	 * Side Effect: Adds the body to the request
+	 *
+	 * @param request     A PUT or POST request
+	 * @param body        Map of Key Value pairs
+	 * @param contentType The intended content type of the body
+	 */
+	protected static void addBodyToRequest(HttpEntityEnclosingRequestBase request, Map<String, Object> body, ContentType contentType) {
+		if (body != null) {
+			if (contentType == ContentType.MULTIPART_FORM_DATA) {
+				MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+				for (Map.Entry<String, Object> entry : body.entrySet()) {
+					builder.addTextBody(entry.getKey(), (String) entry.getValue());
+				}
+				request.setEntity(builder.build());
+			} else {
+				JSONObject jsonBody = new JSONObject(body);
+				StringEntity strBody = new StringEntity(jsonBody.toJSONString(), ContentType.APPLICATION_JSON);
+				request.setEntity(strBody);
+			}
+		}
+	}
+
+	/**
+	 * Verifies that a body is correctly formed
+	 *
+	 * @param body The body to verify
+	 * @return True if the body is correctly formed, else False;
+	 */
+	@SuppressWarnings("unchecked")
+	protected static boolean verifyBody(Map<String, Object> body) {
+		for (Map.Entry<String, Object> entry : body.entrySet()) {
+			if (entry.getValue() instanceof Map) {
+				if (!verifyBody((Map<String, Object>) entry.getValue())) {
+					return false;
+				}
+			} else if (!(entry.getValue() instanceof String)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
