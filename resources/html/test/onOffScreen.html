@@ -8,20 +8,18 @@ on and off screen.
 
 <html>
 	<head>
-            <title>Candybean Test Page 2</title>
+        <title>Candybean Test Page 2</title>
+            <script type="text/javascript">
+                function move() {
+                    var svg1 = document.getElementById('svg1');
+                    var svg2 = document.getElementById('svg2');
+                    var svg3 = document.getElementById('svg3');
 
-<script type="text/javascript">
-	function move() {
-		var svg1 = document.getElementById('svg1');
-		var svg2 = document.getElementById('svg2');
-		var svg3 = document.getElementById('svg3');
-
-		svg1.setAttribute("class", 'top-left-on');
-		svg2.setAttribute("class", 'top-left-off');
-	}
-	window.onload = move;
-</script>
-
+                    svg1.setAttribute("class", 'top-left-on');
+                    svg2.setAttribute("class", 'top-left-off');
+                }
+                window.onload = move;
+            </script>
 	</head>
 <style>
 	.onScreen {

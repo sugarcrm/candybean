@@ -7,42 +7,40 @@
     <head>
         <title>Candybean Test Page</title>
         <script type="text/javascript">
-/*
- * Toggles the visibility of the paragraph with id 'writing', can be used
- * for testing candybean functions which require and element to variably
- * be either visible or invisible or on/off the DOM.
- */
-function toggleDOMWriting() {
-    var para = document.getElementById('writing');
-    var parent = document.getElementById('writingDiv');
-    if (para != null) {
-        parent.removeChild(para);
-    }
-    else{
-        var para = document.createElement('span');
-        para.setAttribute('id', 'writing');
-        var text = document.createTextNode('Click button to hide me');
-        para.appendChild(text);
-        parent.appendChild(para);
-    }
-}
+            /*
+             * Toggles the id 'writing', on and off the DOM can be used  for testing
+             * candybean functions which require an element to be variably either
+             * visible or invisible or on/off the DOM.
+             */
+            function toggleDOMWriting() {
+                var para = document.getElementById('writing');
+                var parent = document.getElementById('writingDiv');
+                if (para !== null) {
+                    parent.removeChild(para);
+                } else{
+                    var para = document.createElement('span');
+                    para.setAttribute('id', 'writing');
+                    var text = document.createTextNode('Click button to hide me');
+                    para.appendChild(text);
+                    parent.appendChild(para);
+                }
+            }
 
-/*
- * Toggles the visibility of element
- *
- * String -> _
- * @para element The id of the element to toggle
- */
-function toggleVisibility(element) {
-    var elem = document.getElementById(element);
+            /*
+             * Toggles the visibility of element
+             *
+             * String -> _
+             * @para element The id of the element to toggle
+             */
+            function toggleVisibility(element) {
+                var elem = document.getElementById(element);
 
-    if (elem.className == 'hidden') {
-        elem.className = 'normal'
-    }
-    else {
-        elem.className = 'hidden';
-    }
-}
+                if (elem.className === 'hidden') {
+                    elem.className = 'normal'
+                } else {
+                    elem.className = 'hidden';
+                }
+            }
         </script>
     </head>
 
@@ -109,7 +107,7 @@ div {
             A test multiple select field
         -->
         <div>
-            <select name="ingredients[]" multiple="multiple" size="5">
+            <select name="ingredients" multiple="multiple" size="5">
                 <option value="Cheese">Cheese</option>
                 <option value="Olives">Olives</option>
                 <option value="Pepperoni">Pepperoni</option>

@@ -5,42 +5,39 @@
  * top-down and bottom-up batches, mobile variants, test translation across
  * languages, plain-language testing, and web service testing.
  * Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.sugarcrm.candybean.automation.webdriver;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.testUtilities.TestConfiguration;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
-import com.sugarcrm.candybean.automation.element.Hook;
-import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.runner.VRunner;
 
-@RunWith(VRunner.class)
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 public class WebDriverElementSystemTest {
 	private WebDriverInterface iface;
-	final String testPage = "file://"+ System.getProperty("user.dir")+"/resources/html/test/testPlayground.html";
+	final String testPage = "file://" + System.getProperty("user.dir") + "/resources/html/test/testPlayground.html";
 
 	@Before
 	public void setUp() throws Exception {
@@ -80,8 +77,8 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void getElementsTest() throws Exception {
 		iface.go(testPage);
-		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.NAME,"namedInput");
-		Assert.assertEquals(4,elements.size());
+		List<WebDriverElement> elements = iface.getWebDriverElements(Strategy.NAME, "namedInput");
+		Assert.assertEquals(4, elements.size());
 	}
 
 	@Test
@@ -121,7 +118,7 @@ public class WebDriverElementSystemTest {
 		Assert.assertTrue(writingDiv.contains("Click button", CASE_INSENSITIVE));
 		Assert.assertFalse(writingDiv.contains("cLiCk BuTtOn", CASE_SENSITIVE));
 		Assert.assertFalse(writingDiv.contains("Doesn't contain this", CASE_SENSITIVE));
-		Assert.assertFalse(writingDiv.contains("Doesn't contain this", CASE_SENSITIVE));
+		Assert.assertFalse(writingDiv.contains("Doesn't contain this", CASE_INSENSITIVE));
 	}
 
 	@Test
@@ -261,7 +258,7 @@ public class WebDriverElementSystemTest {
 		String searchTerm = "This is a search term";
 		searchBox.executeJavascript("arguments[0].value = '" + searchTerm + "';");
 		Assert.assertTrue(searchBox.getAttribute("value").equals(searchTerm));
-		String boxContents = (String)(searchBox.executeJavascript("return arguments[0].value;"));
+		String boxContents = (String) (searchBox.executeJavascript("return arguments[0].value;"));
 		Assert.assertEquals("Javascript return value incorrect.  Expected: " + searchTerm +
 				"   Found: " + boxContents, boxContents, searchTerm);
 	}
@@ -325,7 +322,7 @@ public class WebDriverElementSystemTest {
 		final boolean IS_OFF_SCREEN = false;
 		final Hook paragraph = new Hook(Strategy.ID, "p1");
 
-		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/onOffScreen.html");
+		iface.go("file://" + System.getProperty("user.dir") + "/resources/html/test/onOffScreen.html");
 
 		/* Clicking on paragraph
 		 *     Changes its coordinates to (-50,-50)

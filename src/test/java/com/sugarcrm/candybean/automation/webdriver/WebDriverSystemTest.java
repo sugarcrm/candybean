@@ -5,45 +5,43 @@
  * top-down and bottom-up batches, mobile variants, test translation across
  * languages, plain-language testing, and web service testing.
  * Copyright (C) 2013 SugarCRM, Inc. <candybean@sugarcrm.com>
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.sugarcrm.candybean.automation.webdriver;
 
-import static org.junit.Assert.*;
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
+import com.sugarcrm.candybean.automation.AutomationInterface.Type;
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.testUtilities.TestConfiguration;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.runner.VRunner;
 
-@RunWith(VRunner.class)
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.*;
+
 public class WebDriverSystemTest {
 
 	private WebDriverInterface iface;
 
-	final String testPage1 = "file://"+ System.getProperty("user.dir")+"/resources/html/test/testPlayground.html";
-	final String testPage2 = "file://"+ System.getProperty("user.dir")+"/resources/html/test/onOffScreen.html";
+	final String testPlaygroundPage = "file://" + System.getProperty("user.dir") + "/resources/html/test/testPlayground.html";
+	final String onOffScreenPage = "file://" + System.getProperty("user.dir") + "/resources/html/test/onOffScreen.html";
 
 	@Before
 	public void setUp() throws Exception {
@@ -59,103 +57,73 @@ public class WebDriverSystemTest {
 	public void tearDown() throws CandybeanException {
 		iface.stop();
 	}
-	
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-	
+
 	@Test
 	public void backwardForwardRefreshTest() throws Exception {
-		iface.go(testPage1);
-		iface.go(testPage2);
-		iface.go(testPage1);
-		assertEquals(testPage1, iface.getURL());
+		iface.go(testPlaygroundPage);
+		iface.go(onOffScreenPage);
+		iface.go(testPlaygroundPage);
+		assertEquals(testPlaygroundPage, iface.getURL());
 		iface.backward();
 		iface.pause(1000);
-		assertEquals(testPage2, iface.getURL());
+		assertEquals(onOffScreenPage, iface.getURL());
 		iface.backward();
 		iface.pause(1000);
-		assertEquals(testPage1, iface.getURL());
+		assertEquals(testPlaygroundPage, iface.getURL());
 		iface.forward();
 		iface.pause(1000);
-		assertEquals(testPage2, iface.getURL());
+		assertEquals(onOffScreenPage, iface.getURL());
 		iface.forward();
 		iface.pause(1000);
-		assertEquals(testPage1, iface.getURL());
+		assertEquals(testPlaygroundPage, iface.getURL());
 		iface.refresh(); // refreshing only at end; mid-refreshes crash in Chrome
 		iface.pause(2000);
-		assertEquals(testPage1, iface.getURL());
+		assertEquals(testPlaygroundPage, iface.getURL());
 	}
 
 	@Test
 	public void screenshotTest() throws Exception {
 		File screenshotFile = new File(Candybean.ROOT_DIR + File.separator + "screenshot.png");
-		iface.go(testPage1);
+		iface.go(testPlaygroundPage);
 		iface.screenshot(screenshotFile);
 		assertTrue(screenshotFile.exists());
 		screenshotFile.delete();
 	}
 
-	@Ignore
-	@Test
-	public void startStopRestartTest() throws Exception {
-		iface.go(testPage1);
-		String actUrl = iface.getURL();
-		assertEquals(testPage1, actUrl);
-		iface.stop();
-		iface = new FirefoxInterface();
-		iface.go(testPage1);
-		actUrl = iface.getURL();
-		assertEquals(testPage1, actUrl);
-		iface.restart();
-		iface.go(testPage1);
-		actUrl = iface.getURL();
-		assertEquals(testPage1, actUrl);
-		iface.stop();
-		iface = new ChromeInterface();
-		iface.go(testPage1);
-		actUrl = iface.getURL();
-		assertEquals(testPage1, actUrl);
-		iface.stop();
-		try {
-			thrown.expect(Exception.class);
-			thrown.expectMessage("Automation interface not yet started; cannot restart.");
-			iface.restart();
-		} finally {
-			iface.start();
-		}
-	}
-
 	@Ignore("CB-259: Need support for chromedriver 2.20, as it does not block popups by default")
 	@Test
 	public void openCloseWindowTest() throws Exception {
-		iface.go(testPage1);
-		assertEquals(testPage1, iface.wd.getCurrentUrl());
-		iface.openWindow(testPage2);
-		assertEquals(testPage2, iface.wd.getCurrentUrl());
+		iface.go(testPlaygroundPage);
+		assertEquals(testPlaygroundPage, iface.wd.getCurrentUrl());
+		iface.openWindow(onOffScreenPage);
+		assertEquals(onOffScreenPage, iface.wd.getCurrentUrl());
 		iface.focusWindow(0);
-		assertEquals(testPage1, iface.wd.getCurrentUrl());
+		assertEquals(testPlaygroundPage, iface.wd.getCurrentUrl());
 		iface.focusWindow(1);
-		assertEquals(testPage2, iface.wd.getCurrentUrl());
+		assertEquals(onOffScreenPage, iface.wd.getCurrentUrl());
 		iface.closeWindow();
-		assertEquals(testPage1, iface.wd.getCurrentUrl());
+		assertEquals(testPlaygroundPage, iface.wd.getCurrentUrl());
 	}
 
 	@Test
 	public void presentAcceptDismissDialogTest() throws Exception {
-		iface.go(testPage1);
-		
+		iface.go(testPlaygroundPage);
+
 		// dialog not yet visible
 		assertFalse(iface.isDialogVisible());
-		
+
 		// clicking; alert should be visible and window inactive
 		iface.getWebDriverElement(Strategy.ID, "newAlert").click();
 		iface.pause(1000);
 		assertTrue(iface.isDialogVisible());
-		
+
 		// accepting alert dialog; should be gone
 		iface.acceptDialog();
 		assertFalse(iface.isDialogVisible());
-		
+
 		// Dismiss not available in Chrome
 		if (!(iface instanceof ChromeInterface)) {
 			iface.getWebDriverElement(Strategy.ID, "newAlert").click();
@@ -169,7 +137,7 @@ public class WebDriverSystemTest {
 	public void containsTest() throws Exception {
 		final boolean CASE_SENSITIVE = true;
 		final boolean CASE_INSENSITIVE = false;
-		iface.go(testPage1);
+		iface.go(testPlaygroundPage);
 		Assert.assertTrue(iface.contains("Click button", CASE_SENSITIVE));
 		Assert.assertTrue(iface.contains("cLiCk BuTtOn", CASE_INSENSITIVE));
 		Assert.assertTrue(iface.contains("Click button", CASE_INSENSITIVE));
@@ -183,7 +151,7 @@ public class WebDriverSystemTest {
 	public void focusFrameTest() throws Exception {
 		String mainText = "Click button to hide me";
 		String iframeText = "This goes inside the iframe";
-		iface.go(testPage1);
+		iface.go(testPlaygroundPage);
 		WebDriverElement mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
 		assertEquals(mainText, mainFramePara.getText());
 
@@ -191,7 +159,7 @@ public class WebDriverSystemTest {
 		iface.focusFrame(0);
 		WebDriverElement iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
 		assertEquals(iframeText, iframePara.getText());
-		
+
 		// switch to default focus
 		iface.focusDefault();
 		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
@@ -224,7 +192,7 @@ public class WebDriverSystemTest {
 		String mainWindowTitle = "Candybean Test Page";
 		String altWindowTitle = "Candybean Test Page 2";
 
-		iface.go(testPage1);
+		iface.go(testPlaygroundPage);
 
 		// Opens a window in a new tab
 		iface.getWebDriverElement(Strategy.PLINK, "Open in new window").click();
@@ -245,15 +213,15 @@ public class WebDriverSystemTest {
 		iface.getWebDriverElement(Strategy.PLINK, "Open in new window").click();
 		iface.focusWindow(altWindowTitle);
 		assertEquals(altWindowTitle, iface.wd.getTitle());
-		assertEquals(testPage2, iface.getURL());
+		assertEquals(onOffScreenPage, iface.getURL());
 
 		// Verify URL with switching to window by URL
-		iface.focusWindow(testPage1);
+		iface.focusWindow(testPlaygroundPage);
 		assertEquals(mainWindowTitle, iface.wd.getTitle());
 
 		// Close window and revert to previous window (1 index); verify URL
 		iface.closeWindow();
-		assertEquals(testPage2, iface.getURL());
+		assertEquals(onOffScreenPage, iface.getURL());
 
 		// Verify errors by switching to erroneous window titles & indices
 		// We use try catch rather than expected errors so that we can assert multiple error message
@@ -298,7 +266,7 @@ public class WebDriverSystemTest {
 
 		// multiple arguments
 		javascript = "alert(arguments[0] + ' and ' + arguments[1])";
-		String[] args = { "two", "three" };
+		String[] args = {"two", "three"};
 		iface.executeJavascript(javascript, args);
 		assertTrue(iface.wd.switchTo().alert().getText().contains(args[0]));
 		assertTrue(iface.wd.switchTo().alert().getText().contains(args[1]));
@@ -306,42 +274,42 @@ public class WebDriverSystemTest {
 
 		Long toReturn = 12l;
 		javascript = "return " + toReturn + ";";
-		Long returnValue = (Long)(iface.executeJavascript(javascript));
+		Long returnValue = (Long) (iface.executeJavascript(javascript));
 		assertEquals("Javascript return value incorrect.  Expected: " + toReturn +
 				"   Found: " + returnValue, toReturn, returnValue);
 
 	}
 
-    @Test
+	@Test
 	public void executeAsyncJavaScriptTest() throws Exception {
-        iface.wd.manage().timeouts().setScriptTimeout(1500, TimeUnit.MILLISECONDS);
+		iface.wd.manage().timeouts().setScriptTimeout(1500, TimeUnit.MILLISECONDS);
 
 		// 0 arguments
-        long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 		String javascript = "window.setTimeout(arguments[arguments.length - 1], 500);";
 		iface.executeAsyncJavascript(javascript);
 
-        // Assert that the test waited for at least 500ms
-        assertTrue(System.currentTimeMillis() >= start + 500);
+		// Assert that the test waited for at least 500ms
+		assertTrue(System.currentTimeMillis() >= start + 500);
 
 		// 1 argument
-        start = System.currentTimeMillis();
+		start = System.currentTimeMillis();
 		javascript = "window.setTimeout(arguments[arguments.length - 1], arguments[0]);";
 		iface.executeAsyncJavascript(javascript, 1000);
 
-        // Assert that the test waited for at least 1000ms
-        assertTrue(System.currentTimeMillis() >= start + 1000);
+		// Assert that the test waited for at least 1000ms
+		assertTrue(System.currentTimeMillis() >= start + 1000);
 
-        // multiple arguments
-        start = System.currentTimeMillis();
-        javascript = "window.setTimeout(arguments[arguments.length - 1], arguments[0]-arguments[1]);";
+		// multiple arguments
+		start = System.currentTimeMillis();
+		javascript = "window.setTimeout(arguments[arguments.length - 1], arguments[0]-arguments[1]);";
 
 		iface.executeAsyncJavascript(javascript, 1000, 400);
-        assertTrue(System.currentTimeMillis() >= start + 600);
+		assertTrue(System.currentTimeMillis() >= start + 600);
 
 		String toReturn = "Hello World!";
 		javascript = "window.setTimeout(arguments[arguments.length-1] (\"Hello World!\"), 100);";
-		String returnValue = (String)(iface.executeAsyncJavascript(javascript));
+		String returnValue = (String) (iface.executeAsyncJavascript(javascript));
 		assertEquals("Javascript return value incorrect.  Expected: " + toReturn +
 				"   Found: " + returnValue, toReturn, returnValue);
 	}
