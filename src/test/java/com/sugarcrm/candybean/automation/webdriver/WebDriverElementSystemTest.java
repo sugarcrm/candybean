@@ -35,9 +35,33 @@ import org.junit.rules.ExpectedException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Tests for WebDriverElement.class
+ *
+ * Tests use the local web pages in resources/html/test/ to avoid needing an internet
+ * connection to test. The html page testPlayground.html contains a variety of elements
+ * each contained within a div.
+ *
+ * When selecting elements, the general rule of thumb is to include the id of the parent
+ * div if it is relevant. For example, if you wanted the span with id "writingSpan"
+ * because you wanted to test element visibility, you would search for it with
+ * $("#clickToHideDiv #writingSpan")
+ * However, if you only wanted it because you needed a span element to test against, you
+ * would not list the parent's div name because the ability to click to hide is irrelevant,
+ * search for it using:
+ * $("#writingSpan")
+ *
+ * There's no 100% answer when to use either, so use what you feel best portrays your intent
+ */
 public class WebDriverElementSystemTest {
 	private WebDriverInterface iface;
 	final String testPage = "file://" + System.getProperty("user.dir") + "/resources/html/test/testPlayground.html";
+
+	// Creating this function privately for now, a full implementation in WebDriverElement
+	// is detailed in CB-265
+	private WebDriverElement $(String cssPath) throws CandybeanException {
+		return iface.getWebDriverElement(Strategy.CSS, cssPath);
+	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -61,7 +85,7 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void getAttributeTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement element = iface.getWebDriverElement(Strategy.ID, "toggleWriting");
+		WebDriverElement element = $("#toggleWritingButton");
 		Assert.assertEquals("button", element.getAttribute("type"));
 	}
 
@@ -69,9 +93,30 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void getElementTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement div = iface.getWebDriverElement(Strategy.ID, "writingDiv");
-		WebDriverElement element = ((WebDriverElement) div.getElement(new Hook(Strategy.TAG, "span"), 0));
-		Assert.assertEquals("Click button to hide me", element.getText());
+		WebDriverElement div = $("#clickToHideDiv");
+
+		final WebDriverElement elementByTag = ((WebDriverElement) div.getElement(
+				new Hook(Strategy.TAG, "span"), 0));
+		Assert.assertEquals("Click button to hide me", elementByTag.getText());
+
+		final WebDriverElement elementById = (WebDriverElement) div.getElement(
+				new Hook(Strategy.ID, "writingSpan"), 0);
+		Assert.assertEquals("Click button to hide me", elementById.getText());
+
+		final WebDriverElement elementByClass = (WebDriverElement) div.getElement(
+				new Hook(Strategy.CLASS, "onScreen"), 0);
+		Assert.assertEquals("Click to hide writing", elementByClass.getText());
+
+		final WebDriverElement elementByXPath= (WebDriverElement) div.getElement(
+				new Hook(Strategy.XPATH, "//*[@id=\"writingSpan\"]"), 0);
+		Assert.assertEquals("Click button to hide me", elementByXPath.getText());
+
+		WebDriverElement namesDiv = $("#sameNamedElementsDiv");
+		for (int i = 0; i < 4; i ++) {
+			WebDriverElement elementByName = (WebDriverElement) namesDiv.getElement(
+					new Hook(Strategy.NAME, "namedInput"), i);
+			Assert.assertEquals("This is named input "+ i, elementByName.getText());
+		}
 	}
 
 	@Test
@@ -85,23 +130,20 @@ public class WebDriverElementSystemTest {
 	public void getTextTest() throws Exception {
 		iface.go(testPage);
 
-		WebDriverElement spanByID = iface.getWebDriverElement(Strategy.ID, "writing");
-		Assert.assertEquals("Click button to hide me", spanByID.getText());
+		WebDriverElement span = $("#writingSpan");
+		Assert.assertEquals("Click button to hide me", span.getText());
 
-		WebDriverElement paragraphByCLASS = iface.getWebDriverElement(Strategy.CLASS, "normal");
-		Assert.assertEquals("Click to make me blink", paragraphByCLASS.getText());
+		WebDriverElement paragraph = $("#intervalPara");
+		Assert.assertEquals("Click to make me blink", paragraph.getText());
 
-		WebDriverElement inputByNAME = iface.getWebDriverElement(Strategy.NAME, "namedInput");
-		Assert.assertEquals("This is a named input", inputByNAME.getText());
-
-		WebDriverElement spanByXPATH = iface.getWebDriverElement(Strategy.XPATH, "//*[@id=\"writing\"]");
-		Assert.assertEquals("Click button to hide me", spanByXPATH.getText());
+		WebDriverElement input = iface.getWebDriverElement(Strategy.NAME, "namedInput");
+		Assert.assertEquals("This is named input 0", input.getText());
 	}
 
 	@Test
 	public void getSelectTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement formElement = iface.getWebDriverElement(Strategy.ID, "form");
+		WebDriverElement formElement = $("#formDiv #form");
 		WebDriverSelector actualSelectElement = (WebDriverSelector) formElement.getSelect(new Hook(Strategy.TAG, "select"), 0);
 		Assert.assertEquals("Option 1", actualSelectElement.getFirstSelectedOption());
 	}
@@ -111,7 +153,7 @@ public class WebDriverElementSystemTest {
 		final boolean CASE_SENSITIVE = true;
 		final boolean CASE_INSENSITIVE = false;
 		iface.go(testPage);
-		final WebDriverElement writingDiv = iface.getWebDriverElement(Strategy.ID, "writingDiv");
+		final WebDriverElement writingDiv = $("#clickToHideDiv");
 
 		Assert.assertTrue(writingDiv.contains("Click button", CASE_SENSITIVE));
 		Assert.assertTrue(writingDiv.contains("cLiCk BuTtOn", CASE_INSENSITIVE));
@@ -124,20 +166,22 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void doubleClickTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement doubleClickText = iface.getWebDriverElement(new Hook(Strategy.ID, "doubleClickText"));
+		WebDriverElement doubleClickText = $("#doubleOrRightClickDiv #doubleClickText");
 		// Double clicking paragraph makes it disappear
 		doubleClickText.doubleClick();
 		Assert.assertFalse(doubleClickText.isDisplayed());
 	}
 
-	@Ignore
+	@Ignore("We don't currently have a good way to include drag and drop. " +
+			"Selenium doesn't currently support HTML5 native drag and drop" +
+			"and we don't want to import an entire library for just one test.")
 	@Test
 	public void dragNDropTest() throws Exception {
 		String url = "http://demos111.mootools.net/DragDrop";
 		iface.go(url);
 
-		WebDriverElement dragElement = iface.getWebDriverElement(new Hook(Strategy.CSS, ".drag"));
-		WebDriverElement dropElement = iface.getWebDriverElement(new Hook(Strategy.CSS, ".drop"));
+		WebDriverElement dragElement = $(".drag");
+		WebDriverElement dropElement = $(".drop");
 		Assert.assertTrue("100px".equals(dropElement.getCssValue("height")));
 		dragElement.dragNDrop(dropElement);
 		iface.pause(1000);
@@ -148,21 +192,21 @@ public class WebDriverElementSystemTest {
 	public void pauseUntilVisibleTest() throws Exception {
 		iface.go(testPage);
 
-		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "intervalPara"));
+		WebDriverElement text = $("#clickToToggleVisibilityDiv #intervalPara");
 		text.click();
 		Assert.assertNotNull(iface.getPause().waitForVisible(new Hook(Strategy.ID, "intervalPara"), 2000));
 		Assert.assertTrue(text.isDisplayed());
 		// Wait for the text to go invisible again
 		iface.pause(1000);
-		Assert.assertNotNull(iface.getPause().waitForVisible(new Hook(Strategy.ID, "intervalPara"), 2000));
+		Assert.assertNotNull(iface.getPause().waitForVisible(
+				$("#clickToToggleVisibilityDiv #intervalPara")));
 		Assert.assertTrue(text.isDisplayed());
 
 		// Look for a nonexistent element to get time out, set the implicit wait to 0
 		// so that searching for the element returns immediately when it doesn't find it
 		iface.wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		thrown.expect(CandybeanException.class);
-		iface.getPause().waitForVisible(new Hook(Strategy.ID, "nonExistentElement"), 500);
-
+		iface.getPause().waitForVisible($("#NonExistentElement"));
 	}
 
 	@Test
@@ -170,14 +214,14 @@ public class WebDriverElementSystemTest {
 		iface.go(testPage);
 
 		// Clicking intervalPara makes it toggle visibility every second
-		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "intervalPara"));
+		WebDriverElement text = $("#clickToToggleVisibilityDiv #intervalPara");
 		text.click();
 		iface.getPause().waitForInvisible(new Hook(Strategy.ID, "intervalPara"), 2000);
 		Assert.assertTrue(!text.isDisplayed());
 
 		// Force a timeout on a visible element
 		thrown.expect(CandybeanException.class);
-		iface.getPause().waitForInvisible(new Hook(Strategy.ID, "clickPara"), 100);
+		iface.getPause().waitForInvisible($("#clickToToggleVisibilityDiv #clickPara"), 100);
 	}
 
 	@Test
@@ -185,8 +229,9 @@ public class WebDriverElementSystemTest {
 		iface.go(testPage);
 
 		// Clicking intervalPara makes it toggle visibility every second
-		iface.getWebDriverElement(new Hook(Strategy.ID, "intervalPara")).click();
-		Assert.assertNotNull(iface.getPause().waitUntil(WaitConditions.clickable(new Hook(Strategy.ID, "intervalPara"))));
+		$("#clickToToggleVisibilityDiv #intervalPara").click();
+		Assert.assertNotNull(iface.getPause().waitUntil(WaitConditions.clickable(
+				$("#clickToToggleVisibilityDiv #intervalPara"))));
 
 		// Look for a nonexistent element to get time out, set the implicit wait to 0
 		// so that searching for the element returns immediately when it doesn't find it
@@ -198,7 +243,7 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void hoverTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement hoverElement = iface.getWebDriverElement(Strategy.ID, "hoverElement");
+		WebDriverElement hoverElement = $("#hoverableDiv #hoverElement");
 		// Hovering over hoverElement makes it invisible
 		hoverElement.hover();
 		Assert.assertFalse(hoverElement.isDisplayed());
@@ -207,7 +252,7 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void isDisplayedTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement clickPara = iface.getWebDriverElement(new Hook(Strategy.ID, "clickPara"));
+		WebDriverElement clickPara = $("#clickToToggleVisibilityDiv #clickPara");
 		Assert.assertTrue(clickPara.isDisplayed());
 		// Clicking clickPara toggles its visibility
 		clickPara.click();
@@ -217,7 +262,7 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void rightClickTest() throws Exception {
 		iface.go(testPage);
-		WebDriverElement rightClickText = iface.getWebDriverElement(new Hook(Strategy.ID, "rightClickText"));
+		WebDriverElement rightClickText = $("#doubleOrRightClickDiv #rightClickText");
 		// Right clicking rightClickText toggles its visibility
 		rightClickText.rightClick();
 		// Second right click to cancel the menu
@@ -231,7 +276,7 @@ public class WebDriverElementSystemTest {
 		final String searchString = "sugarcrm";
 		iface.go(testPage);
 
-		WebDriverElement textField = iface.getWebDriverElement(Strategy.ID, "formInput");
+		WebDriverElement textField = $("#formDiv #formInput");
 
 		// clear and set scenario
 		textField.sendString(garbageString);
@@ -254,11 +299,11 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void executeJavascriptTest() throws CandybeanException {
 		iface.go(testPage);
-		WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "formInput"));
+		WebDriverElement formInput = $("#formDiv #formInput");
 		String searchTerm = "This is a search term";
-		searchBox.executeJavascript("arguments[0].value = '" + searchTerm + "';");
-		Assert.assertTrue(searchBox.getAttribute("value").equals(searchTerm));
-		String boxContents = (String) (searchBox.executeJavascript("return arguments[0].value;"));
+		formInput.executeJavascript("arguments[0].value = '" + searchTerm + "';");
+		Assert.assertTrue(formInput.getAttribute("value").equals(searchTerm));
+		String boxContents = (String) (formInput.executeJavascript("return arguments[0].value;"));
 		Assert.assertEquals("Javascript return value incorrect.  Expected: " + searchTerm +
 				"   Found: " + boxContents, boxContents, searchTerm);
 	}
@@ -266,54 +311,54 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void getWidthTest() throws CandybeanException {
 		iface.go(testPage);
-		WebDriverElement form = iface.getWebDriverElement(Strategy.ID, "formInput");
-		Assert.assertTrue(form.getWidth() > 1);
+		WebDriverElement element = $("#formInput");
+		Assert.assertTrue(element.getWidth() > 1);
 	}
 
 	@Test
 	public void getHeightTest() throws CandybeanException {
 		iface.go(testPage);
-		WebDriverElement form = iface.getWebDriverElement(Strategy.ID, "formInput");
-		Assert.assertTrue(form.getHeight() > 1);
+		WebDriverElement element = $("#formInput");
+		Assert.assertTrue(element.getHeight() > 1);
 	}
 
 	@Test
 	public void getCssValueTest() throws CandybeanException {
 		iface.go(testPage);
-		WebDriverElement textField = iface.getWebDriverElement(Strategy.ID, "formInput");
+		WebDriverElement textField = $("#formInput");
 		Assert.assertEquals("inline-block", textField.getCssValue("display"));
 	}
 
 	@Test
 	public void waitForAttribute() throws Exception {
 		final Hook paragraph = new Hook(Strategy.ID, "intervalPara");
-		final boolean MATCH = true;
-		final boolean NO_MATCH = false;
+		final boolean HAS_ATTRIBUTE = true;
+		final boolean DOESNT_HAVE_ATTRIBUTE = false;
 
 		iface.go(testPage);
 		// Clicking on paragraph toggles its class between hidden and normal every second
 		iface.getWebDriverElement(paragraph).click();
 
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", MATCH, 10));
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", NO_MATCH, 10));
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", NO_MATCH, 10));
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", MATCH, 10));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", HAS_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", DOESNT_HAVE_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", DOESNT_HAVE_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", HAS_ATTRIBUTE, 10));
 	}
 
 	@Test
 	public void waitForRegexAttribute() throws Exception {
 		final Hook paragraph = new Hook(Strategy.ID, "intervalPara");
-		final boolean MATCH = true;
-		final boolean NO_MATCH = false;
+		final boolean HAS_ATTRIBUTE = true;
+		final boolean DOESNT_HAVE_ATTRIBUTE = false;
 
 		iface.go(testPage);
 		// Clicking on paragraph toggles its class between hidden and normal every second
 		iface.getWebDriverElement(paragraph).click();
 
-		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "h.*n", MATCH, 10));
-		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", ".idden", NO_MATCH, 10));
-		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "n.*l", NO_MATCH));
-		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "normal", NO_MATCH));
+		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "h.*n", HAS_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", ".idden", DOESNT_HAVE_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "n.*l", DOESNT_HAVE_ATTRIBUTE));
+		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "normal", DOESNT_HAVE_ATTRIBUTE));
 	}
 
 	@Test
@@ -344,11 +389,11 @@ public class WebDriverElementSystemTest {
 
 	@Test
 	public void toggleWaitForElement() throws Exception {
-		final Hook writingHook = new Hook(Strategy.ID, "writing");
+		final Hook writingHook = new Hook(Strategy.ID, "writingSpan");
 		iface.go(testPage);
 
 		// Clicking this button toggles the visibility of the element found by writing hook
-		final WebDriverElement button = iface.getWebDriverElement(new Hook(Strategy.ID, "toggleWriting"));
+		final WebDriverElement button = iface.getWebDriverElement(new Hook(Strategy.ID, "toggleWritingButton"));
 
 		Assert.assertTrue(iface.getPause().waitForElement(writingHook).isDisplayed());
 		button.click();
@@ -368,9 +413,9 @@ public class WebDriverElementSystemTest {
 	@Test
 	public void getSourceTest() throws CandybeanException {
 		iface.go(testPage);
-		final WebDriverElement searchBox = iface.getWebDriverElement(new Hook(Strategy.ID, "writingDiv"));
+		final WebDriverElement searchBox = $("#clickToHideDiv");
 		final String found = searchBox.getSource();
-		final String expected = "id=\"writing\"";
+		final String expected = "id=\"writingSpan\"";
 		Assert.assertTrue("Src did not contain " + expected + "\nFound source:\n" + found,
 				found.contains(expected));
 	}

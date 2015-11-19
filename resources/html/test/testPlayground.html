@@ -13,16 +13,16 @@
              * visible or invisible or on/off the DOM.
              */
             function toggleDOMWriting() {
-                var para = document.getElementById('writing');
-                var parent = document.getElementById('writingDiv');
-                if (para !== null) {
-                    parent.removeChild(para);
+                var span = document.getElementById('writingSpan');
+                var parent = document.getElementById('clickToHideDiv');
+                if (span !== null) {
+                    parent.removeChild(span);
                 } else{
-                    var para = document.createElement('span');
-                    para.setAttribute('id', 'writing');
+                    var span = document.createElement('span');
+                    span.setAttribute('id', 'writingSpan');
                     var text = document.createTextNode('Click button to hide me');
-                    para.appendChild(text);
-                    parent.appendChild(para);
+                    span.appendChild(text);
+                    parent.appendChild(span);
                 }
             }
 
@@ -73,9 +73,9 @@ div {
             The paragraph in this div can be toggled on and off after a one
             second delay by pressing this button.
         -->
-        <div id='writingDiv'>
-            <span id='writing'>Click button to hide me</span>
-            <input type="button" id="toggleWriting" class="onScreen" onclick="setTimeout(toggleDOMWriting,1000)">
+        <div id='clickToHideDiv'>
+            <span id='writingSpan'>Click button to hide me</span>
+            <input value="Click to hide writing" type="button" id="toggleWritingButton" class="onScreen" onclick="setTimeout(toggleDOMWriting,1000)">
         </div>
 
         <!--
@@ -84,7 +84,7 @@ div {
             clicked. It is intended to be used for testing waitConditions that need
             an element to variably be visible and not visible.
         -->
-        <div>
+        <div id='clickToToggleVisibilityDiv'>
             <p id="intervalPara" class="normal" onclick="setInterval(function(){toggleVisibility('intervalPara');}, 1000)">Click to make me blink</p>
             <p id="clickPara" class="normal" onclick="toggleVisibility('clickPara')">Click to hide me</p>
         </div>
@@ -92,7 +92,7 @@ div {
         <!--
             A test form for filling in
         -->
-        <div>
+        <div id='formDiv'>
             <form id="form">
                 <input type="text" id="formInput" />
                 <select id="select">
@@ -106,7 +106,7 @@ div {
         <!--
             A test multiple select field
         -->
-        <div>
+        <div id='multipleSelectFormDiv'>
             <select name="ingredients" multiple="multiple" size="5">
                 <option value="Cheese">Cheese</option>
                 <option value="Olives">Olives</option>
@@ -121,29 +121,29 @@ div {
         <!--
             A test checkbox
         -->
-        <div>
+        <div id='checkboxDiv'>
             <input type="checkbox" id="checkbox" value="Checkbox">This is a checkbox
         </div>
         <!--
             Right clicking and double clicking
         -->
-        <div>
+        <div id='doubleOrRightClickDiv'>
             <p id="rightClickText" oncontextmenu="toggleVisibility('rightClickText')">Right click to hide me</p>
             <p id="doubleClickText" ondblclick="toggleVisibility('doubleClickText')">Doubleclick to hide me</p>
         </div>
         <!--
             Several Elements with the same name
         -->
-        <div>
-            <input  name="namedInput" value="This is a named input"><br>
-            <input  name="namedInput" value="This is a named input"><br>
-            <input  name="namedInput" value="This is a named input"><br>
-            <input  name="namedInput" value="This is a named input"><br>
+        <div id='sameNamedElementsDiv'>
+            <input  name="namedInput" value="This is named input 0"><br>
+            <input  name="namedInput" value="This is named input 1"><br>
+            <input  name="namedInput" value="This is named input 2"><br>
+            <input  name="namedInput" value="This is named input 3"><br>
         </div>
         <!--
             Drag and drop elements
         -->
-        <div>
+        <div id='dragAndDropDiv'>
             <div id="dragDiv" draggable="true">Drag me</div>
             <div>
                 <p id="dropZone" ondrop="toggleVisibility('dropZone')" ondragover="(function(ev){ev.preventDefault();})(event)">Drop here to hide me</p>
@@ -152,13 +152,13 @@ div {
         <!--
             Hoverable elements
         -->
-        <div>
+        <div id='hoverableDiv'>
             <div id="hoverElement" class="hoverable">Hover over me to make me disappear</div>
         </div>
         <!--
             Scrolling elements
         -->
-        <div class="overflow">
+        <div id='overFlowTextDiv'>
             <p id="longParagraph">This is some really long text that is going to overflow outside of the box</p>
             <input id="afterButton" type="button" value="This is a button afterwards">
         </div>
@@ -166,20 +166,20 @@ div {
         <!--
             Alert!
         -->
-        <div class="alert">
+        <div id='pressToAlertDiv'>
             <input id="newAlert" type="button" value="Press for an alert" onclick="alert('Alert!')">
         </div>
 
         <!--
             iframe
         -->
-        <div>
-        <iframe src="iframe.html" name="Test_iframe" id="Test_iframe">Alt Text</iframe>
+        <div id='iframeDiv'>
+            <iframe src="iframe.html" name="Test_iframe" id="Test_iframe">Alt Text</iframe>
         </div>
         <!--
             Open in new window/tab
         -->
-        <div>
+        <div id='openLinkInNewWindowDiv'>
             <a href="onOffScreen.html" target="_blank">Open in new window</a>
         </div>
     </body>

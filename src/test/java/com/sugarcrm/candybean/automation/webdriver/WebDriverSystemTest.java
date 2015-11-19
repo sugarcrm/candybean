@@ -36,12 +36,36 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for WebDriverSystem.class
+ *
+ * Tests use the local web pages in resources/html/test/ to avoid needing an internet
+ * connection to test. The html page testPlayground.html contains a variety of elements
+ * each contained within a div.
+ *
+ * When selecting elements, the general rule of thumb is to include the id of the parent
+ * div if it is relevant. For example, if you wanted the span with id "writingSpan"
+ * because you wanted to test element visibility, you would search for it with
+ * $("#clickToHideDiv #writingSpan")
+ * However, if you only wanted it because you needed a span element to test against, you
+ * would not list the parent's div name because the ability to click to hide is irrelevant,
+ * search for it using:
+ * $("#writingSpan")
+ *
+ * There's no 100% answer when to use either, so use what you feel best portrays your intent
+ */
 public class WebDriverSystemTest {
 
 	private WebDriverInterface iface;
 
 	final String testPlaygroundPage = "file://" + System.getProperty("user.dir") + "/resources/html/test/testPlayground.html";
 	final String onOffScreenPage = "file://" + System.getProperty("user.dir") + "/resources/html/test/onOffScreen.html";
+
+	// Creating this function privately for now, a full implementation in WebDriverElement
+	// is detailed in CB-265
+	private WebDriverElement $(String cssPath) throws CandybeanException {
+		return iface.getWebDriverElement(Strategy.CSS, cssPath);
+	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -116,7 +140,7 @@ public class WebDriverSystemTest {
 		assertFalse(iface.isDialogVisible());
 
 		// clicking; alert should be visible and window inactive
-		iface.getWebDriverElement(Strategy.ID, "newAlert").click();
+		$("#newAlert").click();
 		iface.pause(1000);
 		assertTrue(iface.isDialogVisible());
 
@@ -126,7 +150,7 @@ public class WebDriverSystemTest {
 
 		// Dismiss not available in Chrome
 		if (!(iface instanceof ChromeInterface)) {
-			iface.getWebDriverElement(Strategy.ID, "newAlert").click();
+			$("#newAlert").click();
 			assertTrue(iface.isDialogVisible());
 			iface.dismissDialog();
 			assertFalse(iface.isDialogVisible());
@@ -152,38 +176,31 @@ public class WebDriverSystemTest {
 		String mainText = "Click button to hide me";
 		String iframeText = "This goes inside the iframe";
 		iface.go(testPlaygroundPage);
-		WebDriverElement mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
-		assertEquals(mainText, mainFramePara.getText());
+		assertEquals(mainText, $("#writingSpan").getText());
 
 		// switch focus to frame by index
 		iface.focusFrame(0);
-		WebDriverElement iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
-		assertEquals(iframeText, iframePara.getText());
+		assertEquals(iframeText, $("#iframePara").getText());
 
 		// switch to default focus
 		iface.focusDefault();
-		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
-		assertEquals(mainText, mainFramePara.getText());
+		assertEquals(mainText, $("#writingSpan").getText());
 
 		// switch focus to frame by name
 		iface.focusFrame("Test_iframe");
-		iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
-		assertEquals(iframeText, iframePara.getText());
+		assertEquals(iframeText, $("#iframePara").getText());
 
 		// switch to default focus
 		iface.focusDefault();
-		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
-		assertEquals(mainText, mainFramePara.getText());
+		assertEquals(mainText, $("#writingSpan").getText());
 
 		// switch to focus by control
 		iface.focusFrame(new WebDriverElement(Strategy.ID, "Test_iframe", iface.wd));
-		iframePara = iface.getWebDriverElement(Strategy.ID, "iframePara");
-		assertEquals(iframeText, iframePara.getText());
+		assertEquals(iframeText, $("#iframePara").getText());
 
 		// switch to default focus
 		iface.focusDefault();
-		mainFramePara = iface.getWebDriverElement(Strategy.ID, "writing");
-		assertEquals(mainText, mainFramePara.getText());
+		assertEquals(mainText, $("#writingSpan").getText());
 	}
 
 	@Ignore("CB-263: Candybean does not properly model windows")
