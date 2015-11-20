@@ -1,0 +1,186 @@
+<!--
+    This file is a html page with various element used for testing candybean's
+    functionalities
+-->
+
+<html>
+    <head>
+        <title>Candybean Test Page</title>
+        <script type="text/javascript">
+            /*
+             * Toggles the id 'writing', on and off the DOM can be used  for testing
+             * candybean functions which require an element to be variably either
+             * visible or invisible or on/off the DOM.
+             */
+            function toggleDOMWriting() {
+                var span = document.getElementById('writingSpan');
+                var parent = document.getElementById('clickToHideDiv');
+                if (span !== null) {
+                    parent.removeChild(span);
+                } else{
+                    var span = document.createElement('span');
+                    span.setAttribute('id', 'writingSpan');
+                    var text = document.createTextNode('Click button to hide me');
+                    span.appendChild(text);
+                    parent.appendChild(span);
+                }
+            }
+
+            /*
+             * Toggles the visibility of element
+             *
+             * String -> _
+             * @para element The id of the element to toggle
+             */
+            function toggleVisibility(element) {
+                var elem = document.getElementById(element);
+
+                if (elem.className === 'hidden') {
+                    elem.className = 'normal'
+                } else {
+                    elem.className = 'hidden';
+                }
+            }
+        </script>
+    </head>
+
+    <style>
+.onScreen {
+    position: absolute; left: 50; top:50;
+}
+.hidden {
+    visibility:hidden;
+}
+.hoverable:hover{
+    visibility:hidden;
+}
+.overflow {
+    width:50px;
+    height:50px;
+    overflow:scroll;
+}
+div {
+    display: block;
+    float: left;
+    border-radius: 5px;
+    border: 2px solid #000000;
+    padding: 20px;
+}
+    </style>
+
+    <body>
+        <!--
+            The paragraph in this div can be toggled on and off after a one
+            second delay by pressing this button.
+        -->
+        <div id='clickToHideDiv'>
+            <span id='writingSpan'>Click button to hide me</span>
+            <input value="Click to hide writing" type="button" id="toggleWritingButton" class="onScreen" onclick="setTimeout(toggleDOMWriting,1000)">
+        </div>
+
+        <!--
+            This div contains an element (intervalPara) that toggles visibility every
+            second once clicked, and an element (clickPara) which toggles visibility when
+            clicked. It is intended to be used for testing waitConditions that need
+            an element to variably be visible and not visible.
+        -->
+        <div id='clickToToggleVisibilityDiv'>
+            <p id="intervalPara" class="normal" onclick="setInterval(function(){toggleVisibility('intervalPara');}, 1000)">Click to make me blink</p>
+            <p id="clickPara" class="normal" onclick="toggleVisibility('clickPara')">Click to hide me</p>
+        </div>
+
+        <!--
+            A test form for filling in
+        -->
+        <div id='formDiv'>
+            <form id="form">
+                <input type="text" id="formInput" />
+                <select id="select">
+                    <option id="option1" value="option1">Option 1</option>
+                    <option id="option2" value="option2">Option 2</option>
+                    <option id="option3" value="option3">Option 3</option>
+                </select>
+            </form>
+        </div>
+
+        <!--
+            A test multiple select field
+        -->
+        <div id='multipleSelectFormDiv'>
+            <select name="ingredients" multiple="multiple" size="5">
+                <option value="Cheese">Cheese</option>
+                <option value="Olives">Olives</option>
+                <option value="Pepperoni">Pepperoni</option>
+                <option value="Anchovies">Anchovies</option>
+                <option value="Mushrooms">Mushrooms</option>
+                <option value="Bacon">Bacon</option>
+                <option value="Ham">Ham</option>
+                <option value="Green Pepper">Green Pepper</option>
+            </select>
+        </div>
+        <!--
+            A test checkbox
+        -->
+        <div id='checkboxDiv'>
+            <input type="checkbox" id="checkbox" value="Checkbox">This is a checkbox
+        </div>
+        <!--
+            Right clicking and double clicking
+        -->
+        <div id='doubleOrRightClickDiv'>
+            <p id="rightClickText" oncontextmenu="toggleVisibility('rightClickText')">Right click to hide me</p>
+            <p id="doubleClickText" ondblclick="toggleVisibility('doubleClickText')">Doubleclick to hide me</p>
+        </div>
+        <!--
+            Several Elements with the same name
+        -->
+        <div id='sameNamedElementsDiv'>
+            <input  name="namedInput" value="This is named input 0"><br>
+            <input  name="namedInput" value="This is named input 1"><br>
+            <input  name="namedInput" value="This is named input 2"><br>
+            <input  name="namedInput" value="This is named input 3"><br>
+        </div>
+        <!--
+            Drag and drop elements
+        -->
+        <div id='dragAndDropDiv'>
+            <div id="dragDiv" draggable="true">Drag me</div>
+            <div>
+                <p id="dropZone" ondrop="toggleVisibility('dropZone')" ondragover="(function(ev){ev.preventDefault();})(event)">Drop here to hide me</p>
+            </div>
+        </div>
+        <!--
+            Hoverable elements
+        -->
+        <div id='hoverableDiv'>
+            <div id="hoverElement" class="hoverable">Hover over me to make me disappear</div>
+        </div>
+        <!--
+            Scrolling elements
+        -->
+        <div id='overFlowTextDiv'>
+            <p id="longParagraph">This is some really long text that is going to overflow outside of the box</p>
+            <input id="afterButton" type="button" value="This is a button afterwards">
+        </div>
+
+        <!--
+            Alert!
+        -->
+        <div id='pressToAlertDiv'>
+            <input id="newAlert" type="button" value="Press for an alert" onclick="alert('Alert!')">
+        </div>
+
+        <!--
+            iframe
+        -->
+        <div id='iframeDiv'>
+            <iframe src="iframe.html" name="Test_iframe" id="Test_iframe">Alt Text</iframe>
+        </div>
+        <!--
+            Open in new window/tab
+        -->
+        <div id='openLinkInNewWindowDiv'>
+            <a href="onOffScreen.html" target="_blank">Open in new window</a>
+        </div>
+    </body>
+</html>

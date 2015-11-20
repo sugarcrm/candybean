@@ -448,7 +448,7 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	public WebDriverElement getWebDriverElement(Hook hook, int index) throws CandybeanException {
 		return new WebDriverElement(hook, index, this.wd);
 	}
-	
+
 	/**
 	 * @param strategy The strategy used to search for the control
 	 * @param hook The associated hook for the strategy
