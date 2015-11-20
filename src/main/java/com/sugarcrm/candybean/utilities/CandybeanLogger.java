@@ -1,6 +1,7 @@
 package com.sugarcrm.candybean.utilities;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -20,20 +21,6 @@ public class CandybeanLogger extends Logger {
 	}
 
 	/**
-	 * Removes the handler from the list of file handlers
-	 */
-	public void removeHandler(String simpleClassName) throws SecurityException { 
-		FileHandler handler = handlers.get(simpleClassName);
-		if(handler != null){
-			handlers.remove(simpleClassName);
-			handler.close();
-			super.removeHandler(handler);
-		}
-	}
-	
-	
-
-	/**
 	 * Adds the handler to the logger
 	 */
 	public void addHandler(FileHandler fh, String simpleClassName) {
@@ -45,8 +32,14 @@ public class CandybeanLogger extends Logger {
 	 * Removes all the handlers in the candybean logger
 	 */
 	public void removeAllHandlers(){
-		for(String key: handlers.keySet()){
-			removeHandler(key);
+		// Since we are iterating over a list while removing items, use
+		// an iterator to properly handle iteration
+		for(Iterator<String> it = handlers.keySet().iterator(); it.hasNext();) {
+			String str = it.next();
+			FileHandler fh = handlers.get(str);
+			fh.close();
+			super.removeHandler(fh);
+			it.remove();
 		}
 	}
 	
@@ -54,9 +47,15 @@ public class CandybeanLogger extends Logger {
 	 * Removes all the handlers in the candybean logger
 	 */
 	public void removeAllHandlersExcept(String simpleClassName){
-		for(String key: handlers.keySet()){
-			if (!key.equals(simpleClassName)) {
-				removeHandler(key);
+		// Since we are iterating over a list while removing items, use
+		// an iterator to properly handle iteration
+		for(Iterator<String> it = handlers.keySet().iterator(); it.hasNext();) {
+			String str = it.next();
+			if (!str.equals(simpleClassName)) {
+				FileHandler fh = handlers.get(str);
+				fh.close();
+				super.removeHandler(fh);
+				it.remove();
 			}
 		}
 	}
