@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.model.EachTestNotifier;
 import org.junit.internal.runners.model.ReflectiveCallable;
+import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -15,6 +16,8 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
+import javax.swing.plaf.nimbus.State;
+import java.lang.reflect.Method;
 import java.util.concurrent.*;
 
 /**
@@ -53,6 +56,11 @@ import java.util.concurrent.*;
  * clean up after timing out (Defaults to runner.timeout)
  * runner.runBeforeIfTimedOut = [true|false] If true, run the @Before method on timeout
  * runner.runAfterIfTimedOut  = [true|false] If true, run the @After method on timeout
+ *
+ * Since I expect that those editing this file don't want to have to go read the docs on
+ * how to extend JUnit runners, I've attempted to keep the documentation to a level that
+ * anyone can figure out what's going on without reading the docs (even though you should
+ * anyways).
  */
 public class CandybeanRunner extends BlockJUnit4ClassRunner {
 
@@ -71,23 +79,26 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 	 *
 	 * @param klass The class to initialize
 	 * @throws InitializationError
-	 * @throws CandybeanException
 	 */
-	public CandybeanRunner(Class<?> klass) throws InitializationError, CandybeanException {
+	public CandybeanRunner(Class<?> klass) throws InitializationError, CandybeanException{
 		super(klass);
 	}
 
-	@Override
 	/**
 	 * @{inheritDoc}
 	 */
+	@Override
 	public void run(final RunNotifier notifier) {
 		/* Construct statement that when evaluated:
 		 *  Runs @BeforeClass
 		 *  Runs All children tests with runChild
 		 *  Runs @AfterClass
 		 *
-		 *  If the test fails, it notifies the test runner
+		 * If the test fails, it notifies the test runner
+		 *
+		 * This method is called on each test class. Evaluating
+		 * the statement then runs runChild on each test within
+		 * the class.
 		 */
 		final Statement statement = classBlock(notifier);
 		try {
@@ -99,16 +110,29 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 		}
 	}
 
+	/**
+	 * Runs each test using retries and timeouts. The general idea of the this
+	 * method is that it constructs a Callable that when run, runs the test. It
+	 * attempts to retrieve the results of the callable after a certain timeout.
+	 * If the test wasn't ready, or the test failed, it reruns the callable if
+	 * applicable up to some specified number of times.
+	 *
+	 * @param method The test method to run
+	 * @param notifier The test notifier to update
+	 */
 	@Override
 	protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
 		final Description description = describeChild(method);
 
+		// Check the annotations, it the test is marked ignore, ignore it.
+		// If you wanted add a check for custom annotations, perhaps you
+		// wanted an @DoNotReRun annotation, you would check for it here
 		if (method.getAnnotation(Ignore.class) != null) {
 			notifier.fireTestIgnored(description);
 			return;
 		}
 
-		final EachTestNotifier eachTestNotifier = new EachTestNotifier(notifier, description);
+		// Get a statement representing a single test
 		final Statement statement = methodBlock(method);
 
 		// Construct a callable to run a single test
@@ -124,47 +148,65 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 				return null;
 			}
 		};
+		final EachTestNotifier eachTestNotifier = new EachTestNotifier(notifier, description);
 		eachTestNotifier.fireTestStarted();
 
-		Throwable throwable;
+		TestResult result;
 		int attempts = 0;
 		do {
-			throwable = null;
-			final ExecutorService executorService = Executors.newCachedThreadPool();
-			Future task = executorService.submit(runTest);
-			try {
-				// Create task to run the test, and attempt to retrieve it within
-				// the time limit, else throw a timeout exception
-				task.get(timeout, TimeUnit.MILLISECONDS);
-			} catch (TimeoutException te) {
-				throwable = new TimeoutException(description + " exceeded allocated runtime of " + timeout + "ms");
-				candybean.log.severe(description + " exceeded allocated runtime of " + timeout + "ms, killing now");
+			result = attemptTest(description, runTest, method);
+			if (result.failed() && attempts != retryCount){
+				candybean.getLogger().warning("Caught \"" + result.getThrowable()
+						+ "\" while running " + description
+						+ ", but have not yet exceeded retries. Retrying test...");
+			}
+		}
+		while (result.failed()
+				&& attempts++ < retryCount
+				&& !(result.getThrowable() instanceof TimeoutException && !rerunIfTimedOut));
 
-				// Interupt the task and shutdown the task executor
-				task.cancel(INTERRUPT);
-				executorService.shutdownNow();
-				// If we catch a timeout exception, attempt to run @Before and @After, if enabled
-				if (runAfterIfTimedOut || runBeforeIfTimedOut) {
-					cleanUpState(method);
-				}
-				if (!rerunIfTimedOut) {
-					break;
-				}
-			} catch (ExecutionException e) {
-				// If the test failed, unwrap the ExecutionException
-				throwable = e.getCause();
-			} catch (AssumptionViolatedException | InterruptedException t) {
-				throwable = t;
-			}
-			if (throwable != null && attempts != retryCount) {
-				candybean.getLogger().warning("Caught \"" + throwable +
-						"\" while running " + description + ", but have not yet exceeded retries. Retrying test...");
-			}
-		} while (throwable != null && attempts++ < retryCount);
-		if (throwable != null) {
-			eachTestNotifier.addFailure(throwable);
+		if (result.failed()) {
+			eachTestNotifier.addFailure(result.getThrowable());
 		}
 		eachTestNotifier.fireTestFinished();
+	}
+
+	/**
+	 * Attempt to run the test, and handle the exceptions that a test can throw
+	 * Returning null if it succeeded seems like a terrible idea
+	 *
+	 * @param description The test Description
+	 * @param runTest The callable that runs the test
+	 * @param method The FrameworkMethod of the test to run
+	 * @return A TestResult representing the result
+	 */
+	protected TestResult attemptTest(Description description, Callable runTest, FrameworkMethod method) {
+		final ExecutorService executorService = Executors.newCachedThreadPool();
+		Future task = executorService.submit(runTest);
+		try {
+			// Create task to run the test, and attempt to retrieve it within
+			// the time limit, else throw a timeout exception
+			task.get(timeout, TimeUnit.MILLISECONDS);
+		} catch (TimeoutException te) {
+			candybean.log.severe(description + " exceeded allocated runtime of " + timeout + "ms, killing now");
+
+			// Interrupt the task and shutdown the task executor
+			task.cancel(INTERRUPT);
+			executorService.shutdownNow();
+			// If we catch a timeout exception, attempt to run @Before and @After, if enabled
+			if (runAfterIfTimedOut || runBeforeIfTimedOut) {
+				cleanUpState(method);
+			}
+			return TestResult.Fail(new TimeoutException(description + " exceeded allocated runtime of " + timeout + "ms"));
+		} catch (ExecutionException e) {
+			// If the test failed, unwrap the ExecutionException
+			executorService.shutdownNow();
+			return TestResult.Fail(e.getCause());
+		} catch (AssumptionViolatedException | InterruptedException t) {
+			executorService.shutdownNow();
+			return TestResult.Fail(t);
+		}
+		return TestResult.Success();
 	}
 
 	/**
@@ -184,28 +226,25 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 				}
 			}.run();
 			// Attach the befores and afters to the empty test
+			final Statement emptyStatement = new Statement() {
+				@Override
+				public void evaluate() throws Throwable {}
+			};
 			final Callable<Void> runAfter = new Callable<Void>() {
 				public Void call() throws Exception {
 					try {
+						/*
+						 * In order to run the befores and/or the afters without
+						 * running the actual test, we construct an empty Statement
+						 * and add the before/afters to it
+						 */
 						if (runBeforeIfTimedOut && runAfterIfTimedOut) {
 							withBefores(method, test,
-									withAfters(method, test, new Statement() {
-										@Override
-										public void evaluate() throws Throwable {
-										}
-									})).evaluate();
+									withAfters(method, test, emptyStatement)).evaluate();
 						} else if (runBeforeIfTimedOut) {
-							withBefores(method, test, new Statement() {
-								@Override
-								public void evaluate() throws Throwable {
-								}
-							}).evaluate();
+							withBefores(method, test, emptyStatement).evaluate();
 						} else {
-							withAfters(method, test, new Statement() {
-								@Override
-								public void evaluate() throws Throwable {
-								}
-							}).evaluate();
+							withAfters(method, test, emptyStatement).evaluate();
 						}
 					} catch (Error | Exception e) {
 						throw e;
@@ -233,6 +272,61 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 			candybean.log.warning("Cleaning up" + getDescription() + "failed with " + t);
 		} finally {
 			executorService.shutdownNow();
+		}
+	}
+
+	/**
+	 * Inner class to represent a test result. A test result
+	 * contains the result of the test, passed: true, or failed: false.
+	 * If the result is failed, it also contains the throwable the test
+	 * created.
+	 */
+	protected static class TestResult {
+		private boolean result;
+		private Throwable throwable;
+
+		private TestResult(boolean result, Throwable throwable) {
+			this.result = result;
+			this.throwable = throwable;
+		}
+
+		/**
+		 * Create an instance of a passing TestResult
+		 * @return A passing TestResult
+		 */
+		public static TestResult Success() {
+			return new TestResult(true, null);
+		}
+
+		/**
+		 * Create an instance of a failing TestResult
+		 * @param t The throwable the test threw
+		 * @return A failing TestResult
+		 */
+		public static TestResult Fail(Throwable t) {
+			return new TestResult(false, t);
+		}
+
+		/**
+		 * Get the result of the test
+		 * @return true if the test passed
+		 */
+		public boolean passed() {return result;}
+		/**
+		 * Get the result of the test
+		 * @return true if the test failed
+		 */
+		public boolean failed() {return !result;}
+
+		/**
+		 * The failure reason of the test
+		 * @return The throwable created by the test
+		 */
+		public Throwable getThrowable() {
+			if (result) {
+				throw new RuntimeException("Cannot access throwable of passed test");
+			}
+			return throwable;
 		}
 	}
 }
