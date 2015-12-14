@@ -22,19 +22,19 @@
 package com.sugarcrm.candybean.automation.webdriver;
 
 import com.sugarcrm.candybean.automation.AutomationInterface.Type;
-import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
-import com.sugarcrm.candybean.automation.Candybean;
-import com.sugarcrm.candybean.automation.element.Hook.Strategy;
-import com.sugarcrm.candybean.configuration.Configuration;
-import com.sugarcrm.candybean.exceptions.CandybeanException;
-import com.sugarcrm.candybean.testUtilities.TestConfiguration;
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-
+import static org.junit.Assert.*;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import com.sugarcrm.candybean.automation.element.Hook;
+import com.sugarcrm.candybean.configuration.Configuration;
+import com.sugarcrm.candybean.testUtilities.TestConfiguration;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+import com.sugarcrm.candybean.automation.AutomationInterfaceBuilder;
+import com.sugarcrm.candybean.automation.Candybean;
+import com.sugarcrm.candybean.automation.element.Hook.Strategy;
+import com.sugarcrm.candybean.exceptions.CandybeanException;
 
 /**
  * Tests for WebDriverSystem.class
@@ -226,7 +226,6 @@ public class WebDriverSystemTest {
 		// Close window which should auto-focus to previous window; verify title
 		iface.closeWindow();
 		assertEquals(mainWindowTitle, iface.wd.getTitle());
-
 		iface.getWebDriverElement(Strategy.PLINK, "Open in new window").click();
 		iface.focusWindow(altWindowTitle);
 		assertEquals(altWindowTitle, iface.wd.getTitle());
@@ -264,6 +263,17 @@ public class WebDriverSystemTest {
 			assertEquals("Given focus window index is out of bounds: 1; current size: 1",
 					e.getMessage());
 		}
+	}
+
+	@Test
+	public void delayFocusWindowTest() throws Exception {
+		iface.go("file://"+ System.getProperty("user.dir")+"/resources/html/test/alert.html");
+		// Clicking this button opens a new window after a 1000ms delay
+		WebDriverElement text = iface.getWebDriverElement(new Hook(Strategy.ID, "b1"));
+		text.click();
+		// Check that focusWindow properly waits for there to be enough windows before switching
+		iface.focusWindow(1);
+		iface.focusWindow(0);
 	}
 
 	@Test

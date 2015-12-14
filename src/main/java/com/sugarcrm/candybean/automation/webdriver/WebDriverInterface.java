@@ -59,6 +59,7 @@ import com.sugarcrm.candybean.automation.element.Hook;
 import com.sugarcrm.candybean.automation.element.Hook.Strategy;
 import com.sugarcrm.candybean.exceptions.CandybeanException;
 import com.sugarcrm.candybean.utilities.Utils.Pair;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
@@ -320,21 +321,25 @@ public abstract class WebDriverInterface extends AutomationInterface {
 	 * @param index  		the window index
 	 * @throws CandybeanException	if the specified window index is out of range
 	 */
-	public void focusWindow(int index) throws CandybeanException {
-		if (index == windows.peek().x.intValue()) {
+	public void focusWindow(final int index) throws CandybeanException {
+		if (index == windows.peek().x) {
 			logger.warning("No focus was made because the given index matched the current index: " + index);
 		} else if (index < 0) {
 			throw new CandybeanException("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
 		} else {
+			// Wait for more than the specified number of windows to exist
+			getPause().waitUntil(new ExpectedCondition<Boolean>() {
+				@Override
+				public Boolean apply(WebDriver driver) {
+					wd.getWindowHandles();
+					return wd.getWindowHandles().size() > index;
+				}
+			});
 			Set<String> windowHandlesSet = this.wd.getWindowHandles();
 			String[] windowHandles = windowHandlesSet.toArray(new String[] {""});
-			if (index >= windowHandles.length) {
-				throw new CandybeanException("Given focus window index is out of bounds: " + index + "; current size: " + windows.size());
-			} else {
-				getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windowHandles[index]));
-				windows.push(new Pair<Integer, String>(new Integer(index), this.wd.getWindowHandle()));
-				logger.info("Focused by index: " + index + " to window: " + windows.peek());
-			}
+			getPause().waitUntil(WaitConditions.windowToBeAvailableAndSwitchToIt(windowHandles[index]));
+			windows.push(new Pair<>(index, this.wd.getWindowHandle()));
+			logger.info("Focused by index: " + index + " to window: " + windows.peek());
 		}
 	}
 

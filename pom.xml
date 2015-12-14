@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sugarcrm</groupId>
 	<artifactId>candybean</artifactId>
 	<packaging>jar</packaging>
 	<name>candybean</name>
-	<version>2.0.4-SNAPSHOT</version>
+	<version>2.0.6-SNAPSHOT</version>
 	<description>A highly configurable testing framework that seeks to automate across web and mobile while encapsulating common testing features.</description>
 	<url>http://sugarcrm.github.io/candybean/</url>
 
@@ -37,7 +36,8 @@
 		<connection>scm:git:ssh://git@github.com/sugarcrm/candybean.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/sugarcrm/candybean.git</developerConnection>
 		<url>https://github.com/sugarcrm/candybean</url>
-	</scm>
+	  <tag>HEAD</tag>
+  </scm>
 
 	<developers>
 		<developer>
@@ -255,7 +255,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.44.0</version>
+			<version>2.48.2</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
@@ -265,7 +265,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.3.1</version>
+			<version>4.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
