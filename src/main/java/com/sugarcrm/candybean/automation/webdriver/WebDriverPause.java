@@ -61,36 +61,33 @@ public class WebDriverPause {
 	 * Accepts any ExpectedCondition and poll under this condition is satisfied within timeout
 	 * @param timeoutMs	Timeout in Milliseconds
 	 * @param condition	The condition to poll
-	 * @return			Returning the object that is returned from ExpectedCondition when the condition is met
+	 * @return Returning the object that is returned from ExpectedCondition when the condition is met
 	 * @throws CandybeanException
 	 */
 	public Object waitUntil(ExpectedCondition condition, long timeoutMs) throws CandybeanException {
 		// This is done by double-polling. WebDriverWait waits for wdPollingInterval amount of time.
 		// This is done repetitively until the time reaches timeoutMs.
-		long timeoutS = timeoutMs * 1000;
-		long pollingIntervalS = timeoutS <= defaultPollingIntervalS ? timeoutS : defaultPollingIntervalS;
+		final long pollingIntervalS = Math.min(defaultPollingIntervalS,  Math.max(timeoutMs/1000, 1));
+		final long seleniumPollingIntervalMs = 250;
 		final long startTime = currentTimeMillis();
-		long currentTimeMs, currentTimeS = 0;
 		String toThrow = null;
 		Object toReturn = null;
 
-		while((currentTimeMs = currentTimeMillis() - startTime) <= timeoutMs) {
+		logger.info("Waiting until " + condition.toString() + " is satisfied.");
+		while(currentTimeMillis() - startTime <= timeoutMs) {
 			try {
-				currentTimeS = currentTimeMs / 1000;
-				logger.info(currentTimeS + " seconds have passed. Waiting until " + condition.toString() +
-						" is satisfied.");
-				toReturn = (new WebDriverWait(this.wd, pollingIntervalS)).until(condition);
+				toReturn = (new WebDriverWait(this.wd, pollingIntervalS, seleniumPollingIntervalMs)).until(condition);
 				toThrow = null;
 				break;
 			} catch (WebDriverException wdException) {
+				logger.info(currentTimeMillis() - startTime+ "ms have passed. Waiting until " + condition.toString() + " is satisfied.");
 				toThrow = wdException.toString();
 			}
 		}
 
 		if(toThrow != null) {
-			logger.severe("The timeout " + currentTimeS + " seconds have reached. Throwing Exception.");
-			throw new CandybeanException(toThrow.replaceAll("(.*Timed out after )[0-9]+( seconds.*)",
-					"$1" + currentTimeS + "$2"));
+			logger.severe("The timeout of " + timeoutMs + "ms was reached. Throwing Exception.");
+			throw new CandybeanException("Timed out after "+ timeoutMs + " seconds");
 		}
 
 		return toReturn;
