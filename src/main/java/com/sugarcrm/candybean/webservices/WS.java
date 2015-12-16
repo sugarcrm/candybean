@@ -36,14 +36,11 @@ import org.json.simple.JSONValue;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Helps make web-service calls and supports DELETE, GET, POST, and PUT
  */
 public class WS {
-
-	protected static Logger log = Logger.getLogger(WS.class.getSimpleName());
 
 	public enum OP {DELETE, GET, POST, PUT}
 
