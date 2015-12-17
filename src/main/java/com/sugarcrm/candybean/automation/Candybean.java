@@ -58,6 +58,8 @@ public final class Candybean {
 			ROOT_DIR + File.separator + "candybean.config",
 			ROOT_DIR + File.separator + "src" + File.separator + "test" +
 					File.separator + "resources" + File.separator + "candybean.config",
+			// Using the "Voodoo" name is deprecated and Candybean should be used instead
+			// https://sugarcrm.atlassian.net/browse/CB-270
 			ROOT_DIR + File.separator + "src" + File.separator + "test" +
 					File.separator + "resources" + File.separator + "voodoo.properties"
 			);
