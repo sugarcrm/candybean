@@ -180,7 +180,10 @@ div {
             Open in new window/tab
         -->
         <div id='openLinkInNewWindowDiv'>
-            <a href="onOffScreen.html" target="_blank">Open in new window</a>
+            <a id='linkInNewWindow' href="onOffScreen.html" target="_blank">Open in new window</a>
+            <input id="linkInNewWindowDelay" type="button"
+                   value="Press delayed new window"
+                   onclick="window.setTimeout(function(){window.open('onOffScreen.html')}, 1000)">
         </div>
     </body>
 </html>
