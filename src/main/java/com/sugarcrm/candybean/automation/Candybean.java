@@ -148,7 +148,7 @@ public final class Candybean {
 	 * Gets the calling class from a stack trace. Used strictly to get the calling class
 	 * when creating a builder object.
 	 */
-	private Class<?> getCallingClass(int stackTracePosition) throws CandybeanException{
+	private Class<?> getCallingClass(int stackTracePosition) throws CandybeanException {
 		String className = new Throwable().getStackTrace()[stackTracePosition].getClassName();
 		Class<?> cls;
 		try {
@@ -198,7 +198,7 @@ public final class Candybean {
 		throw new Exception("There are no non-webdriver automation interfaces currently defined.");
 	}
 
-	public static String getDefaultConfigFile() throws CandybeanException{
+	public static String getDefaultConfigFile() throws CandybeanException {
 		final String candybeanConfigStr = System.getProperty(Candybean.CONFIG_KEY);
 		if (candybeanConfigStr != null) {
 			return candybeanConfigStr;

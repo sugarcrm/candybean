@@ -18,20 +18,21 @@ public class CandybeanRunnerSystemTest {
 	@BeforeClass
 	static public void createFile() {
 		File f = new File(filename);
-		if (f.exists()) {
+		if (f.exists()) { // delete the file if it exists.
 			if (!f.delete()) {
 				Assert.fail("Could not delete external resource " + filename);
 			}
-		} else {
-			try {
-				if (!f.createNewFile()) {
-					Assert.fail("Could not create external resource " + filename);
-				}
-			} catch (IOException e) {
+		}
+
+		try { // create the file regardless of whether it was deleted previously.
+			if (!f.createNewFile()) {
 				Assert.fail("Could not create external resource " + filename);
 			}
+		} catch (IOException e) {
+			Assert.fail("Could not create external resource " + filename);
 		}
-		try {
+
+		try { // write to file.
 			FileUtils.writeStringToFile(f, "0");
 		} catch (IOException e) {
 			Assert.fail("Could not write to file: " + filename);

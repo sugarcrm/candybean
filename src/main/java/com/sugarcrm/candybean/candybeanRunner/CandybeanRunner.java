@@ -80,7 +80,7 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 	 * @param klass The class to initialize
 	 * @throws InitializationError
 	 */
-	public CandybeanRunner(Class<?> klass) throws InitializationError, CandybeanException{
+	public CandybeanRunner(Class<?> klass) throws InitializationError, CandybeanException {
 		super(klass);
 	}
 
@@ -111,7 +111,7 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 	}
 
 	/**
-	 * Runs each test using retries and timeouts. The general idea of the this
+	 * Runs each test using retries and timeouts. The general idea of this
 	 * method is that it constructs a Callable that when run, runs the test. It
 	 * attempts to retrieve the results of the callable after a certain timeout.
 	 * If the test wasn't ready, or the test failed, it reruns the callable if
@@ -138,11 +138,11 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 		// Construct a callable to run a single test
 		final Callable<Void> runTest = new Callable<Void>() {
 			public Void call() throws Exception {
-				try {
+				try { // this code throws a Throwable...
 					statement.evaluate();
-				} catch (Error | Exception e) {
+				} catch (Error | Exception e) { // ...if it's an Error or Exception, that's fine...
 					throw e;
-				} catch (Throwable e) {
+				} catch (Throwable e) { // ...if not, wrap it in an Exception before throwing.
 					throw new Exception(e);
 				}
 				return null;
@@ -173,7 +173,6 @@ public class CandybeanRunner extends BlockJUnit4ClassRunner {
 
 	/**
 	 * Attempt to run the test, and handle the exceptions that a test can throw
-	 * Returning null if it succeeded seems like a terrible idea
 	 *
 	 * @param description The test Description
 	 * @param runTest The callable that runs the test
