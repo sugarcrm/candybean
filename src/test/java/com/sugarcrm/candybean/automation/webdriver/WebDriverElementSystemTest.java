@@ -339,10 +339,10 @@ public class WebDriverElementSystemTest {
 		// Clicking on paragraph toggles its class between hidden and normal every second
 		iface.getWebDriverElement(paragraph).click();
 
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", HAS_ATTRIBUTE, 10));
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", DOESNT_HAVE_ATTRIBUTE, 10));
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", DOESNT_HAVE_ATTRIBUTE, 10));
-		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", HAS_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", HAS_ATTRIBUTE, 10000));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "hidden", DOESNT_HAVE_ATTRIBUTE, 10000));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", DOESNT_HAVE_ATTRIBUTE, 10000));
+		Assert.assertNotNull(iface.getPause().waitForAttribute(paragraph, "class", "normal", HAS_ATTRIBUTE, 10000));
 	}
 
 	@Test
@@ -355,8 +355,8 @@ public class WebDriverElementSystemTest {
 		// Clicking on paragraph toggles its class between hidden and normal every second
 		iface.getWebDriverElement(paragraph).click();
 
-		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "h.*n", HAS_ATTRIBUTE, 10));
-		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", ".idden", DOESNT_HAVE_ATTRIBUTE, 10));
+		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "h.*n", HAS_ATTRIBUTE, 10000));
+		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", ".idden", DOESNT_HAVE_ATTRIBUTE, 10000));
 		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "n.*l", DOESNT_HAVE_ATTRIBUTE));
 		Assert.assertNotNull(iface.getPause().waitForRegexAttribute(paragraph, "class", "normal", DOESNT_HAVE_ATTRIBUTE));
 	}
