@@ -50,8 +50,9 @@ public class BlockListUnitTest {
 	public void blockListFail() throws Exception {
 		fail();
 	}
-	
+
 	// To ensure VRunner @Test doesn't break
+	@Ignore
 	@Test
 	public void pass() throws Exception {
 		assertTrue(true);
