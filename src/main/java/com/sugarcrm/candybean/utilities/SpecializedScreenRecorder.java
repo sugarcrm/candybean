@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.monte.media.math.Rational;
 import org.monte.media.Format;
 import org.monte.screenrecorder.ScreenRecorder;

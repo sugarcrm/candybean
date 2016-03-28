@@ -2,7 +2,7 @@ package com.sugarcrm.candybean.server.configuration;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.jetty.util.ajax.JSON;
 
 public class FormData {
